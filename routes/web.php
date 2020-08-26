@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Auth::loginUsingId(1001);
+//Auth::loginUsingId(1001);
 
 Route::get('/', function () {
     return view('welcome');
