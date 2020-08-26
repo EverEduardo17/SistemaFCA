@@ -16,6 +16,7 @@ class DatosPersonales extends Model
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
 
+    //Relacion Uno a Uno
     public function usuario(){
         return $this->hasOne(User::class, 'IdUsuario', 'IdUsuario');
     }

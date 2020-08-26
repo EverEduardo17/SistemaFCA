@@ -6,20 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Organizador extends Model
+class AcademicoEvento extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "organizador";
-    protected $primaryKey = "IdOrganizador";
+    protected $table = "academico_evento";
+    protected $primaryKey = "Id_Academico_Evento";
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
-
-    //Relacion Uno a Mucho
-    public function evento(){
-        return $this->hasMany(Evento::class, 'IdEvento', 'IdEvento');
-    }
 
     //Relacion Uno a Mucho
     public function academico(){
@@ -27,7 +22,7 @@ class Organizador extends Model
     }
 
     //Relacion Uno a Mucho
-    public function tipo_organizador(){
-        return $this->hasMany(TipoOrganizador::class, 'IdTipoOrganizador', 'IdTipoOrganizador');
+    public function evento(){
+        return $this->hasMany(Evento::class, 'IdEvento', 'IdEvento');
     }
 }

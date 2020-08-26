@@ -3,11 +3,26 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Academia extends Model
 {
+    use Notifiable, SoftDeletes;
+
     protected $table = "Academia";
-    protected $primaryKey = "idAcademia";
-    public const CREATED_AT = "CreatedAt";
-    public const UPDATED_AT = "UpdatedAt";
+    protected $primaryKey = "IdAcademia";
+    const CREATED_AT = 'CreatedAt';
+    const UPDATED_AT = 'UpdatedAt';
+    const DELETED_AT = 'DeletedAt';
+
+    //Relacion Muchos a Uno
+    public function academico_academia(){
+        return $this->belongsTo(AcademicoAcademia::class, 'IdAcademia', 'IdAcademia');
+    }
+
+    //Relacion Uno a Mucho
+    public function coordinador(){
+        return $this->hasMany(Academico::class, 'IdAcademico', 'Coordinador');
+    }
 }

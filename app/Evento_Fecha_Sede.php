@@ -16,14 +16,17 @@ class Evento_Fecha_Sede extends Model
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
 
+    //Relacion Uno a Uno
     public function evento(){
         return $this->hasOne(Evento::class, 'IdEvento', 'IdEvento');
     }
-
+    
+    //Relacion Uno a Uno
     public function fechaEvento(){
         return $this->hasOne(FechaEvento::class, 'IdFechaEvento', 'IdFechaEvento');
     }
 
+    //Relacion Uno a Uno
     public function sedeEvento(){
         return $this->hasOne(SedeEvento::class, 'IdSedeEvento', 'IdSedeEvento');
     }

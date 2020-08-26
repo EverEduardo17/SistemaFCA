@@ -82,9 +82,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Inicio de Sesión - Universidad Veracruzana</title>
     <!-- Estilos CSS -->
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/signin.css">
+    <link rel="stylesheet" href="{{asset('css/index.css')}}">
+    <link rel="stylesheet" href="{{asset('css/bootstrap/bootstrap.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/signin.css')}}">
     <!-- JQuery -->
     <!-- <script src="../node_modules/jquery/dist/jquery.slim.js"></script> -->
     <!-- JavaScript -->

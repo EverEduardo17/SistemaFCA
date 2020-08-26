@@ -6,7 +6,6 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
@@ -19,9 +18,10 @@
     <!-- Styles -->
 
 {{--    <link href="{{ asset('css/app.css') }}" rel="stylesheet">--}}
-    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="{{asset('css/site.css')}}" />
 
     <link rel="stylesheet" href="{{asset('lib/bootstrap/bootstrap.min.css')}}" />
+    
     @yield('head')
 </head>
 <body>
@@ -101,8 +101,8 @@
         </footer>
     </div>
     <script type="text/javascript" src="{{asset('lib/jquery/jquery-3.5.0.min.js')}}"></script>
-    <script type="text/javascript" src="/lib/popper/popper.min.js"></script>
-    <script type="text/javascript" src="/lib/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{asset('lib/popper/popper.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('lib/bootstrap/bootstrap.min.js')}}"></script>
     @yield('script')
 </body>
 </html>

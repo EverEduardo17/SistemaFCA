@@ -16,6 +16,7 @@ class SedeEvento extends Model
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
 
+    //Relacion Muchos a Uno
     public function evento_fecha_sede(){
         return $this->belongsTo(Evento_Fecha_Sede::class, 'IdFechaEvento', 'IdFechaEvento');
     }

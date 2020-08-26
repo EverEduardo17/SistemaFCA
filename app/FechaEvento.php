@@ -3,11 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FechaEvento extends Model
 {
-    use SoftDeletes;
+    use Notifiable, SoftDeletes;
 
     protected $table = "FechaEvento";
     protected $primaryKey = "IdFechaEvento";
@@ -17,6 +18,7 @@ class FechaEvento extends Model
 
     protected $dates = ['InicioFechaEvento', 'FinFechaEvento'];
 
+    //Relacion Muchos a Uno
     public function evento_fecha_sede(){
         return $this->belongsTo(Evento_Fecha_Sede::class, 'IdFechaEvento', 'IdFechaEvento');
     }
