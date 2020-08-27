@@ -17,7 +17,7 @@
     <!-- Styles -->
     <link rel="icon" href="{{ asset('img/logo.png') }}">
     <link rel="stylesheet" href="{{asset('css/site.css')}}" />
-    <link rel="stylesheet" href="{{asset('lib/bootstrap/bootstrap.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('lib/bootstrap/bootstrap.css')}}" />
     
     {{-- Extras --}}
     @yield('head')
@@ -33,7 +33,7 @@
         </div>
     </main>
 
-    @include('layouts.footer')
+    {{-- @include('layouts.footer') --}}
         
     {{-- Extras --}}
     <script type="text/javascript" src="{{asset('js/jquery-3.5.1.slim.min.js')}}"></script>

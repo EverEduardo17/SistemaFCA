@@ -18,7 +18,6 @@ class EventoController extends FcaController
     public function __construct()
     {
         $this->user = Auth::user();
-        $this->idUsuario = $this->user->IdUsuario;
     }
 
     /**

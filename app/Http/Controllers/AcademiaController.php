@@ -2,84 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AcademiaRequest;
 use App\Academia;
+use App\Academico;
 use Illuminate\Http\Request;
 
 class AcademiaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        return view('academias.index', [
+            'academias' => Academia::get()
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return view('academias.create', [
+            'academia' => new Academia,
+            'coordinadores' => Academico::get()
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(AcademiaRequest $request)
     {
-        //
+        Academia::create( $request->validated() );
+        return redirect()->route('academias.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Academia  $academia
-     * @return \Illuminate\Http\Response
-     */
     public function show(Academia $academia)
     {
-        //
+        
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Academia  $academia
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Academia $academia)
     {
-        //
+        return view('academias.edit', [
+            'academia' => $academia,
+            'coordinadores' => Academico::get()
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Academia  $academia
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Academia $academia)
+    public function update(AcademiaRequest $request, Academia $academia)
     {
-        //
+        $academia->update( $request->validated() );
+        return redirect()->route('academias.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Academia  $academia
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Academia $academia)
     {
-        //
+        $academia->delete();
+        return redirect()->route('academias.index');
     }
 }

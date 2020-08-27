@@ -12,6 +12,7 @@ class Academia extends Model
 
     protected $table = "Academia";
     protected $primaryKey = "IdAcademia";
+    protected $fillable = ['IdAcademia', 'NombreAcademia', 'DescripcionAcademia', 'Coordinador'];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
@@ -23,6 +24,6 @@ class Academia extends Model
 
     //Relacion Uno a Mucho
     public function coordinador(){
-        return $this->hasMany(Academico::class, 'IdAcademico', 'Coordinador');
+        return $this->hasOne(Academico::class, 'IdAcademico', 'Coordinador');
     }
 }

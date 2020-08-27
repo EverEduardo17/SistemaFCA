@@ -110,3 +110,44 @@ code {
 .bg-color{
     background-color: #dcf6de !important;
 }
+
+/* validator */
+.alert.alert-custom.alert-danger {
+    background-color: #F64E60;
+    border-color: #F64E60;
+}
+.alert.alert-custom {
+    display: flex;
+    align-items: stretch;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 0 black;
+}
+.alert.alert-danger {
+    background-color: #F64E60;
+    border-color: #F64E60;
+    color: #ffffff;
+}
+.alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.42rem;
+}
+.alert.alert-custom .alert-icon {
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem 0 0;
+}
+.alert.alert-custom.alert-danger .alert-text {
+    color: #ffffff;
+}
+
+.alert.alert-custom .alert-text {
+    align-self: center;
+    flex-grow: 1;
+}
+.svg-icon svg g [fill] {
+    transition: fill 0.3s ease;
+    fill: #B5B5C3;
+}

@@ -5,6 +5,7 @@
         <div class="row">
             <div class="col-lg-3 col-md-3 text-center">
                 <h4>Fechas de Eventos</h4>
+                <a class="btn btn-primary" href="#" role="button">Añadir Academia</a>
             </div>
         </div>
         <div class="row justify-content-center">
