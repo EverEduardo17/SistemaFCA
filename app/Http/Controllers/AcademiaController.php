@@ -26,6 +26,9 @@ class AcademiaController extends Controller
 
     public function store(AcademiaRequest $request)
     {
+        $request->validate([
+            'NombreAcademia' => 'unique:academia,NombreAcademia'
+        ]);
         Academia::create( $request->validated() );
         return redirect()->route('academias.index');
     }
@@ -45,6 +48,9 @@ class AcademiaController extends Controller
 
     public function update(AcademiaRequest $request, Academia $academia)
     {
+        $request->validate([
+            'NombreAcademia' => 'unique:academia,NombreAcademia,'.$academia->IdAcademia.',IdAcademia'
+        ]);
         $academia->update( $request->validated() );
         return redirect()->route('academias.index');
     }
