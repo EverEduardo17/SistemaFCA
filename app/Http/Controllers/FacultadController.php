@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FacultadRequest;
 use App\Facultad;
 use Illuminate\Http\Request;
 
@@ -9,22 +10,22 @@ class FacultadController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        return view('facultades.index', [
+            'facultades' => Facultad::get()
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        return view('facultades.create', [
+            'facultad' => new Facultad()
+        ]);
     }
 
     /**
@@ -33,9 +34,14 @@ class FacultadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FacultadRequest $request)
     {
-        //
+        $request->validate([
+            'NombreFacultad' => 'unique:facultad,NombreFacultad',
+            'ClaveFacultad' => 'unique:facultad,ClaveFacultad'
+        ]);
+        Facultad::create($request->validated());
+        return redirect()->route('facultades.index');
     }
 
     /**
@@ -51,35 +57,34 @@ class FacultadController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \App\Facultad  $facultad
-     * @return \Illuminate\Http\Response
      */
     public function edit(Facultad $facultad)
     {
-        //
+        dd($facultad);
+        return view('facultades.edit', [
+            'facultad' => $facultad
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Facultad  $facultad
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Facultad $facultad)
+    public function update(FacultadRequest $request, Facultad $facultad)
     {
-        //
+        $request->validate([
+            'NombreFacultad' => 'unique:facultad,NombreFacultad'.$facultad->IdFacultad.',IdFacultad',
+            'ClaveFacultad' => 'unique:facultad,ClaveFacultad'.$facultad->IdFacultad.',IdFacultad'
+        ]);
+        $facultad->update( $request->validated() );
+        return redirect()->route('facultades.index');
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Facultad  $facultad
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Facultad $facultad)
     {
-        //
+        $facultad->delete();
+        return redirect()->route('facultades.index');
     }
 }

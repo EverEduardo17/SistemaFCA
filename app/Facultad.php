@@ -12,6 +12,7 @@ class Facultad extends Model
 
     protected $table = "facultad";
     protected $primaryKey = "IdFacultad";
+    protected $fillable = ['IdFacultad', 'NombreFacultad', 'ClaveFacultad'];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';

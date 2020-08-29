@@ -23,6 +23,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::resource('academias', 'AcademiaController');
+Route::resource('facultades', 'FacultadController');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
