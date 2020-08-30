@@ -58,11 +58,10 @@ class FacultadController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Facultad $facultad)
+    public function edit(Facultad $facultade)
     {
-        dd($facultad);
         return view('facultades.edit', [
-            'facultad' => $facultad
+            'facultad' => $facultade
         ]);
     }
 
@@ -82,9 +81,9 @@ class FacultadController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Facultad $facultad)
+    public function destroy(Facultad $facultade)
     {
-        $facultad->delete();
+        $facultade->delete();
         return redirect()->route('facultades.index');
     }
 }
