@@ -15,7 +15,7 @@ class HomeController extends Controller
                 "background" => $colores[0],
                 "enlace" => "eventos",
                 "operaciones" => [
-                    ["titulo" => "Nuevo Evento", "enlace" => "nuevo"],
+                    ["titulo" => "Nuevo Evento", "enlace" => "create"],
                     ["titulo" => "Ver Eventos", "enlace" => ""],
                     ["titulo" => "Mis Eventos", "enlace" => "mis-eventos"],
                 ]
@@ -66,8 +66,18 @@ class HomeController extends Controller
                 "background" => $colores[1],
                 "enlace" => "facultades",
                 "operaciones" => [
-                    ["titulo" => "Nueva Facultad", "enlace" => "nuevo"],
+                    ["titulo" => "Nueva Facultad", "enlace" => "create"],
                     ["titulo" => "Ver Facultades", "enlace" => ""],
+                ]
+            ],
+
+            [
+                "titulo" => "Academinas",
+                "background" => $colores[0],
+                "enlace" => "academias",
+                "operaciones" => [
+                    ["titulo" => "Nueva Academia", "enlace" => "create"],
+                    ["titulo" => "Ver Academia", "enlace" => ""],
                 ]
             ]
         ];

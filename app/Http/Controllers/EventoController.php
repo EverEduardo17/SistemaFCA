@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EventoRequest;
 use App\Evento;
 use App\Evento_Fecha_Sede;
 use App\SedeEvento;
@@ -9,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Extensions\MongoSessionStore;
+use Illuminate\Support\Facades\Session;
 
 class EventoController extends FcaController
 {
@@ -20,11 +23,6 @@ class EventoController extends FcaController
         $this->user = Auth::user();
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $evento_fecha_sede_s = Evento_Fecha_Sede
@@ -33,7 +31,9 @@ class EventoController extends FcaController
             ->where('fechaEvento.InicioFechaEvento','>=', (new \DateTime())->format("Y-m-d") )
             ->sortBy('fechaEvento.InicioFechaEvento');
         //dd($evento_fecha_sede_s->sortBy('FechaInicioEvento'));
-        return view('eventos.index', ["evento_fecha_sede_s"=>$evento_fecha_sede_s]);
+        return view('eventos.index', [
+            "evento_fecha_sede_s" => $evento_fecha_sede_s
+        ]);
     }
 
     public function indexWithDate($year, $month, $day)
@@ -47,53 +47,24 @@ class EventoController extends FcaController
             ->where('fechaEvento.InicioFechaEvento','>=',$from)
             ->where('fechaEvento.InicioFechaEvento','<',$to)
             ->sortBy('fechaEvento.InicioFechaEvento', 1, false);
-        return view('eventos.index', ["evento_fecha_sede_s"=>$evento_fecha_sede_s]);
+        return view('eventos.index', [
+            "evento_fecha_sede_s" => $evento_fecha_sede_s
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        $sedes = SedeEvento::all();
-        return view('eventos.create', ["sedes"=>$sedes]);
+        return view('eventos.create', [
+            "sedes" => SedeEvento::all()
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(EventoRequest $request)
     {
-        $input = $request->all();
+        $input = $request->validated();
         //dd($input);
-        $rules = [
-            'nombre' => 'required|max:100',
-            'descripcion' => 'required|max:150',
-            'fechaInicio' => 'required|date_format:d/m/Y',
-            'horaInicio' => 'required|date_format:g:i A',
-            'horaFin' => 'required|date_format:g:i A',
-            'sede' => 'required|exists:App\SedeEvento,IdSedeEvento'
-        ];
-        $validator = Validator::make($input, $rules);
-
-        if ($validator->fails()) {
-            return redirect()
-                ->route('eventos_create')
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $messages = [
-            'email.required' => 'We need to know your e-mail address!',
-        ];
-
+        
         /* Obtener fechas */
-
         $fechaInicio = explode( '/', $input['fechaInicio'] );
         $horaInicio  = explode( ' ', $input['horaInicio'] );
         $PM          = strcmp ( 'PM', mb_strtoupper( $horaInicio[1] ) ) == 0;
@@ -148,72 +119,40 @@ class EventoController extends FcaController
                 'UpdatedBy'     => $this->idUsuario,
             ]);
 
-
-
             if( $idOrganizador == null || $idOrganizador == 0 || $idSedeEvento == null || $idSedeEvento == 0 ){
                 DB::rollBack();
-                return redirect()
-                    ->route('eventos_create')
-                    ->withInput();
-                //!!! Enviar alerta de error
+                Session::flash('flash', [ ['type' => "danger", 'message' => "Error al registrar el evento."] ]);
+                return redirect()->route('eventos.index');
             }
 
         DB::commit();
-        dd($input);
+        
         //$validator = Validator::make($input, $rules, $messages);
-
+        Session::flash('flash', [ ['type' => "success", 'message' => "Evento registrado correctamente"] ]);
+        return redirect()->route('eventos.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Evento  $evento
-     * @return \Illuminate\Http\Response
-     */
     public function show(Evento $evento)
     {
-        $evento_fecha_sede_s = Evento_Fecha_Sede
-            ::where('IdEvento', $evento->IdEvento)
+        $evento_fecha_sede_s = Evento_Fecha_Sede::where('IdEvento', $evento->IdEvento)
             ->with(['fechaEvento', 'sedeEvento'])
             ->get()
             ->sortBy('fechaEvento.InicioFechaEvento');
-        $sedes = SedeEvento::all();
-        return view('eventos.show',
-            [
-                "evento"=>$evento, "evento_fecha_sede_s"=>$evento_fecha_sede_s,
-                "sedes" =>$sedes
-            ]);
+        return view('eventos.show', [
+            "evento"=>$evento, "evento_fecha_sede_s"=>$evento_fecha_sede_s,
+            "sedes" =>SedeEvento::all()
+        ]);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Evento  $evento
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Evento $evento)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Evento  $evento
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Evento $evento)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Evento  $evento
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Evento $evento)
     {
         //

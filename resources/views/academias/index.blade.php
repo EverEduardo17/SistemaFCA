@@ -2,9 +2,11 @@
 
 @section('content')
   <div class="card">
-    <div class="card-header row">
-      <h5 class="card-title col-8">Academias</h5>
-      <a class="btn btn-primary col-4" href="{{ route('academias.create') }}" role="button">Añadir Academia</a>
+    <div class="card-header">
+      <div class="row">
+        <h5 class="card-title col-8">Academias</h5>
+        <a class="btn btn-primary col-4" href="{{ route('academias.create') }}" role="button">Añadir Academia</a>
+      </div>
     </div>
     <div class="card-body">
       <table class="table table-striped">

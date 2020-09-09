@@ -2,7 +2,7 @@
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-light fixed-top bg-color">
         {{-- <img class="logo" src="{{ asset('img/logo.png') }}"> --}}
-        <a class="navbar-brand text-black" href="{{ url('/') }}" >Universidad Veracruzana</a>
+        <a class="navbar-brand text-black" href="{{ url('/home') }}" >Universidad Veracruzana</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">

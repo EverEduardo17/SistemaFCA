@@ -13,7 +13,7 @@
                 <hr>
                 <div id="dateStart" class="ui-datepicker-div"></div>
                 <hr>
-                <a class="btn btn-primary btn-lg" href="{{route('eventos_create')}}">Registrar un evento</a>
+                <a class="btn btn-primary btn-lg" href="{{route('eventos.create')}}">Registrar un evento</a>
             </div>
             <div class="col-lg-9 col-md-8">
                 <table id="table_eventos" class="display">
@@ -33,7 +33,7 @@
                             <td>{{$efs->evento->NombreEvento ?? ""}}</td>
                             <td>{{$efs->sedeEvento->NombreSedeEvento ?? ""}}</td>
                             <td>{{$efs->evento->EstadoEvento ?? ""}}</td>
-                            <td><a href="{{route('eventos_show', [$efs->IdEvento])}}" /> Detalles </td>
+                            <td><a href="{{ route('eventos.show', [$efs->IdEvento]) }}"> Detalles </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -84,7 +84,7 @@
             maxViewMode: 2,
             language: "es"
         }).on('changeDate', function(e) {
-            window.location.href = "{{route('eventos')}}"
+            window.location.href = "{{route('eventos.index')}}"
                 + "/" + e.date.getFullYear()
                 + "/" + (e.date.getMonth()+1)
                 + "/" + e.date.getDate();

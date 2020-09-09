@@ -1,127 +1,76 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Registrar Evento</div>
+  <div class="card">
+    <div class="card-header">
+      <div class="row">
+        <h5 class="card-title col-8">Crear Evento</h5>
+        <a class="btn btn-primary col-4" href="" role="button">Ver Eventos</a>
+      </div>
+    </div>
+    <div class="card-body">
+      
+      <form method="POST" action="{{ route('eventos.store') }}" autocomplete="off">
+        @csrf
+        @include('layouts.validaciones')
+        <div class="form-group">
+          <label name="nombre">Nombre del Evento:</label>
+          <input name="nombre" type="text" value="{{ old('nombre') }}" class="form-control @error('nombre') is-invalid @enderror">
+          <small class="form-text text-muted">El nombre se puede cambiar despues.</small>
+        </div>
 
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('eventos_create') }}">
-                            @csrf
-                            <div class="form-group row">
-                                <label for="nombre" class="col-md-3 col-form-label text-md-right">Evento</label>
+        <div class="form-group">
+            <label name="descripcion">Descripción del Evento:</label>
+            <input name="descripcion" type="text" value="{{ old('descripcion') }}" class="form-control @error('descripcion') is-invalid @enderror">
+        </div>
 
-                                <div class="col-md-8">
-                                    <input id="nombre" type="text" class="form-control @error('nombre') is-invalid @enderror" name="nombre" value="{{ old('nombre') }}" required autocomplete="nombre" autofocus>
+        <hr>
 
-                                    @error('nombre')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
+        <div class="form-group">
+            <label for="fechaInicio">Fecha del Evento:</label>
+            <input id="fechaInicio" type="text" class="form-control @error('fechaInicio') is-invalid @enderror" name="fechaInicio" value="{{ old('fechaInicio') }}" placeholder="Dia/Mes/Año">
+        </div>
 
-                            <div class="form-group row">
-                                <label for="descripcion" class="col-md-3 col-form-label text-md-right">Descripción</label>
-
-                                <div class="col-md-8">
-                                    <input id="descripcion" type="text" class="form-control @error('descripcion') is-invalid @enderror" name="descripcion" value="{{ old('descripcion') }}" required autocomplete="descripcion" autofocus>
-
-                                    @error('descripcion')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <div class="form-group row">
-                                <label for="fechaInicio" class="col-md-3 col-form-label text-md-right">Fecha</label>
-
-                                <div class="col-md-4">
-                                        <input id="fechaInicio" type="text" class="form-control @error('fechaInicio') is-invalid @enderror" name="fechaInicio" value="{{ old('fechaInicio') }}" required autofocus placeholder="Dia/Mes/Año">
-                                    @error('fechaInicio')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="horaInicio" class="col-md-3 col-form-label text-md-right">Hora</label>
-                                <div class="col-md-4">
-                                    <input id="horaInicio" type="text" class="form-control  @error('horaInicio') is-invalid @enderror" name="horaInicio" value="{{ old('horaInicio') }}" required autofocus placeholder="Inicio">
-                                    @error('horaInicio')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-4">
-                                    <input id="horaFin" type="text" class="form-control datetimepicker-input @error('horaFin') is-invalid @enderror" name="horaFin" value="{{ old('horaFin') }}" required autofocus placeholder="Fin">
-                                    @error('horaFin')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <div class="form-group row">
-
-                                <label class="col-md-3 col-form-label text-md-right">Sede</label>
-
-                                <div class="col-md-8">
-                                    <select class="form-control @error('sede') is-invalid @enderror" id="sede" name="sede" required autofocus>
-                                        <option></option>
-                                        @foreach( $sedes as $sede)
-                                            <option value="{{$sede->IdSedeEvento}}" {{ old('sede') == $sede->IdSedeEvento ? ' selected' : ''}}>{{$sede->NombreSedeEvento}}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('sede')
-                                    <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <div class="form-group row mb-0">
-                                <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        Continuar
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+        <div class="form-group">
+            <label for="horaInicio">Horario del Evento:</label>
+            <div class="form-row">
+                <div class="col">
+                    <input id="horaInicio" type="text" class="form-control  @error('horaInicio') is-invalid @enderror" name="horaInicio" value="{{ old('horaInicio') }}" placeholder="Inicio">
+                </div>
+                <div class="col">
+                    <input id="horaFin" type="text" class="form-control datetimepicker-input @error('horaFin') is-invalid @enderror" name="horaFin" value="{{ old('horaFin') }}" placeholder="Fin">
                 </div>
             </div>
         </div>
+
+        <hr>
+
+        <div class="form-group">
+          <label name="sede">Sede del Evento:</label>
+          <select name="sede" id="sede" class="form-control @error('sede') is-invalid @enderror">
+            @foreach ($sedes as $sede)
+              <option value="{{$sede->IdSedeEvento}}" {{ old('sede') == $sede->IdSedeEvento ? ' selected' : ''}}>{{$sede->NombreSedeEvento}}</option>
+            @endforeach
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+        <a href="" class="btn btn-secondary btn-block">Cancelar</a>
+      </form>
+
     </div>
+  </div>
 @endsection
 
 @section('head')
     <link rel="stylesheet" href="{{asset('lib/bootstrap3/css/bootstrap-mod.css')}}" />
-    <link rel="stylesheet" href="/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="{{asset('lib/datetimepicker/css/bootstrap-datetimepicker.min.css')}}" />
 @endsection
 
 @section('script')
     {{--<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>--}}
-    <script type="text/javascript" src="/lib/moment/min/moment-with-locales.min.js"></script>
-    <script type="text/javascript" src="/lib/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="{{asset('lib/moment/min/moment-with-locales.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('lib/datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
     <script>
         $('#fechaInicio').datetimepicker({
             locale: 'es',

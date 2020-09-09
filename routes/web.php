@@ -24,17 +24,16 @@ Auth::routes();
 
 Route::resource('academias', 'AcademiaController');
 Route::resource('facultades', 'FacultadController');
+Route::resource('eventos', 'EventoController');
+Route::resource('fechaEventos', 'FechaEventoController');
+Route::put('/fechaEvento/put', 'FechaEventoController@update')->name("fechaEventos.update");
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/eventos', 'EventoController@index')->name("eventos");
 Route::get('/eventos/{year}/{month}/{day}', 'EventoController@indexWithDate')->name("eventosWithDate");
-Route::get('/eventos/nuevo', 'EventoController@create')->name("eventos_create");
-Route::post('eventos/nuevo', 'EventoController@store');
-Route::get('eventos/{evento}', 'EventoController@show')->name("eventos_show");
 
-Route::post('/fechaEvento/store', 'FechaEventoController@store')->name("fechaEventos_store");
-Route::put('/fechaEvento/put', 'FechaEventoController@update')->name("fechaEventos_update");
+//Route::post('/fechaEvento/store', 'FechaEventoController@store')->name("fechaEventos_store");
+
 Route::delete('/fechaEvento/delete', 'FechaEventoController@destroy')->name('fechaeventos_delete');
 
 Route::get('/academicos', 'AcademicoController@index');

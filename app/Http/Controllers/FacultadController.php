@@ -28,12 +28,6 @@ class FacultadController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(FacultadRequest $request)
     {
         $request->validate([
@@ -44,12 +38,6 @@ class FacultadController extends Controller
         return redirect()->route('facultades.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Facultad  $facultad
-     * @return \Illuminate\Http\Response
-     */
     public function show(Facultad $facultad)
     {
         //
@@ -58,33 +46,32 @@ class FacultadController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Facultad $facultad)
+    public function edit(Facultad $facultade)
     {
-        dd($facultad);
         return view('facultades.edit', [
-            'facultad' => $facultad
+            'facultad' => $facultade
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(FacultadRequest $request, Facultad $facultad)
+    public function update(FacultadRequest $request, Facultad $facultade)
     {
         $request->validate([
-            'NombreFacultad' => 'unique:facultad,NombreFacultad'.$facultad->IdFacultad.',IdFacultad',
-            'ClaveFacultad' => 'unique:facultad,ClaveFacultad'.$facultad->IdFacultad.',IdFacultad'
+            'NombreFacultad' => 'unique:facultad,NombreFacultad,'.$facultade->IdFacultad.',IdFacultad',
+            'ClaveFacultad' => 'unique:facultad,ClaveFacultad,'.$facultade->IdFacultad.',IdFacultad'
         ]);
-        $facultad->update( $request->validated() );
+        $facultade->update( $request->validated() );
         return redirect()->route('facultades.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Facultad $facultad)
+    public function destroy(Facultad $facultade)
     {
-        $facultad->delete();
+        $facultade->delete();
         return redirect()->route('facultades.index');
     }
 }

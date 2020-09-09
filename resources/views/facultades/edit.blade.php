@@ -2,9 +2,11 @@
 
 @section('content')
 <div class="card">
-  <div class="card-header row">
-    <h5 class="card-title col-8">Editar Facultad</h5>
-    <a class="btn btn-primary col-4" href="{{ route('facultades.index') }}" role="button">Ver Facultades</a>
+  <div class="card-header">
+    <div class="row">
+      <h5 class="card-title col-8">Editar Facultad</h5>
+      <a class="btn btn-primary col-4" href="{{ route('facultades.index') }}" role="button">Ver Facultades</a>
+    </div>
   </div>
   <div class="card-body">
 
@@ -17,7 +19,7 @@
       </div>
       <div class="form-group">
         <label name="ClaveFacultad">Clave de la Facultad:</label>
-        <input name="ClaveFacultad" class="form-control @error('ClaveFacultad') is-invalid @enderror" value="{{ old('ClaveFacultad', $facultad->ClaveFacultad) }}" maxlength="10"></input>
+        <input name="ClaveFacultad" class="form-control @error('ClaveFacultad') is-invalid @enderror" value="{{ old('ClaveFacultad', $facultad->ClaveFacultad) }}" maxlength="10">
       </div>
       <button type="submit" class="btn btn-primary btn-block">Guardar</button>
       <a href="{{ route('facultades.index') }}" class="btn btn-secondary btn-block">Cancelar</a>

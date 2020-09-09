@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FechaEventoRequest;
 use App\Evento;
 use App\Evento_Fecha_Sede;
 use App\FechaEvento;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Session;
 
 class FechaEventoController extends FcaController
 {
@@ -21,54 +23,19 @@ class FechaEventoController extends FcaController
         $this->idUsuario = $this->user->IdUsuario;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $input = $request->all();
-
-        $rules = [
-            'fechaInicio' => 'required|date_format:d/m/Y',
-            'horaInicio' => 'required|date_format:g:i A',
-            'horaFin' => 'required|date_format:g:i A',
-            'evento' => 'required|exists:App\Evento,IdEvento',
-            'sede' => 'required|exists:App\SedeEvento,IdSedeEvento'
-        ];
-
-        $validator = Validator::make($input, $rules);
-
-        if ($validator->fails()) {
-            $this->addFlash('danger','No fue posible realizar la operación solicitada.');
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput()
-                ->with( $this->getFlash() );
-        }
+    public function store(FechaEventoRequest $request)
+    {   
+        $input = $request->validated();
 
         $idEvento = $input['evento'];
 
@@ -110,69 +77,26 @@ class FechaEventoController extends FcaController
         }
 
         DB::commit();
-
-        $this->addFlash('success','Fecha <strong>agregada</strong> con éxito.');
-        return redirect()
-            ->back()
-            ->withInput()
-            ->with('flash',$this->getFlash() );
+        
+        Session::flash('flash', [ ['type' => "success", 'message' => "Fecha Agregada Con Exito."] ]);
+        return redirect()->back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\FechaEvento  $fechaEvento
-     * @return \Illuminate\Http\Response
-     */
     public function show(FechaEvento $fechaEvento)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\FechaEvento  $fechaEvento
-     * @return \Illuminate\Http\Response
-     */
     public function edit(FechaEvento $fechaEvento)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\FechaEvento  $fechaEvento
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
+    public function update(FechaEventoRequest $request)
     {
-        $input = $request->all();
-
-        $rules = [
-            'fechaInicio' => 'required|date_format:d/m/Y',
-            'horaInicio' => 'required|date_format:g:i A',
-            'horaFin' => 'required|date_format:g:i A',
-            'evento' => 'required|exists:App\Evento,IdEvento',
-            'fechaEvento' => 'required|exists:App\FechaEvento,IdFechaEvento',
-            'sede' => 'required|exists:App\SedeEvento,IdSedeEvento'
-        ];
-
-        $validator = Validator::make($input, $rules);
-
-        if ($validator->fails()) {
-            $this->addFlash('danger','No fue posible realizar la operación solicitada.');
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput()
-                ->with( $this->getFlash() );
-        }
+        $input = $request->validated();
 
         /* Obtener fechas */
-
         $fechaInicio = \DateTime::createFromFormat('d/m/Y g:m A', $input['fechaInicio'].' '.$input['horaInicio'] );
 
         $fechaFin = \DateTime::createFromFormat('d/m/Y g:m A', $input['fechaInicio'].' '.$input['horaFin'] );
@@ -194,22 +118,6 @@ class FechaEventoController extends FcaController
 
         try{
             DB::beginTransaction();
-/*
-            $actualizado = DB::table('FechaEvento')
-                ->where('IdFechaEvento', $input['fechaEvento'])
-                ->update([
-                    'InicioFechaEvento' => $fechaInicio,
-                    'FinFechaEvento'    => $fechaFin,
-                    'UpdatedBy'         => $this->idUsuario,
-            ]);
-
-            $actualizado2 = DB::table('Evento_Fecha_Sede')
-                ->where('IdFechaEvento', $input['fechaEvento'])
-                ->update([
-                    'IdSedeEvento'  => $input['sede'],
-                    'UpdatedBy'     => $this->idUsuario,
-            ]);
-            */
 
             $fechaEvento = FechaEvento::find( $input['fechaEvento'] );
             $fechaEvento->InicioFechaEvento = $fechaInicio;
@@ -234,19 +142,10 @@ class FechaEventoController extends FcaController
             //!!! Enviar alerta de error
         }
 
-        $this->addFlash('success','Fecha <strong>actualizada</strong> con éxito.');
-        return redirect()
-            ->back()
-            ->withInput()
-            ->with('flash',$this->getFlash() );
+        Session::flash('flash', [ ['type' => "success", 'message' => "Fecha Actualizada Con Exito."] ]);
+        return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\FechaEvento  $fechaEvento
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Request $request)
     {
         $input = $request->all();
