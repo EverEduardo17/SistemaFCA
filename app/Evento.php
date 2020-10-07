@@ -12,6 +12,7 @@ class Evento extends Model
 
     protected $table = "Evento";
     protected $primaryKey = "IdEvento";
+    protected $fillable = ['NombreEvento', 'DescripcionEvento','EstadoEvento'];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';

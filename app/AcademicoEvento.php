@@ -12,6 +12,7 @@ class AcademicoEvento extends Model
 
     protected $table = "academico_evento";
     protected $primaryKey = "Id_Academico_Evento";
+    protected $fillable = ['IdAcademico', 'IdEvento'];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
@@ -23,6 +24,6 @@ class AcademicoEvento extends Model
 
     //Relacion Uno a Mucho
     public function evento(){
-        return $this->hasMany(Evento::class, 'IdEvento', 'IdEvento');
+        return $this->hasOne(Evento::class, 'IdEvento', 'IdEvento');
     }
 }

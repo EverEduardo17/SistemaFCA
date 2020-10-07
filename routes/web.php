@@ -23,6 +23,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::resource('academias', 'AcademiaController');
+Route::resource('academicos', 'AcademicoController');
+Route::resource('academicoEvento','AcademicoEventoController');
 Route::resource('facultades', 'FacultadController');
 Route::resource('eventos', 'EventoController');
 Route::resource('fechaEventos', 'FechaEventoController');
@@ -36,5 +38,5 @@ Route::get('/eventos/{year}/{month}/{day}', 'EventoController@indexWithDate')->n
 
 Route::delete('/fechaEvento/delete', 'FechaEventoController@destroy')->name('fechaeventos_delete');
 
-Route::get('/academicos', 'AcademicoController@index');
+// Route::get('/academicos', 'AcademicoController@index');
 
