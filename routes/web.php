@@ -29,6 +29,7 @@ Route::resource('facultades', 'FacultadController');
 Route::resource('eventos', 'EventoController');
 Route::resource('fechaEventos', 'FechaEventoController');
 Route::resource('documento', 'DocumentoController');
+Route::resource('tipoorganizador', 'TipoOrganizadorController');
 Route::put('/fechaEvento/put', 'FechaEventoController@update')->name("fechaEventos.update");
 
 Route::get('/home', 'HomeController@index')->name('home');

@@ -7,6 +7,7 @@ use App\Evento;
 use App\Evento_Fecha_Sede;
 use App\SedeEvento;
 use App\Documento;
+use App\Organizador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -145,6 +146,7 @@ class EventoController extends FcaController
             "evento_fecha_sede_s"=>$evento_fecha_sede_s,
             "sedes" =>SedeEvento::all(),
             "documentos" => $documentos,
+            "responsables" => Organizador::where('IdEvento', $evento->IdEvento)->get(),
         ]);
     }
     public function edit(Evento $evento)

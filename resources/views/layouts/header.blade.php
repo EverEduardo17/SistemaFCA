@@ -8,7 +8,7 @@
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        
+
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown justify-content-start">
@@ -52,7 +52,7 @@
                         <a class="dropdown-item" asp-area="" asp-controller="Role_Usuario" asp-action="Index">Role_Usuarios</a>
                     </div>
                 </li>
-                       
+
             </ul>
             <span class="navbar-text">
                 {{Auth::user()->name ?? "Invitado"}}

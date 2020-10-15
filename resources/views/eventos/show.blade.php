@@ -130,7 +130,24 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-
+                            <table id="table_responsable" class="display">
+                                <thead>
+                                <tr>
+                                    <th>Responsable</th>
+                                    <th>Rol</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($responsables as $responsable)
+                                    <tr>
+                                        <td>{{ $responsable->academico->usuario->name }}</td>
+                                        <td>{{ $responsable->tipo_organizador->NombreTipoOrganizador }}</td>
+                                        <td></td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -221,6 +238,7 @@
         $(document).ready( function () {
             $('#table_eventos').DataTable();
             $('#table_documentos').DataTable();
+            $('#table_responsable').DataTable();
         } );
 
         $('#evento-list a').on('click', function (e) {

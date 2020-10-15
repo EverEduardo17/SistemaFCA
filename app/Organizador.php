@@ -23,11 +23,11 @@ class Organizador extends Model
 
     //Relacion Uno a Mucho
     public function academico(){
-        return $this->hasMany(Academico::class, 'IdAcademico', 'IdAcademico');
+        return $this->hasOne(Academico::class, 'IdAcademico', 'IdAcademico');
     }
 
     //Relacion Uno a Mucho
     public function tipo_organizador(){
-        return $this->hasMany(TipoOrganizador::class, 'IdTipoOrganizador', 'IdTipoOrganizador');
+        return $this->hasOne(TipoOrganizador::class, 'IdTipoOrganizador', 'IdTipoOrganizador');
     }
 }

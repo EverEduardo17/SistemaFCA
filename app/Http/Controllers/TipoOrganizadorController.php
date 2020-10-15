@@ -2,84 +2,74 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TipoOrganizadorRequest;
 use App\TipoOrganizador;
 use Illuminate\Http\Request;
+use App\TipoOrganizadoro;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Throwable;
+use Yaf\Exception;
 
-class TipoOrganizadorController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
+class TipoOrganizadorController extends Controller {
+
+    public function index() {
+        return view('tipoorganizador.index', [
+            'tipoorganizadores' => TipoOrganizador::get()
+        ]);
+    }
+
+    public function create() {
+        return view('tipoorganizador.create');
+    }
+
+    public function store(TipoOrganizadorRequest $request) {
+        $request = $request->validated();
+
+        try {
+            DB::beginTransaction();
+                DB::table('tipoorganizador')->insert([
+                    'NombreTipoOrganizador'      => $request['NombreTipoOrganizador'],
+                    'DescripcionTipoOrganizador' => $request['DescripcionTipoOrganizador']
+                ]);
+            DB::commit();
+        }catch (\Throwable $exception){
+            DB::rollBack();
+            Session::flash('flash', [ ['type' => "danger", 'message' => "Tipo de Organizador no pudo ser registrado."] ]);
+            return redirect()->route('tipoorganizador.index');
+        }
+        Session::flash('flash', [ ['type' => "success", 'message' => "Tipo Organizador fue Registrado Con Exito."] ]);
+        return redirect()->route('tipoorganizador.index');
+    }
+
+    public function show(TipoOrganizador $tipoOrganizador) {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+    public function edit(TipoOrganizador $tipoOrganizador) {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function update(TipoOrganizadorRequest $request, $tipoOrganizador) {
+        $request = $request->validated();
+
+        try {
+            DB::beginTransaction();
+                DB::table('tipoorganizador')->where('IdTipoOrganizador', $tipoOrganizador)->update([
+                   'NombreTipoOrganizador'      => $request['NombreTipoOrganizador'],
+                   'DescripcionTipoOrganizador' => $request['DescripcionTipoOrganizador']
+                ]);
+            DB::commit();
+        }catch (\Throwable $exception){
+            DB::rollBack();
+            Session::flash('flash', [ ['type' => "danger", 'message' => "Tipo de Organizador no pudo ser actualizado."] ]);
+            return redirect()->route('tipoorganizador.index');
+        }
+        Session::flash('flash', [ ['type' => "success", 'message' => "Tipo Organizador Actualizado Con Exito."] ]);
+        return redirect()->route('tipoorganizador.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\TipoOrganizador  $tipoOrganizador
-     * @return \Illuminate\Http\Response
-     */
-    public function show(TipoOrganizador $tipoOrganizador)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\TipoOrganizador  $tipoOrganizador
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(TipoOrganizador $tipoOrganizador)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\TipoOrganizador  $tipoOrganizador
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, TipoOrganizador $tipoOrganizador)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\TipoOrganizador  $tipoOrganizador
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(TipoOrganizador $tipoOrganizador)
-    {
+    public function destroy(TipoOrganizador $tipoOrganizador) {
         //
     }
 }

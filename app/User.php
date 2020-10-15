@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "Usuario";
+    protected $table = "usuario";
     protected $primaryKey = "IdUsuario";
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
