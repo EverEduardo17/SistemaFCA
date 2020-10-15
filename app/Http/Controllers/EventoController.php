@@ -6,6 +6,7 @@ use App\Http\Requests\EventoRequest;
 use App\Evento;
 use App\Evento_Fecha_Sede;
 use App\SedeEvento;
+use App\Documento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -20,7 +21,7 @@ class EventoController extends FcaController
 
     public function __construct()
     {
-        $this->user = Auth::user();
+        $this->user = Auth::user()->db;
     }
 
     public function index()
@@ -63,7 +64,7 @@ class EventoController extends FcaController
     {
         $input = $request->validated();
         //dd($input);
-        
+
         /* Obtener fechas */
         $fechaInicio = explode( '/', $input['fechaInicio'] );
         $horaInicio  = explode( ' ', $input['horaInicio'] );
@@ -126,7 +127,7 @@ class EventoController extends FcaController
             }
 
         DB::commit();
-        
+
         //$validator = Validator::make($input, $rules, $messages);
         Session::flash('flash', [ ['type' => "success", 'message' => "Evento registrado correctamente"] ]);
         return redirect()->route('eventos.index');
@@ -138,9 +139,12 @@ class EventoController extends FcaController
             ->with(['fechaEvento', 'sedeEvento'])
             ->get()
             ->sortBy('fechaEvento.InicioFechaEvento');
+        $documentos = Documento::where('IdEvento', $evento->IdEvento)->get();
         return view('eventos.show', [
-            "evento"=>$evento, "evento_fecha_sede_s"=>$evento_fecha_sede_s,
-            "sedes" =>SedeEvento::all()
+            "evento"=>$evento,
+            "evento_fecha_sede_s"=>$evento_fecha_sede_s,
+            "sedes" =>SedeEvento::all(),
+            "documentos" => $documentos,
         ]);
     }
     public function edit(Evento $evento)

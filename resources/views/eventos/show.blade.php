@@ -160,7 +160,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Documentos</h4>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-primary">Agregar</button>
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#addDocument">Agregar</button>
                                 </div>
                             </div>
                             <hr>
@@ -168,7 +168,32 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-
+                            <table id="table_documentos" class="display">
+                                <thead>
+                                    <tr>
+                                        <th>NombreDocumento</th>
+                                        <th>DescripcionDocumento</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($documentos as $documento)
+                                        <tr>
+                                            <td>{{ $documento->NombreDocumento }}</td>
+                                            <td>{{ $documento->DescripcionDocumento }}</td>
+                                            <td>
+                                                <a href="{{ route('documento.show', $documento->IdDocumento) }}">Descargar</a>
+                                                <a href="#" data-toggle="modal" data-target="#deleteDocumento"
+                                                   data-documento="{{ $documento->IdDocumento }}">Eliminar</a>
+                                                <a href="#" data-toggle="modal" data-target="#editDocumento"
+                                                   data-documento="{{ $documento->IdDocumento }}"
+                                                   data-nombre="{{ $documento->NombreDocumento }}"
+                                                   data-descripcion="{{ $documento->DescripcionDocumento }}">Editar</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -178,6 +203,7 @@
 
     @include('eventos.modals.deleteFecha')
     @include('eventos.modals.addFecha')
+    @include('eventos.modals.addDocument')
 @endsection
 
 @section('head')
@@ -190,10 +216,11 @@
     <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
     <script type="text/javascript" src="{{asset('lib/moment/min/moment-with-locales.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('lib/datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
-    
+
     <script>
         $(document).ready( function () {
             $('#table_eventos').DataTable();
+            $('#table_documentos').DataTable();
         } );
 
         $('#evento-list a').on('click', function (e) {
@@ -240,6 +267,33 @@
                 modal.find('#sede').val(sedeEvento);
                 modal.find('.modal-footer button[type=submit]').text('Editar');
             }
+        })
+
+        $('#addDocument').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+        })
+
+        /*Eliminar documento*/
+        $('#deleteDocumento').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('documento');
+            var modal = $(this);
+            var action = $("#form-eliminar-documento").attr('action') + '/' + id;
+            modal.find('.modal-body form').attr('action', action);
+        })
+
+        /*edit documento*/
+        $('#editDocumento').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('documento');
+            var nombre = button.data('nombre');
+            var descripcion = button.data('descripcion');
+            var modal = $(this);
+            var action = $("#form-editar-documento").attr('action') + '/' + id;
+            modal.find('.modal-body form').attr('action', action);
+            modal.find('.modal-body input[name=NombreDocumento]').val(nombre);
+            modal.find('.modal-body input[name=DescripcionDocumento]').val(descripcion);
         })
 
         /*Date Picker*/

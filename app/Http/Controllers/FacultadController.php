@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FacultadRequest;
 use App\Facultad;
+use App\AcademicoEvento;
 use Illuminate\Http\Request;
 
 class FacultadController extends Controller
@@ -13,6 +14,8 @@ class FacultadController extends Controller
      */
     public function index()
     {
+        $item = AcademicoEvento::get();
+        dd($item[0]->evento->NombreEvento);
         return view('facultades.index', [
             'facultades' => Facultad::get()
         ]);
