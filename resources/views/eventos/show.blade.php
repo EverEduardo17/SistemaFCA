@@ -122,7 +122,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Responsables</h4>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-primary">Agregar</button>
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#addTipoOrganizador">Agregar</button>
                                 </div>
                             </div>
                             <hr>
@@ -143,7 +143,13 @@
                                     <tr>
                                         <td>{{ $responsable->academico->usuario->name }}</td>
                                         <td>{{ $responsable->tipo_organizador->NombreTipoOrganizador }}</td>
-                                        <td></td>
+                                        <td>
+                                            <a href="#" data-toggle="modal" data-target="#deleteTipoOrganizador"
+                                               data-tipoorganizador="{{ $responsable->IdOrganizador }}">Eliminar</a>
+                                            <!--<a href="#" data-toggle="modal" data-target="#editTipoOrganizador"
+                                               data-tipoorganizador="{{ $responsable->IdOrganizador }}"
+                                               data-tipoact="{{ $responsable->IdTipoOrganizador }}">Editar</a>-->
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -221,6 +227,7 @@
     @include('eventos.modals.deleteFecha')
     @include('eventos.modals.addFecha')
     @include('eventos.modals.addDocument')
+    @include('eventos.modals.tipoorganizador')
 @endsection
 
 @section('head')
@@ -307,6 +314,32 @@
             var id = button.data('documento');
             var nombre = button.data('nombre');
             var descripcion = button.data('descripcion');
+            var modal = $(this);
+            var action = $("#form-editar-documento").attr('action') + '/' + id;
+            modal.find('.modal-body form').attr('action', action);
+            modal.find('.modal-body input[name=NombreDocumento]').val(nombre);
+            modal.find('.modal-body input[name=DescripcionDocumento]').val(descripcion);
+        })
+
+        $('#addTipoOrganizador').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+        })
+
+        /*Eliminar tipoorganizador*/
+        $('#deleteTipoOrganizador').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('tipoorganizador');
+            var modal = $(this);
+            var action = $("#form-eliminar-organizador").attr('action') + '/' + id;
+            modal.find('.modal-body form').attr('action', action);
+        })
+
+        /*edit tipoorganizador*/
+        $('#editTipoOrganizador').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('tipoorganizador');
+            var act = button.data('tipoact');
             var modal = $(this);
             var action = $("#form-editar-documento").attr('action') + '/' + id;
             modal.find('.modal-body form').attr('action', action);

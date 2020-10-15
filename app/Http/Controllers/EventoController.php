@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Academico;
 use App\Http\Requests\EventoRequest;
 use App\Evento;
 use App\Evento_Fecha_Sede;
 use App\SedeEvento;
 use App\Documento;
 use App\Organizador;
+use App\TipoOrganizador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -147,6 +149,8 @@ class EventoController extends FcaController
             "sedes" =>SedeEvento::all(),
             "documentos" => $documentos,
             "responsables" => Organizador::where('IdEvento', $evento->IdEvento)->get(),
+            "tipoorganizadores" => TipoOrganizador::get(),
+            "academicos"    => Academico::get()
         ]);
     }
     public function edit(Evento $evento)
