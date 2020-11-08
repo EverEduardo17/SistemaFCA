@@ -60,7 +60,7 @@ class OrganizadorController extends Controller {
     }
     public function destroy($organizador){
         $organizador = Organizador::findOrFail( $organizador );
-        $organizador->delete();
+        $organizador->forceDelete();
 
         Session::flash('flash', [ ['type' => "success", 'message' => "Organizador Eliminado Correctamente."] ]);
         return redirect()->back();

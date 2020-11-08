@@ -34,7 +34,7 @@ class FechaEventoController extends FcaController
     }
 
     public function store(FechaEventoRequest $request)
-    {   
+    {
         $input = $request->validated();
 
         $idEvento = $input['evento'];
@@ -77,7 +77,7 @@ class FechaEventoController extends FcaController
         }
 
         DB::commit();
-        
+
         Session::flash('flash', [ ['type' => "success", 'message' => "Fecha Agregada Con Exito."] ]);
         return redirect()->back();
     }
@@ -97,9 +97,28 @@ class FechaEventoController extends FcaController
         $input = $request->validated();
 
         /* Obtener fechas */
-        $fechaInicio = \DateTime::createFromFormat('d/m/Y g:m A', $input['fechaInicio'].' '.$input['horaInicio'] );
+        /* Obtener fechas */
+        $fechaInicio = explode( '/', $input['fechaInicio'] );
+        $horaInicio  = explode( ' ', $input['horaInicio'] );
+        $PM          = strcmp ( 'PM', mb_strtoupper( $horaInicio[1] ) ) == 0;
+        $horaInicio  = explode( ':', $horaInicio[0] );
+        if( $PM ){
+            $horaInicio[0] += 12;
+        }
 
-        $fechaFin = \DateTime::createFromFormat('d/m/Y g:m A', $input['fechaInicio'].' '.$input['horaFin'] );
+        $fechaFin = $fechaInicio;
+        $horaFin  = explode(' ', $input['horaFin'] );
+        $PM       = strcmp ( 'PM', mb_strtoupper($horaFin[1]) ) == 0;
+        $horaFin  = explode(':', $horaFin[0] );
+        if( $PM ){
+            $horaFin[0] += 12;
+        }
+
+        $fechaInicio = sprintf("%d-%d-%d %d:%d",
+            $fechaInicio[2], $fechaInicio[1], $fechaInicio[0], $horaInicio[0], $horaInicio[1] );
+
+        $fechaFin = sprintf("%d-%d-%d %d:%d",
+            $fechaFin[2], $fechaFin[1], $fechaFin[0], $horaFin[0], $horaFin[1] );
 
         //!!!! Validar que la fechaFin debe ser mayor a la fechaInicio
 
@@ -117,6 +136,7 @@ class FechaEventoController extends FcaController
         }
 
         try{
+
             DB::beginTransaction();
 
             $fechaEvento = FechaEvento::find( $input['fechaEvento'] );

@@ -28,6 +28,12 @@ class Academico extends Model
 
     //Relacion Muchos a Uno
     public function academico_academia(){
+        return $this->belongsTo(AcademicoAcademia::class, 'IdAcademico', 'IdAcademico');
+        //return $this->belongsToMany(Academia::class, 'academico_academia', 'IdAcademico', 'IdAcademia');
+    }
+
+    //Relacion Muchos a Uno
+    public function mico_mia(){
         //return $this->belongsTo(AcademicoAcademia::class, 'IdAcademico', 'IdAcademico');
         return $this->belongsToMany(Academia::class, 'academico_academia', 'IdAcademico', 'IdAcademia');
     }

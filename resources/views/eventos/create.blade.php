@@ -5,11 +5,11 @@
     <div class="card-header">
       <div class="row">
         <h5 class="card-title col-8">Crear Evento</h5>
-        <a class="btn btn-primary col-4" href="" role="button">Ver Eventos</a>
+        <a class="btn btn-primary col-4" href="{{ route('eventos.index') }}" role="button">Ver Eventos</a>
       </div>
     </div>
     <div class="card-body">
-      
+
       <form method="POST" action="{{ route('eventos.store') }}" autocomplete="off">
         @csrf
         @include('layouts.validaciones')

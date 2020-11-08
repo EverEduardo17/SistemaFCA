@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Academia;
+use App\Academico;
+use App\AcademicoAcademia;
+use App\Organizador;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+
+class AcademiaAcademicoController extends Controller {
+
+    public function __construct() {
+        $this->user = Auth::user();
+    }
+
+    public function index() {
+        //
+    }
+
+    public function create() {
+        //
+    }
+
+    public function store(Request $request) {
+
+        $academia = Academia::findOrFail($request->academia);
+        $academico = Academico::findOrFail($request->docente);
+
+        if(AcademicoAcademia::where([['IdAcademico', $academico->IdAcademico], ['IdAcademia', $academia->IdAcademia]])->exists()){
+            Session::flash('flash', [ ['type' => "danger", 'message' => "El academico ya pertenece a esta academia."] ]);
+            return redirect()->route('academias.show', $academia);
+        }
+
+        try {
+            DB::table('academico_academia')->insert([
+                'IdAcademico'       => $academico->IdAcademico,
+                'IdAcademia'  => $academia->IdAcademia
+            ]);
+        }catch (\Throwable $throwable) {
+            Session::flash('flash', [ ['type' => "danger", 'message' => "El academico no pudo ser agregado a esta academia."] ]);
+            return redirect()->route('academias.show', $academia);
+        }
+        Session::flash('flash', [ ['type' => "success", 'message' => "El academico fue agregado a esta academia."] ]);
+        return redirect()->route('academias.show', $academia);
+    }
+
+    public function show($id) {
+        //
+    }
+
+    public function edit($id) {
+        //
+    }
+
+    public function update(Request $request, $id) {
+        //
+    }
+
+    public function destroy($id) {
+        $academicoEvento = Organizador::findOrFail($id);
+        try {
+            $academicoEvento->forceDelete();
+            Session::flash('flash', [['type' => "success", 'message' => "Académico eliminado correctamente."]]);
+            return redirect()->route('academicoEvento.index');
+        } catch (\Throwable $throwable) {
+            Session::flash('flash', [['type' => "danger", 'message' => "No es posible eliminar al Académico."]]);
+            return redirect()->route('academicoEvento.index');
+        }
+    }
+}

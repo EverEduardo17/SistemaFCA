@@ -23,6 +23,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::resource('academias', 'AcademiaController');
+Route::resource('academiaacademico', 'AcademiaAcademicoController');
 Route::delete('academias/academico/delete/{academicoAcademia}', 'AcademiaController@destroyAcademicoAcademia')->name('deleteAcademicoAcademia');
 Route::resource('academicos', 'AcademicoController');
 Route::resource('academicoEvento','AcademicoEventoController');

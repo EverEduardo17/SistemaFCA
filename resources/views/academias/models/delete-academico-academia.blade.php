@@ -33,14 +33,15 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" id="form-add-academico" action="" autocomplete="off">
+                <form method="POST" id="form-add-academico" action="{{ route('academiaacademico.store') }}" autocomplete="off">
                     @csrf
                     @include('layouts.validaciones')
+                    <input type="hidden" name="academia" value="{{ $academia->IdAcademia }}">
                     <div class="form-group">
-                        <label name="Coordinador">Docente:</label>
-                        <select name="Coordinador" class="form-control @error('Coordinador') is-invalid @enderror">
+                        <label name="docente">Docente:</label>
+                        <select name="docente" class="form-control @error('docente') is-invalid @enderror">
                             @foreach ($academicos as $academico)
-                                <option value="{{ $academico->academico->IdAcademico }}">{{ $academico->academico->usuario->name }}</option>
+                                <option value="{{ $academico->IdAcademico }}">{{ $academico->usuario->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -48,7 +49,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary" form="form-ad-academico">Agregar</button>
+                <button type="submit" class="btn btn-primary" form="form-add-academico">Agregar</button>
             </div>
         </div>
     </div>

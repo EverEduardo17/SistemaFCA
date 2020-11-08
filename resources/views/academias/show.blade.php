@@ -9,10 +9,17 @@
             </div>
         </div>
         <div class="card-body">
-            <h5 class="card-title">Coordinador: {{ $academia->coordinador->usuario->name }}</h5>
-            <p class="card-text">{{ $academia->DescripcionAcademia }}</p>
-            <a href="#" data-toggle="modal" data-target="#addAcademicoAcademia" class="btn btn-primary">Agregar Academico</a>
-            <table class="table table-striped">
+            <div class="row">
+                <div class="col-8">
+                    <h5 class="card-title">Coordinador: {{ $academia->coordinador->usuario->name }}</h5>
+                    <p class="card-text">{{ $academia->DescripcionAcademia }}</p>
+                </div>
+                <div class="col">
+                    <a href="#" data-toggle="modal" data-target="#addAcademicoAcademia" class="btn btn-success">Agregar Academico</a>
+                </div>
+            </div>
+            <br><br>
+            <table class="table table-striped" id="table">
                 <thead>
                 <tr>
                     <th>No de Personal</th>
@@ -41,11 +48,16 @@
 @endsection
 
 @section('head')
-
+    <link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}"/>
 @endsection
 
 @section('script')
+    <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
     <script>
+        $(document).ready( function () {
+            $('#table').DataTable();
+        } );
+
         /*Eliminar Acedemico*/
         $('#deleteAcademicoAcademia').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);

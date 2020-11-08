@@ -42,24 +42,13 @@ class AcademiaController extends Controller
 
     }
 
-    public function show(Academia $academia)
-    {
-        //SELECT academico.* FROM academico LEFT JOIN academico_academia on academico_academia.IdAcademico = academico.IdAcademico WHERE academico_academia.IdAcademia = 5;
-        //Devuelve los que pertenecen
-        //->join('academia', 'academia.IdAcademia', '=', 'aa.IdAcademia')
-        $academicss = Academico::get();
-        //$academicss = $academicss->academico_academia()
-          //  ->where('IdAcademia', '<>', $academia->IdAcademia)->get();
-//        dd($academicss);
-//        $academicos = Academico::whereHas('academico_academia', function ($query) {
-//                return $query->where('IdAcademia', '<>', $academia->IdAcademia);
-//            })->get();
-//        dd($academicos[0]);
-        dd( Academico::leftjoin('academico_academia as aa', 'aa.IdAcademico', '=', 'academico.IdAcademico')->select('academico.*')->where('aa.IdAcademia', '<>', $academia->IdAcademia)->get() );
-        dd( AcademicoAcademia::rightjoin('academico', 'academico.IdAcademico', '=', 'academico_academia.IdAcademico')->where('academico_academia.DeletedAt', null)->select('academico.*')->get() );
+    public function show(Academia $academia) {
+        $data = AcademicoAcademia::select('IdAcademico')->where('IdAcademia', $academia->IdAcademia)->get()->toArray();
+        $academicosNot = Academico::whereNotIn('IdAcademico', $data)->get();
+
         return view('academias.show', [
             'academia'      => $academia,
-            'academicos'    => $academicos,
+            'academicos'    => $academicosNot,
         ]);
     }
 
@@ -88,13 +77,20 @@ class AcademiaController extends Controller
 
     public function destroy(Academia $academia)
     {
-        $academia->delete();
-        return redirect()->route('academias.index');
+        try {
+            $academia->delete();
+            Session::flash('flash', [ ['type' => "success", 'message' => "Academia fue eliminada correctamente."] ]);
+            return redirect()->route('academias.index');
+        }catch (\Throwable $throwable){
+            Session::flash('flash', [ ['type' => "danger", 'message' => "La Academia no pudo ser eliminada correctamente."] ]);
+            return redirect()->route('academias.index');
+        }
+
     }
 
     public function destroyAcademicoAcademia(AcademicoAcademia $academicoAcademia){
         try {
-            $academicoAcademia->delete();
+            $academicoAcademia->forceDelete();
             Session::flash('flash', [ ['type' => "success", 'message' => "El Academico fue eliminado de la Academia correctamente."] ]);
             return redirect()->route('academias.show', $academicoAcademia->IdAcademia);
         }catch (\Throwable $throwable){

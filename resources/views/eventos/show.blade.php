@@ -6,7 +6,7 @@
             <div class="row d-flex align-items-center mr-2">
                 <h4 class="mr-auto p-3">Evento</h4>
                 <div class="btn-group" role="group">
-                    <button class="btn btn-primary">Editar</button>
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#editEvento">Editar</a>
                     <button class="btn btn-danger" style="margin-left: 1em" >Eliminar</button>
                 </div>
             </div>
@@ -223,7 +223,7 @@
             </div>
         </div>
     </div>
-
+    @include('eventos.modals.edit')
     @include('eventos.modals.deleteFecha')
     @include('eventos.modals.addFecha')
     @include('eventos.modals.addDocument')
@@ -292,6 +292,11 @@
                 modal.find('#sede').val(sedeEvento);
                 modal.find('.modal-footer button[type=submit]').text('Editar');
             }
+        })
+
+        $('#editEvento').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
         })
 
         $('#addDocument').on('show.bs.modal', function (event) {

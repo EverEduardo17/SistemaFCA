@@ -22,7 +22,7 @@
 
                     <div class="form-group">
                         <label for="horaInicio" class="col-form-label">Hora de inicio</label>
-                        <input id="horaInicio" type="text" class="form-control  @error('horaInicio') is-invalid @enderror" name="horaInicio" value="{{ old('horaInicio') }}" placeholder="Inicio">
+                        <input id="horaInicio" type="text" class="form-control  datetimepicker-input @error('horaInicio') is-invalid @enderror" name="horaInicio" value="{{ old('horaInicio') }}" placeholder="Inicio">
                     </div>
 
                     <div class="form-group">

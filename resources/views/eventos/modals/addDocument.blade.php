@@ -74,7 +74,7 @@
             <div class="modal-body">
                 <form method="POST" id="form-editar-documento" action="{{ route('documento.update', '') }}" autocomplete="off">
                     @csrf
-                    @method('put')
+                    @method('PATCH')
                     <input type="hidden" name="id" id="id">
                     @include('layouts.validaciones')
 
@@ -90,7 +90,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-success" form="form-editar-documento">Agregar</button>
+                <button type="submit" class="btn btn-success" form="form-editar-documento">Editar</button>
             </div>
 
         </div>

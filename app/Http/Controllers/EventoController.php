@@ -10,6 +10,7 @@ use App\SedeEvento;
 use App\Documento;
 use App\Organizador;
 use App\TipoOrganizador;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -24,7 +25,7 @@ class EventoController extends FcaController
 
     public function __construct()
     {
-        $this->user = Auth::user()->db;
+        $this->user = Auth::user();
     }
 
     public function index()
@@ -87,8 +88,22 @@ class EventoController extends FcaController
 
         //!!!! Validar que la fechaFin debe ser mayor a la fechaInicio
 
-        //!!! Validar que las fechas no chocan con otro evento
+        $fechaInicioFormat = sprintf("%d-%d-%d %d:%d",
+            $fechaInicio[2], $fechaInicio[1], $fechaInicio[0], $horaInicio[0], $horaInicio[1] );
+        $fechaFinFormat = sprintf("%d-%d-%d %d:%d",
+            $fechaFin[2], $fechaFin[1], $fechaFin[0], $horaFin[0], $horaFin[1] );
+        $hrInicio = sprintf("%d%d",
+            $horaInicio[0], $horaInicio[1] );
+        $hrFin = sprintf("%d%d",
+            $horaFin[0], $horaFin[1] );
+        if($hrInicio >= $hrFin){
+            Session::flash('flash', [ ['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."] ]);
+            return redirect()->route('eventos.create')
+                ->withInput();
+        }
 
+        //!!! Validar que las fechas no chocan con otro evento
+        //dd($this->user);
         DB::beginTransaction();
 
             $idEvento = DB::table('Evento')->insertGetId([
@@ -107,10 +122,8 @@ class EventoController extends FcaController
             ]);
 
             $idFechaEvento = DB::table('FechaEvento')->insertGetId([
-                'InicioFechaEvento' => sprintf("%d-%d-%d %d:%d",
-                                        $fechaInicio[2], $fechaInicio[1], $fechaInicio[0], $horaInicio[0], $horaInicio[1] ),
-                'FinFechaEvento'    => sprintf("%d-%d-%d %d:%d",
-                                        $fechaFin[2], $fechaFin[1], $fechaFin[0], $horaFin[0], $horaFin[1] ),
+                'InicioFechaEvento' => $fechaInicioFormat,
+                'FinFechaEvento'    => $fechaFinFormat,
                 'CreatedBy'         => $this->idUsuario,
                 'UpdatedBy'         => $this->idUsuario,
             ]);
@@ -143,6 +156,8 @@ class EventoController extends FcaController
             ->get()
             ->sortBy('fechaEvento.InicioFechaEvento');
         $documentos = Documento::where('IdEvento', $evento->IdEvento)->get();
+        $data = Organizador::select('IdAcademico')->where('IdEvento', $evento->IdEvento)->get()->toArray();
+        $acemicosNot = Academico::whereNotIn('IdAcademico', $data)->get();
         return view('eventos.show', [
             "evento"=>$evento,
             "evento_fecha_sede_s"=>$evento_fecha_sede_s,
@@ -150,7 +165,7 @@ class EventoController extends FcaController
             "documentos" => $documentos,
             "responsables" => Organizador::where('IdEvento', $evento->IdEvento)->get(),
             "tipoorganizadores" => TipoOrganizador::get(),
-            "academicos"    => Academico::get()
+            "academicos"    => $acemicosNot
         ]);
     }
     public function edit(Evento $evento)
@@ -158,9 +173,28 @@ class EventoController extends FcaController
         //
     }
 
-    public function update(Request $request, Evento $evento)
+    public function update(Request $request, $evento)
     {
-        //
+        $evento = Evento::findOrFail( $evento );
+        $request->validate([
+            'NombreEvento'       => 'required | String',
+            'DescripcionEvento'  => 'required | String',
+        ]);
+
+        try {
+            DB::beginTransaction();
+                DB::table('evento')->where('IdEvento', $evento->IdEvento)->update([
+                    'NombreEvento'       => $request->NombreEvento,
+                    'DescripcionEvento'  => $request->DescripcionEvento,
+                ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Session::flash('flash', [ ['type' => "danger", 'message' => "Error al editar el Evento."] ]);
+            return redirect()->route('eventos.show', $evento->IdEvento);
+        }
+        Session::flash('flash', [ ['type' => "success", 'message' => "Evento editado con exito."] ]);
+        return redirect()->route('eventos.show', $evento->IdEvento);
     }
 
     public function destroy(Evento $evento)
