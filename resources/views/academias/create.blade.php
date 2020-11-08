@@ -16,7 +16,7 @@
         <div class="form-group">
           <label name="NombreAcademia">Nombre de la Academia:</label>
           <input name="NombreAcademia" type="text" value="{{ old('NombreAcademia', $academia->NombreAcademia) }}" class="form-control @error('NombreAcademia') is-invalid @enderror">
-          <small class="form-text text-muted">El nombre puede cambiar despues.</small>
+          <small class="form-text text-muted">El nombre puede cambiar después.</small>
         </div>
         <div class="form-group">
           <label name="Coordinador">Docente Coordinador:</label>

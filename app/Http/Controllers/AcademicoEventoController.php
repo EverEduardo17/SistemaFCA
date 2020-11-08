@@ -7,6 +7,8 @@ use App\AcademicoEvento;
 use App\Evento;
 use Illuminate\Http\Request;
 use App\Http\Requests\AcademicoEventoRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class AcademicoEventoController extends Controller
 {
@@ -30,7 +32,7 @@ class AcademicoEventoController extends Controller
     public function create()
     {
         return view('academicoEvento.create', [
-            'eventos' => Evento::get(),
+            'eventoes' => Evento::get(),
             'academicoes' => Academico::get()
         ]);
     }
@@ -43,8 +45,22 @@ class AcademicoEventoController extends Controller
      */
     public function store(AcademicoEventoRequest $request)
     {
-        AcademicoEvento::create( $request->validated() );
-        return redirect()->route('academicoEvento.index');
+        if (DB::table('academico_evento')->where([['IdEvento', $request->IdEvento], ['IdAcademico', $request->IdAcademico]])->doesntExist()) {
+            AcademicoEvento::create($request->validated());
+            Session::flash('flash', [['type' => "success", 'message' => "Académico agregado correctamente."]]);
+            return redirect()->route('academicoEvento.index');
+        } else {
+            // dd($request);
+            // !!Checar bien esta parte del método, falta actualizar.
+            // if (DB::table('academico_evento')->where([['IdEvento', $request->IdEvento], ['IdAcademico', $request->IdAcademico]])->exists()) {
+            //     $request->DeletedAt = null;
+            //     AcademicoEvento::updated($request->validated());
+            //     Session::flash('flash', [['type' => "success", 'message' => "Académico agregado correctamente."]]);
+            //     return redirect()->route('academicoEvento.index');
+            // }
+            Session::flash('flash', [['type' => "danger", 'message' => "El académico ya está registrado en ese evento."]]);
+            return redirect()->route('academicoEvento.index');
+        }
     }
 
     /**
@@ -87,8 +103,15 @@ class AcademicoEventoController extends Controller
      * @param  \App\Academico  $academico
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Academico $academico)
+    public function destroy(AcademicoEvento $academicoEvento)
     {
-        //
+        try {
+            $academicoEvento->forceDelete();
+            Session::flash('flash', [['type' => "success", 'message' => "Académico eliminado correctamente."]]);
+            return redirect()->route('academicoEvento.index');
+        } catch (\Throwable $throwable) {
+            Session::flash('flash', [['type' => "danger", 'message' => "No es posible eliminar al Académico."]]);
+            return redirect()->route('academicoEvento.index');
+        }
     }
 }

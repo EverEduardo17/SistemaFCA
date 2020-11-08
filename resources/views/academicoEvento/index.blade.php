@@ -23,7 +23,10 @@
           <td>{{ $item->evento->NombreEvento }}</td>
           <td>{{ $item->academico[0]->usuario->name }}</td>
           <td>
-            <a class="btn btn-primary btn-sm" href="{{ route('academicoEvento.edit', $item) }}">Editar</a>
+            <form method="POST" action="{{ route('academicoEvento.destroy', $item) }}">
+              @csrf @method('DELETE')
+              <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+            </form>
           </td>
         </tr>
         @endforeach

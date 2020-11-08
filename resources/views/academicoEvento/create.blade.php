@@ -14,15 +14,15 @@
             @csrf
             @include('layouts.validaciones')
             <div class="form-group">
-                <label name="NombreEvento">Evento:</label>
-                <select name="NombreEvento" class="form-control @error('NombreEvento') is-invalid @enderror">
-                    @foreach ($eventos as $evento)
-                    <option value="{{ $evento->IdEvento }}">{{ $evento->NombreEvento }}</option>
+                <label name="IdEventos">Evento:</label>
+                <select name="IdEvento" class="form-control @error('IdEvento') is-invalid @enderror">
+                    @foreach ($eventoes as $evento)
+                        <option value="{{ $evento->IdEvento }}">{{ $evento->NombreEvento }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="form-group">
-                <label name="IdAcademico">Participante:</label>
+                <label name="IdAcademicos">Participante:</label>
                 <select name="IdAcademico" class="form-control @error('IdAcademico') is-invalid @enderror">
                     @foreach ($academicoes as $academico)
                     <option value="{{ $academico->IdAcademico }}">{{ $academico->usuario->name }}</option>
