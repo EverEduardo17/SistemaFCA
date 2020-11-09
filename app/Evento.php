@@ -24,17 +24,17 @@ class Evento extends Model
 
     //Relacion Muchos a Uno
     public function organizador(){
-        return $this->belongsTo(Organizador::class, 'IdEvento', 'IdEvento');
+        return $this->hasMany(Organizador::class, 'IdEvento', 'IdEvento');
     }
 
     //Relacion Muchos a Uno
     public function documento(){
-        return $this->belongsTo(Documento::class, 'IdEvento', 'IdEvento');
+        return $this->hasMany(Documento::class, 'IdEvento', 'IdEvento');
     }
 
     //Relacion Muchos a Uno
     public function academico_evento(){
-        return $this->belongsTo(AcademicoEvento::class, 'IdEvento', 'IdEvento');
+        return $this->hasMany(AcademicoEvento::class, 'IdEvento', 'IdEvento');
     }
 
 }

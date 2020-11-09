@@ -26,12 +26,12 @@ Route::resource('academias', 'AcademiaController');
 Route::resource('academiaacademico', 'AcademiaAcademicoController');
 Route::delete('academias/academico/delete/{academicoAcademia}', 'AcademiaController@destroyAcademicoAcademia')->name('deleteAcademicoAcademia');
 Route::resource('academicos', 'AcademicoController');
-Route::resource('academicoEvento','AcademicoEventoController');
-Route::resource('facultades', 'FacultadController');
+Route::resource('academicoEvento','AcademicoEventoController')->except('index', 'create', 'show', 'edit', 'update');;
+Route::resource('facultades', 'FacultadController')->except('show');
 Route::resource('eventos', 'EventoController');
 Route::resource('fechaEventos', 'FechaEventoController');
 Route::resource('documento', 'DocumentoController');
-Route::resource('tipoorganizador', 'TipoOrganizadorController');
+Route::resource('tipoorganizador', 'TipoOrganizadorController')->except('show', 'edit', 'destroy');
 Route::resource('organizador', 'OrganizadorController');
 Route::put('/fechaEvento/put', 'FechaEventoController@update')->name("fechaEventos.update");
 

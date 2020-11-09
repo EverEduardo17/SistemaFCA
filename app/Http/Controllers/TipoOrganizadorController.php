@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TipoOrganizadorRequest;
 use App\TipoOrganizador;
-use Illuminate\Http\Request;
 use App\TipoOrganizadoro;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Throwable;
-use Yaf\Exception;
 
 class TipoOrganizadorController extends Controller {
 

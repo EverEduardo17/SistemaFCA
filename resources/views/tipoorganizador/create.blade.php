@@ -9,7 +9,6 @@
             </div>
         </div>
         <div class="card-body">
-
             <form method="POST" action="{{ route('tipoorganizador.store') }}" autocomplete="off">
                 @csrf
                 @include('layouts.validaciones')
@@ -24,7 +23,6 @@
                 <button type="submit" class="btn btn-primary btn-block">Guardar</button>
                 <a href="{{ route('tipoorganizador.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
             </form>
-
         </div>
     </div>
 @endsection

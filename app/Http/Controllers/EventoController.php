@@ -7,35 +7,29 @@ use App\Http\Requests\EventoRequest;
 use App\Evento;
 use App\Evento_Fecha_Sede;
 use App\SedeEvento;
-use App\Documento;
 use App\Organizador;
 use App\TipoOrganizador;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Extensions\MongoSessionStore;
 use Illuminate\Support\Facades\Session;
 
-class EventoController extends FcaController
-{
+class EventoController extends FcaController {
     private $user;
     private $idUsuario;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->user = Auth::user();
     }
 
-    public function index()
-    {
+    public function index() {
         $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
             ->get()
             ->where('fechaEvento.InicioFechaEvento','>=', (new \DateTime())->format("Y-m-d") )
             ->sortBy('fechaEvento.InicioFechaEvento');
-        //dd($evento_fecha_sede_s->sortBy('FechaInicioEvento'));
+
         return view('eventos.index', [
             "evento_fecha_sede_s" => $evento_fecha_sede_s
         ]);
@@ -155,17 +149,14 @@ class EventoController extends FcaController
             ->with(['fechaEvento', 'sedeEvento'])
             ->get()
             ->sortBy('fechaEvento.InicioFechaEvento');
-        $documentos = Documento::where('IdEvento', $evento->IdEvento)->get();
         $data = Organizador::select('IdAcademico')->where('IdEvento', $evento->IdEvento)->get()->toArray();
         $acemicosNot = Academico::whereNotIn('IdAcademico', $data)->get();
         return view('eventos.show', [
             "evento"=>$evento,
             "evento_fecha_sede_s"=>$evento_fecha_sede_s,
             "sedes" =>SedeEvento::all(),
-            "documentos" => $documentos,
-            "responsables" => Organizador::where('IdEvento', $evento->IdEvento)->get(),
             "tipoorganizadores" => TipoOrganizador::get(),
-            "academicos"    => $acemicosNot
+            "academicos"    => $acemicosNot,
         ]);
     }
     public function edit(Evento $evento)

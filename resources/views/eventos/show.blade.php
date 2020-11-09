@@ -139,7 +139,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($responsables as $responsable)
+                                @foreach($evento->organizador as $responsable)
                                     <tr>
                                         <td>{{ $responsable->academico->usuario->name }}</td>
                                         <td>{{ $responsable->tipo_organizador->NombreTipoOrganizador }}</td>
@@ -172,7 +172,26 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-
+                            <table id="table_participante" class="display">
+                                <thead>
+                                <tr>
+                                    <th>NoPersonal</th>
+                                    <th>Nombre del Academico</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($evento->academico_evento as $ae)
+                                    <tr>
+                                        <td>{{$ae->academico->NoPersonalAcademico }}</td>
+                                        <td>{{$ae->academico->usuario->name }}</td>
+                                        <td>
+                                            <a href="">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -200,7 +219,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($documentos as $documento)
+                                    @foreach($evento->documento as $documento)
                                         <tr>
                                             <td>{{ $documento->NombreDocumento }}</td>
                                             <td>{{ $documento->DescripcionDocumento }}</td>
@@ -246,6 +265,7 @@
             $('#table_eventos').DataTable();
             $('#table_documentos').DataTable();
             $('#table_responsable').DataTable();
+            $('#table_participante').DataTable();
         } );
 
         $('#evento-list a').on('click', function (e) {

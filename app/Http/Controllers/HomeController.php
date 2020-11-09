@@ -42,16 +42,6 @@ class HomeController extends Controller
             ],
 
             [
-                "titulo" => "Organizadores",
-                "background" => $colores[1],
-                "enlace" => "organizadores",
-                "operaciones" => [
-                    ["titulo" => "Nuevo Organizador", "enlace" => "nuevo"],
-                    ["titulo" => "Ver Organizadores", "enlace" => ""],
-                ]
-            ],
-
-            [
                 "titulo" => "Tipos de Organizadores",
                 "background" => $colores[0],
                 "enlace" => "tipoorganizador",

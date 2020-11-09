@@ -6,28 +6,24 @@ use App\AcademicoAcademia;
 use App\Http\Requests\AcademiaRequest;
 use App\Academia;
 use App\Academico;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class AcademiaController extends Controller
 {
-    public function index()
-    {
+    public function index() {
         return view('academias.index', [
             'academias' => Academia::get()
         ]);
     }
 
-    public function create()
-    {
+    public function create() {
         return view('academias.create', [
             'academia' => new Academia,
             'coordinadores' => Academico::get()
         ]);
     }
 
-    public function store(AcademiaRequest $request)
-    {
+    public function store(AcademiaRequest $request) {
         $request->validate([
             'NombreAcademia' => 'unique:academia,NombreAcademia'
         ]);
@@ -39,7 +35,6 @@ class AcademiaController extends Controller
             Session::flash('flash', [ ['type' => "danger", 'message' => "La Academia no pudo ser creada correctamente."] ]);
             return redirect()->route('academias.index');
         }
-
     }
 
     public function show(Academia $academia) {
@@ -52,16 +47,14 @@ class AcademiaController extends Controller
         ]);
     }
 
-    public function edit(Academia $academia)
-    {
+    public function edit(Academia $academia) {
         return view('academias.edit', [
             'academia' => $academia,
             'coordinadores' => Academico::get()
         ]);
     }
 
-    public function update(AcademiaRequest $request, Academia $academia)
-    {
+    public function update(AcademiaRequest $request, Academia $academia) {
         $request->validate([
             'NombreAcademia' => 'unique:academia,NombreAcademia,'.$academia->IdAcademia.',IdAcademia'
         ]);
@@ -75,8 +68,7 @@ class AcademiaController extends Controller
         }
     }
 
-    public function destroy(Academia $academia)
-    {
+    public function destroy(Academia $academia) {
         try {
             $academia->delete();
             Session::flash('flash', [ ['type' => "success", 'message' => "Academia fue eliminada correctamente."] ]);
