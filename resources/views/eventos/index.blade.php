@@ -5,7 +5,6 @@
         <div class="row">
             <div class="col-lg-3 col-md-3 text-center">
                 <h4>Fechas de Eventos</h4>
-                <a class="btn btn-primary" href="#" role="button">Añadir Academia</a>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -27,14 +26,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($evento_fecha_sede_s as $efs)
-                        <tr>
-                            <td>{{$efs->fechaEvento->InicioFechaEvento ?? ""}}</td>
-                            <td>{{$efs->evento->NombreEvento ?? ""}}</td>
-                            <td>{{$efs->sedeEvento->NombreSedeEvento ?? ""}}</td>
-                            <td>{{$efs->evento->EstadoEvento ?? ""}}</td>
-                            <td><a href="{{ route('eventos.show', [$efs->IdEvento]) }}"> Detalles </td>
-                        </tr>
+                        @foreach($evento_fecha_sede_s as $efs)
+                            <tr>
+                                <td>{{$efs->fechaEvento->InicioFechaEvento ?? ""}}</td>
+                                <td>{{$efs->evento->NombreEvento ?? ""}}</td>
+                                <td>{{$efs->sedeEvento->NombreSedeEvento ?? ""}}</td>
+                                <td>{{$efs->evento->EstadoEvento ?? ""}}</td>
+                                <td><a href="{{ route('eventos.show', [$efs->IdEvento]) }}"> Detalles </td>
+                            </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
@@ -44,6 +43,7 @@
                             <th>Sede</th>
                             <th>Estado</th>
                             <th>Estado</th>
+                        </tr>
                     </tfoot>
                 </table>
             </div>
@@ -66,7 +66,6 @@
 @endsection
 
 @section('script')
-
     <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
     <!-- DatePicker -->
     <script src="{{asset('lib/datePicker/js/bootstrap-datepicker.min.js')}}"></script>
@@ -76,9 +75,7 @@
         $(document).ready( function () {
             $('#table_eventos').DataTable();
         } );
-    </script>
 
-    <script>
         $('#dateStart').datepicker({
             format: "dd/mm/yyyy",
             maxViewMode: 2,

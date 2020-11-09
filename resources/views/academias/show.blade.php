@@ -18,15 +18,16 @@
                     <a href="#" data-toggle="modal" data-target="#addAcademicoAcademia" class="btn btn-success">Agregar Academico</a>
                 </div>
             </div>
-            <br><br>
+            <br>
+            <br>
             <table class="table table-striped" id="table">
                 <thead>
-                <tr>
-                    <th>No de Personal</th>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Acciones</th>
-                </tr>
+                    <tr>
+                        <th>No de Personal</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Acciones</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach ($academia->academico_academia as $item)

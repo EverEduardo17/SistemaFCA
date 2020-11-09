@@ -11,34 +11,33 @@
         <div class="card-body">
             <table id="table_tipoorganizador" class="table">
                 <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Descripcion</th>
-                    <th>Acciones</th>
-                </tr>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripcion</th>
+                        <th>Acciones</th>
+                    </tr>
                 </thead>
                 <tbody>
-                @foreach ($tipoorganizadores as $item)
-                    <tr>
-                        <th>{{ $item->NombreTipoOrganizador }}</th>
-                        <td>{{ $item->DescripcionTipoOrganizador }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-sm" href="#"
-                               data-toggle="modal" data-target="#editTipo"
-                               data-tipo="{{ $item->IdTipoOrganizador }}"
-                               data-nombre="{{ $item->NombreTipoOrganizador }}"
-                               data-descripcion="{{ $item->DescripcionTipoOrganizador }}">Editar</a>
-                        </td>
-                    </tr>
-                @endforeach
+                    @foreach ($tipoorganizadores as $item)
+                        <tr>
+                            <th>{{ $item->NombreTipoOrganizador }}</th>
+                            <td>{{ $item->DescripcionTipoOrganizador }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" href="#"
+                                   data-toggle="modal" data-target="#editTipo"
+                                   data-tipo="{{ $item->IdTipoOrganizador }}"
+                                   data-nombre="{{ $item->NombreTipoOrganizador }}"
+                                   data-descripcion="{{ $item->DescripcionTipoOrganizador }}">Editar</a>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
-
     @include('tipoorganizador.modal.edit')
-
 @endsection
+
 @section('head')
     <link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}"/>
 @endsection
