@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\SedeEvento;
-use Illuminate\Http\Request;
+use App\Http\Requests\SedeEventoRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class SedeEventoController extends Controller
 {
@@ -14,7 +16,9 @@ class SedeEventoController extends Controller
      */
     public function index()
     {
-        //
+        return view('sedeEvento.index', [
+            'sedes' => SedeEvento::get()
+        ]);
     }
 
     /**
@@ -24,7 +28,9 @@ class SedeEventoController extends Controller
      */
     public function create()
     {
-        //
+        return view('sedeEvento.create', [
+            'sedes' => new SedeEvento()
+        ]);
     }
 
     /**
@@ -33,9 +39,17 @@ class SedeEventoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SedeEventoRequest $request)
     {
-        //
+        if (DB::table('sedeevento')->where([['NombreSedeEvento', $request->NombreSedeEvento]])->doesntExist()) {
+            // dd($request->validated());
+            SedeEvento::create($request->validated());
+            Session::flash('flash', [['type' => "success", 'message' => "Sede agregada correctamente."]]);
+            return redirect()->route('sedeEventos.index');
+        } else {
+            Session::flash('flash', [['type' => "danger", 'message' => "La sede ya se encuentra registrada."]]);
+            return redirect()->route('sedeEventos.index');
+        }
     }
 
     /**
@@ -57,7 +71,9 @@ class SedeEventoController extends Controller
      */
     public function edit(SedeEvento $sedeEvento)
     {
-        //
+        return view('sedeEvento.edit', [
+            'sede' => $sedeEvento
+        ]);
     }
 
     /**
@@ -67,9 +83,10 @@ class SedeEventoController extends Controller
      * @param  \App\SedeEvento  $sedeEvento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SedeEvento $sedeEvento)
+    public function update(SedeEventoRequest $request, SedeEvento $sedeEvento)
     {
-        //
+        $sedeEvento->update( $request->validated() );
+        return redirect()->route('sedeEventos.index');
     }
 
     /**
@@ -80,6 +97,7 @@ class SedeEventoController extends Controller
      */
     public function destroy(SedeEvento $sedeEvento)
     {
-        //
+        $sedeEvento->delete();
+        return redirect()->route('sedeEventos.index');
     }
 }

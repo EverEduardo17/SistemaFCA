@@ -15,7 +15,6 @@ class FacultadController extends Controller
     public function index()
     {
         $item = AcademicoEvento::get();
-        // dd($item[0]->evento->NombreEvento);
         return view('facultades.index', [
             'facultades' => Facultad::get()
         ]);
