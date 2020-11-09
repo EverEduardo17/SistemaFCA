@@ -34,7 +34,7 @@ class HomeController extends Controller
             [
                 "titulo" => "Sedes de los Eventos",
                 "background" => $colores[0],
-                "enlace" => "sede-eventos",
+                "enlace" => "sedeEventos",
                 "operaciones" => [
                     ["titulo" => "Nueva Sede de Evento", "enlace" => "nuevo"],
                     ["titulo" => "Ver Sedes de Eventos", "enlace" => ""],
