@@ -1,4 +1,3 @@
-
 <div class="modal fade" id="editEvento" tabindex="-1" role="dialog" aria-labelledby="fechaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -8,14 +7,12 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
             <div class="modal-body">
                 <form method="POST" id="form-editar-evento" action="{{ route('eventos.update', $evento->IdEvento) }}" autocomplete="off">
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="id" id="id">
                     @include('layouts.validaciones')
-
                     <div class="form-group">
                         <label name="NombreEvento">Nombre del Evento:</label>
                         <input name="NombreEvento" value="{{ old('NombreEvento', $evento->NombreEvento) }}" type="text" class="form-control @error('NombreEvento') is-invalid @enderror">
@@ -30,7 +27,6 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-success" form="form-editar-evento">Editar</button>
             </div>
-
         </div>
     </div>
 </div>

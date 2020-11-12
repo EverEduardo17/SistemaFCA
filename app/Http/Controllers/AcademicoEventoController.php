@@ -43,24 +43,34 @@ class AcademicoEventoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AcademicoEventoRequest $request)
+    public function store(Request $request)
     {
-        if (DB::table('academico_evento')->where([['IdEvento', $request->IdEvento], ['IdAcademico', $request->IdAcademico]])->doesntExist()) {
-            AcademicoEvento::create($request->validated());
-            Session::flash('flash', [['type' => "success", 'message' => "Académico agregado correctamente."]]);
-            return redirect()->route('academicoEvento.index');
-        } else {
-            // dd($request);
-            // !!Checar bien esta parte del método, falta actualizar.
-            // if (DB::table('academico_evento')->where([['IdEvento', $request->IdEvento], ['IdAcademico', $request->IdAcademico]])->exists()) {
-            //     $request->DeletedAt = null;
-            //     AcademicoEvento::updated($request->validated());
-            //     Session::flash('flash', [['type' => "success", 'message' => "Académico agregado correctamente."]]);
-            //     return redirect()->route('academicoEvento.index');
-            // }
-            Session::flash('flash', [['type' => "danger", 'message' => "El académico ya está registrado en ese evento."]]);
-            return redirect()->route('academicoEvento.index');
+        $request->validate([
+            'academico' => 'required | numeric',
+        ]);
+
+        //validar que todo existe
+
+        $exist = AcademicoEvento::where([ ['IdAcademico', $request['academico']], ['IdEvento', $request['evento']] ] )->first();
+        if ($exist){
+            Session::flash('flash', [ ['type' => "danger", 'message' => "Este docente ya es participante."] ]);
+            return redirect()->route('eventos.show', $request['evento']);
         }
+
+        try {
+            DB::beginTransaction();
+                DB::table('academico_evento')->insert([
+                    'IdAcademico'       => $request['academico'],
+                    'IdEvento'          => $request['evento']
+                ]);
+            DB::commit();
+        }catch (\Throwable $exception){
+            DB::rollBack();
+            Session::flash('flash', [ ['type' => "danger", 'message' => "La asignacion no pudo ser registrado."] ]);
+            return redirect()->route('eventos.show', $request['evento']);
+        }
+        Session::flash('flash', [ ['type' => "success", 'message' => "Academico asignado correctamente."] ]);
+        return redirect()->route('eventos.show', $request['evento']);
     }
 
     /**
@@ -103,15 +113,11 @@ class AcademicoEventoController extends Controller
      * @param  \App\Academico  $academico
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AcademicoEvento $academicoEvento)
-    {
-        try {
-            $academicoEvento->forceDelete();
-            Session::flash('flash', [['type' => "success", 'message' => "Académico eliminado correctamente."]]);
-            return redirect()->route('academicoEvento.index');
-        } catch (\Throwable $throwable) {
-            Session::flash('flash', [['type' => "danger", 'message' => "No es posible eliminar al Académico."]]);
-            return redirect()->route('academicoEvento.index');
-        }
+    public function destroy($participante) {
+        $participante = AcademicoEvento::findOrFail( $participante );
+        $participante->forceDelete();
+
+        Session::flash('flash', [ ['type' => "success", 'message' => "Participante Eliminado Correctamente."] ]);
+        return redirect()->back();
     }
 }

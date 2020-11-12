@@ -25,7 +25,7 @@ class AcademiaController extends Controller
 
     public function store(AcademiaRequest $request) {
         $request->validate([
-            'NombreAcademia' => 'unique:academia,NombreAcademia'
+            'NombreAcademia' => 'unique:Academia,NombreAcademia'
         ]);
         try {
             Academia::create( $request->validated() );
@@ -56,7 +56,7 @@ class AcademiaController extends Controller
 
     public function update(AcademiaRequest $request, Academia $academia) {
         $request->validate([
-            'NombreAcademia' => 'unique:academia,NombreAcademia,'.$academia->IdAcademia.',IdAcademia'
+            'NombreAcademia' => 'unique:Academia,NombreAcademia,'.$academia->IdAcademia.',IdAcademia'
         ]);
         try {
             $academia->update( $request->validated() );

@@ -24,8 +24,8 @@ class AcademicoEventoRequest extends FormRequest
     public function rules()
     {
         return [
-            'IdEvento' => 'required',
-            'IdAcademico' => 'required'
+            'evento' => 'required',
+            'academico' => 'required'
         ];
     }
 }

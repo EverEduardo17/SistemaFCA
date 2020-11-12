@@ -36,7 +36,7 @@ class HomeController extends Controller
                 "background" => $colores[0],
                 "enlace" => "sedeEventos",
                 "operaciones" => [
-                    ["titulo" => "Nueva Sede de Evento", "enlace" => "nuevo"],
+                    ["titulo" => "Nueva Sede de Evento", "enlace" => "create"],
                     ["titulo" => "Ver Sedes de Eventos", "enlace" => ""],
                 ]
             ],
@@ -72,6 +72,6 @@ class HomeController extends Controller
             ]
         ];
 
-        return view("Home", ['opciones'=>$opciones]);
+        return view("home", ['opciones'=>$opciones]);
     }
 }

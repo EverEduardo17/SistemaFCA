@@ -4,24 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FacultadRequest;
 use App\Facultad;
-use App\AcademicoEvento;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
-<<<<<<< HEAD
-class FacultadController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $item = AcademicoEvento::get();
-=======
+
 class FacultadController extends Controller{
 
     public function index(){
->>>>>>> a625e6847c17c04f27d8d60df1a1db91e4e6420a
         return view('facultades.index', [
             'facultades' => Facultad::get()
         ]);

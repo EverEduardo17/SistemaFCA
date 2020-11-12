@@ -40,10 +40,37 @@ class FechaEventoController extends FcaController
         $idEvento = $input['evento'];
 
         /* Obtener fechas */
+        $fechaInicio = explode( '/', $input['fechaInicio'] );
+        $horaInicio  = explode( ' ', $input['horaInicio'] );
+        $PM          = strcmp ( 'PM', mb_strtoupper( $horaInicio[1] ) ) == 0;
+        $horaInicio  = explode( ':', $horaInicio[0] );
+        if( $PM ){
+            $horaInicio[0] += 12;
+        }
 
-        $fechaInicio = \DateTime::createFromFormat('d/m/Y g:m A', $input['fechaInicio'].' '.$input['horaInicio'] );
+        $fechaFin = $fechaInicio;
+        $horaFin  = explode(' ', $input['horaFin'] );
+        $PM       = strcmp ( 'PM', mb_strtoupper($horaFin[1]) ) == 0;
+        $horaFin  = explode(':', $horaFin[0] );
+        if( $PM ){
+            $horaFin[0] += 12;
+        }
 
-        $fechaFin = \DateTime::createFromFormat('d/m/Y g:m A', $input['fechaInicio'].' '.$input['horaFin'] );
+        //!!!! Validar que la fechaFin debe ser mayor a la fechaInicio
+
+        $fechaInicioFormat = sprintf("%d-%d-%d %d:%d",
+            $fechaInicio[2], $fechaInicio[1], $fechaInicio[0], $horaInicio[0], $horaInicio[1] );
+        $fechaFinFormat = sprintf("%d-%d-%d %d:%d",
+            $fechaFin[2], $fechaFin[1], $fechaFin[0], $horaFin[0], $horaFin[1] );
+        $hrInicio = sprintf("%d%d",
+            $horaInicio[0], $horaInicio[1] );
+        $hrFin = sprintf("%d%d",
+            $horaFin[0], $horaFin[1] );
+        if($hrInicio >= $hrFin){
+            Session::flash('flash', [ ['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."] ]);
+            return redirect()->back()
+                ->withInput();
+        }
 
         //!!!! Validar que la fechaFin debe ser mayor a la fechaInicio
 
@@ -52,8 +79,8 @@ class FechaEventoController extends FcaController
         DB::beginTransaction();
 
         $idFechaEvento = DB::table('FechaEvento')->insertGetId([
-            'InicioFechaEvento' => $fechaInicio,
-            'FinFechaEvento'    => $fechaFin,
+            'InicioFechaEvento' => $fechaInicioFormat,
+            'FinFechaEvento'    => $fechaFinFormat,
             'CreatedBy'         => $this->idUsuario,
             'UpdatedBy'         => $this->idUsuario,
         ]);
@@ -121,6 +148,15 @@ class FechaEventoController extends FcaController
             $fechaFin[2], $fechaFin[1], $fechaFin[0], $horaFin[0], $horaFin[1] );
 
         //!!!! Validar que la fechaFin debe ser mayor a la fechaInicio
+        $hrInicio = sprintf("%d%d",
+            $horaInicio[0], $horaInicio[1] );
+        $hrFin = sprintf("%d%d",
+            $horaFin[0], $horaFin[1] );
+        if($hrInicio >= $hrFin){
+            Session::flash('flash', [ ['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."] ]);
+            return redirect()->back()
+                ->withInput();
+        }
 
         //!!! Validar que las fechas no chocan con otro evento
 
@@ -130,7 +166,6 @@ class FechaEventoController extends FcaController
             $this->addFlash('danger', 'No fue posible realizar la operación solicitada.');
             return redirect()
                 ->back()
-                ->withErrors($validator)
                 ->withInput()
                 ->with($this->getFlash());
         }

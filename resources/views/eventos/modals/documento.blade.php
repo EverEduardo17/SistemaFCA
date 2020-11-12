@@ -12,7 +12,6 @@
                 <div class="modal-body">
                     @include('layouts.validaciones')
                     <input type="hidden" name="evento" value="{{$evento->IdEvento}}">
-
                     <div class="form-group">
                         <label name="NombreDocumento">Nombre del Documento:</label>
                         <input name="NombreDocumento" type="text" class="form-control @error('NombreDocumento') is-invalid @enderror">
@@ -70,14 +69,12 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
             <div class="modal-body">
                 <form method="POST" id="form-editar-documento" action="{{ route('documento.update', '') }}" autocomplete="off">
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="id" id="id">
                     @include('layouts.validaciones')
-
                     <div class="form-group">
                         <label name="NombreDocumento">Nombre del Documento:</label>
                         <input name="NombreDocumento" value="{{ old('NombreDocumento') }}" type="text" class="form-control @error('NombreDocumento') is-invalid @enderror">
@@ -92,7 +89,6 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-success" form="form-editar-documento">Editar</button>
             </div>
-
         </div>
     </div>
 </div>

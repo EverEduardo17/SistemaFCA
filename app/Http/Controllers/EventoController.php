@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Academico;
+use App\AcademicoEvento;
 use App\Http\Requests\EventoRequest;
 use App\Evento;
 use App\Evento_Fecha_Sede;
@@ -35,8 +36,7 @@ class EventoController extends FcaController {
         ]);
     }
 
-    public function indexWithDate($year, $month, $day)
-    {
+    public function indexWithDate($year, $month, $day) {
         $date = sprintf("%d-%02d-%02d", $year, $month, $day);
         $from = date( "Y-m-d", strtotime( $date ) );
         $to = date( "Y-m-d", strtotime( $date . " +1 days" ) );
@@ -46,22 +46,20 @@ class EventoController extends FcaController {
             ->where('fechaEvento.InicioFechaEvento','>=',$from)
             ->where('fechaEvento.InicioFechaEvento','<',$to)
             ->sortBy('fechaEvento.InicioFechaEvento', 1, false);
+
         return view('eventos.index', [
             "evento_fecha_sede_s" => $evento_fecha_sede_s
         ]);
     }
 
-    public function create()
-    {
+    public function create() {
         return view('eventos.create', [
             "sedes" => SedeEvento::all()
         ]);
     }
 
-    public function store(EventoRequest $request)
-    {
+    public function store(EventoRequest $request) {
         $input = $request->validated();
-        //dd($input);
 
         /* Obtener fechas */
         $fechaInicio = explode( '/', $input['fechaInicio'] );
@@ -107,7 +105,7 @@ class EventoController extends FcaController {
                 'UpdatedBy'         => $this->idUsuario,
             ]);
 
-            $idOrganizador = DB::table('Organizador')->insertGetId([
+            $idOrganizador = DB::table('organizador')->insertGetId([
                 'IdEvento'           => $idEvento,
                 'IdAcademico'        => $this->user->academico->IdAcademico,
                 'IdTipoOrganizador'  => 1,
@@ -143,29 +141,30 @@ class EventoController extends FcaController {
         return redirect()->route('eventos.index');
     }
 
-    public function show(Evento $evento)
-    {
+    public function show(Evento $evento) {
         $evento_fecha_sede_s = Evento_Fecha_Sede::where('IdEvento', $evento->IdEvento)
             ->with(['fechaEvento', 'sedeEvento'])
             ->get()
             ->sortBy('fechaEvento.InicioFechaEvento');
         $data = Organizador::select('IdAcademico')->where('IdEvento', $evento->IdEvento)->get()->toArray();
         $acemicosNot = Academico::whereNotIn('IdAcademico', $data)->get();
+
+        $data = AcademicoEvento::select('IdAcademico')->where('IdEvento', $evento->IdEvento)->get()->toArray();
+        $participanteNot = Academico::whereNotIn('IdAcademico', $data)->get();
         return view('eventos.show', [
             "evento"=>$evento,
             "evento_fecha_sede_s"=>$evento_fecha_sede_s,
             "sedes" =>SedeEvento::all(),
             "tipoorganizadores" => TipoOrganizador::get(),
             "academicos"    => $acemicosNot,
+            'participantes'  => $participanteNot
         ]);
     }
-    public function edit(Evento $evento)
-    {
+    public function edit(Evento $evento) {
         //
     }
 
-    public function update(Request $request, $evento)
-    {
+    public function update(Request $request, $evento) {
         $evento = Evento::findOrFail( $evento );
         $request->validate([
             'NombreEvento'       => 'required | String',
@@ -174,7 +173,7 @@ class EventoController extends FcaController {
 
         try {
             DB::beginTransaction();
-                DB::table('evento')->where('IdEvento', $evento->IdEvento)->update([
+                DB::table('Evento')->where('IdEvento', $evento->IdEvento)->update([
                     'NombreEvento'       => $request->NombreEvento,
                     'DescripcionEvento'  => $request->DescripcionEvento,
                 ]);
@@ -188,8 +187,7 @@ class EventoController extends FcaController {
         return redirect()->route('eventos.show', $evento->IdEvento);
     }
 
-    public function destroy(Evento $evento)
-    {
+    public function destroy(Evento $evento) {
         //
     }
 }

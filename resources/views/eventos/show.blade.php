@@ -30,7 +30,6 @@
                     @enderror
                 </div>
             </div>
-
             <div class="form-group row">
                 <label for="estado" class="col-md-3 col-form-label text-md-right">Estatus</label>
                 <div class="col-md-8">
@@ -65,7 +64,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Fechas</h4>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-primary" data-toggle="modal" data-target="#addfechaModal" data-do="create">Agregar</button>
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#addfecha" data-do="create">Agregar</button>
                                 </div>
                             </div>
                             <hr>
@@ -80,7 +79,7 @@
                                         <th>Inicio</th>
                                         <th>Fin</th>
                                         <th>Sede</th>
-                                        <th></th>
+                                        <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -91,13 +90,13 @@
                                             <td>{{$efs->fechaEvento->FinFechaEvento->format('h:i A') ?? ""}}</td>
                                             <td>{{$efs->sedeEvento->NombreSedeEvento ?? ""}}</td>
                                             <td>
-                                                <a href="#" data-toggle="modal" data-target="#addfechaModal"
+                                                <a href="#" data-toggle="modal" data-target="#addfecha"
                                                 data-do="update" data-fecha="{{$efs->IdFechaEvento}}"
                                                 data-fechainicio="{{$efs->fechaEvento->InicioFechaEvento->format('d/m/Y')}}"
                                                 data-horainicio="{{$efs->fechaEvento->InicioFechaEvento->format('g:i A')}}"
                                                 data-horafin="{{$efs->fechaEvento->FinFechaEvento->format('g:i A')}}"
                                                 data-sedeevento="{{$efs->IdSedeEvento}}" >Editar</a> |
-                                                <a href="#" data-toggle="modal" data-target="#exampleModal" data-fecha="{{$efs->IdFechaEvento}}">Eliminar</a>
+                                                <a href="#" data-toggle="modal" data-target="#deletefecha" data-fecha="{{$efs->IdFechaEvento}}">Eliminar</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -108,7 +107,7 @@
                                         <th>Inicio</th>
                                         <th>Fin</th>
                                         <th>Sede</th>
-                                        <th></th>
+                                        <th>Acciones</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -164,7 +163,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Participantes</h4>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-primary">Agregar</button>
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#addParticipante">Agregar</button>
                                 </div>
                             </div>
                             <hr>
@@ -174,22 +173,23 @@
                         <div class="col-md-12">
                             <table id="table_participante" class="display">
                                 <thead>
-                                <tr>
-                                    <th>NoPersonal</th>
-                                    <th>Nombre del Academico</th>
-                                    <th>Acciones</th>
-                                </tr>
+                                    <tr>
+                                        <th>NoPersonal</th>
+                                        <th>Nombre del Academico</th>
+                                        <th>Acciones</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($evento->academico_evento as $ae)
-                                    <tr>
-                                        <td>{{$ae->academico->NoPersonalAcademico }}</td>
-                                        <td>{{$ae->academico->usuario->name }}</td>
-                                        <td>
-                                            <a href="">Eliminar</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                    @foreach($evento->academico_evento as $ae)
+                                        <tr>
+                                            <td>{{$ae->academico->NoPersonalAcademico }}</td>
+                                            <td>{{$ae->academico->usuario->name }}</td>
+                                            <td>
+                                                <a href="#" data-toggle="modal" data-target="#deleteParticipante"
+                                                   data-participante="{{ $ae->Id_Academico_Evento }}">Eliminar</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -243,10 +243,10 @@
         </div>
     </div>
     @include('eventos.modals.edit')
-    @include('eventos.modals.deleteFecha')
-    @include('eventos.modals.addFecha')
-    @include('eventos.modals.addDocument')
+    @include('eventos.modals.fecha')
+    @include('eventos.modals.documento')
     @include('eventos.modals.tipoorganizador')
+    @include('eventos.modals.participante')
 @endsection
 
 @section('head')
@@ -274,7 +274,7 @@
         })
 
         /*Eliminar Fechas*/
-        $('#exampleModal').on('show.bs.modal', function (event) {
+        $('#deletefecha').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var recipient = button.data('fecha');
             var modal = $(this);
@@ -282,7 +282,7 @@
         })
 
         //Modal Fechas
-        $('#addfechaModal').on('show.bs.modal', function (event) {
+        $('#addfecha').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var recipient = button.data('fecha');
             var modal = $(this);
@@ -360,17 +360,20 @@
             modal.find('.modal-body form').attr('action', action);
         })
 
-        /*edit tipoorganizador*/
-        $('#editTipoOrganizador').on('show.bs.modal', function (event) {
+        $('#addParticipante').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
-            var id = button.data('tipoorganizador');
-            var act = button.data('tipoact');
             var modal = $(this);
-            var action = $("#form-editar-documento").attr('action') + '/' + id;
-            modal.find('.modal-body form').attr('action', action);
-            modal.find('.modal-body input[name=NombreDocumento]').val(nombre);
-            modal.find('.modal-body input[name=DescripcionDocumento]').val(descripcion);
         })
+
+        /*Eliminar tipoorganizador*/
+        $('#deleteParticipante').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('participante');
+            var modal = $(this);
+            var action = $("#form-eliminar-participante").attr('action') + '/' + id;
+            modal.find('.modal-body form').attr('action', action);
+        })
+
 
         /*Date Picker*/
         $('#fechaInicio').datetimepicker({

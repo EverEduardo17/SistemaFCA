@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="card-body">
-            <table class="table table-striped">
+            <table class="table table-striped" id="table_facultades+098765">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -34,9 +34,14 @@
 @endsection
 
 @section('head')
-
+    <link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}"/>
 @endsection
 
 @section('script')
-
+    <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
+    <script>
+        $(document).ready( function () {
+            $('#table_facultades').DataTable();
+        } );
+    </script>
 @endsection

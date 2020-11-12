@@ -1,13 +1,13 @@
-<div class="modal fade" id="addTipoOrganizador" tabindex="-1" role="dialog" aria-labelledby="fechaModalLabel" aria-hidden="true">
+<div class="modal fade" id="addParticipante" tabindex="-1" role="dialog" aria-labelledby="fechaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="fechaModalLabel">Agregar organizador</h5>
+                <h5 class="modal-title" id="fechaModalLabel">Agregar participante</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST"  action="{{ route('organizador.store') }}" autocomplete="off" >
+            <form method="POST"  action="{{ route('academicoEvento.store') }}" autocomplete="off" >
                 @csrf
                 <div class="modal-body">
                     @include('layouts.validaciones')
@@ -17,17 +17,8 @@
                         <label name="academico">Nombre del Docente:</label>
                         <select name="academico" class="form-control @error('academico') is-invalid @enderror">
                             <option value=""></option>
-                            @foreach ($academicos as $academico)
-                                <option value="{{ $academico->IdAcademico }}">{{ $academico->usuario->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label name="organizador">Tipo de Organizador:</label>
-                        <select name="organizador" class="form-control @error('organizador') is-invalid @enderror">
-                            <option value=""></option>
-                            @foreach ($tipoorganizadores as $tipoorganizador)
-                                <option value="{{ $tipoorganizador->IdTipoOrganizador }}">{{ $tipoorganizador->NombreTipoOrganizador }}</option>
+                            @foreach ($participantes as $participante)
+                                <option value="{{ $participante->IdAcademico }}">{{ $participante->usuario->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -41,19 +32,19 @@
     </div>
 </div>
 
-<div class="modal fade" id="deleteTipoOrganizador" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteParticipante" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Eliminar Documento</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Eliminar Participante</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Usted está por eliminar un documento.</p>
+                <p>Usted está por eliminar un participante.</p>
                 <h4>¿Desea continuar?</h4>
-                <form id="form-eliminar-organizador" method="post" action="{{ route('organizador.destroy', '') }}">
+                <form id="form-eliminar-participante" method="post" action="{{ route('academicoEvento.destroy', '') }}">
                     @csrf
                     @method('delete')
                     <input type="hidden" name="id" id="id">
@@ -61,7 +52,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-danger" form="form-eliminar-organizador">Eliminar</button>
+                <button type="submit" class="btn btn-danger" form="form-eliminar-participante">Eliminar</button>
             </div>
         </div>
     </div>
