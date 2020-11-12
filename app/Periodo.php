@@ -12,6 +12,7 @@ class Periodo extends Model
 
     protected $table = "periodo";
     protected $primaryKey = "IdPeriodo";
+    protected $fillable = ['NombrePeriodo', 'FechaInicioPeriodo', 'FechaFinPeriodo','ActualPeriodo'];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';

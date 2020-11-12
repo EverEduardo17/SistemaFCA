@@ -32,6 +32,7 @@ Route::resource('eventos', 'EventoController');
 Route::resource('fechaEventos', 'FechaEventoController');
 Route::resource('documento', 'DocumentoController');
 Route::resource('sedeEventos', 'SedeEventoController');
+Route::resource('periodo', 'PeriodoController');
 
 Route::resource('tipoorganizador', 'TipoOrganizadorController')->except('show', 'edit');
 
