@@ -36,6 +36,7 @@
                     {{$evento->EstadoEvento}}
                 </div>
             </div>
+            @include('layouts.validaciones')
         </div>
     </div>
     <br>
@@ -256,17 +257,36 @@
 @endsection
 
 @section('script')
+    <script type="text/javascript" src="{{asset('js/jquery.blockUI.js')}}"></script>
     <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
     <script type="text/javascript" src="{{asset('lib/moment/min/moment-with-locales.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('lib/datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
 
     <script>
+        $(document).on('click', '#agregarDocumentoCargando', function() {
+            $('#addDocument').modal('hide');
+            $.blockUI({
+                message: 'Espere un momento...',
+                css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: '#000',
+                    '-webkit-border-radius': '10px',
+                    '-moz-border-radius': '10px',
+                    opacity: .5,
+                    color: '#fff'
+                }
+            });
+        });
+
         $(document).ready( function () {
             $('#table_eventos').DataTable();
             $('#table_documentos').DataTable();
             $('#table_responsable').DataTable();
             $('#table_participante').DataTable();
+
         } );
+
 
         $('#evento-list a').on('click', function (e) {
             e.preventDefault();

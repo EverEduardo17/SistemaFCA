@@ -27,15 +27,15 @@
 
     <hr>
 
-    <form method="POST" action="{{ route('sedeEventos.destroy', $sede) }}">
+    <form method="POST" id="form-eliminar" action="{{ route('sedeEventos.destroy', $sede) }}">
       @csrf @method('DELETE')
-      <button type="submit" class="btn btn-danger btn-block">¡Eliminar Permanentemente!</button>
+        <a href="#"  data-toggle="modal" data-target="#delete" class="btn btn-danger btn-block">¡Eliminar Permanentemente!</a>
     </form>
-
-    <form action=""></form>
 
   </div>
 </div>
+
+@include('sedeEvento.modals.delete')
 @endsection
 
 @section('head')
@@ -43,5 +43,10 @@
 @endsection
 
 @section('script')
-
+    <script>
+        $('#delete').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+        })
+    </script>
 @endsection

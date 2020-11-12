@@ -33,7 +33,7 @@ Route::resource('fechaEventos', 'FechaEventoController');
 Route::resource('documento', 'DocumentoController');
 Route::resource('sedeEventos', 'SedeEventoController');
 
-Route::resource('tipoorganizador', 'TipoOrganizadorController')->except('show', 'edit', 'destroy');
+Route::resource('tipoorganizador', 'TipoOrganizadorController')->except('show', 'edit');
 
 Route::resource('organizador', 'OrganizadorController');
 Route::put('/fechaEvento/put', 'FechaEventoController@update')->name("fechaEventos.update");

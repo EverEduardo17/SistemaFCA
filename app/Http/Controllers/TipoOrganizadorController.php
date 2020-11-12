@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TipoOrganizadorRequest;
+use App\Organizador;
 use App\TipoOrganizador;
 use App\TipoOrganizadoro;
 use Illuminate\Support\Facades\DB;
@@ -66,7 +67,20 @@ class TipoOrganizadorController extends Controller {
         return redirect()->route('tipoorganizador.index');
     }
 
-    public function destroy(TipoOrganizador $tipoOrganizador) {
-        //
+    public function destroy($tipoOrganizador) {
+        try {
+            $tipoOrganizador = TipoOrganizador::findOrFail($tipoOrganizador);
+            $tipoOcupado = Organizador::where('IdTipoOrganizador', $tipoOrganizador->IdTipoOrganizador)->count();
+            if($tipoOcupado > 0){
+                Session::flash('flash', [['type' => "danger", 'message' => "Este Tipo de Organizador fue asignado a un evento, no puede ser eliminada."]]);
+                return redirect()->route('tipoorganizador.index');
+            }
+            $tipoOrganizador->delete();
+            Session::flash('flash', [['type' => "success", 'message' => "Tipo de Organizador eliminado correctamente."]]);
+            return redirect()->route('tipoorganizador.index');
+        }catch (\Throwable $throwable){
+            Session::flash('flash', [['type' => "danger", 'message' => "Error al eliminar el Tipo de Organizador correctamente."]]);
+            return redirect()->route('tipoorganizador.index');
+        }
     }
 }

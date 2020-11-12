@@ -17,7 +17,6 @@ class HomeController extends Controller
                 "operaciones" => [
                     ["titulo" => "Nuevo Evento", "enlace" => "create"],
                     ["titulo" => "Ver Eventos", "enlace" => ""],
-                    ["titulo" => "Mis Eventos", "enlace" => "mis-eventos"],
                 ]
             ],
 

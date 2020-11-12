@@ -138,7 +138,7 @@ class EventoController extends FcaController {
 
         //$validator = Validator::make($input, $rules, $messages);
         Session::flash('flash', [ ['type' => "success", 'message' => "Evento registrado correctamente"] ]);
-        return redirect()->route('eventos.index');
+        return redirect()->route('eventos.show', $idEvento);
     }
 
     public function show(Evento $evento) {

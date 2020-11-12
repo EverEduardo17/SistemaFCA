@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Evento_Fecha_Sede;
+use App\FechaEvento;
 use App\SedeEvento;
 use App\Http\Requests\SedeEventoRequest;
 use Illuminate\Support\Facades\DB;
@@ -83,21 +85,31 @@ class SedeEventoController extends Controller
      * @param  \App\SedeEvento  $sedeEvento
      * @return \Illuminate\Http\Response
      */
-    public function update(SedeEventoRequest $request, SedeEvento $sedeEvento)
-    {
-        $sedeEvento->update( $request->validated() );
-        return redirect()->route('sedeEventos.index');
+    public function update(SedeEventoRequest $request, SedeEvento $sedeEvento) {
+        try {
+            $sedeEvento->update( $request->validated() );
+            Session::flash('flash', [['type' => "success", 'message' => "Sede editada correctamente."]]);
+            return redirect()->route('sedeEventos.index');
+        }catch (\Throwable $throwable){
+            Session::flash('flash', [['type' => "danger", 'message' => "Error al editar la sede correctamente."]]);
+            return redirect()->route('sedeEventos.index');
+        }
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\SedeEvento  $sedeEvento
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(SedeEvento $sedeEvento)
-    {
-        $sedeEvento->delete();
-        return redirect()->route('sedeEventos.index');
+    public function destroy(SedeEvento $sedeEvento) {
+        try {
+            $sedeOcupada = Evento_Fecha_Sede::where('IdSedeEvento', $sedeEvento->IdSedeEvento)->count();
+            if($sedeOcupada > 0){
+                Session::flash('flash', [['type' => "danger", 'message' => "Esta Sede fue asignada a un evento, no puede ser eliminada."]]);
+                return redirect()->route('sedeEventos.index');
+            }
+            $sedeEvento->delete();
+            Session::flash('flash', [['type' => "success", 'message' => "Sede eliminada correctamente."]]);
+            return redirect()->route('sedeEventos.index');
+        }catch (\Throwable $throwable){
+            Session::flash('flash', [['type' => "danger", 'message' => "Error al eliminar la sede correctamente."]]);
+            return redirect()->route('sedeEventos.index');
+        }
     }
 }

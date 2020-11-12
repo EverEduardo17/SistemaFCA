@@ -28,6 +28,9 @@
                                    data-tipo="{{ $item->IdTipoOrganizador }}"
                                    data-nombre="{{ $item->NombreTipoOrganizador }}"
                                    data-descripcion="{{ $item->DescripcionTipoOrganizador }}">Editar</a>
+                                <a class="btn btn-danger btn-sm" href="#"
+                                   data-toggle="modal" data-target="#deleteTipo"
+                                   data-tipo="{{ $item->IdTipoOrganizador }}">Eliminar</a>
                             </td>
                         </tr>
                     @endforeach
@@ -63,6 +66,16 @@
             modal.find('.modal-body form').attr('action', action);
             modal.find('.modal-body input[name=NombreTipoOrganizador]').val(nombre);
             modal.find('.modal-body input[name=DescripcionTipoOrganizador]').val(descripcion);
+        });
+        /*delete documento*/
+        $('#deleteTipo').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('tipo');
+            var modal = $(this);
+            var actionStart = '{{ route('tipoorganizador.destroy', '') }}';
+            modal.find('.modal-body form').attr('action', actionStart);
+            var action = $("#form-eliminar-tipo").attr('action') + '/' + id;
+            modal.find('.modal-body form').attr('action', action);
         });
     </script>
 
