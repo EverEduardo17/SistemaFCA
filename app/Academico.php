@@ -12,6 +12,7 @@ class Academico extends Model
 
     protected $table = "Academico";
     protected $primaryKey = "IdAcademico";
+    protected $fillable = ['NoPersonalAcademico', 'RfcAcademico','IdUsuario'];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
