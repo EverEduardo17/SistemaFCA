@@ -2,7 +2,7 @@
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-light fixed-top bg-color">
         {{-- <img class="logo" src="{{ asset('img/logo.png') }}"> --}}
-        <a class="navbar-brand text-black" href="{{ url('/home') }}" >Universidad Veracruzana</a>
+        <a class="navbar-brand text-white" href="{{ url('/home') }}" >Universidad Veracruzana</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,7 +12,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown justify-content-start">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Elementos
                     </a>
                     <div class="dropdown-menu " aria-labelledby="navbarDropdown">
@@ -38,7 +38,7 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown justify-content-start">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Elementos Intermedios
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -54,7 +54,7 @@
                 </li>
 
             </ul>
-            <span class="navbar-text">
+            <span class="navbar-text text-white">
                 {{Auth::user()->name ?? "Invitado"}}
             </span>
         </div>

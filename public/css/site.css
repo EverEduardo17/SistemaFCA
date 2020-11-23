@@ -108,12 +108,12 @@ code {
 }
 
 .bg-color{
-    background-color: #dcf6de !important;
+    background-color: #0D47A1 !important;
 }
 
 /* validator */
 .alert.alert-custom.alert-danger {
-    background-color: #F64E60;
+    background-color: #f64e60;
     border-color: #F64E60;
 }
 .alert.alert-custom {

@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::loginUsingId(1001);
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/home', function () {
+ //   return view('welcome');
+//});
 
 Auth::routes();
 
@@ -38,6 +38,7 @@ Route::resource('tipoorganizador', 'TipoOrganizadorController')->except('show', 
 Route::resource('organizador', 'OrganizadorController');
 Route::put('/fechaEvento/put', 'FechaEventoController@update')->name("fechaEventos.update");
 
+Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/eventos/{year}/{month}/{day}', 'EventoController@indexWithDate')->name("eventosWithDate");
