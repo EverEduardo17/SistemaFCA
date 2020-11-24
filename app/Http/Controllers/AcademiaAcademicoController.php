@@ -31,7 +31,7 @@ class AcademiaAcademicoController extends Controller {
         $academico = Academico::findOrFail($request->docente);
 
         if(AcademicoAcademia::where([['IdAcademico', $academico->IdAcademico], ['IdAcademia', $academia->IdAcademia]])->exists()){
-            Session::flash('flash', [ ['type' => "danger", 'message' => "El academico ya pertenece a esta academia."] ]);
+            Session::flash('flash', [ ['type' => "danger", 'message' => "El académico ya pertenece a esta academia."] ]);
             return redirect()->route('academias.show', $academia);
         }
 
@@ -41,10 +41,10 @@ class AcademiaAcademicoController extends Controller {
                 'IdAcademia'  => $academia->IdAcademia
             ]);
         }catch (\Throwable $throwable) {
-            Session::flash('flash', [ ['type' => "danger", 'message' => "El academico no pudo ser agregado a esta academia."] ]);
+            Session::flash('flash', [ ['type' => "danger", 'message' => "El académico NO pudo ser agregado a esta academia."] ]);
             return redirect()->route('academias.show', $academia);
         }
-        Session::flash('flash', [ ['type' => "success", 'message' => "El academico fue agregado a esta academia."] ]);
+        Session::flash('flash', [ ['type' => "success", 'message' => "El académico fue agregado a esta academia correctamente."] ]);
         return redirect()->route('academias.show', $academia);
     }
 

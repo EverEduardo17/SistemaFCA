@@ -33,10 +33,10 @@ class TipoOrganizadorController extends Controller {
             DB::commit();
         }catch (\Throwable $exception){
             DB::rollBack();
-            Session::flash('flash', [ ['type' => "danger", 'message' => "Tipo de Organizador no pudo ser registrado."] ]);
+            Session::flash('flash', [ ['type' => "danger", 'message' => "El Tipo de Organizador NO pudo ser registrado."] ]);
             return redirect()->route('tipoorganizador.index');
         }
-        Session::flash('flash', [ ['type' => "success", 'message' => "Tipo Organizador fue Registrado Con Exito."] ]);
+        Session::flash('flash', [ ['type' => "success", 'message' => "El Tipo de Organizador fue registrado con éxito."] ]);
         return redirect()->route('tipoorganizador.index');
     }
 
@@ -60,10 +60,10 @@ class TipoOrganizadorController extends Controller {
             DB::commit();
         }catch (\Throwable $exception){
             DB::rollBack();
-            Session::flash('flash', [ ['type' => "danger", 'message' => "Tipo de Organizador no pudo ser actualizado."] ]);
+            Session::flash('flash', [ ['type' => "danger", 'message' => "El Tipo de Organizador NO pudo ser actualizado."] ]);
             return redirect()->route('tipoorganizador.index');
         }
-        Session::flash('flash', [ ['type' => "success", 'message' => "Tipo Organizador Actualizado Con Exito."] ]);
+        Session::flash('flash', [ ['type' => "success", 'message' => "Tipo de Organizador actualizado con éxito."] ]);
         return redirect()->route('tipoorganizador.index');
     }
 
@@ -72,14 +72,14 @@ class TipoOrganizadorController extends Controller {
             $tipoOrganizador = TipoOrganizador::findOrFail($tipoOrganizador);
             $tipoOcupado = Organizador::where('IdTipoOrganizador', $tipoOrganizador->IdTipoOrganizador)->count();
             if($tipoOcupado > 0){
-                Session::flash('flash', [['type' => "danger", 'message' => "Este Tipo de Organizador fue asignado a un evento, no puede ser eliminada."]]);
+                Session::flash('flash', [['type' => "danger", 'message' => "Este Tipo de Organizador fue asignado a un evento, no puede ser eliminado."]]);
                 return redirect()->route('tipoorganizador.index');
             }
             $tipoOrganizador->delete();
-            Session::flash('flash', [['type' => "success", 'message' => "Tipo de Organizador eliminado correctamente."]]);
+            Session::flash('flash', [['type' => "success", 'message' => "Tipo de Organizador eliminado con éxito."]]);
             return redirect()->route('tipoorganizador.index');
         }catch (\Throwable $throwable){
-            Session::flash('flash', [['type' => "danger", 'message' => "Error al eliminar el Tipo de Organizador correctamente."]]);
+            Session::flash('flash', [['type' => "danger", 'message' => "Error al eliminar el Tipo de Organizador."]]);
             return redirect()->route('tipoorganizador.index');
         }
     }

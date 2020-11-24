@@ -67,7 +67,7 @@ class FechaEventoController extends FcaController
         $hrFin = sprintf("%d%d",
             $horaFin[0], $horaFin[1] );
         if($hrInicio >= $hrFin){
-            Session::flash('flash', [ ['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."] ]);
+            Session::flash('flash', [ ['type' => "danger", 'message' => "La Hora de Término debe ser mayor que la Hora de Inicio."] ]);
             return redirect()->back()
                 ->withInput();
         }
@@ -105,7 +105,7 @@ class FechaEventoController extends FcaController
 
         DB::commit();
 
-        Session::flash('flash', [ ['type' => "success", 'message' => "Fecha Agregada Con Exito."] ]);
+        Session::flash('flash', [ ['type' => "success", 'message' => "Fecha agregada con éxito."] ]);
         return redirect()->back();
     }
 
@@ -153,7 +153,7 @@ class FechaEventoController extends FcaController
         $hrFin = sprintf("%d%d",
             $horaFin[0], $horaFin[1] );
         if($hrInicio >= $hrFin){
-            Session::flash('flash', [ ['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."] ]);
+            Session::flash('flash', [ ['type' => "danger", 'message' => "La Hora de Término debe ser mayor que la Hora de Inicio."] ]);
             return redirect()->back()
                 ->withInput();
         }
@@ -197,7 +197,7 @@ class FechaEventoController extends FcaController
             //!!! Enviar alerta de error
         }
 
-        Session::flash('flash', [ ['type' => "success", 'message' => "Fecha Actualizada Con Exito."] ]);
+        Session::flash('flash', [ ['type' => "success", 'message' => "Fecha actualizada con éxito."] ]);
         return redirect()->back();
     }
 

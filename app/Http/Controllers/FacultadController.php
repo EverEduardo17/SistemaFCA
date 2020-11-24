@@ -64,7 +64,7 @@ class FacultadController extends Controller{
 
     public function destroy(Facultad $facultade) {
         try {
-            $facultade->delete();
+            $facultade->forceDelete();
             Session::flash('flash', [ ['type' => "success", 'message' => "Facultad eliminada correctamente."] ]);
             return redirect()->route('facultades.index');
         }catch (\Throwable $throwable){

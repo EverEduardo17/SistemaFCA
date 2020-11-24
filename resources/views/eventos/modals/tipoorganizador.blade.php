@@ -1,8 +1,8 @@
 <div class="modal fade" id="addTipoOrganizador" tabindex="-1" role="dialog" aria-labelledby="fechaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="fechaModalLabel">Agregar organizador</h5>
+            <div class="modal-header bg-success">
+                <h5 class="modal-title text-white" id="fechaModalLabel">Agregar organizador</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -44,15 +44,16 @@
 <div class="modal fade" id="deleteTipoOrganizador" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Eliminar Documento</h5>
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title text-white" id="exampleModalLabel">Eliminar Responsable</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Usted está por eliminar un documento.</p>
-                <h4>¿Desea continuar?</h4>
+                <p>Usted está por eliminar un responsable del evento.</p>
+                <h5>¿Desea continuar?</h5>
+                <small class="text-danger"><-- Esta acción no se puede deshacer --></small>
                 <form id="form-eliminar-organizador" method="post" action="{{ route('organizador.destroy', '') }}">
                     @csrf
                     @method('delete')

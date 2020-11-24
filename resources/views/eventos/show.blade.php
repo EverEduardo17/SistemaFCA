@@ -1,10 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="card">
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('eventos.index') }}">Eventos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{$evento->NombreEvento ?? ""}}</li>
+    </ol>
+</nav>
+<div class="card">
         <div class="card-header">
             <div class="row d-flex align-items-center mr-2">
-                <h4 class="mr-auto p-3">Evento</h4>
+                <h4 class="mr-auto p-3">{{$evento->NombreEvento ?? ""}}</h4>
+               
                 <div class="btn-group" role="group">
                     <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#editEvento">Editar</a>
                     <button class="btn btn-danger" style="margin-left: 1em" >Eliminar</button>
@@ -65,7 +73,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Fechas</h4>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-primary" data-toggle="modal" data-target="#addfecha" data-do="create">Agregar</button>
+                                    <button class="btn btn-success" data-toggle="modal" data-target="#addfecha" data-do="create">Agregar Fecha</button>
                                 </div>
                             </div>
                             <hr>
@@ -91,26 +99,17 @@
                                             <td>{{$efs->fechaEvento->FinFechaEvento->format('h:i A') ?? ""}}</td>
                                             <td>{{$efs->sedeEvento->NombreSedeEvento ?? ""}}</td>
                                             <td>
-                                                <a href="#" data-toggle="modal" data-target="#addfecha"
+                                                <a class="btn btn-sm btn-outline-primary" href="#" data-toggle="modal" data-target="#addfecha"
                                                 data-do="update" data-fecha="{{$efs->IdFechaEvento}}"
                                                 data-fechainicio="{{$efs->fechaEvento->InicioFechaEvento->format('d/m/Y')}}"
                                                 data-horainicio="{{$efs->fechaEvento->InicioFechaEvento->format('g:i A')}}"
                                                 data-horafin="{{$efs->fechaEvento->FinFechaEvento->format('g:i A')}}"
-                                                data-sedeevento="{{$efs->IdSedeEvento}}" >Editar</a> |
-                                                <a href="#" data-toggle="modal" data-target="#deletefecha" data-fecha="{{$efs->IdFechaEvento}}">Eliminar</a>
+                                                data-sedeevento="{{$efs->IdSedeEvento}}" >Editar</a>
+                                                <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deletefecha" data-fecha="{{$efs->IdFechaEvento}}">Eliminar</a>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Inicio</th>
-                                        <th>Fin</th>
-                                        <th>Sede</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -122,7 +121,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Responsables</h4>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-primary" data-toggle="modal" data-target="#addTipoOrganizador">Agregar</button>
+                                    <button class="btn btn-success" data-toggle="modal" data-target="#addTipoOrganizador">Agregar Responsable</button>
                                 </div>
                             </div>
                             <hr>
@@ -144,7 +143,7 @@
                                         <td>{{ $responsable->academico->usuario->name }}</td>
                                         <td>{{ $responsable->tipo_organizador->NombreTipoOrganizador }}</td>
                                         <td>
-                                            <a href="#" data-toggle="modal" data-target="#deleteTipoOrganizador"
+                                            <a  class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteTipoOrganizador"
                                                data-tipoorganizador="{{ $responsable->IdOrganizador }}">Eliminar</a>
                                             <!--<a href="#" data-toggle="modal" data-target="#editTipoOrganizador"
                                                data-tipoorganizador="{{ $responsable->IdOrganizador }}"
@@ -164,7 +163,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Participantes</h4>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-primary" data-toggle="modal" data-target="#addParticipante">Agregar</button>
+                                    <button class="btn btn-success" data-toggle="modal" data-target="#addParticipante">Agregar Participante</button>
                                 </div>
                             </div>
                             <hr>
@@ -175,8 +174,8 @@
                             <table id="table_participante" class="display">
                                 <thead>
                                     <tr>
-                                        <th>NoPersonal</th>
-                                        <th>Nombre del Academico</th>
+                                        <th>No. de Personal</th>
+                                        <th>Nombre del Académico</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -184,9 +183,9 @@
                                     @foreach($evento->academico_evento as $ae)
                                         <tr>
                                             <td>{{$ae->academico->NoPersonalAcademico }}</td>
-                                            <td>{{$ae->academico->usuario->name }}</td>
+                                            <td>{{$ae->academico->usuario-> name }}</td>
                                             <td>
-                                                <a href="#" data-toggle="modal" data-target="#deleteParticipante"
+                                                <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteParticipante"
                                                    data-participante="{{ $ae->Id_Academico_Evento }}">Eliminar</a>
                                             </td>
                                         </tr>
@@ -203,7 +202,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Documentos</h4>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-primary" data-toggle="modal" data-target="#addDocument">Agregar</button>
+                                    <button class="btn btn-success" data-toggle="modal" data-target="#addDocument">Agregar Documento</button>
                                 </div>
                             </div>
                             <hr>
@@ -214,8 +213,8 @@
                             <table id="table_documentos" class="display">
                                 <thead>
                                     <tr>
-                                        <th>NombreDocumento</th>
-                                        <th>DescripcionDocumento</th>
+                                        <th>Nombre del Documento</th>
+                                        <th>Descripción del Documento</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -225,13 +224,13 @@
                                             <td>{{ $documento->NombreDocumento }}</td>
                                             <td>{{ $documento->DescripcionDocumento }}</td>
                                             <td>
-                                                <a href="{{ route('documento.show', $documento->IdDocumento) }}">Descargar</a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteDocumento"
-                                                   data-documento="{{ $documento->IdDocumento }}">Eliminar</a>
-                                                <a href="#" data-toggle="modal" data-target="#editDocumento"
+                                                <a class="btn btn-sm btn-outline-primary" href="{{ route('documento.show', $documento->IdDocumento) }}">Descargar</a>
+                                                <a class="btn btn-sm btn-primary" href="#" data-toggle="modal" data-target="#editDocumento"
                                                    data-documento="{{ $documento->IdDocumento }}"
                                                    data-nombre="{{ $documento->NombreDocumento }}"
                                                    data-descripcion="{{ $documento->DescripcionDocumento }}">Editar</a>
+                                                <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteDocumento"
+                                                   data-documento="{{ $documento->IdDocumento }}">Eliminar</a>
                                             </td>
                                         </tr>
                                     @endforeach

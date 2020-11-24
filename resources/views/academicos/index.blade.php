@@ -1,11 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Académicos</li>
+    </ol>
+</nav>
 <div class="card">
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Académicos</h5>
-            <a class="btn btn-primary col-4" href="{{ route('academicos.create') }}" role="button">Agregar Académico</a>
+            <a class="btn btn-success col-4" href="{{ route('academicos.create') }}" role="button">Agregar Académico</a>
         </div>
     </div>
     <div class="card-body">
@@ -14,7 +20,7 @@
                 <tr>
                     <th>No. Personal</th>
                     <th>Nombre Completo</th>
-                    <th>Email</th>
+                    <th>Correo electrónico</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -29,9 +35,9 @@
                     </td>
                     <td>{{$academico->usuario->email ?? ""}}</td>
                     <td>
-                        <a class="btn btn-outline-primary btn-sm" href="{{ route('academicos.show', $academico) }}">Detalles</a>
-                        <a class="btn btn-danger btn-sm" href="{{ route('academicos.destroy', $academico) }}">Eliminar</a>
+                        <a class="btn btn-outline-primary btn-sm" href="{{ route('academicos.show', $academico) }}">Detalles</a>                        
                         <a class="btn btn-primary btn-sm" href="{{ route('academicos.edit', $academico) }}">Editar</a>
+                        <a class="btn btn-danger btn-sm" href="{{ route('academicos.destroy', $academico) }}">Eliminar</a>
                     </td>
                 </tr>
                 @endforeach

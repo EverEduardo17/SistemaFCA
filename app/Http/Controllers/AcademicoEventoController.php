@@ -66,10 +66,10 @@ class AcademicoEventoController extends Controller
             DB::commit();
         }catch (\Throwable $exception){
             DB::rollBack();
-            Session::flash('flash', [ ['type' => "danger", 'message' => "La asignacion no pudo ser registrado."] ]);
+            Session::flash('flash', [ ['type' => "danger", 'message' => "No es posible asignar al docente."] ]);
             return redirect()->route('eventos.show', $request['evento']);
         }
-        Session::flash('flash', [ ['type' => "success", 'message' => "Academico asignado correctamente."] ]);
+        Session::flash('flash', [ ['type' => "success", 'message' => "Académico asignado correctamente."] ]);
         return redirect()->route('eventos.show', $request['evento']);
     }
 
@@ -117,7 +117,7 @@ class AcademicoEventoController extends Controller
         $participante = AcademicoEvento::findOrFail( $participante );
         $participante->forceDelete();
 
-        Session::flash('flash', [ ['type' => "success", 'message' => "Participante Eliminado Correctamente."] ]);
+        Session::flash('flash', [ ['type' => "success", 'message' => "Participante eliminado correctamente."] ]);
         return redirect()->back();
     }
 }

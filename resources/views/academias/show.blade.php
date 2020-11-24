@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('academias.index') }}">Academias</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ $academia->NombreAcademia }}</li>
+    </ol>
+</nav>
     <div class="card">
         <div class="card-header">
             <div class="row">
@@ -11,11 +18,11 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-8">
-                    <h5 class="card-title">Coordinador: {{ $academia->coordinador->usuario->name }}</h5>
+                    <h6 class="card-title">Coordinador: {{ $academia->coordinador->usuario->name }}</h6>
                     <p class="card-text">{{ $academia->DescripcionAcademia }}</p>
                 </div>
                 <div class="col">
-                    <a href="#" data-toggle="modal" data-target="#addAcademicoAcademia" class="btn btn-success">Agregar Academico</a>
+                    <a class="btn btn-success" href="#" data-toggle="modal" data-target="#addAcademicoAcademia" >Agregar integrate</a>
                 </div>
             </div>
             <br>
@@ -23,7 +30,7 @@
             <table class="table table-striped" id="table">
                 <thead>
                     <tr>
-                        <th>No de Personal</th>
+                        <th>No. de Personal</th>
                         <th>Nombre</th>
                         <th>Correo</th>
                         <th>Acciones</th>
@@ -36,8 +43,7 @@
                             <td>{{ $item->academico->usuario->name }}</td>
                             <td>{{ $item->academico->usuario->email }}</td>
                             <td>
-                                <a href="#" data-toggle="modal" data-target="#deleteAcademicoAcademia"
-                                   data-academico="{{ $item->Id_Academico_Academia }}">Eliminar</a>
+                                <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteAcademicoAcademia" data-academico="{{ $item->Id_Academico_Academia }}">Eliminar</a>
                             </td>
                         </tr>
                     @endforeach

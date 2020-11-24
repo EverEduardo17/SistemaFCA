@@ -1,11 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Sedes</li>
+    </ol>
+</nav>
 <div class="card">
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Sedes</h5>
-            <a class="btn btn-primary col-4" href="{{ route('sedeEventos.create') }}" role="button">Agregar Sede</a>
+            <a class="btn btn-success col-4" href="{{ route('sedeEventos.create') }}" role="button">Agregar Sede</a>
         </div>
     </div>
     <div class="card-body">
@@ -34,14 +40,14 @@
 @endsection
 
 @section('head')
-    <link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}" />
 @endsection
 
 @section('script')
-    <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
-    <script>
-        $(document).ready( function () {
-            $('#table_sede').DataTable();
-        } );
-    </script>
+<script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
+<script>
+    $(document).ready(function() {
+        $('#table_sede').DataTable();
+    });
+</script>
 @endsection

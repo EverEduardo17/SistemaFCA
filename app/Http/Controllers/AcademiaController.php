@@ -32,7 +32,7 @@ class AcademiaController extends Controller
             Session::flash('flash', [ ['type' => "success", 'message' => "Academia creada correctamente."] ]);
             return redirect()->route('academias.index');
         }catch (\Throwable $throwable){
-            Session::flash('flash', [ ['type' => "danger", 'message' => "La Academia no pudo ser creada correctamente."] ]);
+            Session::flash('flash', [ ['type' => "danger", 'message' => "La Academia NO pudo ser creada correctamente."] ]);
             return redirect()->route('academias.index');
         }
     }
@@ -60,10 +60,10 @@ class AcademiaController extends Controller
         ]);
         try {
             $academia->update( $request->validated() );
-            Session::flash('flash', [ ['type' => "success", 'message' => "Academia editada correctamente."] ]);
+            Session::flash('flash', [ ['type' => "success", 'message' => "Academia actualizada correctamente."] ]);
             return redirect()->route('academias.index');
         }catch (\Throwable $throwable){
-            Session::flash('flash', [ ['type' => "danger", 'message' => "La Academia no pudo ser editada correctamente."] ]);
+            Session::flash('flash', [ ['type' => "danger", 'message' => "La Academia NO puede ser actualizada correctamente."] ]);
             return redirect()->route('academias.index');
         }
     }
@@ -71,10 +71,10 @@ class AcademiaController extends Controller
     public function destroy(Academia $academia) {
         try {
             $academia->delete();
-            Session::flash('flash', [ ['type' => "success", 'message' => "Academia fue eliminada correctamente."] ]);
+            Session::flash('flash', [ ['type' => "success", 'message' => "Academia eliminada correctamente."] ]);
             return redirect()->route('academias.index');
         }catch (\Throwable $throwable){
-            Session::flash('flash', [ ['type' => "danger", 'message' => "La Academia no pudo ser eliminada correctamente."] ]);
+            Session::flash('flash', [ ['type' => "danger", 'message' => "La Academia NO pudo ser eliminada correctamente."] ]);
             return redirect()->route('academias.index');
         }
 
@@ -83,10 +83,10 @@ class AcademiaController extends Controller
     public function destroyAcademicoAcademia(AcademicoAcademia $academicoAcademia){
         try {
             $academicoAcademia->forceDelete();
-            Session::flash('flash', [ ['type' => "success", 'message' => "El Academico fue eliminado de la Academia correctamente."] ]);
+            Session::flash('flash', [ ['type' => "success", 'message' => "El Académico fue eliminado de la academia correctamente."] ]);
             return redirect()->route('academias.show', $academicoAcademia->IdAcademia);
         }catch (\Throwable $throwable){
-            Session::flash('flash', [ ['type' => "danger", 'message' => "El Academico NO fue eliminado de la Academia correctamente."] ]);
+            Session::flash('flash', [ ['type' => "danger", 'message' => "El Académico NO fue eliminado de la Academia correctamente."] ]);
             return redirect()->route('academias.show', $academicoAcademia->IdAcademia);
         }
 

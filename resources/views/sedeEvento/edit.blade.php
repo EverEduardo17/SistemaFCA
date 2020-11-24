@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('sedeEventos.index') }}">Sedes</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Editar Sede</li>
+  </ol>
+</nav>
 <div class="card">
   <div class="card-header">
     <div class="row">
@@ -15,11 +22,11 @@
       @include('layouts.validaciones')
       <div class="form-group">
         <label name="NombreSedeEvento">Nombre de la Facultad:</label>
-        <input name="NombreSedeEvento" type="text" value="{{ old('NombreSedeEvento', $sede->NombreSedeEvento) }}" class="form-control @error('NombreSedeEvento') is-invalid @enderror">
+        <input name="NombreSedeEvento" type="text" value="{{ old('NombreSedeEvento', $sede->NombreSedeEvento) }}" class="form-control @error('NombreSedeEvento') is-invalid @enderror" placeholder="Ej. LABLIS">
       </div>
       <div class="form-group">
         <label name="DescripcionSedeEvento">Clave de la Facultad:</label>
-        <input name="DescripcionSedeEvento" class="form-control @error('DescripcionSedeEvento') is-invalid @enderror" value="{{ old('DescripcionSedeEvento', $sede->DescripcionSedeEvento) }}">
+        <input name="DescripcionSedeEvento" class="form-control @error('DescripcionSedeEvento') is-invalid @enderror" value="{{ old('DescripcionSedeEvento', $sede->DescripcionSedeEvento) }}" placeholder="Ej. Centro de cómputo de LIS">
       </div>
       <button type="submit" class="btn btn-primary btn-block">Guardar</button>
       <a href="{{ route('sedeEventos.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
@@ -29,7 +36,7 @@
 
     <form method="POST" id="form-eliminar" action="{{ route('sedeEventos.destroy', $sede) }}">
       @csrf @method('DELETE')
-        <a href="#"  data-toggle="modal" data-target="#delete" class="btn btn-danger btn-block">¡Eliminar Permanentemente!</a>
+      <a href="#" data-toggle="modal" data-target="#delete" class="btn btn-danger btn-block">Eliminar Permanentemente</a>
     </form>
 
   </div>
@@ -43,10 +50,10 @@
 @endsection
 
 @section('script')
-    <script>
-        $('#delete').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var modal = $(this);
-        })
-    </script>
+<script>
+  $('#delete').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget);
+    var modal = $(this);
+  })
+</script>
 @endsection

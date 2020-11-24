@@ -1,11 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Tipo de Organizadores</li>
+    </ol>
+</nav>
     <div class="card">
         <div class="card-header">
             <div class="row">
                 <h5 class="card-title col-8">Tipo de Organizadores</h5>
-                <a class="btn btn-primary col-4" href="{{ route('tipoorganizador.create') }}" role="button">Añadir Tipo de Organizador</a>
+                <a class="btn btn-success col-4" href="{{ route('tipoorganizador.create') }}" role="button">Agregar Tipo de Organizador</a>
             </div>
         </div>
         <div class="card-body">
@@ -13,7 +19,7 @@
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Descripcion</th>
+                        <th>Descripción</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>

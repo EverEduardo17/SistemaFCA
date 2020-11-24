@@ -183,7 +183,7 @@ class EventoController extends FcaController {
             Session::flash('flash', [ ['type' => "danger", 'message' => "Error al editar el Evento."] ]);
             return redirect()->route('eventos.show', $evento->IdEvento);
         }
-        Session::flash('flash', [ ['type' => "success", 'message' => "Evento editado con exito."] ]);
+        Session::flash('flash', [ ['type' => "success", 'message' => "Evento actualizado con éxito."] ]);
         return redirect()->route('eventos.show', $evento->IdEvento);
     }
 

@@ -1,15 +1,15 @@
 <div class="modal fade" id="deleteAcademicoAcademia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Eliminar Academico de la Academia de: {{ $academia->NombreAcademia }}</h5>
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title text-white" id="exampleModalLabel">Eliminar Académico</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Usted está por eliminar un academico de esta academia.</p>
-                <h4>¿Desea continuar?</h4>
+                <p>Usted está por eliminar un académico de la academia: <br> <strong> {{ $academia->NombreAcademia }}</strong></p>
+                <h5>¿Desea continuar?</h5>
                 <form id="form-eliminar-academico" method="post" action="{{ route('deleteAcademicoAcademia', '') }}">
                     @csrf
                     @method('delete')
@@ -26,8 +26,8 @@
 <div class="modal fade" id="addAcademicoAcademia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar Academico a la Academia de: {{ $academia->NombreAcademia }}</h5>
+            <div class="modal-header bg-success">
+                <h5 class="modal-title text-white" id="exampleModalLabel">Agregar Integrante</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -38,6 +38,8 @@
                     @include('layouts.validaciones')
                     <input type="hidden" name="academia" value="{{ $academia->IdAcademia }}">
                     <div class="form-group">
+                        <label>Agrega un académico a la academia:<br> <strong> {{ $academia->NombreAcademia }}</strong></label>
+                        <br>
                         <label name="docente">Docente:</label>
                         <select name="docente" class="form-control @error('docente') is-invalid @enderror">
                             @foreach ($academicos as $academico)
@@ -49,7 +51,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary" form="form-add-academico">Agregar</button>
+                <button type="submit" class="btn btn-success" form="form-add-academico">Agregar</button>
             </div>
         </div>
     </div>

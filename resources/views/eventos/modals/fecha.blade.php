@@ -1,8 +1,8 @@
 <div class="modal fade" id="addfecha" tabindex="-1" role="dialog" aria-labelledby="fechaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="fechaModalLabel">Agregar fecha</h5>
+            <div class="modal-header bg-success">
+                <h5 class="modal-title text-white" id="fechaModalLabel">Agregar fecha</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -16,18 +16,18 @@
                     <input type="hidden" name="fechaEvento" value="">
 
                     <div class="form-group">
-                        <label for="fechaInicio" class="col-form-label">Fecha</label>
-                        <input id="fechaInicio" type="text" class="form-control @error('fechaInicio') is-invalid @enderror" name="fechaInicio" value="{{ old('fechaInicio') }}" placeholder="Dia/Mes/Año">
+                        <label for="fechaInicio" class="col-form-label">Fecha del evento:</label>
+                        <input id="fechaInicio" type="text" class="form-control @error('fechaInicio') is-invalid @enderror" name="fechaInicio" value="{{ old('fechaInicio') }}" placeholder="Día/Mes/Año">
                     </div>
 
                     <div class="form-group">
-                        <label for="horaInicio" class="col-form-label">Hora de inicio</label>
-                        <input id="horaInicio" type="text" class="form-control  datetimepicker-input @error('horaInicio') is-invalid @enderror" name="horaInicio" value="{{ old('horaInicio') }}" placeholder="Inicio">
+                        <label for="horaInicio" class="col-form-label">Hora de inicio:</label>
+                        <input id="horaInicio" type="text" class="form-control  datetimepicker-input @error('horaInicio') is-invalid @enderror" name="horaInicio" value="{{ old('horaInicio') }}" placeholder="Hora de Inicio">
                     </div>
 
                     <div class="form-group">
-                        <label for="horaFin" class="col-form-label">Hora de fin</label>
-                        <input id="horaFin" type="text" class="form-control datetimepicker-input @error('horaFin') is-invalid @enderror" name="horaFin" value="{{ old('horaFin') }}" placeholder="Fin">
+                        <label for="horaFin" class="col-form-label">Hora de término:</label>
+                        <input id="horaFin" type="text" class="form-control datetimepicker-input @error('horaFin') is-invalid @enderror" name="horaFin" value="{{ old('horaFin') }}" placeholder="Hora de Término">
                     </div>
 
                     <div class="form-group">
@@ -51,15 +51,16 @@
 <div class="modal fade" id="deletefecha" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Eliminar Fecha</h5>
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title text-white" id="exampleModalLabel">Eliminar Fecha</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Usted está por eliminar una fecha.</p>
-                <h4>¿Desea continuar?</h4>
+                <p>Usted está por eliminar una fecha del evento.</p>
+                <h5>¿Desea continuar?</h5>
+                <small class="text-danger"><-- Esta acción no se puede deshacer --></small>
                 <form id="form-eliminar-fecha" method="post" action="{{route('fechaeventos_delete')}}">
                     @csrf
                     @method('delete')
