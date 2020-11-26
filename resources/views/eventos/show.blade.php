@@ -99,7 +99,7 @@
                                             <td>{{$efs->fechaEvento->FinFechaEvento->format('h:i A') ?? ""}}</td>
                                             <td>{{$efs->sedeEvento->NombreSedeEvento ?? ""}}</td>
                                             <td>
-                                                <a class="btn btn-sm btn-outline-primary" href="#" data-toggle="modal" data-target="#addfecha"
+                                                <a class="btn btn-sm btn-primary" href="#" data-toggle="modal" data-target="#addfecha"
                                                 data-do="update" data-fecha="{{$efs->IdFechaEvento}}"
                                                 data-fechainicio="{{$efs->fechaEvento->InicioFechaEvento->format('d/m/Y')}}"
                                                 data-horainicio="{{$efs->fechaEvento->InicioFechaEvento->format('g:i A')}}"

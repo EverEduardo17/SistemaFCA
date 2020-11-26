@@ -1,10 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('academicos.index') }}">Académicos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Detalles académico</li>
+    </ol>
+</nav>
 <div class="card">
     <div class="card-header">
         <div class="row">
-            <h5 class="card-title col-8">Actualizar Académico</h5>
+            <h5 class="card-title col-8">Detalles Académico</h5>
             <a class="btn btn-primary col-4" href="{{ route('academicos.index') }}" role="button">Ver Académicos</a>
         </div>
     </div>
@@ -42,8 +49,7 @@
                 <label name="email">Correo electrónico:</label>
                 <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $academico->usuario->email) }}" disabled>
             </div>
-            <a href="{{ route('academicos.edit', $academico) }}" class="btn btn-primary btn-block">Editar</a>
-            <a href="{{ route('academicos.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
+            <a href="{{ route('academicos.edit', $academico) }}" class="btn btn-primary btn-block">Editar Académico</a>
         </form>
     </div>
 </div>

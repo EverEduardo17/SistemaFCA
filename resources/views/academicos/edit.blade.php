@@ -1,10 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('academicos.index') }}">Académicos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Editar académico</li>
+    </ol>
+</nav>
 <div class="card">
     <div class="card-header">
         <div class="row">
-            <h5 class="card-title col-8">Actualizar Académico</h5>
+            <h5 class="card-title col-8">Editar Académico</h5>
             <a class="btn btn-primary col-4" href="{{ route('academicos.index') }}" role="button">Ver Académicos</a>
         </div>
     </div>
