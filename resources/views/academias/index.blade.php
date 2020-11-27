@@ -11,7 +11,9 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Academias</h5>
-            <a class="btn btn-success col-4" href="{{ route('academias.create') }}" role="button">Agregar Academia</a>
+            @can('havepermiso', 'academia-crear')
+                <a class="btn btn-success col-4" href="{{ route('academias.create') }}" role="button">Agregar Academia</a>
+            @endcan
         </div>
     </div>
     <div class="card-body">

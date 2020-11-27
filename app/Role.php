@@ -10,15 +10,14 @@ class Role extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "role";
+    protected $table = "Role";
     protected $primaryKey = "IdRole";
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
 
-    //Relacion Muchos a Uno
-    public function role_permiso(){
-        return $this->belongsTo(RolePermiso::class, 'IdRole', 'IdRole');
+    public function permisos() {
+        return $this->belongsToMany('App\Permiso', 'role_permiso', 'IdRole', 'IdPermiso');
     }
 
     //Relacion Muchos a Uno

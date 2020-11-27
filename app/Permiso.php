@@ -10,7 +10,7 @@ class Permiso extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "permiso";
+    protected $table = "Permiso";
     protected $primaryKey = "IdPermiso";
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
