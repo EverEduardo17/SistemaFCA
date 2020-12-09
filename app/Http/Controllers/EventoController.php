@@ -7,6 +7,7 @@ use App\AcademicoEvento;
 use App\Http\Requests\EventoRequest;
 use App\Evento;
 use App\Evento_Fecha_Sede;
+use App\Mail\EventoRegistrado;
 use App\SedeEvento;
 use App\Organizador;
 use App\TipoOrganizador;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Extensions\MongoSessionStore;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class EventoController extends FcaController {
@@ -60,6 +62,10 @@ class EventoController extends FcaController {
 
     public function store(EventoRequest $request) {
         $input = $request->validated();
+
+        Mail::to('luis.antoniomv24@gmail.com')->queue(new EventoRegistrado($input));
+        return redirect()->route('home');
+
 
         /* Obtener fechas */
         $fechaInicio = explode( '/', $input['fechaInicio'] );
@@ -135,6 +141,8 @@ class EventoController extends FcaController {
             }
 
         DB::commit();
+
+            Mail::to('sistema@mail.com')->send(new EventoRegistrado($input));
 
         //$validator = Validator::make($input, $rules, $messages);
         Session::flash('flash', [ ['type' => "success", 'message' => "Evento registrado correctamente"] ]);
