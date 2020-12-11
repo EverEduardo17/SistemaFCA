@@ -56,6 +56,10 @@ return [
             'transport' => 'postmark',
         ],
 
+        'sendgrid' => [
+            'transport' => 'sendgrid',
+        ],
+
         'sendmail' => [
             'transport' => 'sendmail',
             'path' => '/usr/sbin/sendmail -bs',
@@ -83,8 +87,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'sistemaFCA@uv.mx'),
+        'name' => env('MAIL_FROM_NAME', 'sistemaFCA'),
     ],
 
     /*

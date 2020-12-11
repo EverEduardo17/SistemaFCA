@@ -14,7 +14,11 @@
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
+<<<<<<< HEAD
         "maatwebsite/excel": "^3.1"
+=======
+        "s-ichikawa/laravel-sendgrid-driver": "^3.0"
+>>>>>>> bd93dc7779297d1d0e0cf79620168e60163f18f4
     },
     "require-dev": {
         "facade/ignition": "^2.0",
