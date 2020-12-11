@@ -20,6 +20,7 @@ class CreateDatospersonalesTable extends Migration
             $table->string('ApellidoPaternoDatosPersonales', 100)->nullable(false);
             $table->string('ApellidoMaternoDatosPersonales', 100)->nullable();
             $table->date('FechaNacimientoDatosPersonales', 100)->nullable();
+            $table->string('Genero', 10)->nullable();
 
             $table->unsignedBigInteger('IdUsuario')->nullable(false)->unique();
             $table->foreign('IdUsuario')->references('IdUsuario')->on('Usuario');

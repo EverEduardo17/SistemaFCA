@@ -12,6 +12,7 @@ class Estudiante extends Model
 
     protected $table = "estudiante";
     protected $primaryKey = "IdEstudiante";
+    protected $fillable = ['MatriculaEstudiante','IdUsuario'];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
@@ -20,4 +21,5 @@ class Estudiante extends Model
     public function usuario(){
         return $this->hasOne(User::class, 'IdUsuario', 'IdUsuario');
     }
+    
 }

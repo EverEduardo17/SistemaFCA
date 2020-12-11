@@ -19,7 +19,7 @@ class CreateEstudianteTable extends Migration
             $table->string('MatriculaEstudiante', 10)->nullable(false)->unique();
 
             /*Realaciones*/
-            $table->unsignedBigInteger('IdUsuario')->nullable(false)->unique();
+            $table->unsignedBigInteger('IdUsuario')->nullable()->unique();
             $table->foreign('IdUsuario')->references('IdUsuario')->on('Usuario');
 
 

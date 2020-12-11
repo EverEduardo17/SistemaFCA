@@ -3,74 +3,115 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $colores = [ "#00A639", "#0D47A1" ];
+        $nombreCohorte = DB::table('cohorte')->orderBy('IdCohorte', 'desc')->value('NombreCohorte');
+        $colores = ["#00A639", "#0D47A1"];
         $opciones = [
-            [
-                "titulo" => "Eventos",
-                "background" => $colores[0],
-                "enlace" => "eventos",
-                "operaciones" => [
-                    ["titulo" => "Nuevo Evento", "enlace" => "create"],
-                    ["titulo" => "Ver Eventos", "enlace" => ""],
-                ]
-            ],
+            // [
+            //     "titulo" => "Eventos",
+            //     "background" => $colores[0],
+            //     "enlace" => "eventos",
+            //     "operaciones" => [
+            //         ["titulo" => "Nuevo Evento", "enlace" => "create"],
+            //         ["titulo" => "Ver Eventos", "enlace" => ""],
+            //     ]
+            // ],
+
+            // [
+            //     "titulo" => "Académicos",
+            //     "background" => $colores[1],
+            //     "enlace" => "academicos",
+            //     "operaciones" => [
+            //         ["titulo" => "Nuevo Académico", "enlace" => "create"],
+            //         ["titulo" => "Ver Académicos", "enlace" => ""],
+            //     ]
+            // ],
+
+            // [
+            //     "titulo" => "Sedes de los Eventos",
+            //     "background" => $colores[0],
+            //     "enlace" => "sedeEventos",
+            //     "operaciones" => [
+            //         ["titulo" => "Nueva Sede de Evento", "enlace" => "create"],
+            //         ["titulo" => "Ver Sedes de Eventos", "enlace" => ""],
+            //     ]
+            // ],
+
+            // [
+            //     "titulo" => "Tipos de Organizadores",
+            //     "background" => $colores[0],
+            //     "enlace" => "tipoorganizador",
+            //     "operaciones" => [
+            //         ["titulo" => "Nuevo Tipo de Organizador", "enlace" => "create"],
+            //         ["titulo" => "Ver Tipos de Organizadores", "enlace" => ""],
+            //     ]
+            // ],
+
+            // [
+            //     "titulo" => "Facultades",
+            //     "background" => $colores[1],
+            //     "enlace" => "facultades",
+            //     "operaciones" => [
+            //         ["titulo" => "Nueva Facultad", "enlace" => "create"],
+            //         ["titulo" => "Ver Facultades", "enlace" => ""],
+            //     ]
+            // ],
+
+            // [
+            //     "titulo" => "Academinas",
+            //     "background" => $colores[0],
+            //     "enlace" => "academias",
+            //     "operaciones" => [
+            //         ["titulo" => "Nueva Academia", "enlace" => "create"],
+            //         ["titulo" => "Ver Academia", "enlace" => ""],
+            //     ]
+            // ],
 
             [
-                "titulo" => "Académicos",
+                "titulo" => "Programas Educativos",
+                "background" => $colores[0],
+                "enlace" => "programaEducativo",
+                "operaciones" => [
+                    ["titulo" => "Nuevo Programa Educativo", "enlace" => "create"],
+                    ["titulo" => "Gestión de Programas Educativos", "enlace" => ""],
+                ]
+            ],
+            [
+                "titulo" => "Empresas",
                 "background" => $colores[1],
-                "enlace" => "academicos",
+                "enlace" => "empresas",
                 "operaciones" => [
-                    ["titulo" => "Nuevo Académico", "enlace" => "nuevo"],
-                    ["titulo" => "Ver Académicos", "enlace" => ""],
+                    ["titulo" => "Nueva Empresa", "enlace" => "create"],
+                    ["titulo" => "Gestión de Empresas", "enlace" => ""],
                 ]
             ],
 
             [
-                "titulo" => "Sedes de los Eventos",
+                "titulo" => "Cohortes",
                 "background" => $colores[0],
-                "enlace" => "sedeEventos",
+                "enlace" => "cohortes",
                 "operaciones" => [
-                    ["titulo" => "Nueva Sede de Evento", "enlace" => "create"],
-                    ["titulo" => "Ver Sedes de Eventos", "enlace" => ""],
+                    ["titulo" => "Nuevo Cohorte", "enlace" => "create"],
+                    ["titulo" => "Gestión de Cohortes", "enlace" => $nombreCohorte],
                 ]
             ],
-
             [
-                "titulo" => "Tipos de Organizadores",
-                "background" => $colores[0],
-                "enlace" => "tipoorganizador",
-                "operaciones" => [
-                    ["titulo" => "Nuevo Tipo de Organizador", "enlace" => "create"],
-                    ["titulo" => "Ver Tipos de Organizadores", "enlace" => ""],
-                ]
-            ],
-
-            [
-                "titulo" => "Facultades",
+                "titulo" => "Grupos",
                 "background" => $colores[1],
-                "enlace" => "facultades",
+                "enlace" => "grupos",
                 "operaciones" => [
-                    ["titulo" => "Nueva Facultad", "enlace" => "create"],
-                    ["titulo" => "Ver Facultades", "enlace" => ""],
+                    ["titulo" => "Nuevo Grupo", "enlace" => "create"],
+                    ["titulo" => "Gestión de Grupos", "enlace" => ""],
                 ]
             ],
 
-            [
-                "titulo" => "Academinas",
-                "background" => $colores[0],
-                "enlace" => "academias",
-                "operaciones" => [
-                    ["titulo" => "Nueva Academia", "enlace" => "create"],
-                    ["titulo" => "Ver Academia", "enlace" => ""],
-                ]
-            ]
         ];
 
-        return view("home", ['opciones'=>$opciones]);
+        return view("home", ['opciones' => $opciones]);
     }
 }

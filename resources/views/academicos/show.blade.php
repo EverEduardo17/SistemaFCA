@@ -5,7 +5,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('academicos.index') }}">Académicos</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Detalles académico</li>
+        <li class="breadcrumb-item active" aria-current="page">{{$academico->usuario->datospersonales->ApellidoPaternoDatosPersonales}} {{$academico->usuario->datospersonales->ApellidoMaternoDatosPersonales}} {{$academico->usuario->datospersonales->NombreDatosPersonales}}</li>
     </ol>
 </nav>
 <div class="card">

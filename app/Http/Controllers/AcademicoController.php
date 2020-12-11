@@ -122,19 +122,15 @@ class AcademicoController extends Controller
      */
     public function update(Request $request, Academico $academico)
     {
-        dd($request);
         $request->validate([
             'NombreDatosPersonales' => 'required',
             'ApellidoPaternoDatosPersonales' => 'required',
             'ApellidoMaternoDatosPersonales' => 'required',
-            'NoPersonalAcademico' => 'unique:academico,NoPersonalAcademico,'.$academico->NoPersonalAcademico,
-            'RfcAcademico' => 'unique:academico,RfcAcademico,'.$academico->RfcAcademico,
-            'name' => 'unique:usuario,name,'.$academico->usuario->name,
-            'email' => 'unique:academico,email,'.$academico->usuario->email
+            'NoPersonalAcademico' => 'unique:academico,NoPersonalAcademico,'.$academico->NoPersonalAcademico.',NoPersonalAcademico',
+            'RfcAcademico' => 'unique:academico,RfcAcademico,'.$academico->RfcAcademico.',RfcAcademico',
+            'name' => 'unique:usuario,name,'.$academico->usuario->name.',name',
+            'email' => 'unique:academico,email,'.$academico->usuario->email.',email'
         ]);
-
-        dd($request);
-
         try {
             DB::beginTransaction();
 

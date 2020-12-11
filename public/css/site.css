@@ -111,6 +111,27 @@ code {
     background-color: #0D47A1 !important;
 }
 
+.bg-table{
+    background-color: #00A639;
+}
+
+.testimonial-group > .row {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.testimonial-group > .row > .col-s-4{
+    display: inline-block;
+}
+
+.contenedor-botones{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+
 /* validator */
 .alert.alert-custom.alert-danger {
     background-color: #f64e60;

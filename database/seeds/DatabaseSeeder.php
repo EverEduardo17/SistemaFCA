@@ -22,10 +22,14 @@ class DatabaseSeeder extends Seeder
 
         $this->call(FacultadSeeder::class);
         $this->call(PeriodoSeeder::class);
-        $this->call(ProgramaEducativoSeeder::class);
         $this->call(SedeEventoSeeder::class);
 
         $this->call(TipoDocumentoSeeder::class);
         $this->call(TipoOrganizadorSeeder::class);
+
+        /*Módulo Control Academico*/
+        $this->call(ProgramaEducativoSeeder::class);
+        $this->call(CohortesSeeder::class);
+        $this->call(ModalidadSeeder::class);
     }
 }
