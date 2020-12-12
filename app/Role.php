@@ -20,6 +20,10 @@ class Role extends Model
         return $this->belongsToMany('App\Permiso', 'role_permiso', 'IdRole', 'IdPermiso');
     }
 
+    public function usuarios() {
+        return $this->belongsToMany(Usuario::class, 'Role_Usuario', 'IdRole', 'IdUsuario');
+    }
+
     //Relacion Muchos a Uno
     public function role_usuario(){
         return $this->belongsTo(RoleUsuario::class, 'IdRole', 'IdRole');

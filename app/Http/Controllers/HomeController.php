@@ -12,65 +12,65 @@ class HomeController extends Controller
         $nombreCohorte = DB::table('cohorte')->orderBy('IdCohorte', 'desc')->value('NombreCohorte');
         $colores = ["#00A639", "#0D47A1"];
         $opciones = [
-            // [
-            //     "titulo" => "Eventos",
-            //     "background" => $colores[0],
-            //     "enlace" => "eventos",
-            //     "operaciones" => [
-            //         ["titulo" => "Nuevo Evento", "enlace" => "create"],
-            //         ["titulo" => "Ver Eventos", "enlace" => ""],
-            //     ]
-            // ],
+            [
+                "titulo" => "Eventos",
+                "background" => $colores[0],
+                "enlace" => "eventos",
+                "operaciones" => [
+                    ["titulo" => "Nuevo Evento", "enlace" => "create"],
+                    ["titulo" => "Ver Eventos", "enlace" => ""],
+                ]
+            ],
 
-            // [
-            //     "titulo" => "Académicos",
-            //     "background" => $colores[1],
-            //     "enlace" => "academicos",
-            //     "operaciones" => [
-            //         ["titulo" => "Nuevo Académico", "enlace" => "create"],
-            //         ["titulo" => "Ver Académicos", "enlace" => ""],
-            //     ]
-            // ],
+            [
+                "titulo" => "Académicos",
+                "background" => $colores[1],
+                "enlace" => "academicos",
+                "operaciones" => [
+                    ["titulo" => "Nuevo Académico", "enlace" => "create"],
+                    ["titulo" => "Ver Académicos", "enlace" => ""],
+                ]
+            ],
 
-            // [
-            //     "titulo" => "Sedes de los Eventos",
-            //     "background" => $colores[0],
-            //     "enlace" => "sedeEventos",
-            //     "operaciones" => [
-            //         ["titulo" => "Nueva Sede de Evento", "enlace" => "create"],
-            //         ["titulo" => "Ver Sedes de Eventos", "enlace" => ""],
-            //     ]
-            // ],
+            [
+                "titulo" => "Sedes de los Eventos",
+                "background" => $colores[0],
+                "enlace" => "sedeEventos",
+                "operaciones" => [
+                    ["titulo" => "Nueva Sede de Evento", "enlace" => "create"],
+                    ["titulo" => "Ver Sedes de Eventos", "enlace" => ""],
+                ]
+            ],
 
-            // [
-            //     "titulo" => "Tipos de Organizadores",
-            //     "background" => $colores[0],
-            //     "enlace" => "tipoorganizador",
-            //     "operaciones" => [
-            //         ["titulo" => "Nuevo Tipo de Organizador", "enlace" => "create"],
-            //         ["titulo" => "Ver Tipos de Organizadores", "enlace" => ""],
-            //     ]
-            // ],
+            [
+                "titulo" => "Tipos de Organizadores",
+                "background" => $colores[0],
+                "enlace" => "tipoorganizador",
+                "operaciones" => [
+                    ["titulo" => "Nuevo Tipo de Organizador", "enlace" => "create"],
+                    ["titulo" => "Ver Tipos de Organizadores", "enlace" => ""],
+                ]
+            ],
 
-            // [
-            //     "titulo" => "Facultades",
-            //     "background" => $colores[1],
-            //     "enlace" => "facultades",
-            //     "operaciones" => [
-            //         ["titulo" => "Nueva Facultad", "enlace" => "create"],
-            //         ["titulo" => "Ver Facultades", "enlace" => ""],
-            //     ]
-            // ],
+            [
+                "titulo" => "Facultades",
+                "background" => $colores[1],
+                "enlace" => "facultades",
+                "operaciones" => [
+                    ["titulo" => "Nueva Facultad", "enlace" => "create"],
+                    ["titulo" => "Ver Facultades", "enlace" => ""],
+                ]
+            ],
 
-            // [
-            //     "titulo" => "Academinas",
-            //     "background" => $colores[0],
-            //     "enlace" => "academias",
-            //     "operaciones" => [
-            //         ["titulo" => "Nueva Academia", "enlace" => "create"],
-            //         ["titulo" => "Ver Academia", "enlace" => ""],
-            //     ]
-            // ],
+            [
+                "titulo" => "Academinas",
+                "background" => $colores[0],
+                "enlace" => "academias",
+                "operaciones" => [
+                    ["titulo" => "Nueva Academia", "enlace" => "create"],
+                    ["titulo" => "Ver Academia", "enlace" => ""],
+                ]
+            ],
 
             [
                 "titulo" => "Programas Educativos",

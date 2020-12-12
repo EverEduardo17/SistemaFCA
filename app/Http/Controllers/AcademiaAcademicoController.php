@@ -9,6 +9,7 @@ use App\Organizador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class AcademiaAcademicoController extends Controller {
@@ -26,7 +27,7 @@ class AcademiaAcademicoController extends Controller {
     }
 
     public function store(Request $request) {
-
+        Gate::authorize('havepermiso', 'academia-academico-crear');
         $academia = Academia::findOrFail($request->academia);
         $academico = Academico::findOrFail($request->docente);
 
@@ -36,7 +37,7 @@ class AcademiaAcademicoController extends Controller {
         }
 
         try {
-            DB::table('academico_academia')->insert([
+            DB::table('Academico_Academia')->insert([
                 'IdAcademico'       => $academico->IdAcademico,
                 'IdAcademia'  => $academia->IdAcademia
             ]);
@@ -61,9 +62,10 @@ class AcademiaAcademicoController extends Controller {
     }
 
     public function destroy($id) {
-        $academicoEvento = Organizador::findOrFail($id);
+        Gate::authorize('havepermiso', 'academia-academico-eliminar');
+        $academicoAcademia = AcademicoAcademia::findOrFail($id);
         try {
-            $academicoEvento->forceDelete();
+            $academicoAcademia->forceDelete();
             Session::flash('flash', [['type' => "success", 'message' => "Académico eliminado correctamente."]]);
             return redirect()->route('academicoEvento.index');
         } catch (\Throwable $throwable) {

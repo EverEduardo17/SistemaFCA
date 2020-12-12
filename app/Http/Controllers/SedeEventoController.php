@@ -3,47 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Evento_Fecha_Sede;
-use App\FechaEvento;
 use App\SedeEvento;
 use App\Http\Requests\SedeEventoRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class SedeEventoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
+        Gate::authorize('havepermiso', 'sedes-listar');
         return view('sedeEvento.index', [
             'sedes' => SedeEvento::get()
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
+        Gate::authorize('havepermiso', 'sedes-crear');
         return view('sedeEvento.create', [
             'sedes' => new SedeEvento()
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(SedeEventoRequest $request)
     {
-        if (DB::table('sedeevento')->where([['NombreSedeEvento', $request->NombreSedeEvento]])->doesntExist()) {
+        Gate::authorize('havepermiso', 'sedes-crear');
+        if (DB::table('SedeEvento')->where([['NombreSedeEvento', $request->NombreSedeEvento]])->doesntExist()) {
             // dd($request->validated());
             SedeEvento::create($request->validated());
             Session::flash('flash', [['type' => "success", 'message' => "Sede agregada correctamente."]]);
@@ -54,38 +41,21 @@ class SedeEventoController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\SedeEvento  $sedeEvento
-     * @return \Illuminate\Http\Response
-     */
     public function show(SedeEvento $sedeEvento)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\SedeEvento  $sedeEvento
-     * @return \Illuminate\Http\Response
-     */
     public function edit(SedeEvento $sedeEvento)
     {
+        Gate::authorize('havepermiso', 'sedes-editar');
         return view('sedeEvento.edit', [
             'sede' => $sedeEvento
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\SedeEvento  $sedeEvento
-     * @return \Illuminate\Http\Response
-     */
     public function update(SedeEventoRequest $request, SedeEvento $sedeEvento) {
+        Gate::authorize('havepermiso', 'sedes-editar');
         try {
             $sedeEvento->update( $request->validated() );
             Session::flash('flash', [['type' => "success", 'message' => "Sede editada correctamente."]]);
@@ -98,6 +68,7 @@ class SedeEventoController extends Controller
     }
 
     public function destroy(SedeEvento $sedeEvento) {
+        Gate::authorize('havepermiso', 'sedes-eliminar');
         try {
             $sedeOcupada = Evento_Fecha_Sede::where('IdSedeEvento', $sedeEvento->IdSedeEvento)->count();
             if($sedeOcupada > 0){

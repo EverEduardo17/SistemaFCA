@@ -72,7 +72,7 @@
             </div>
 
             <hr class="mb-4">
-            <a href="https://sistemafca.demos.mx" class="btn btn-primary btn-lg btn-block">Aprobar</a>
+            <a href="http://sistemafca.demos.mx" class="btn btn-primary btn-lg btn-block">Aprobar</a>
         </div>
         <div class="col-md-4 order-md-2 mb-4">
             <h4 class="d-flex justify-content-between align-items-center mb-3">

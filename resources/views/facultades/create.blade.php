@@ -12,7 +12,9 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Agregar Facultad</h5>
-            <a class="btn btn-primary col-4" href="{{ route('facultades.index') }}" role="button">Ver Facultades</a>
+            @can('havepermiso', 'facultades-listar')
+                <a class="btn btn-primary col-4" href="{{ route('facultades.index') }}" role="button">Ver Facultades</a>
+            @endcan
         </div>
     </div>
     <div class="card-body">
@@ -28,7 +30,9 @@
                 <input name="ClaveFacultad" value="{{ old('ClaveFacultad') }}" class="form-control @error('ClaveFacultad') is-invalid @enderror" maxlength="10" placeholder="Ej. 51301">
             </div>
             <button type="submit" class="btn btn-primary btn-block">Guardar</button>
-            <a href="{{ route('facultades.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
+            @can('havepermiso', 'facultades-listar')
+                <a href="{{ route('facultades.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
+            @endcan
         </form>
     </div>
 </div>

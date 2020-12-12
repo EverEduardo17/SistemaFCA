@@ -11,7 +11,7 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Academias</h5>
-            @can('havepermiso', 'academia-crear')
+            @can('havepermiso', 'academias-crear')
                 <a class="btn btn-success col-4" href="{{ route('academias.create') }}" role="button">Agregar Academia</a>
             @endcan
         </div>
@@ -33,8 +33,12 @@
                     <td>{{ $item->DescripcionAcademia }}</td>
                     <td>{{ $item->coordinador->usuario->name }}</td>
                     <td>
-                        <a class="btn btn-outline-primary btn-sm" href="{{ route('academias.show', $item) }}">Detalles</a>
-                        <a class="btn btn-primary btn-sm" href="{{ route('academias.edit', $item) }}">Editar</a>
+                        @can('havepermiso', 'academias-leer')
+                            <a class="btn btn-outline-primary btn-sm" href="{{ route('academias.show', $item) }}">Detalles</a>
+                        @endcan
+                        @can('havepermiso', 'academias-editar')
+                            <a class="btn btn-primary btn-sm" href="{{ route('academias.edit', $item) }}">Editar</a>
+                        @endcan
                     </td>
                 </tr>
                 @endforeach

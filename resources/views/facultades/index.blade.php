@@ -11,11 +11,13 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Facultades</h5>
-            <a class="btn btn-success col-4" href="{{ route('facultades.create') }}" role="button">Agregar Facultad</a>
+            @can('havepermiso', 'facultades-crear')
+                <a class="btn btn-success col-4" href="{{ route('facultades.create') }}" role="button">Agregar Facultad</a>
+            @endcan
         </div>
     </div>
     <div class="card-body">
-        <table class="table table-striped" id="table_facultades+098765">
+        <table class="table table-striped" id="table_facultades">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -29,7 +31,9 @@
                     <th>{{ $item->NombreFacultad }}</th>
                     <td>{{ $item->ClaveFacultad }}</td>
                     <td>
-                        <a class="btn btn-primary btn-sm" href="{{ route('facultades.edit', $item) }}">Editar</a>
+                        @can('havepermiso', 'facultades-editar')
+                            <a class="btn btn-primary btn-sm" href="{{ route('facultades.edit', $item) }}">Editar</a>
+                        @endcan
                     </td>
                 </tr>
                 @endforeach

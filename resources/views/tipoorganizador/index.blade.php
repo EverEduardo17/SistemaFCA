@@ -11,7 +11,9 @@
         <div class="card-header">
             <div class="row">
                 <h5 class="card-title col-8">Tipo de Organizadores</h5>
-                <a class="btn btn-success col-4" href="{{ route('tipoorganizador.create') }}" role="button">Agregar Tipo de Organizador</a>
+                @can('havepermiso', 'tipoorganizador-listar')
+                    <a class="btn btn-success col-4" href="{{ route('tipoorganizador.create') }}" role="button">Agregar Tipo de Organizador</a>
+                @endcan
             </div>
         </div>
         <div class="card-body">
@@ -29,14 +31,18 @@
                             <th>{{ $item->NombreTipoOrganizador }}</th>
                             <td>{{ $item->DescripcionTipoOrganizador }}</td>
                             <td>
-                                <a class="btn btn-primary btn-sm" href="#"
-                                   data-toggle="modal" data-target="#editTipo"
-                                   data-tipo="{{ $item->IdTipoOrganizador }}"
-                                   data-nombre="{{ $item->NombreTipoOrganizador }}"
-                                   data-descripcion="{{ $item->DescripcionTipoOrganizador }}">Editar</a>
-                                <a class="btn btn-danger btn-sm" href="#"
-                                   data-toggle="modal" data-target="#deleteTipo"
-                                   data-tipo="{{ $item->IdTipoOrganizador }}">Eliminar</a>
+                                @can('havepermiso', 'tipoorganizador-editar')
+                                    <a class="btn btn-primary btn-sm" href="#"
+                                       data-toggle="modal" data-target="#editTipo"
+                                       data-tipo="{{ $item->IdTipoOrganizador }}"
+                                       data-nombre="{{ $item->NombreTipoOrganizador }}"
+                                       data-descripcion="{{ $item->DescripcionTipoOrganizador }}">Editar</a>
+                                @endcan
+                                @can('havepermiso', 'tipoorganizador-eliminar')
+                                    <a class="btn btn-danger btn-sm" href="#"
+                                       data-toggle="modal" data-target="#deleteTipo"
+                                       data-tipo="{{ $item->IdTipoOrganizador }}">Eliminar</a>
+                                @endcan
                             </td>
                         </tr>
                     @endforeach

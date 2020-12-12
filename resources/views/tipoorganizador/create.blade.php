@@ -12,7 +12,9 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Agregar Tipo de Organizador</h5>
-            <a class="btn btn-primary col-4" href="{{ route('tipoorganizador.index') }}" role="button">Ver Tipo de Organizadores</a>
+            @can('havepermiso', 'tipoorganizador-listar')
+                <a class="btn btn-primary col-4" href="{{ route('tipoorganizador.index') }}" role="button">Ver Tipo de Organizadores</a>
+            @endcan
         </div>
     </div>
     <div class="card-body">
@@ -28,7 +30,9 @@
                 <input name="DescripcionTipoOrganizador" type="text" value="{{ old('DescripcionTipoOrganizador') }}" class="form-control @error('DescripcionTipoOrganizador') is-invalid @enderror" placeholder="Ej. Representante ante la facultad del evento. ">
             </div>
             <button type="submit" class="btn btn-primary btn-block">Guardar</button>
-            <a href="{{ route('tipoorganizador.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
+            @can('havepermiso', 'tipoorganizador-listar')
+                <a href="{{ route('tipoorganizador.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
+            @endcan
         </form>
     </div>
 </div>

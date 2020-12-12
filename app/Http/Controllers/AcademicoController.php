@@ -9,17 +9,14 @@ use App\Http\Requests\AcademicoRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class AcademicoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
+        Gate::authorize('havepermiso', 'tipoorganizador-listar');
         $academicos = Academico::with('usuario.datosPersonales')->get();
         return view(
             'academicos.index',
@@ -27,24 +24,15 @@ class AcademicoController extends Controller
         );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
+        Gate::authorize('havepermiso', 'tipoorganizador-crear');
         return view('academicos.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(AcademicoRequest $request)
     {
+        Gate::authorize('havepermiso', 'tipoorganizador-crear');
         $input = $request->validated();
         DB::beginTransaction();
 
@@ -87,41 +75,25 @@ class AcademicoController extends Controller
         return redirect()->route('academicos.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Academico  $academico
-     * @return \Illuminate\Http\Response
-     */
     public function show(Academico $academico)
     {
+        Gate::authorize('havepermiso', 'tipoorganizador-leer');
         return view('academicos.show', [
             "academico" => $academico
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Academico  $academico
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Academico $academico)
     {
+        Gate::authorize('havepermiso', 'tipoorganizador-editar');
         return view('academicos.edit', [
             "academico" => $academico
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Academico  $academico
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Academico $academico)
     {
+        Gate::authorize('havepermiso', 'tipoorganizador-editar');
         $request->validate([
             'NombreDatosPersonales' => 'required',
             'ApellidoPaternoDatosPersonales' => 'required',
@@ -157,14 +129,9 @@ class AcademicoController extends Controller
         return redirect()->route('academicos.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Academico  $academico
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Academico $academico)
     {
+        Gate::authorize('havepermiso', 'tipoorganizador-eliminar');
         //!! Checar bien, aún no funciona
         try {
             $academico->delete();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FacultadRequest;
 use App\Facultad;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 
@@ -12,6 +13,7 @@ class FacultadController extends Controller
 
     public function index()
     {
+        Gate::authorize('havepermiso', 'facultades-listar');
         return view('facultades.index', [
             'facultades' => Facultad::get()
         ]);
@@ -19,6 +21,7 @@ class FacultadController extends Controller
 
     public function create()
     {
+        Gate::authorize('havepermiso', 'facultades-crear');
         return view('facultades.create', [
             'facultad' => new Facultad()
         ]);
@@ -26,9 +29,10 @@ class FacultadController extends Controller
 
     public function store(FacultadRequest $request)
     {
+        Gate::authorize('havepermiso', 'facultades-crear');
         $request->validate([
-            'NombreFacultad' => 'unique:facultad,NombreFacultad',
-            'ClaveFacultad' => 'unique:facultad,ClaveFacultad'
+            'NombreFacultad' => 'unique:Facultad,NombreFacultad',
+            'ClaveFacultad' => 'unique:Facultad,ClaveFacultad'
         ]);
         try {
             Facultad::create($request->validated());
@@ -46,6 +50,7 @@ class FacultadController extends Controller
 
     public function edit(Facultad $facultade)
     {
+        Gate::authorize('havepermiso', 'facultades-editar');
         return view('facultades.edit', [
             'facultad' => $facultade
         ]);
@@ -53,9 +58,10 @@ class FacultadController extends Controller
 
     public function update(FacultadRequest $request, Facultad $facultade)
     {
+        Gate::authorize('havepermiso', 'facultades-editar');
         $request->validate([
-            'NombreFacultad' => 'unique:facultad,NombreFacultad,' . $facultade->IdFacultad . ',IdFacultad',
-            'ClaveFacultad' => 'unique:facultad,ClaveFacultad,' . $facultade->IdFacultad . ',IdFacultad'
+            'NombreFacultad' => 'unique:Facultad,NombreFacultad,' . $facultade->IdFacultad . ',IdFacultad',
+            'ClaveFacultad' => 'unique:Facultad,ClaveFacultad,' . $facultade->IdFacultad . ',IdFacultad'
         ]);
         try {
             $facultade->update($request->validated());
@@ -69,6 +75,7 @@ class FacultadController extends Controller
 
     public function destroy(Facultad $facultade)
     {
+        Gate::authorize('havepermiso', 'facultades-eliminar');
         try {
             $facultade->forceDelete();
             Session::flash('flash', [['type' => "success", 'message' => "Facultad eliminada correctamente."]]);

@@ -10,7 +10,7 @@ class Facultad extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "facultad";
+    protected $table = "Facultad";
     protected $primaryKey = "IdFacultad";
     protected $fillable = ['IdFacultad', 'NombreFacultad', 'ClaveFacultad'];
     const CREATED_AT = 'CreatedAt';

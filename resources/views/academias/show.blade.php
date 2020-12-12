@@ -12,7 +12,9 @@
         <div class="card-header">
             <div class="row">
                 <h5 class="card-title col-8">{{ $academia->NombreAcademia }}</h5>
-                <a class="btn btn-primary col-4" href="{{ route('academias.edit', $academia) }}" role="button">Editar Academia</a>
+                @can('havepermiso', 'academias-editar')
+                    <a class="btn btn-primary col-4" href="{{ route('academias.edit', $academia) }}" role="button">Editar Academia</a>
+                @endcan
             </div>
         </div>
         <div class="card-body">
@@ -22,7 +24,9 @@
                     <p class="card-text">{{ $academia->DescripcionAcademia }}</p>
                 </div>
                 <div class="col">
-                    <a class="btn btn-success" href="#" data-toggle="modal" data-target="#addAcademicoAcademia" >Agregar integrate</a>
+                    @can('havepermiso', 'academia-academico-crear')
+                        <a class="btn btn-success" href="#" data-toggle="modal" data-target="#addAcademicoAcademia" >Agregar integrate</a>
+                    @endcan
                 </div>
             </div>
             <br>
@@ -43,7 +47,9 @@
                             <td>{{ $item->academico->usuario->name }}</td>
                             <td>{{ $item->academico->usuario->email }}</td>
                             <td>
-                                <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteAcademicoAcademia" data-academico="{{ $item->Id_Academico_Academia }}">Eliminar</a>
+                                @can('havepermiso', 'academia-academico-eliminar')
+                                    <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteAcademicoAcademia" data-academico="{{ $item->Id_Academico_Academia }}">Eliminar</a>
+                                @endcan
                             </td>
                         </tr>
                     @endforeach

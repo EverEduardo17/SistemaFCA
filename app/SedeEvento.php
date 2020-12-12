@@ -10,7 +10,7 @@ class SedeEvento extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "sedeevento";
+    protected $table = "SedeEvento";
     protected $primaryKey = "IdSedeEvento";
     protected $fillable = ['NombreSedeEvento', 'DescripcionSedeEvento'];
     const CREATED_AT = 'CreatedAt';

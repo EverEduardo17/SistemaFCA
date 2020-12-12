@@ -7,26 +7,30 @@ use App\Organizador;
 use App\TipoOrganizador;
 use App\TipoOrganizadoro;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class TipoOrganizadorController extends Controller {
 
     public function index() {
+        Gate::authorize('havepermiso', 'tipoorganizador-listar');
         return view('tipoorganizador.index', [
             'tipoorganizadores' => TipoOrganizador::get()
         ]);
     }
 
     public function create() {
+        Gate::authorize('havepermiso', 'tipoorganizador-crear');
         return view('tipoorganizador.create');
     }
 
     public function store(TipoOrganizadorRequest $request) {
+        Gate::authorize('havepermiso', 'tipoorganizador-crear');
         $request = $request->validated();
 
         try {
             DB::beginTransaction();
-                DB::table('tipoorganizador')->insert([
+                DB::table('TipoOrganizador')->insert([
                     'NombreTipoOrganizador'      => $request['NombreTipoOrganizador'],
                     'DescripcionTipoOrganizador' => $request['DescripcionTipoOrganizador']
                 ]);
@@ -49,11 +53,12 @@ class TipoOrganizadorController extends Controller {
     }
 
     public function update(TipoOrganizadorRequest $request, $tipoOrganizador) {
+        Gate::authorize('havepermiso', 'tipoorganizador-editar');
         $request = $request->validated();
 
         try {
             DB::beginTransaction();
-                DB::table('tipoorganizador')->where('IdTipoOrganizador', $tipoOrganizador)->update([
+                DB::table('TipoOrganizador')->where('IdTipoOrganizador', $tipoOrganizador)->update([
                    'NombreTipoOrganizador'      => $request['NombreTipoOrganizador'],
                    'DescripcionTipoOrganizador' => $request['DescripcionTipoOrganizador']
                 ]);
@@ -68,6 +73,7 @@ class TipoOrganizadorController extends Controller {
     }
 
     public function destroy($tipoOrganizador) {
+        Gate::authorize('havepermiso', 'tipoorganizador-eliminar');
         try {
             $tipoOrganizador = TipoOrganizador::findOrFail($tipoOrganizador);
             $tipoOcupado = Organizador::where('IdTipoOrganizador', $tipoOrganizador->IdTipoOrganizador)->count();

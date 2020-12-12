@@ -6,6 +6,8 @@ use App\AcademicoAcademia;
 use App\Http\Requests\AcademiaRequest;
 use App\Academia;
 use App\Academico;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class AcademiaController extends Controller
@@ -17,6 +19,7 @@ class AcademiaController extends Controller
     }
 
     public function create() {
+        Gate::authorize('havepermiso', 'academias-crear');
         return view('academias.create', [
             'academia' => new Academia,
             'coordinadores' => Academico::get()
@@ -24,20 +27,34 @@ class AcademiaController extends Controller
     }
 
     public function store(AcademiaRequest $request) {
+        Gate::authorize('havepermiso', 'academias-crear');
         $request->validate([
             'NombreAcademia' => 'unique:Academia,NombreAcademia'
         ]);
         try {
-            Academia::create( $request->validated() );
+            DB::beginTransaction();
+                $academiaId = DB::table('Academia')->insertGetId([
+                    'NombreAcademia'        => $request['NombreAcademia'],
+                    'DescripcionAcademia'   => $request['DescripcionAcademia'],
+                    'Coordinador'           => $request['Coordinador']
+                ]);
+                DB::table('Academico_Academia')->insert([
+                    'IdAcademico'       => $request['Coordinador'],
+                    'IdAcademia'        => $academiaId
+                ]);
+            DB::commit();
+
             Session::flash('flash', [ ['type' => "success", 'message' => "Academia creada correctamente."] ]);
             return redirect()->route('academias.index');
         }catch (\Throwable $throwable){
+            DB::rollBack();
             Session::flash('flash', [ ['type' => "danger", 'message' => "La Academia NO pudo ser creada correctamente."] ]);
             return redirect()->route('academias.index');
         }
     }
 
     public function show(Academia $academia) {
+        Gate::authorize('havepermiso', 'academias-leer');
         $data = AcademicoAcademia::select('IdAcademico')->where('IdAcademia', $academia->IdAcademia)->get()->toArray();
         $academicosNot = Academico::whereNotIn('IdAcademico', $data)->get();
 
@@ -48,6 +65,7 @@ class AcademiaController extends Controller
     }
 
     public function edit(Academia $academia) {
+        Gate::authorize('havepermiso', 'academias-editar');
         return view('academias.edit', [
             'academia' => $academia,
             'coordinadores' => Academico::get()
@@ -55,6 +73,7 @@ class AcademiaController extends Controller
     }
 
     public function update(AcademiaRequest $request, Academia $academia) {
+        Gate::authorize('havepermiso', 'academias-editar');
         $request->validate([
             'NombreAcademia' => 'unique:Academia,NombreAcademia,'.$academia->IdAcademia.',IdAcademia'
         ]);
@@ -69,6 +88,7 @@ class AcademiaController extends Controller
     }
 
     public function destroy(Academia $academia) {
+        Gate::authorize('havepermiso', 'academias-eliminar');
         try {
             $academia->delete();
             Session::flash('flash', [ ['type' => "success", 'message' => "Academia eliminada correctamente."] ]);

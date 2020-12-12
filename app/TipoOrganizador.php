@@ -10,7 +10,7 @@ class TipoOrganizador extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "tipoorganizador";
+    protected $table = "TipoOrganizador";
     protected $primaryKey = "IdTipoOrganizador";
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';

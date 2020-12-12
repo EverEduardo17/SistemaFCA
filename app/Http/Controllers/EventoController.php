@@ -8,6 +8,7 @@ use App\Http\Requests\EventoRequest;
 use App\Evento;
 use App\Evento_Fecha_Sede;
 use App\Mail\EventoRegistrado;
+use App\Role;
 use App\SedeEvento;
 use App\Organizador;
 use App\TipoOrganizador;
@@ -62,10 +63,6 @@ class EventoController extends FcaController {
 
     public function store(EventoRequest $request) {
         $input = $request->validated();
-
-        Mail::to('luis.antoniomv24@gmail.com')->queue(new EventoRegistrado($input));
-        return redirect()->route('home');
-
 
         /* Obtener fechas */
         $fechaInicio = explode( '/', $input['fechaInicio'] );
@@ -142,7 +139,12 @@ class EventoController extends FcaController {
 
         DB::commit();
 
-            Mail::to('sistema@mail.com')->send(new EventoRegistrado($input));
+        //EnviarCorreos
+        $users = Role::where('IdRole', 3)->first();
+        foreach ($users->usuarios as $user){
+            //dd($user->email);
+            Mail::to($user->email)->send(new EventoRegistrado($input));
+        }
 
         //$validator = Validator::make($input, $rules, $messages);
         Session::flash('flash', [ ['type' => "success", 'message' => "Evento registrado correctamente"] ]);

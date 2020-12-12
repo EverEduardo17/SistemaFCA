@@ -12,7 +12,9 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Agregar Academia</h5>
-            <a class="btn btn-primary col-4" href="{{ route('academias.index') }}" role="button">Ver Academias</a>
+            @can('havepermiso', 'academias-listar')
+                <a class="btn btn-primary col-4" href="{{ route('academias.index') }}" role="button">Ver Academias</a>
+            @endcan
         </div>
     </div>
     <div class="card-body">
@@ -22,7 +24,7 @@
             <div class="form-group">
                 <label name="NombreAcademia">Nombre de la Academia:</label>
                 <input name="NombreAcademia" type="text" value="{{ old('NombreAcademia', $academia->NombreAcademia) }}" class="form-control @error('NombreAcademia') is-invalid @enderror" placeholder="Ej. Academia de Informática.">
-                
+
             </div>
             <div class="form-group">
                 <label name="Coordinador">Docente Coordinador:</label>

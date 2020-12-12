@@ -26,16 +26,16 @@ class CreateGruposTable extends Migration
 
             /*Realaciones*/
             $table->unsignedBigInteger('IdProgramaEducativo')->nullable(false);
-            $table->foreign('IdProgramaEducativo')->references('IdProgramaEducativo')->on('Programa_Educativo');
-            
+            $table->foreign('IdProgramaEducativo')->references('IdProgramaEducativo')->on('programa_educativo');
+
             $table->unsignedBigInteger('IdCohorte')->nullable(false);
-            $table->foreign('IdCohorte')->references('IdCohorte')->on('Cohorte');
-            
+            $table->foreign('IdCohorte')->references('IdCohorte')->on('cohorte');
+
             $table->unsignedBigInteger('IdPeriodoInicio')->nullable(false);
-            $table->foreign('IdPeriodoInicio')->references('IdPeriodo')->on('Periodo');
-            
+            $table->foreign('IdPeriodoInicio')->references('IdPeriodo')->on('periodo');
+
             $table->unsignedBigInteger('IdPeriodoActivo')->nullable(false);
-            $table->foreign('IdPeriodoActivo')->references('IdPeriodo')->on('Periodo');
+            $table->foreign('IdPeriodoActivo')->references('IdPeriodo')->on('periodo');
 
             $table->timestamp('CreatedAt')->useCurrent();
             $table->timestamp('UpdatedAt')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

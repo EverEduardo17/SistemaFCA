@@ -11,7 +11,9 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Sedes</h5>
-            <a class="btn btn-success col-4" href="{{ route('sedeEventos.create') }}" role="button">Agregar Sede</a>
+            @can('havepermiso', 'sedes-crear')
+                <a class="btn btn-success col-4" href="{{ route('sedeEventos.create') }}" role="button">Agregar Sede</a>
+            @endcan
         </div>
     </div>
     <div class="card-body">
@@ -29,7 +31,9 @@
                     <th>{{ $item->NombreSedeEvento }}</th>
                     <td>{{ $item->DescripcionSedeEvento }}</td>
                     <td>
-                        <a class="btn btn-primary btn-sm" href="{{ route('sedeEventos.edit', $item) }}">Editar</a>
+                        @can('havepermiso', 'sedes-crear')
+                            <a class="btn btn-primary btn-sm" href="{{ route('sedeEventos.edit', $item) }}">Editar</a>
+                        @endcan
                     </td>
                 </tr>
                 @endforeach
@@ -40,14 +44,14 @@
 @endsection
 
 @section('head')
-<link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}" />
 @endsection
 
 @section('script')
-<script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
-<script>
-    $(document).ready(function() {
-        $('#table_sede').DataTable();
-    });
-</script>
+    <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
+    <script>
+        $(document).ready(function() {
+            $('#table_sede').DataTable();
+        });
+    </script>
 @endsection

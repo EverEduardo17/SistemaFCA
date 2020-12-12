@@ -12,7 +12,9 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Editar Academia</h5>
-            <a class="btn btn-primary col-4" href="{{ route('academias.index') }}" role="button">Ver Academias</a>
+            @can('havepermiso', 'academias-listar')
+                <a class="btn btn-primary col-4" href="{{ route('academias.index') }}" role="button">Ver Academias</a>
+            @endcan
         </div>
     </div>
     <div class="card-body">
@@ -39,11 +41,13 @@
             <a href="{{ route('academias.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
         </form>
         <hr>
-        <form method="POST" action="{{ route('academias.destroy', $academia) }}">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger btn-block">Eliminar Permanentemente</button>
-        </form>
+        @can('havepermiso', 'academias-eliminar')
+            <form method="POST" action="{{ route('academias.destroy', $academia) }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger btn-block">Eliminar Permanentemente</button>
+            </form>
+        @endcan
     </div>
 </div>
 @endsection

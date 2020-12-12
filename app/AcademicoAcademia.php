@@ -10,7 +10,7 @@ class AcademicoAcademia extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "academico_academia";
+    protected $table = "Academico_Academia";
     protected $primaryKey = "Id_Academico_Academia";
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
