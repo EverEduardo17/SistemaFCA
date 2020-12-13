@@ -18,7 +18,9 @@
             <hr>
             <div id="dateStart" class="ui-datepicker-div"></div>
             <hr>
-            <a class="btn btn-primary btn-lg" href="{{route('eventos.create')}}">Registrar un evento</a>
+            @can('havepermiso', 'eventos-crear')
+                <a class="btn btn-primary btn-lg" href="{{route('eventos.create')}}">Registrar un evento</a>
+            @endcan
         </div>
         <div class="col-lg-9 col-md-8">
             <table id="table_eventos" class="display">
@@ -38,7 +40,11 @@
                         <td>{{$efs->evento->NombreEvento ?? ""}}</td>
                         <td>{{$efs->sedeEvento->NombreSedeEvento ?? ""}}</td>
                         <td>{{$efs->evento->EstadoEvento ?? ""}}</td>
-                        <td><a class="btn btn-sm btn-outline-primary" href="{{ route('eventos.show', [$efs->IdEvento]) }}"> Detalles </td>
+                        <td>
+                            @can('havepermiso', 'eventos-leer')
+                                <a class="btn btn-sm btn-outline-primary" href="{{ route('eventos.show', [$efs->IdEvento]) }}"> Detalles</a>
+                            @endcan
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

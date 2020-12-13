@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 class AcademiaController extends Controller
 {
     public function index() {
+        Gate::authorize('havepermiso', 'academias-listar');
         return view('academias.index', [
             'academias' => Academia::get()
         ]);

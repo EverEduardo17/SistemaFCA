@@ -12,7 +12,9 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Agregar Evento</h5>
-            <a class="btn btn-primary col-4" href="{{ route('eventos.index') }}" role="button">Ver Eventos</a>
+            @can('havepermiso', 'eventos-listar')
+                <a class="btn btn-primary col-4" href="{{ route('eventos.index') }}" role="button">Ver Eventos</a>
+            @endcan
         </div>
     </div>
     <div class="card-body">
@@ -56,7 +58,9 @@
                 </select>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Guardar</button>
-            <a href="" class="btn btn-secondary btn-block">Cancelar</a>
+            @can('havepermiso', 'eventos-listar')
+                <a href="{{ route('eventos.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
+            @endcan
         </form>
     </div>
 </div>

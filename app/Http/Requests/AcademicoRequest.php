@@ -27,10 +27,10 @@ class AcademicoRequest extends FormRequest
             'NombreDatosPersonales' => 'required',
             'ApellidoPaternoDatosPersonales' => 'required',
             'ApellidoMaternoDatosPersonales' => 'required',
-            'NoPersonalAcademico' => 'required | unique:academico,NoPersonalAcademico',
-            'RfcAcademico' => 'required | unique:academico,RfcAcademico',
-            'name' => 'required | unique:usuario,name',
-            'email' => 'required | unique:usuario,email',
+            'NoPersonalAcademico' => 'required | unique:Academico,NoPersonalAcademico',
+            'RfcAcademico' => 'required | unique:Academico,RfcAcademico',
+            'name' => 'required | unique:Usuario,name',
+            'email' => 'required | unique:Usuario,email',
             'password' => 'required'
         ];
     }

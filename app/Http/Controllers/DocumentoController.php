@@ -6,6 +6,7 @@ use App\Documento;
 use Illuminate\Http\Request;
 use App\Evento;
 use App\Http\Requests\DocumentoRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,7 @@ class DocumentoController extends Controller
     }
 
     public function store(DocumentoRequest $request) {
+        Gate::authorize('havepermiso', 'documentos-crear');
         $request->validated();
         $evento = Evento::findOrFail($request->evento);
 
@@ -33,7 +35,7 @@ class DocumentoController extends Controller
         try {
             DB::beginTransaction();
                 if( $request->file() ) {
-                    DB::table('documento')->insert([
+                    DB::table('Documento')->insert([
                         'NombreDocumento'       => $request->NombreDocumento,
                         'DescripcionDocumento'  => $request->DescripcionDocumento,
                         'FormatoDocumento'      => $fileName,
@@ -51,6 +53,7 @@ class DocumentoController extends Controller
     }
 
     public function show($id) {
+        Gate::authorize('havepermiso', 'documentos-leer');
         $documento = Documento::findOrFail( $id );
         return Storage::disk('documento')->download( $documento->FormatoDocumento );
     }
@@ -60,6 +63,7 @@ class DocumentoController extends Controller
     }
 
     public function update(Request $request, $id) {
+        Gate::authorize('havepermiso', 'documentos-editar');
         $documento = Documento::findOrFail( $id );
         $evento = Evento::findOrFail( $documento->IdEvento );
 
@@ -70,7 +74,7 @@ class DocumentoController extends Controller
 
         try {
             DB::beginTransaction();
-                DB::table('documento')->where('IdDocumento', $documento->IdDocumento)->update([
+                DB::table('Documento')->where('IdDocumento', $documento->IdDocumento)->update([
                     'NombreDocumento'       => $request->NombreDocumento,
                     'DescripcionDocumento'  => $request->DescripcionDocumento,
                 ]);
@@ -86,6 +90,7 @@ class DocumentoController extends Controller
     }
 
     public function destroy($id) {
+        Gate::authorize('havepermiso', 'documentos-eliminar');
         $documento = Documento::findOrFail( $id );
         $documento->delete();
 

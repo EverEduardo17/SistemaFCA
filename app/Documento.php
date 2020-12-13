@@ -10,7 +10,7 @@ class Documento extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "documento";
+    protected $table = "Documento";
     protected $primaryKey = "IdDocumento";
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';

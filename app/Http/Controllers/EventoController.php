@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Extensions\MongoSessionStore;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
@@ -28,6 +29,7 @@ class EventoController extends FcaController {
     }
 
     public function index() {
+        Gate::authorize('havepermiso', 'eventos-listar');
         $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
             ->get()
@@ -40,6 +42,7 @@ class EventoController extends FcaController {
     }
 
     public function indexWithDate($year, $month, $day) {
+        Gate::authorize('havepermiso', 'eventos-listar');
         $date = sprintf("%d-%02d-%02d", $year, $month, $day);
         $from = date( "Y-m-d", strtotime( $date ) );
         $to = date( "Y-m-d", strtotime( $date . " +1 days" ) );
@@ -56,12 +59,14 @@ class EventoController extends FcaController {
     }
 
     public function create() {
+        Gate::authorize('havepermiso', 'eventos-crear');
         return view('eventos.create', [
             "sedes" => SedeEvento::all()
         ]);
     }
 
     public function store(EventoRequest $request) {
+        Gate::authorize('havepermiso', 'eventos-crear');
         $input = $request->validated();
 
         /* Obtener fechas */
@@ -108,7 +113,7 @@ class EventoController extends FcaController {
                 'UpdatedBy'         => $this->idUsuario,
             ]);
 
-            $idOrganizador = DB::table('organizador')->insertGetId([
+            $idOrganizador = DB::table('Organizador')->insertGetId([
                 'IdEvento'           => $idEvento,
                 'IdAcademico'        => $this->user->academico->IdAcademico,
                 'IdTipoOrganizador'  => 1,
@@ -152,6 +157,7 @@ class EventoController extends FcaController {
     }
 
     public function show(Evento $evento) {
+        Gate::authorize('havepermiso', 'eventos-leer');
         $evento_fecha_sede_s = Evento_Fecha_Sede::where('IdEvento', $evento->IdEvento)
             ->with(['fechaEvento', 'sedeEvento'])
             ->get()
@@ -175,6 +181,7 @@ class EventoController extends FcaController {
     }
 
     public function update(Request $request, $evento) {
+        Gate::authorize('havepermiso', 'eventos-editar');
         $evento = Evento::findOrFail( $evento );
         $request->validate([
             'NombreEvento'       => 'required | String',
@@ -198,6 +205,6 @@ class EventoController extends FcaController {
     }
 
     public function destroy(Evento $evento) {
-        //
+        Gate::authorize('havepermiso', 'eventos-eliminar');
     }
 }

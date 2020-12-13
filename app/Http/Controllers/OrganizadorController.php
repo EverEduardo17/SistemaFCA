@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Organizador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class OrganizadorController extends Controller {
@@ -17,6 +18,7 @@ class OrganizadorController extends Controller {
     }
 
     public function store(Request $request) {
+        Gate::authorize('havepermiso', 'responsable-eliminar');
         $request->validate([
             'academico' => 'required | numeric',
             'organizador' => 'required | numeric'
@@ -33,7 +35,7 @@ class OrganizadorController extends Controller {
 
         try {
             DB::beginTransaction();
-                DB::table('organizador')->insert([
+                DB::table('Organizador')->insert([
                     'IdAcademico'       => $request['academico'],
                     'IdEvento'          => $request['evento'],
                     'IdTipoOrganizador' => $request['organizador']
@@ -59,6 +61,7 @@ class OrganizadorController extends Controller {
         //
     }
     public function destroy($organizador){
+        Gate::authorize('havepermiso', 'responsable-eliminar');
         $organizador = Organizador::findOrFail( $organizador );
         $organizador->forceDelete();
 

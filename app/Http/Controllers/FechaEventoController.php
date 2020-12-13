@@ -9,6 +9,7 @@ use App\FechaEvento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 
@@ -35,6 +36,7 @@ class FechaEventoController extends FcaController
 
     public function store(FechaEventoRequest $request)
     {
+        Gate::authorize('havepermiso', 'fechaevento-crear');
         $input = $request->validated();
 
         $idEvento = $input['evento'];
@@ -121,6 +123,7 @@ class FechaEventoController extends FcaController
 
     public function update(FechaEventoRequest $request)
     {
+        Gate::authorize('havepermiso', 'fechaevento-editar');
         $input = $request->validated();
 
         /* Obtener fechas */
@@ -203,6 +206,7 @@ class FechaEventoController extends FcaController
 
     public function destroy(Request $request)
     {
+        Gate::authorize('havepermiso', 'fechaevento-eliminar');
         $input = $request->all();
         $rules = [
             'fechaEvento' => 'required|exists:App\FechaEvento,IdFechaEvento|exists:App\Evento_Fecha_Sede,IdFechaEvento'

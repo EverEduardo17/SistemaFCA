@@ -12,10 +12,12 @@
         <div class="card-header">
             <div class="row d-flex align-items-center mr-2">
                 <h4 class="mr-auto p-3">{{$evento->NombreEvento ?? ""}}</h4>
-               
+
                 <div class="btn-group" role="group">
-                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#editEvento">Editar</a>
-                    <button class="btn btn-danger" style="margin-left: 1em" >Eliminar</button>
+                    @can('havepermiso', 'eventos-editar')
+                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#editEvento">Editar</a>
+                    @endcan
+                    <!--<button class="btn btn-danger" style="margin-left: 1em" >Eliminar</button>-->
                 </div>
             </div>
         </div>
@@ -73,7 +75,9 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Fechas</h4>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-success" data-toggle="modal" data-target="#addfecha" data-do="create">Agregar Fecha</button>
+                                    @can('havepermiso', 'fechaevento-crear')
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#addfecha" data-do="create">Agregar Fecha</button>
+                                    @endcan
                                 </div>
                             </div>
                             <hr>
@@ -99,13 +103,18 @@
                                             <td>{{$efs->fechaEvento->FinFechaEvento->format('h:i A') ?? ""}}</td>
                                             <td>{{$efs->sedeEvento->NombreSedeEvento ?? ""}}</td>
                                             <td>
-                                                <a class="btn btn-sm btn-primary" href="#" data-toggle="modal" data-target="#addfecha"
-                                                data-do="update" data-fecha="{{$efs->IdFechaEvento}}"
-                                                data-fechainicio="{{$efs->fechaEvento->InicioFechaEvento->format('d/m/Y')}}"
-                                                data-horainicio="{{$efs->fechaEvento->InicioFechaEvento->format('g:i A')}}"
-                                                data-horafin="{{$efs->fechaEvento->FinFechaEvento->format('g:i A')}}"
-                                                data-sedeevento="{{$efs->IdSedeEvento}}" >Editar</a>
-                                                <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deletefecha" data-fecha="{{$efs->IdFechaEvento}}">Eliminar</a>
+                                                @can('havepermiso', 'fechaevento-editar')
+                                                    <a class="btn btn-sm btn-primary" href="#" data-toggle="modal" data-target="#addfecha"
+                                                       data-do="update" data-fecha="{{$efs->IdFechaEvento}}"
+                                                       data-fechainicio="{{$efs->fechaEvento->InicioFechaEvento->format('d/m/Y')}}"
+                                                       data-horainicio="{{$efs->fechaEvento->InicioFechaEvento->format('g:i A')}}"
+                                                       data-horafin="{{$efs->fechaEvento->FinFechaEvento->format('g:i A')}}"
+                                                       data-sedeevento="{{$efs->IdSedeEvento}}" >Editar</a>
+                                                @endcan
+                                                @can('havepermiso', 'fechaevento-eliminar')
+                                                    <a class="btn btn-sm btn-danger" href="#" data-toggle="modal"
+                                                       data-target="#deletefecha" data-fecha="{{$efs->IdFechaEvento}}">Eliminar</a>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach
@@ -121,7 +130,9 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Responsables</h4>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-success" data-toggle="modal" data-target="#addTipoOrganizador">Agregar Responsable</button>
+                                    @can('havepermiso', 'responsable-crear')
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#addTipoOrganizador">Agregar Responsable</button>
+                                    @endcan
                                 </div>
                             </div>
                             <hr>
@@ -143,11 +154,10 @@
                                         <td>{{ $responsable->academico->usuario->name }}</td>
                                         <td>{{ $responsable->tipo_organizador->NombreTipoOrganizador }}</td>
                                         <td>
-                                            <a  class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteTipoOrganizador"
-                                               data-tipoorganizador="{{ $responsable->IdOrganizador }}">Eliminar</a>
-                                            <!--<a href="#" data-toggle="modal" data-target="#editTipoOrganizador"
-                                               data-tipoorganizador="{{ $responsable->IdOrganizador }}"
-                                               data-tipoact="{{ $responsable->IdTipoOrganizador }}">Editar</a>-->
+                                            @can('havepermiso', 'responsable-eliminar')
+                                                <a  class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteTipoOrganizador"
+                                                    data-tipoorganizador="{{ $responsable->IdOrganizador }}">Eliminar</a>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach
@@ -163,7 +173,9 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Participantes</h4>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-success" data-toggle="modal" data-target="#addParticipante">Agregar Participante</button>
+                                    @can('havepermiso', 'participantes-crear')
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#addParticipante">Agregar Participante</button>
+                                    @endcan
                                 </div>
                             </div>
                             <hr>
@@ -185,8 +197,10 @@
                                             <td>{{$ae->academico->NoPersonalAcademico }}</td>
                                             <td>{{$ae->academico->usuario-> name }}</td>
                                             <td>
-                                                <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteParticipante"
-                                                   data-participante="{{ $ae->Id_Academico_Evento }}">Eliminar</a>
+                                                @can('havepermiso', 'participantes-eliminar')
+                                                    <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteParticipante"
+                                                       data-participante="{{ $ae->Id_Academico_Evento }}">Eliminar</a>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach
@@ -202,7 +216,9 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Documentos</h4>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-success" data-toggle="modal" data-target="#addDocument">Agregar Documento</button>
+                                    @can('havepermiso', 'documentos-crear')
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#addDocument">Agregar Documento</button>
+                                    @endcan
                                 </div>
                             </div>
                             <hr>
@@ -224,13 +240,19 @@
                                             <td>{{ $documento->NombreDocumento }}</td>
                                             <td>{{ $documento->DescripcionDocumento }}</td>
                                             <td>
-                                                <a class="btn btn-sm btn-outline-primary" href="{{ route('documento.show', $documento->IdDocumento) }}">Descargar</a>
-                                                <a class="btn btn-sm btn-primary" href="#" data-toggle="modal" data-target="#editDocumento"
-                                                   data-documento="{{ $documento->IdDocumento }}"
-                                                   data-nombre="{{ $documento->NombreDocumento }}"
-                                                   data-descripcion="{{ $documento->DescripcionDocumento }}">Editar</a>
-                                                <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteDocumento"
-                                                   data-documento="{{ $documento->IdDocumento }}">Eliminar</a>
+                                                @can('havepermiso', 'documentos-leer')
+                                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('documento.show', $documento->IdDocumento) }}">Descargar</a>
+                                                @endcan
+                                                @can('havepermiso', 'documentos-editar')
+                                                    <a class="btn btn-sm btn-primary" href="#" data-toggle="modal" data-target="#editDocumento"
+                                                       data-documento="{{ $documento->IdDocumento }}"
+                                                       data-nombre="{{ $documento->NombreDocumento }}"
+                                                       data-descripcion="{{ $documento->DescripcionDocumento }}">Editar</a>
+                                                @endcan
+                                                @can('havepermiso', 'documentos-eliminar')
+                                                    <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteDocumento"
+                                                       data-documento="{{ $documento->IdDocumento }}">Eliminar</a>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach

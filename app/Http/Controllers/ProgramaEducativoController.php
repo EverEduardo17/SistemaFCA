@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Session;
 
 class ProgramaEducativoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return view('ProgramaEducativo.index', [
@@ -24,11 +19,6 @@ class ProgramaEducativoController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('ProgramaEducativo.create', [
@@ -38,12 +28,6 @@ class ProgramaEducativoController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(ProgramaEducativoRequest $request)
     {
         $request->validate([
@@ -59,23 +43,11 @@ class ProgramaEducativoController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\ProgramaEducativo  $programaEducativo
-     * @return \Illuminate\Http\Response
-     */
     public function show(ProgramaEducativo $programaEducativo)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ProgramaEducativo  $programaEducativo
-     * @return \Illuminate\Http\Response
-     */
     public function edit(ProgramaEducativo $programaEducativo)
     {
         return view('programaEducativo.edit', [
@@ -84,13 +56,6 @@ class ProgramaEducativoController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ProgramaEducativo  $programaEducativo
-     * @return \Illuminate\Http\Response
-     */
     public function update(ProgramaEducativoRequest $request, ProgramaEducativo $programaEducativo)
     {
         $request->validate([
@@ -107,12 +72,6 @@ class ProgramaEducativoController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\ProgramaEducativo  $programaEducativo
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(ProgramaEducativo $programaEducativo)
     {
         try {

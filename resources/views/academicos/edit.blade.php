@@ -13,12 +13,15 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Editar Académico</h5>
-            <a class="btn btn-primary col-4" href="{{ route('academicos.index') }}" role="button">Ver Académicos</a>
+            @can('havepermiso', 'academicos-listar')
+                <a class="btn btn-primary col-4" href="{{ route('academicos.index') }}" role="button">Ver Académicos</a>
+            @endcan
         </div>
     </div>
     <div class="card-body">
-        <form method="POST" action="{{ route('academicos.store') }}" autocomplete="off">
+        <form method="POST" action="{{ route('academicos.update', $academico) }}" autocomplete="off">
             @csrf
+            @method('PATCH')
             @include('layouts.validaciones')
             <div class="form-group">
                 <label name="NombreDatosPersonales">Nombre del Académico:</label>
@@ -51,7 +54,9 @@
                 <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $academico->usuario->email) }}" placeholder="Ej. correo@correo.com">
             </div>
             <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
-            <a href="{{ route('academicos.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
+            @can('havepermiso', 'academicos-listar')
+                <a href="{{ route('academicos.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
+            @endcan
         </form>
     </div>
 </div>

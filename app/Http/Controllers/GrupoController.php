@@ -15,11 +15,6 @@ use Illuminate\Support\Facades\Session;
 
 class GrupoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         // $idFCA = DB::table('facultad')
@@ -27,16 +22,11 @@ class GrupoController extends Controller
         return view('grupos.index', [
             // 'grupos' => DB::table('grupo')
             //     ->where('IdFacultad', '=', $idFCA)
-            //     ->get(),            
+            //     ->get(),
             'grupos' => Grupo::get()
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $idFCA = DB::table('facultad')
@@ -53,12 +43,6 @@ class GrupoController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(GrupoRequest $request)
     {
         $ocupado = DB::table('grupo')->where([
@@ -82,12 +66,6 @@ class GrupoController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(Grupo $grupo)
     {
         return view('grupos.show', [
@@ -173,7 +151,7 @@ class GrupoController extends Controller
             'activoHombre' => $activoHombre,
             'activoMujer' => $activoMujer,
             'totalActivos' => $totalActivos,
-        
+
             'egresadoHombre' => $egresadoHombre,
             'egresadoMujer' => $egresadoMujer,
             'totalEgresados' => $totalEgresados,
@@ -228,7 +206,7 @@ class GrupoController extends Controller
             'activoHombre' => $activoHombre,
             'activoMujer' => $activoMujer,
             'totalActivos' => $totalActivos,
-        
+
             'egresadoHombre' => $egresadoHombre,
             'egresadoMujer' => $egresadoMujer,
             'totalEgresados' => $totalEgresados,
@@ -239,15 +217,6 @@ class GrupoController extends Controller
         ]);
     }
 
-
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Grupo $grupo)
     {
         $idFCA = DB::table('facultad')
@@ -264,13 +233,6 @@ class GrupoController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(GrupoRequest $request, Grupo $grupo)
     {
         $ocupado = DB::table('grupo')->where([
@@ -293,12 +255,6 @@ class GrupoController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Grupo $grupo)
     {
         $ocupado = Grupo_Estudiante::where('IdGrupo', $grupo->IdGrupo)->count();

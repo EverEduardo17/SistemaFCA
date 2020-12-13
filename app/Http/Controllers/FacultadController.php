@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Session;
 
 class FacultadController extends Controller
 {
-
     public function index()
     {
         Gate::authorize('havepermiso', 'facultades-listar');
@@ -46,6 +45,7 @@ class FacultadController extends Controller
 
     public function show(Facultad $facultad)
     {
+        //
     }
 
     public function edit(Facultad $facultade)

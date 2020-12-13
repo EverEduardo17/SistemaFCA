@@ -34,42 +34,42 @@ class AcademicoController extends Controller
     {
         Gate::authorize('havepermiso', 'tipoorganizador-crear');
         $input = $request->validated();
-        DB::beginTransaction();
+        try{
+            DB::beginTransaction();
 
-        $idUsuarioDB = DB::table('usuario')->insertGetId([
-            'name'      => $input['name'],
-            'email' => $input['email'],
-            'password' => Crypt::encryptString($input['password'])
-            // 'CreatedBy'         => $this->idUsuario,
-            // 'UpdatedBy'         => $this->idUsuario
-        ]);
+                $idUsuarioDB = DB::table('Usuario')->insertGetId([
+                    'name'              => $input['name'],
+                    'email'             => $input['email'],
+                    'password'          => Crypt::encryptString($input['password'])
+                    // 'CreatedBy'         => $this->idUsuario,
+                    // 'UpdatedBy'         => $this->idUsuario
+                ]);
 
-        $idAcademico = DB::table('academico')->insertGetId([
-            'idAcademico'      => $idUsuarioDB,
-            'NoPersonalAcademico' => $input['NoPersonalAcademico'],
-            'RfcAcademico' => $input['RfcAcademico'],
-            'IdUsuario' => $idUsuarioDB
-            // 'CreatedBy'         => $this->idUsuario,
-            // 'UpdatedBy'         => $this->idUsuario
-        ]);
+                $idAcademico = DB::table('Academico')->insertGetId([
+                    'idAcademico'           => $idUsuarioDB,
+                    'NoPersonalAcademico'   => $input['NoPersonalAcademico'],
+                    'RfcAcademico'          => $input['RfcAcademico'],
+                    'IdUsuario'             => $idUsuarioDB
+                    // 'CreatedBy'         => $this->idUsuario,
+                    // 'UpdatedBy'         => $this->idUsuario
+                ]);
 
-        $idDatosPersonales = DB::table('datospersonales')->insertGetId([
-            'idDatosPersonales'      => $idUsuarioDB,
-            'NombreDatosPersonales' => $input['NombreDatosPersonales'],
-            'ApellidoPaternoDatosPersonales' => $input['ApellidoPaternoDatosPersonales'],
-            'ApellidoMaternoDatosPersonales' => $input['ApellidoMaternoDatosPersonales'],
-            'IdUsuario' => $idUsuarioDB
-            // 'CreatedBy'         => $this->idUsuario,
-            // 'UpdatedBy'         => $this->idUsuario
-        ]);
+                $idDatosPersonales = DB::table('DatosPersonales')->insertGetId([
+                    'idDatosPersonales'                 => $idUsuarioDB,
+                    'NombreDatosPersonales'             => $input['NombreDatosPersonales'],
+                    'ApellidoPaternoDatosPersonales'    => $input['ApellidoPaternoDatosPersonales'],
+                    'ApellidoMaternoDatosPersonales'    => $input['ApellidoMaternoDatosPersonales'],
+                    'IdUsuario'                         => $idUsuarioDB
+                    // 'CreatedBy'                      => $this->idUsuario,
+                    // 'UpdatedBy'                      => $this->idUsuario
+                ]);
 
-        if ($idUsuarioDB == null || $idUsuarioDB == 0 || $idAcademico == null || $idAcademico == 0 || $idDatosPersonales == null || $idDatosPersonales == 0) {
+            DB::commit();
+        }catch (\Throwable $throwable){
             DB::rollBack();
             Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar al Académico."]]);
             return redirect()->route('academicos.index');
         }
-
-        DB::commit();
 
         Session::flash('flash', [['type' => "success", 'message' => "Académico registrado correctamente."]]);
         return redirect()->route('academicos.index');
@@ -98,27 +98,26 @@ class AcademicoController extends Controller
             'NombreDatosPersonales' => 'required',
             'ApellidoPaternoDatosPersonales' => 'required',
             'ApellidoMaternoDatosPersonales' => 'required',
-            'NoPersonalAcademico' => 'unique:academico,NoPersonalAcademico,'.$academico->NoPersonalAcademico.',NoPersonalAcademico',
-            'RfcAcademico' => 'unique:academico,RfcAcademico,'.$academico->RfcAcademico.',RfcAcademico',
-            'name' => 'unique:usuario,name,'.$academico->usuario->name.',name',
-            'email' => 'unique:academico,email,'.$academico->usuario->email.',email'
+            'NoPersonalAcademico' => 'unique:Academico,NoPersonalAcademico,'.$academico->IdAcademico.',IdAcademico',
+            'RfcAcademico' => 'unique:Academico,RfcAcademico,'.$academico->IdAcademico.',IdAcademico',
+            'name' => 'unique:Usuario,name,'.$academico->usuario->IdUsuario.',IdUsuario',
+            'email' => 'unique:Usuario,email,'.$academico->usuario->IdUsuario.',IdUsuario'
         ]);
         try {
             DB::beginTransaction();
-
-            DB::table('usuario')->where('IdUsuario', $academico->IdUsuario)->update([
-                'name'       => $request->name,
-                'email'  => $request->email
-            ]);
-            DB::table('academico')->where('IdUsuario', $academico->IdUsuario)->update([
-                'NoPersonalAcademico' => $request->NoPersonalAcademico,
-                'RfcAcademico'        => $request->RfcAcademico
-            ]);
-            DB::table('datospersonales')->where('IdUsuario', $academico->IdUsuario)->update([
-                'NombreDatosPersonales'             => $request->NombreDatosPersonales,
-                'ApellidoPaternoDatosPersonales'    => $request->ApellidoPaternoDatosPersonales,
-                'ApellidoMaternoDatosPersonales'    => $request->ApellidoMaternoDatosPersonales,
-            ]);
+                DB::table('Usuario')->where('IdUsuario', $academico->IdUsuario)->update([
+                    'name'       => $request->name,
+                    'email'  => $request->email
+                ]);
+                DB::table('Academico')->where('IdUsuario', $academico->IdUsuario)->update([
+                    'NoPersonalAcademico' => $request->NoPersonalAcademico,
+                    'RfcAcademico'        => $request->RfcAcademico
+                ]);
+                DB::table('DatosPersonales')->where('IdUsuario', $academico->IdUsuario)->update([
+                    'NombreDatosPersonales'             => $request->NombreDatosPersonales,
+                    'ApellidoPaternoDatosPersonales'    => $request->ApellidoPaternoDatosPersonales,
+                    'ApellidoMaternoDatosPersonales'    => $request->ApellidoMaternoDatosPersonales,
+                ]);
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -132,7 +131,7 @@ class AcademicoController extends Controller
     public function destroy(Academico $academico)
     {
         Gate::authorize('havepermiso', 'tipoorganizador-eliminar');
-        //!! Checar bien, aún no funciona
+        //!! Checar bien, aún no funciona actualizado: creo que ya funciona :D
         try {
             $academico->delete();
             Session::flash('flash', [ ['type' => "success", 'message' => "Académico eliminado correctamente."] ]);
