@@ -39,6 +39,9 @@ Route::resource('grupos', 'GrupoController');
 Route::resource('periodo', 'PeriodoController');
 Route::resource('programaEducativo', 'ProgramaEducativoController');
 Route::resource('sedeEventos', 'SedeEventoController');
+Route::resource('eventos.estado', 'EventoEstadoController')->shallow();
+Route::post('eventos/{evento}/estado/rechado', 'EventoEstadoController@rechazo')->name('eventos.estado.rechazo');
+
 
 Route::resource('tipoorganizador', 'TipoOrganizadorController')->except('show', 'edit');
 

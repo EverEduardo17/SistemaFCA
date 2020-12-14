@@ -1,17 +1,18 @@
 INSERT INTO `Permiso`(`IdPermiso`, `ClavePermiso`, `DescripcionPermiso`, `CreatedAt`, `UpdatedAt`, `DeletedAt`, `CreatedBy`, `UpdatedBy`) VALUES
-(48, "documentos-listar", "documentos-listar", current_timestamp, current_timestamp, null, 1, 1),
-(49, "documentos-crear", "documentos-listar", current_timestamp, current_timestamp, null, 1, 1),
-(50, "documentos-leer", "documentos-listar", current_timestamp, current_timestamp, null, 1, 1),
-(51, "documentos-editar", "documentos-listar", current_timestamp, current_timestamp, null, 1, 1),
-(52, "documentos-eliminar", "documentos-listar", current_timestamp, current_timestamp, null, 1, 1),
+(53, "eventoestado-listar", "eventoestado-listar", current_timestamp, current_timestamp, null, 1, 1),
+(54, "eventoestado-crear", "eventoestado-crear", current_timestamp, current_timestamp, null, 1, 1),
+(55, "eventoestado-leer", "eventoestado-editar", current_timestamp, current_timestamp, null, 1, 1),
+(56, "eventoestado-editar", "eventoestado-leer", current_timestamp, current_timestamp, null, 1, 1),
+(57, "eventoestado-eliminar", "eventoestado-eliminar", current_timestamp, current_timestamp, null, 1, 1),
+(58, "eventoestado-aprobar", "eventoestado-aprobar", current_timestamp, current_timestamp, null, 1, 1),
 
 INSERT INTO `role_permiso`(`IdRole`, `IdPermiso`, `CreatedAt`, `UpdatedAt`, `DeletedAt`, `CreatedBy`, `UpdatedBy`) VALUES
-(1, 48, current_timestamp, current_timestamp, null, 1, 1),
-(1, 49, current_timestamp, current_timestamp, null, 1, 1),
-(1, 50, current_timestamp, current_timestamp, null, 1, 1),
-(1, 51, current_timestamp, current_timestamp, null, 1, 1),
-(1, 52, current_timestamp, current_timestamp, null, 1, 1),
-
+(1, 53, current_timestamp, current_timestamp, null, 1, 1),
+(1, 54, current_timestamp, current_timestamp, null, 1, 1),
+(1, 55, current_timestamp, current_timestamp, null, 1, 1),
+(1, 56, current_timestamp, current_timestamp, null, 1, 1),
+(1, 57, current_timestamp, current_timestamp, null, 1, 1),
+(1, 58, current_timestamp, current_timestamp, null, 1, 1),
 
 
 INSERT INTO `Permiso`(`IdPermiso`, `ClavePermiso`, `DescripcionPermiso`, `CreatedAt`, `UpdatedAt`, `DeletedAt`, `CreatedBy`, `UpdatedBy`) VALUES
@@ -62,6 +63,17 @@ INSERT INTO `Permiso`(`IdPermiso`, `ClavePermiso`, `DescripcionPermiso`, `Create
 (45, "participantes-leer", "participantes-listar", current_timestamp, current_timestamp, null, 1, 1),
 (46, "participantes-editar", "participantes-listar", current_timestamp, current_timestamp, null, 1, 1),
 (47, "participantes-eliminar", "participantes-listar", current_timestamp, current_timestamp, null, 1, 1),
+(48, "documentos-listar", "documentos-listar", current_timestamp, current_timestamp, null, 1, 1),
+(49, "documentos-crear", "documentos-listar", current_timestamp, current_timestamp, null, 1, 1),
+(50, "documentos-leer", "documentos-listar", current_timestamp, current_timestamp, null, 1, 1),
+(51, "documentos-editar", "documentos-listar", current_timestamp, current_timestamp, null, 1, 1),
+(52, "documentos-eliminar", "documentos-listar", current_timestamp, current_timestamp, null, 1, 1),
+(53, "eventoestado-listar", "eventoestado-listar", current_timestamp, current_timestamp, null, 1, 1),
+(54, "eventoestado-crear", "eventoestado-crear", current_timestamp, current_timestamp, null, 1, 1),
+(55, "eventoestado-leer", "eventoestado-editar", current_timestamp, current_timestamp, null, 1, 1),
+(56, "eventoestado-editar", "eventoestado-leer", current_timestamp, current_timestamp, null, 1, 1),
+(57, "eventoestado-eliminar", "eventoestado-eliminar", current_timestamp, current_timestamp, null, 1, 1),
+(58, "eventoestado-aprobar", "eventoestado-aprobar", current_timestamp, current_timestamp, null, 1, 1),
 
 INSERT INTO `role_permiso`(`IdRole`, `IdPermiso`, `CreatedAt`, `UpdatedAt`, `DeletedAt`, `CreatedBy`, `UpdatedBy`) VALUES
 (1, 1, current_timestamp, current_timestamp, null, 1, 1),
@@ -111,3 +123,14 @@ INSERT INTO `role_permiso`(`IdRole`, `IdPermiso`, `CreatedAt`, `UpdatedAt`, `Del
 (1, 45, current_timestamp, current_timestamp, null, 1, 1),
 (1, 46, current_timestamp, current_timestamp, null, 1, 1),
 (1, 47, current_timestamp, current_timestamp, null, 1, 1),
+(1, 48, current_timestamp, current_timestamp, null, 1, 1),
+(1, 49, current_timestamp, current_timestamp, null, 1, 1),
+(1, 50, current_timestamp, current_timestamp, null, 1, 1),
+(1, 51, current_timestamp, current_timestamp, null, 1, 1),
+(1, 52, current_timestamp, current_timestamp, null, 1, 1),
+(1, 53, current_timestamp, current_timestamp, null, 1, 1),
+(1, 54, current_timestamp, current_timestamp, null, 1, 1),
+(1, 55, current_timestamp, current_timestamp, null, 1, 1),
+(1, 56, current_timestamp, current_timestamp, null, 1, 1),
+(1, 57, current_timestamp, current_timestamp, null, 1, 1),
+(1, 58, current_timestamp, current_timestamp, null, 1, 1),

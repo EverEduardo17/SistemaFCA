@@ -13,11 +13,21 @@
             <div class="row d-flex align-items-center mr-2">
                 <h4 class="mr-auto p-3">{{$evento->NombreEvento ?? ""}}</h4>
 
-                <div class="btn-group" role="group">
+                <div>
                     @can('havepermiso', 'eventos-editar')
                         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#editEvento">Editar</a>
                     @endcan
-                    <!--<button class="btn btn-danger" style="margin-left: 1em" >Eliminar</button>-->
+                    @if($evento->EstadoEvento == "POR APROBAR")
+                        @can('havepermiso', 'eventoestado-aprobar')
+                            <a href="#" class="btn btn-info" data-toggle="modal" data-target="#aprobarEvento">Aprobar</a>
+                            <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#rechazarEvento">Rechazar</a>
+                        @endcan
+                    @endif
+                    @if($evento->EstadoEvento == "RECHAZADO")
+                        @can('havepermiso', 'eventoestado-editar')
+                            <a href="#" class="btn btn-info" data-toggle="modal" data-target="#solicitarEvento">Solicitar aprobación</a>
+                        @endcan
+                    @endif
                 </div>
             </div>
         </div>
@@ -41,11 +51,19 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="estado" class="col-md-3 col-form-label text-md-right">Estatus</label>
+                <label for="estado" class="col-md-3 col-form-label text-md-right">Estado</label>
                 <div class="col-md-8">
-                    {{$evento->EstadoEvento}}
+                    <input type="text" class="form-control"value="{{ $evento->EstadoEvento }}" disabled>
                 </div>
             </div>
+            @if($evento->EstadoEvento == "RECHAZADO")
+                <div class="form-group row">
+                    <label for="estado" class="col-md-3 col-form-label text-md-right">Motivo de rechazo</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control"value="{{ $evento->Motivo }}" disabled>
+                    </div>
+                </div>
+            @endif
             @include('layouts.validaciones')
         </div>
     </div>
@@ -269,6 +287,7 @@
     @include('eventos.modals.documento')
     @include('eventos.modals.tipoorganizador')
     @include('eventos.modals.participante')
+    @include('eventos.modals.eventoestado')
 @endsection
 
 @section('head')
@@ -361,6 +380,21 @@
         })
 
         $('#addDocument').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+        })
+
+        $('#solicitarEvento').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+        })
+
+        $('#aprobarEvento').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+        })
+
+        $('#rechazarEvento').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var modal = $(this);
         })
