@@ -14,9 +14,8 @@ class CreatePracticasEstudiantesTable extends Migration
      */
     public function up()
     {
-        Schema::create('practica_estudiante', function (Blueprint $table) {
+        Schema::create('Practica_Estudiante', function (Blueprint $table) {
             $table->bigIncrements('IdPractica');
-            $table->boolean('activo')->nullable(false)->unique();
 
             /*Realaciones*/
             $table->unsignedBigInteger('IdEmpresa')->nullable(false);
@@ -43,6 +42,6 @@ class CreatePracticasEstudiantesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('practica_estudiante');
+        Schema::dropIfExists('Practica_Estudiante');
     }
 }

@@ -13,29 +13,40 @@ class Grupo extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "grupo";
+    protected $table = "Grupo";
     protected $primaryKey = "IdGrupo";
-    protected $fillable = ['NombreGrupo', 'DescripcionGrupo', 'TotalEstudiantesGrupo', 'EstudiantesActivos','EstudiantesInactivos','EstudiantesStandBy', 'FechaInicioGrupo','IdProgramaEducativo', 'IdCohorte', 'IdPeriodoInicio', 'IdPeriodoActivo'];
+    protected $fillable = [
+        'NombreGrupo', 'DescripcionGrupo', 'IdProgramaEducativo',
+        'IdCohorte', 'IdPeriodoInicio', 'IdPeriodoActivo',
+        'IdFacultad'
+    ];
 
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
 
-    //Relacion Uno a Uno
     public function programaEducativo()
     {
         return $this->hasOne(ProgramaEducativo::class, 'IdProgramaEducativo', 'IdProgramaEducativo');
     }
+
     public function cohorte()
     {
         return $this->hasOne(Cohorte::class, 'IdCohorte', 'IdCohorte');
     }
+
+    public function periodoInicio()
+    {
+        return $this->hasOne(Periodo::class, 'IdPeriodo', 'IdPeriodoInicio');
+    }
+    
     public function periodoActivo()
     {
         return $this->hasOne(Periodo::class, 'IdPeriodo', 'IdPeriodoActivo');
     }
-    public function periodoInicio()
+   
+    public function facultad()
     {
-        return $this->hasOne(Periodo::class, 'IdPeriodo', 'IdPeriodoInicio');
+        return $this->hasOne(Facultad::class, 'IdFacultad', 'IdFacultad');
     }
 }

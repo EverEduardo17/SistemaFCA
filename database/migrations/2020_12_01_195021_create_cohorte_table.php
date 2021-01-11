@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateCohorteTable extends Migration
@@ -13,10 +14,10 @@ class CreateCohorteTable extends Migration
      */
     public function up()
     {
-        Schema::create('cohorte', function (Blueprint $table) {
+        Schema::create('Cohorte', function (Blueprint $table) {
             $table->bigIncrements('IdCohorte');
             $table->string('NombreCohorte', 10)->nullable(false)->unique();
-            $table->string('DescripcionCohorte', 100)->nullable(false);
+            $table->string('DescripcionCohorte', 100)->nullable();
             
             $table->timestamp('CreatedAt')->useCurrent();
             $table->timestamp('UpdatedAt')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
@@ -36,6 +37,6 @@ class CreateCohorteTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cohorte');
+        Schema::dropIfExists('Cohorte');
     }
 }

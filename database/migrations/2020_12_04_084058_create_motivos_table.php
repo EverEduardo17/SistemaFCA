@@ -14,7 +14,7 @@ class CreateMotivosTable extends Migration
      */
     public function up()
     {
-        Schema::create('motivo', function (Blueprint $table) {
+        Schema::create('Motivo', function (Blueprint $table) {
             $table->bigIncrements('IdMotivo');
             $table->string('NombreMotivo',150)->nullable(false)->unique();
             $table->string('DescripcionMotivo',150)->nullable();
@@ -37,6 +37,6 @@ class CreateMotivosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('motivo');
+        Schema::dropIfExists('Motivo');
     }
 }

@@ -17,14 +17,14 @@ class EmpresaController extends Controller
 
     public function index()
     {
-        return view('Empresa.index', [
+        return view('empresa.index', [
             'empresas' => Empresa::get()
         ]);
     }
 
     public function create()
     {
-        return view('Empresa.create', [
+        return view('empresa.create', [
             'empresa' => new Empresa()
         ]);
     }
@@ -84,18 +84,17 @@ class EmpresaController extends Controller
     public function destroy(Empresa $empresa)
     {
         try {
-            $ocupadoPracticas = Practicas_Estudiante::where('IdPractica', $empresa->IdEmpresa)->count();
-            $ocupadoServicio = Servicio_Social_Estudiante::where('IdServicioSocial', $empresa->IdEmpresa)->count();
+            $ocupadoPracticas = Practicas_Estudiante::where('IdEmpresa', $empresa->IdEmpresa)->count();
+            $ocupadoServicio = Servicio_Social_Estudiante::where('IdEmpresa', $empresa->IdEmpresa)->count();
             if ($ocupadoPracticas > 0 || $ocupadoServicio > 0) {
-                Session::flash('flash', [['type' => "danger", 'message' => "Esta empresa ya está en uso, no puede ser eliminado."]]);
-                return redirect()->route('sedeEventos.index');
+                Session::flash('flash', [['type' => "danger", 'message' => "La empresa " . $empresa->NombreEmpresa . " ya está en uso, no puede ser eliminada."]]);
+                return redirect()->route('empresas.index');
             } else {
                 $empresa->forceDelete();
                 Session::flash('flash', [['type' => "success", 'message' => "La empresa fue eliminada correctamente."]]);
                 return redirect()->route('empresas.index');
             }
         } catch (\Throwable $throwable) {
-            dd($throwable);
             Session::flash('flash', [['type' => "danger", 'message' => "La empresa NO pudo ser eliminada correctamente."]]);
             return redirect()->route('empresas.edit', $empresa->IdEmpresa);
         }

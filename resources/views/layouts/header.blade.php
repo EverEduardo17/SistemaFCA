@@ -1,7 +1,7 @@
 <header>
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-light fixed-top bg-color">
-        {{-- <img class="logo" src="{{ asset('img/logo.png') }}"> --}}
+        {{-- <img class="logo" src="{{ asset('img/logo.png') }}" alt="Logo UV"> --}}
         <a class="navbar-brand text-white" href="{{ url('/home') }}" >Universidad Veracruzana</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"

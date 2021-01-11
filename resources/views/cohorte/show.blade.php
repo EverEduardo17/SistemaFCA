@@ -18,7 +18,7 @@
     <div class="card-body">
         <div class="contenedor-botones justify-content-center align-items-center">
             <a class="btn btn-outline-dark" href="#">Ver Cohorte</a>
-            <a href="#" data-toggle="modal" data-target="#createEstudiante" class="btn btn-outline-dark">Agregar Estudiante</a>
+            <a href="#" class="btn btn-outline-dark">Agregar Estudiante</a>
             <a class="btn btn-outline-dark" href="#">Editar Estudiante</a>
             <a class="btn btn-outline-dark" href="#">Dar de Baja Estudiante</a>
         </div>
@@ -101,7 +101,6 @@
 </div>
 @include('grupos.modals.create')
 @include('grupos.modals.delete')
-@include('Estudiantes.modals.create')
 @endsection
 @section('head')
 <link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}" />
@@ -148,10 +147,7 @@
         var button = $(event.relatedTarget);
         var modal = $(this);
     })
-    $('#createEstudiante').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var modal = $(this);
-    })
+  
 </script>
 
 @endsection

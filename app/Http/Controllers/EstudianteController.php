@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Cohorte;
+use App\DatosPersonales;
 use App\Estudiante;
+use App\Facultad;
 use App\Grupo;
+use App\Grupo_Estudiante;
 use App\Http\Requests\EstudianteRequest;
 use App\Modalidad;
 use App\Motivo;
@@ -11,7 +15,8 @@ use App\Motivos;
 use App\Periodo;
 use App\Practicas_Estudiante;
 use App\ProgramaEducativo;
-use App\Reprobados;
+use App\Reprobado;
+
 use App\Servicio_Social_Estudiante;
 use App\Titulacion;
 use App\Traslado;
@@ -23,78 +28,89 @@ use MotivoSeeder;
 
 class EstudianteController extends Controller
 {
-    public function index()
+    public function agregarEstudiante($idGrupo)
     {
-        //
-    }
-
-    public function create()
-    {
-        //
+        $grupo = Grupo::where('IdGrupo', $idGrupo)->get()->last();
+        $cohorte = Cohorte::where('IdCohorte', $grupo->IdCohorte)->get()->last();
+        $programaEducativo = ProgramaEducativo::where('IdProgramaEducativo', $grupo->IdProgramaEducativo)->get()->last();
+        $idFCA = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
+        return view('estudiantes.crear', [
+            'grupo'             => $grupo,
+            'cohorte'           => $cohorte,
+            'cohortes'          => Cohorte::orderBy('IdCohorte', 'desc')->get(),
+            'programas'         => ProgramaEducativo::where('IdFacultad', $idFCA)->get(),
+            'grupos'            => Grupo::where("IdFacultad", "=", $idFCA)->get(),
+            'modalidades'       => Modalidad::where("TipoModalidad", "=", "Entrada")->get(),
+            'programaEducativo' => $programaEducativo,
+            'periodos'          => Periodo::get(),
+            'motivos'           => Motivo::get()
+        ]);
     }
 
     public function store(EstudianteRequest $request)
     {
+        $existe = DatosPersonales::where([
+            ['NombreDatosPersonales', '=', $request->NombreDatosPersonales],
+            ['ApellidoPaternoDatosPersonales', '=', $request->ApellidoPaternoDatosPersonales],
+            ['ApellidoMaternoDatosPersonales', '=', $request->ApellidoMaternoDatosPersonales],
+        ])->count();
+        if ($existe > 0) {
+            $idDatos = DatosPersonales::where([
+                ['NombreDatosPersonales', '=', $request->NombreDatosPersonales],
+                ['ApellidoPaternoDatosPersonales', '=', $request->ApellidoPaternoDatosPersonales],
+                ['ApellidoMaternoDatosPersonales', '=', $request->ApellidoMaternoDatosPersonales],
+            ])->value("IdDatosPersonales");
+            $existeTrayectoria = Trayectoria::where("IdDatosPersonales", "=", $idDatos)->get()->last();
+            if ($existeTrayectoria != null) {
+                if ($existeTrayectoria->IdGrupo == $request->IdGrupo) {
+                    Session::flash('flash', [['type' => "danger", 'message' => "El estudiante ya se encuentra registrado en este grupo."]]);
+                    return redirect()->route('estudiantesGrupo', $request->IdGrupo);
+                }
+            }
+        }
         try {
             $input = $request->validated();
             $idGrupo = $input['IdGrupo'];
 
-            $activos = DB::table('grupo')
-                ->where('IdGrupo', $idGrupo)->value('EstudiantesActivos');
-            $total = DB::table('grupo')
-                ->where('IdGrupo', $idGrupo)->value('TotalEstudiantesGrupo');
+            DB::beginTransaction();
 
-            if (($activos + 1) <= $total) {
-                DB::beginTransaction();
+            $idEstudianteDB = DB::table('Estudiante')->insertGetId([
+                'matriculaEstudiante'   => $input['MatriculaEstudiante']
+            ]);
 
-                $idEstudianteDB = DB::table('estudiante')->insertGetId([
-                    'matriculaEstudiante'      => $input['MatriculaEstudiante']
-                ]);
+            $idDatosPersonales = DB::table('DatosPersonales')->insertGetId([
+                'NombreDatosPersonales'               => $input['NombreDatosPersonales'],
+                'ApellidoPaternoDatosPersonales'      => $input['ApellidoPaternoDatosPersonales'],
+                'ApellidoMaternoDatosPersonales'      => $input['ApellidoMaternoDatosPersonales'],
+                'Genero'                              => $input['Genero']
+            ]);
 
-                $idDatosPersonales = DB::table('datospersonales')->insertGetId([
-                    'NombreDatosPersonales'               => $input['NombreDatosPersonales'],
-                    'ApellidoPaternoDatosPersonales'      => $input['ApellidoPaternoDatosPersonales'],
-                    'ApellidoMaternoDatosPersonales'      => $input['ApellidoMaternoDatosPersonales'],
-                    'Genero'                              => $input['Genero']
-                ]);
+            $idTrayectoria = DB::table('Trayectoria')->insertGetId([
+                'EstudianteRegular'     => 1,
+                'TotalPeriodos'         => 1,
+                'IdGrupo'               => $input['IdGrupo'],
+                'IdEstudiante'          => $idEstudianteDB,
+                'IdProgramaEducativo'   => $input['IdProgramaEducativo'],
+                'IdModalidad'           => $input['IdModalidad'],
+                'IdCohorte'             => $input['IdCohorte'],
+                'IdDatosPersonales'     => $idDatosPersonales
+            ]);
 
-                $idTrayectoria = DB::table('trayectoria')->insertGetId([
-                    'EstudianteRegular' => 1,
-                    'EstudianteActivo' => 1,
-                    'TotalPeriodos' => 1,
-                    'IdGrupo' => $input['IdGrupo'],
-                    'IdEstudiante' => $idEstudianteDB,
-                    'IdProgramaEducativo' => $input['IdProgramaEducativo'],
-                    'IdModalidad' => $input['IdModalidad'],
-                    'IdCohorte' => $input['IdCohorte'],
-                    'IdDatosPersonales' => $idDatosPersonales
-                ]);
+            $idGrupoEstudiante = DB::table('Grupo_Estudiante')->insertGetId([
+                'IdGrupo' => $input['IdGrupo'],
+                'Estado' => 'Activo',
+                'IdTrayectoria' => $idTrayectoria
+            ]);
 
-                $idGrupoEstudiante = DB::table('grupo_estudiante')->insertGetId([
-                    'IdGrupo' => $input['IdGrupo'],
-                    'Estado' => 'Activo',
-                    'IdTrayectoria' => $idTrayectoria
-                ]);
-
-                if (
-                    $idEstudianteDB == null || $idEstudianteDB == 0 || $idDatosPersonales == null || $idDatosPersonales == 0
-                    || $idTrayectoria == null || $idTrayectoria == 0 || $idGrupoEstudiante == null || $idGrupoEstudiante == 0
-                ) {
-                    DB::rollBack();
-                    Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar al Estudiante."]]);
-                    return redirect()->route('estudiantes.show', $idGrupo);
-                }
-                DB::commit();
-                DB::beginTransaction();
-                DB::table('Grupo')->where('IdGrupo', $idGrupo)->update([
-                    'EstudiantesActivos'       => ($activos + 1)
-                ]);
-                DB::commit();
-            } else {
+            if (
+                $idEstudianteDB == null || $idEstudianteDB == 0 || $idDatosPersonales == null || $idDatosPersonales == 0
+                || $idTrayectoria == null || $idTrayectoria == 0 || $idGrupoEstudiante == null || $idGrupoEstudiante == 0
+            ) {
                 DB::rollBack();
-                Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar al Estudiante, el grupo ya está completo."]]);
+                Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar al Estudiante."]]);
                 return redirect()->route('estudiantes.show', $idGrupo);
             }
+            DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
             dd($th);
@@ -107,72 +123,84 @@ class EstudianteController extends Controller
 
     public function show($idGrupo)
     {
-        /*Nota:
-         *   El código se hizo de esta manera debido a que apenas se está
-         *   aprendiendo la tecnología y por cuestiones de tiempo se hizo
-         *   con lo que se conocía en ese momento, no es lo mejor pero funciona ;).
-         */
-        $nombreGrupo = DB::table('grupo')
-            ->where('IdGrupo', $idGrupo)->value('NombreGrupo');
-        $idCohorte = DB::table('grupo')
-            ->where('IdGrupo', $idGrupo)->value('IdCohorte');
-        $nombreCohorte = DB::table('cohorte')
-            ->where('IdCohorte', $idCohorte)->value('NombreCohorte');
-        $idProgramaEducativo = DB::table('grupo')
-            ->where('IdGrupo', $idGrupo)->value('IdProgramaEducativo');
-        $programaEducativo = DB::table('programa_educativo')
-            ->where('IdProgramaEducativo', $idProgramaEducativo)->value('AcronimoProgramaEducativo');
-        $idFCA = DB::table('facultad')
-            ->where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('idFacultad');
+        $grupo = Grupo::where('IdGrupo', $idGrupo)->get()->last();
+        $cohorte = Cohorte::where('IdCohorte', $grupo->IdCohorte)->get()->last();
+        $programaEducativo = ProgramaEducativo::where('IdProgramaEducativo', $grupo->IdProgramaEducativo)->get()->last();
+        $idFCA = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
         return view('estudiantes.show', [
-            'idGrupo' => $idGrupo,
-            'nombreGrupo' => $nombreGrupo,
-            'idCohorte' => $idCohorte,
-            'nombreCohorte' => $nombreCohorte,
-            'estudiantes' => Trayectoria::where('IdGrupo', $idGrupo)->get(),
-            'cohortes' => DB::table('cohorte')
-                ->orderBy('IdCohorte', 'desc')
-                ->get(),
-            'programas' => DB::table('programa_educativo')
-                ->where('IdFacultad', $idFCA)
-                ->get(),
-            'grupos' => Grupo::get(),
-            'modalidades' => Modalidad::get(),
-            'idProgramaEducativo' => $idProgramaEducativo,
-            'acronimoProgramaEducativo' => $programaEducativo,
-            'periodos' => Periodo::get(),
-            'motivos' => Motivo::get()
+            'grupo'             => $grupo,
+            'cohorte'           => $cohorte,
+            'estudiantes'       => Trayectoria::where('IdGrupo', $idGrupo)->get(),
+            'cohortes'          => Cohorte::orderBy('IdCohorte', 'desc')->get(),
+            'programas'         => ProgramaEducativo::where('IdFacultad', $idFCA)->get(),
+            'grupos'            => Grupo::where("IdFacultad", "=", $idFCA)->get(),
+            'modalidades'       => Modalidad::where("TipoModalidad", "=", "Entrada")->get(),
+            'programaEducativo' => $programaEducativo,
+            'periodos'          => Periodo::get(),
+            'motivos'           => Motivo::get(),
+            'estados'           => Grupo_Estudiante::where("IdGrupo", "=", $idGrupo)->get()
         ]);
     }
 
     public function mostrarEstudiante($idGrupo, $idTrayectoria)
     {
-        $trayectoria = Trayectoria::where('IdTrayectoria',$idTrayectoria)->get();
-        $reprobados = Reprobados::where('IdTrayectoria',$idTrayectoria)->get();
-        $servicioSocial = Servicio_Social_Estudiante::where('IdTrayectoria',$idTrayectoria)->get();
-        $practicas = Practicas_Estudiante::where('IdTrayectoria',$idTrayectoria)->get();
-        $titulacion = Titulacion::where('IdTrayectoria',$idTrayectoria)->get();
-        $movilidad = Traslado::where('IdTrayectoria',$idTrayectoria)->get();
-        return view('estudiantes.mostrarEstudiante',[
+        $trayectoria = Trayectoria::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $estado = Grupo_Estudiante::where('IdTrayectoria', $idTrayectoria)->value("Estado");
+        $reprobados = Reprobado::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $servicioSocial = Servicio_Social_Estudiante::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $practicas = Practicas_Estudiante::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $titulacion = Titulacion::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $movilidad = Traslado::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $periodos = Periodo::get();
+        $motivos = Motivo::get();
+        return view('estudiantes.mostrarEstudiante', [
             'trayectoria'   => $trayectoria,
-            'reprobados'    => $reprobados,
+            'reprobado'     => $reprobados,
             'servicio'      => $servicioSocial,
             'practicas'     => $practicas,
             'titulacion'    => $titulacion,
-            'movilidad'    => $movilidad
+            'movilidad'     => $movilidad,
+            'estado'        => $estado,
+            'periodos'      => $periodos,
+            'motivos'      => $motivos,
         ]);
     }
 
-    public function showEstudiante(Estudiante $estudiante)
+    public function editarEstudiante($idGrupo, $idTrayectoria)
     {
-        /*
-        @return va
-        */
-    }
-
-    public function edit(Estudiante $estudiante)
-    {
-        //
+        $estado = Grupo_Estudiante::where("IdTrayectoria", "=", $idTrayectoria)->value("Estado");
+        if ($estado == "Activo") {
+            $trayectoria = Trayectoria::where('IdTrayectoria', $idTrayectoria)->get()->last();
+            $estado = Grupo_Estudiante::where('IdTrayectoria', $idTrayectoria)->value("Estado");
+            $reprobados = Reprobado::where('IdTrayectoria', $idTrayectoria)->get()->last();
+            $servicioSocial = Servicio_Social_Estudiante::where('IdTrayectoria', $idTrayectoria)->get()->last();
+            $practicas = Practicas_Estudiante::where('IdTrayectoria', $idTrayectoria)->get()->last();
+            $titulacion = Titulacion::where('IdTrayectoria', $idTrayectoria)->get()->last();
+            $movilidad = Traslado::where('IdTrayectoria', $idTrayectoria)->get()->last();
+            $periodos = Periodo::get();
+            $motivos = Motivo::get();
+            $cohortes = Cohorte::orderBy('IdCohorte', 'desc')->get();
+            $modalidades = Modalidad::get();
+            $programas = ProgramaEducativo::where("IdFacultad", "=", Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->value("IdFacultad"))->get();
+            $grupos = Grupo::where("IdCohorte", "=", $trayectoria->IdCohorte)->get();
+            return view('estudiantes.edit', [
+                'trayectoria'   => $trayectoria,
+                'reprobado'     => $reprobados,
+                'servicio'      => $servicioSocial,
+                'practicas'     => $practicas,
+                'titulacion'    => $titulacion,
+                'movilidad'     => $movilidad,
+                'estado'        => $estado,
+                'periodos'      => $periodos,
+                'motivos'       => $motivos,
+                'cohortes'      => $cohortes,
+                'modalidades'   => $modalidades,
+                'programas'     => $programas,
+                'grupos'        => $grupos,
+            ]);
+        } else {
+            return redirect()->back();
+        }
     }
 
     public function update(Request $request, Estudiante $estudiante)

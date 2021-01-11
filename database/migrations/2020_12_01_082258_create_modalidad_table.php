@@ -14,7 +14,7 @@ class CreateModalidadTable extends Migration
      */
     public function up()
     {
-        Schema::create('modalidad', function (Blueprint $table) {
+        Schema::create('Modalidad', function (Blueprint $table) {
             $table->bigIncrements('IdModalidad');
             
             $table->string('NombreModalidad', 100)->nullable(false)->unique();
@@ -39,6 +39,6 @@ class CreateModalidadTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('modalidad');
+        Schema::dropIfExists('Modalidad');
     }
 }

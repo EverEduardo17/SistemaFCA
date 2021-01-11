@@ -30,14 +30,20 @@ Route::resource('academicoEvento','AcademicoEventoController')->except('index', 
 Route::resource('bajas', 'BajaController');
 Route::resource('cohortes', 'CohorteController');
 Route::resource('documento', 'DocumentoController');
-Route::resource('estudiantes', 'EstudianteController');
+Route::resource('estudiantes', 'EstudianteController')->except('agregarEstudiante','mostrarEstudiante');
 Route::resource('empresas', 'EmpresaController');
 Route::resource('eventos', 'EventoController');
 Route::resource('facultades', 'FacultadController')->except('show');
 Route::resource('fechaEventos', 'FechaEventoController');
 Route::resource('grupos', 'GrupoController');
 Route::resource('periodo', 'PeriodoController');
+Route::resource('practicas', 'PracticasEstudianteController');
 Route::resource('programaEducativo', 'ProgramaEducativoController');
+Route::resource('reprobado', 'ReprobadoController');
+Route::resource('sedeEventos', 'SedeEventoController');
+Route::resource('servicio', 'ServicioSocialEstudianteController');
+Route::resource('titulo', 'TitulacionController');
+Route::resource('traslado', 'TrasladoController');
 Route::resource('sedeEventos', 'SedeEventoController');
 Route::resource('eventos.estado', 'EventoEstadoController')->shallow();
 Route::post('eventos/{evento}/estado/rechado', 'EventoEstadoController@rechazo')->name('eventos.estado.rechazo');
@@ -51,11 +57,14 @@ Route::put('/fechaEvento/put', 'FechaEventoController@update')->name("fechaEvent
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/cohortes', 'CohorteController@mostrarCohorte')->name('cohortes.mostrarCohorte');
 Route::get('/cohortes/{nombreCohorte}/{idGrupo}', 'GrupoController@mostrarGrupo')->name('cohortes.mostrarGrupo');
 Route::get('/cohortes/{nombreCohorte}/{idGrupo}/estado', 'GrupoController@mostrarEstado')->name('cohortes.mostrarEstado');
 
 Route::get('grupos/{idGrupo}/estudiantes', 'EstudianteController@show')->name('estudiantesGrupo');
+Route::get('grupos/{idGrupo}/estudiantes/crear', 'EstudianteController@agregarEstudiante')->name('agregarEstudiante');
 Route::get('grupos/{idGrupo}/estudiantes/{idEstudiante}', 'EstudianteController@mostrarEstudiante')->name('mostrarEstudiante');
+Route::get('grupos/{idGrupo}/estudiantes/{idEstudiante}/editar', 'EstudianteController@editarEstudiante')->name('editarEstudiante');
 
 Route::get('/eventos/{year}/{month}/{day}', 'EventoController@indexWithDate')->name("eventosWithDate");
 

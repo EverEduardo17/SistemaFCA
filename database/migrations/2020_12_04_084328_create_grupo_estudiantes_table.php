@@ -14,16 +14,17 @@ class CreateGrupoEstudiantesTable extends Migration
      */
     public function up()
     {
-        Schema::create('grupo_estudiante', function (Blueprint $table) {
+        Schema::create('Grupo_Estudiante', function (Blueprint $table) {
             $table->bigIncrements('IdGrupoEstudiante');
-            $table->string('estado',20)->nullable(false);
+            $table->string('Estado', 20)->nullable(false);
+            $table->string('TipoTraslado', 30)->nullable();
 
             /*Realaciones*/
             $table->unsignedBigInteger('IdGrupo')->nullable(false);
             $table->foreign('IdGrupo')->references('IdGrupo')->on('Grupo');
 
             $table->unsignedBigInteger('IdTrayectoria')->nullable(false);
-            $table->foreign('IdTrayectoria')->references('IdTrayectoria')->on('trayectoria');
+            $table->foreign('IdTrayectoria')->references('IdTrayectoria')->on('Trayectoria');
 
             $table->timestamp('CreatedAt')->useCurrent();
             $table->timestamp('UpdatedAt')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
@@ -43,6 +44,6 @@ class CreateGrupoEstudiantesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('grupo_estudiante');
+        Schema::dropIfExists('Grupo_Estudiante');
     }
 }

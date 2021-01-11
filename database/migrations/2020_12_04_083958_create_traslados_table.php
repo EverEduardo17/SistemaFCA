@@ -14,7 +14,7 @@ class CreateTrasladosTable extends Migration
      */
     public function up()
     {
-        Schema::create('traslado', function (Blueprint $table) {
+        Schema::create('Traslado', function (Blueprint $table) {
             $table->bigIncrements('IdTraslado');
             $table->string('FacultadDestino',150)->nullable(false);
             $table->string('CampusDestino',150)->nullable(false);
@@ -47,6 +47,6 @@ class CreateTrasladosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('traslado');
+        Schema::dropIfExists('Traslado');
     }
 }

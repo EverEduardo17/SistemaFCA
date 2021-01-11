@@ -2,103 +2,53 @@
 
 namespace App\Http\Controllers;
 
+use App\Baja;
+use App\Http\Requests\BajaRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class BajaController extends Controller
 {
-    public function index()
+    private function comprobarMotivo($input)
     {
-        //
+        $motivo = $input['IdMotivo'];
+        if ($input['TipoBaja'] == "Temporal") {
+            return ($motivo == 1 || $motivo == 2 || $motivo == 4 || $motivo == 5 || $motivo == 6);
+        } else {
+            return ($motivo == 3 || $motivo == 7 || $motivo == 8 || $motivo == 9);
+        }
     }
 
-    public function create()
+    public function store(BajaRequest $request)
     {
-        //
+        $input  = $request->validated();
+        $existe = Baja::where("IdTrayectoria", "=", $input['IdTrayectoria'])->where("IdPeriodoBaja", "=", $input['IdPeriodoBaja'])->count();
+        if ($existe > 0) {
+            Session::flash('flash', [['type' => "danger", 'message' => "El estudiante ya está dado de baja en el periodo seleccionado."]]);
+            return redirect()->route('estudiantesGrupo', $input['IdGrupo']);
+        }
+        if (!$this->comprobarMotivo($input)) {
+            Session::flash('flash', [['type' => "danger", 'message' => "El motivo seleccionado no es aplicable para el tipo de baja seleccionado."]]);
+            return redirect()->back();
+        }
+        try {
+            Baja::create($request->validated());
+            DB::beginTransaction();
+            DB::table('Grupo_Estudiante')->where('IdTrayectoria', $input['IdTrayectoria'])->update([
+                'Estado' => "Baja"
+            ]);
+            DB::commit();
+            Session::flash('flash', [['type' => "success", 'message' => "Baja registrada correctamente."]]);
+            return redirect()->route('estudiantesGrupo', $input['IdGrupo']);
+        } catch (\Throwable $throwable) {
+            DB::rollBack();
+            Session::flash('flash', [['type' => "danger", 'message' => "La Baja NO pudo ser registrada correctamente."]]);
+            return redirect()->back();
+        }
     }
 
-    public function store(Request $request)
-    {
-        dd($request);
-        // try {
-        //     $input = $request->validate([
 
-        //     ]);
-        //     $idGrupo = $input['Id'];
-
-        //     $activos = DB::table('grupo')
-        //         ->where('IdGrupo', $idGrupo)->value('EstudiantesActivos');
-        //     $total = DB::table('grupo')
-        //         ->where('IdGrupo', $idGrupo)->value('TotalEstudiantesGrupo');
-
-        //     if (($activos + 1) <= $total) {
-        //         DB::beginTransaction();
-
-        //         $idEstudianteDB = DB::table('estudiante')->insertGetId([
-        //             'matriculaEstudiante'      => $input['MatriculaEstudiante']
-        //         ]);
-
-        //         $idDatosPersonales = DB::table('datospersonales')->insertGetId([
-        //             'NombreDatosPersonales'               => $input['NombreDatosPersonales'],
-        //             'ApellidoPaternoDatosPersonales'      => $input['ApellidoPaternoDatosPersonales'],
-        //             'ApellidoMaternoDatosPersonales'      => $input['ApellidoMaternoDatosPersonales'],
-        //             'Genero'                              => $input['Genero']
-        //         ]);
-
-        //         $idTrayectoria = DB::table('trayectoria')->insertGetId([
-        //             'EstudianteRegular' => 1,
-        //             'EstudianteActivo' => 1,
-        //             'TotalPeriodos' => 1,
-        //             'IdGrupo' => $input['IdGrupo'],
-        //             'IdEstudiante' => $idEstudianteDB,
-        //             'IdProgramaEducativo' => $input['IdProgramaEducativo'],
-        //             'IdModalidad' => $input['IdModalidad'],
-        //             'IdCohorte' => $input['IdCohorte'],
-        //             'IdDatosPersonales' => $idDatosPersonales
-        //         ]);
-
-        //         $idGrupoEstudiante = DB::table('grupo_estudiante')->insertGetId([
-        //             'IdGrupo' => $input['IdGrupo'],
-        //             'Estado' => 'Activo',
-        //             'IdTrayectoria' => $idTrayectoria
-        //         ]);
-
-        //         if (
-        //             $idEstudianteDB == null || $idEstudianteDB == 0 || $idDatosPersonales == null || $idDatosPersonales == 0
-        //             || $idTrayectoria == null || $idTrayectoria == 0 || $idGrupoEstudiante == null || $idGrupoEstudiante == 0
-        //         ) {
-        //             DB::rollBack();
-        //             Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar al Estudiante."]]);
-        //             return redirect()->route('estudiantes.show', $idGrupo);
-        //         }
-        //         DB::commit();
-        //         DB::beginTransaction();
-        //         DB::table('Grupo')->where('IdGrupo', $idGrupo)->update([
-        //             'EstudiantesActivos'       => ($activos + 1)
-        //         ]);
-        //         DB::commit();
-        //     } else {
-        //         DB::rollBack();
-        //         Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar al Estudiante, el grupo ya está completo."]]);
-        //         return redirect()->route('estudiantes.show', $idGrupo);
-        //     }
-        // } catch (\Throwable $th) {
-        //     DB::rollBack();
-        //     dd($th);
-        //     Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar al Estudiante."]]);
-        //     return redirect()->route('estudiantes.show', $idGrupo);
-        // }
-        // Session::flash('flash', [['type' => "success", 'message' => "Estudiante registrado correctamente."]]);
-        // return redirect()->route('estudiantes.show', $idGrupo);
-
-
-    }
-
-    public function show($id)
-    {
-        //
-    }
 
     public function edit($id)
     {
@@ -106,11 +56,6 @@ class BajaController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function destroy($id)
     {
         //
     }

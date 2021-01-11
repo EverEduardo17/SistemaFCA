@@ -10,7 +10,7 @@ class Modalidad extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "modalidad";
+    protected $table = "Modalidad";
     protected $primaryKey = "IdModalidad";
     protected $fillable = ['NombreModalidad', 'DescripcionModalidad','TipoModalidad'];
     const CREATED_AT = 'CreatedAt';

@@ -14,7 +14,7 @@ class CreateReprobadosTable extends Migration
      */
     public function up()
     {
-        Schema::create('reprobado', function (Blueprint $table) {
+        Schema::create('Reprobado', function (Blueprint $table) {
             $table->bigIncrements('IdReprobado');
             
             /*Realaciones*/
@@ -45,6 +45,6 @@ class CreateReprobadosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reprobado');
+        Schema::dropIfExists('Reprobado');
     }
 }

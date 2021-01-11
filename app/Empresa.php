@@ -12,9 +12,12 @@ class Empresa extends Model
 
     protected $table = "Empresa";
     protected $primaryKey = "IdEmpresa";
-    protected $fillable = ['NombreEmpresa','DireccionEmpresa','NoDireccionEmpresa','LocalidadEmpresa','TelefonoEmpresa','ResponsableEmpresa','TipoEmpresa','ActividadEmpresa','ClasificacionEmpresa'];
+    protected $fillable = [
+        'NombreEmpresa', 'DireccionEmpresa', 'LocalidadEmpresa',
+        'TelefonoEmpresa', 'ResponsableEmpresa', 'TipoEmpresa',
+        'ActividadEmpresa', 'ClasificacionEmpresa'
+    ];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
-
 }

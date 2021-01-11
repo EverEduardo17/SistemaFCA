@@ -92,12 +92,11 @@ class HomeController extends Controller
             ],
 
             [
-                "titulo" => "Cohortes",
+                "titulo" => "Estudiantes",
                 "background" => $colores[0],
                 "enlace" => "cohortes",
                 "operaciones" => [
-                    ["titulo" => "Nuevo Cohorte", "enlace" => "create"],
-                    ["titulo" => "Gestión de Cohortes", "enlace" => $nombreCohorte],
+                    ["titulo" => "Gestión de Estudiantes", "enlace" => $nombreCohorte],
                 ]
             ],
             [

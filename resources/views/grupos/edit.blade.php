@@ -1,6 +1,5 @@
-@extends('layouts.app')
-
-@section('content')
+@extends('layouts.plantilla')
+@section('breadcrumb')
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
@@ -9,10 +8,12 @@
     <li class="breadcrumb-item active" aria-current="page">Editar Grupo</li>
   </ol>
 </nav>
+@endsection
+@section('content')
 <div class="card">
   <div class="card-header">
     <div class="row">
-      <h5 class="card-title col-8">Editar Grupo</h5>
+      <h5 class="card-title col-8"><strong>Editar Grupo</strong></h5>
       <a class="btn btn-outline-info col-4" href="{{ route('grupos.index') }}" role="button">Ver Grupos</a>
     </div>
   </div>
@@ -21,20 +22,18 @@
     <form method="POST" action="{{ route('grupos.update', $grupos) }}" autocomplete="off">
       @csrf @method('PATCH')
       @include('layouts.validaciones')
+      <input type="hidden" name="IdFacultad" value="{{$facultad}}">
+      <input type="hidden" name="IdGrupo" value="{{$grupos->IdGrupo}}">
       <div class="form-group">
-        <label name="NombreGrupo">Nombre del Grupo:</label>
+        <label name="NombreGrupo">Nombre del grupo:</label>
         <input name="NombreGrupo" type="text" class="form-control @error('NombreGrupo') is-invalid @enderror" value="{{old('NombreGrupo',$grupos->NombreGrupo)}}" placeholder="Ej. LIS 701">
       </div>
       <div class="form-group">
-        <label name="DescripcionGrupo">Descripción del Grupo:</label>
+        <label name="DescripcionGrupo">Descripción del grupo:</label>
         <textarea name="DescripcionGrupo" type="text" class="form-control @error('DescripcionGrupo') is-invalid @enderror" value="{{old('DescripcionGrupo','$grupos->DescripcionGrupo')}}" placeholder="Ej. Grupo de LIS en 7mo semestre." rows="2">{{old('DescripcionGrupo',$grupos->DescripcionGrupo)}}</textarea>
       </div>
       <div class="form-group">
-        <label name="TotalEstudiantesGrupo">Capacidad de Estudiantes:</label>
-        <input name="TotalEstudiantesGrupo" type="number" class="form-control @error('TotalEstudiantesGrupo') is-invalid @enderror" step="1" value="{{old('TotalEstudiantesGrupo',$grupos->TotalEstudiantesGrupo)}}">
-      </div>
-      <div class="form-group">
-        <label name="IdProgramaEducativo">Programa de pertenencia:</label>
+        <label name="IdProgramaEducativo">Programa Educativo de pertenencia:</label>
         <select name="IdProgramaEducativo" class="form-control @error('IdProgramaEducativo') is-invalid @enderror">
           @foreach ($programas as $programa)
           <option value="{{ $programa->IdProgramaEducativo }}" @if($programa->IdProgramaEducativo == $grupos->IdProgramaEducativo )selected @endif >{{ $programa->NombreProgramaEducativo }}</option>
@@ -68,7 +67,7 @@
 
       <br>
       <button type="submit" class="btn btn-primary btn-block">Guardar</button>
-      <a href="{{ route('grupos.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
+      <a href="{{ route('grupos.show',$grupos) }}" class="btn btn-secondary btn-block">Cancelar</a>
     </form>
 
   </div>

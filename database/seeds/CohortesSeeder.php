@@ -12,7 +12,7 @@ class CohortesSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('cohorte')->insert([
+        DB::table('Cohorte')->insert([
             [
                 'NombreCohorte'   => 'S030',
                 'DescripcionCohorte' => 'Cohorte de la generación 2003',

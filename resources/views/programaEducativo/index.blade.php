@@ -1,16 +1,17 @@
-@extends('layouts.app')
-
-@section('content')
+@extends('layouts.plantilla')
+@section('breadcrumb')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
         <li class="breadcrumb-item active" aria-current="page">Gestión de Programas Educativos</li>
     </ol>
 </nav>
+@endsection
+@section('content')
 <div class="card">
     <div class="card-header">
         <div class="row">
-            <h5 class="card-title col-8">Programas Educativos</h5>
+            <h5 class="card-title col-8"><strong> Gestión de Programas Educativos</strong></h5>
             <a class="btn btn-success col-4" href="{{ route('programaEducativo.create') }}" role="button">Agregar Programa Educativo</a>
         </div>
     </div>
@@ -20,18 +21,18 @@
                 <caption>Programas Educativos registrados en el sistema.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Acrónimo</th>
-                        <th scope="col">Facultad</th>
-                        <th scope="col">Acciones</th>
+                        <th scope="col" class="border-right">Nombre</th>
+                        <th scope="col" class="border-right">Acrónimo</th>
+                        <th scope="col" class="border-right">Facultad</th>
+                        <th scope="col" class="border-right">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($programas as $programa)
                     <tr>
-                        <th scope="row">{{ $programa->NombreProgramaEducativo }}</th>
-                        <td>{{ $programa->AcronimoProgramaEducativo }}</td>
-                        <td>{{ $programa->Facultad->NombreFacultad }}</td>
+                        <th scope="row" class="border-right">{{ $programa->NombreProgramaEducativo }}</th>
+                        <td class="border-right">{{ $programa->AcronimoProgramaEducativo }}</td>
+                        <td class="border-right">{{ $programa->Facultad->NombreFacultad }}</td>
                         <td class="btn-group btn-group-sm px-3">
                             <a class="btn btn-primary btn-sm" href="{{ route('programaEducativo.edit', $programa) }}">Editar</a>
                             <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $programa->IdProgramaEducativo }}">Eliminar</a>

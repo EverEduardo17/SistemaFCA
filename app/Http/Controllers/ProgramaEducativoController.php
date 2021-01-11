@@ -14,17 +14,17 @@ class ProgramaEducativoController extends Controller
 {
     public function index()
     {
-        return view('ProgramaEducativo.index', [
-            'programas' => ProgramaEducativo::get()
+        $idFCA = Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->value("IdFacultad");
+        return view('programaEducativo.index', [
+            'programas' => ProgramaEducativo::where("IdFacultad", "=", $idFCA)->get()
         ]);
     }
 
     public function create()
     {
-        return view('ProgramaEducativo.create', [
+        return view('programaEducativo.create', [
             'programas' => new ProgramaEducativo(),
-            'facultadoes' => Facultad::get()
-
+            'facultad' => Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->get()
         ]);
     }
 
@@ -43,16 +43,11 @@ class ProgramaEducativoController extends Controller
         }
     }
 
-    public function show(ProgramaEducativo $programaEducativo)
-    {
-        //
-    }
-
     public function edit(ProgramaEducativo $programaEducativo)
     {
         return view('programaEducativo.edit', [
             'programas' => $programaEducativo,
-            'facultadoes' => Facultad::get()
+            'facultad' => Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->get()
         ]);
     }
 

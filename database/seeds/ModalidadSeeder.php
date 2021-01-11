@@ -50,19 +50,34 @@ class ModalidadSeeder extends Seeder
                 'UpdatedBy' => 1,
             ],
             [
-                'NombreModalidad'         => 'Tésis',
-                'DescripcionModalidad' => 'Titulación por modalidad de tésis',
+                'NombreModalidad'         => 'Tesis',
+                'DescripcionModalidad' => 'Titulación por modalidad de tesis',
                 'TipoModalidad'         => 'Titulación',
                 'CreatedBy' => 1,
                 'UpdatedBy' => 1,
             ],
             [
-                'NombreModalidad'         => 'Definitiva',
-                'DescripcionModalidad' => 'Ingreso por lugares disponibles.',
+                'NombreModalidad'         => 'Tesina',
+                'DescripcionModalidad' => 'Titulación por modalidad de tesina',
                 'TipoModalidad'         => 'Titulación',
                 'CreatedBy' => 1,
                 'UpdatedBy' => 1,
             ],
+            [
+                'NombreModalidad'         => 'Monografía',
+                'DescripcionModalidad' => 'Titulación por modalidad de monografía',
+                'TipoModalidad'         => 'Titulación',
+                'CreatedBy' => 1,
+                'UpdatedBy' => 1,
+            ],
+            [
+                'NombreModalidad'         => 'Examen CENEVAL',
+                'DescripcionModalidad' => 'Titulación por modalidad de Examen CENEVAL',
+                'TipoModalidad'         => 'Titulación',
+                'CreatedBy' => 1,
+                'UpdatedBy' => 1,
+            ],
+            
         ]);
     }
 }

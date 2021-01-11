@@ -20,7 +20,6 @@ class Trayectoria extends Model
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
 
-    //Relacion Uno a Uno
     public function grupo()
     {
         return $this->hasOne(Grupo::class, 'IdGrupo', 'IdGrupo');

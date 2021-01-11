@@ -10,18 +10,18 @@ class Servicio_Social_Estudiante extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "Servicio_Social_Estudiante";
+    protected $table = "Servicio_Estudiante";
     protected $primaryKey = "IdServicioSocial";
-    protected $fillable = ['activo', 'IdEmpresa', 'IdTrayectoria'];
+    protected $fillable = ['IdEmpresa', 'IdTrayectoria'];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
 
-    //Relacion Uno a Uno
     public function empresa()
     {
         return $this->hasOne(Empresa::class, 'IdEmpresa', 'IdEmpresa');
     }
+
     public function Trayectoria()
     {
         return $this->hasOne(Trayectoria::class, 'IdTrayectoria', 'IdTrayectoria');

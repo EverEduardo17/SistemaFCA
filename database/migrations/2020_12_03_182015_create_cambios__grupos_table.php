@@ -14,8 +14,8 @@ class CreateCambiosGruposTable extends Migration
      */
     public function up()
     {
-        Schema::create('cambio_grupo', function (Blueprint $table) {
-            $table->bigIncrements('IdCambiosGrupo');
+        Schema::create('Cambio_Grupo', function (Blueprint $table) {
+            $table->bigIncrements('IdCambioGrupo');
             
             /*Realaciones*/
             $table->unsignedBigInteger('IdGrupoOrigen')->nullable(false);
@@ -24,11 +24,11 @@ class CreateCambiosGruposTable extends Migration
             $table->unsignedBigInteger('IdGrupoDestino')->nullable(false);
             $table->foreign('IdGrupoDestino')->references('IdGrupo')->on('Grupo');
 
-            $table->unsignedBigInteger('IdEstudiante')->nullable(false);
-            $table->foreign('IdEstudiante')->references('IdEstudiante')->on('Estudiante');
+            $table->unsignedBigInteger('IdTrayectoria')->nullable(false);
+            $table->foreign('IdTrayectoria')->references('IdTrayectoria')->on('Trayectoria');
             
-            $table->unsignedBigInteger('IdPeriodo')->nullable(false);
-            $table->foreign('IdPeriodo')->references('IdPeriodo')->on('Periodo');
+            $table->unsignedBigInteger('IdPeriodoCambioGrupo')->nullable(false);
+            $table->foreign('IdPeriodoCambioGrupo')->references('IdPeriodo')->on('Periodo');
 
             $table->timestamp('CreatedAt')->useCurrent();
             $table->timestamp('UpdatedAt')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
@@ -48,6 +48,6 @@ class CreateCambiosGruposTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cambio_grupo');
+        Schema::dropIfExists('Cambio_Grupo');
     }
 }

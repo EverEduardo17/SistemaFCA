@@ -1,4 +1,4 @@
-<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="fechaModalLabel" aria-hidden="true">
+<div class="modal fade" id="bajaCohorte" tabindex="-1" role="dialog" aria-labelledby="fechaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-danger">
@@ -11,17 +11,21 @@
                 @csrf
                 <div class="modal-body">
                     @include('layouts.validaciones')
-                    <input type="hidden" name="IdTrayectoria" value="{{$estudiante->IdTrayectoria}}">
                     <div class="form-group">
-                        <label name="NombreDatosPersonales">Nombre(s):</label>
-                        <input name="NombreDatosPersonales" type="text" class="form-control @error('NombreDatosPersonales') is-invalid @enderror" value="{{$estudiante->datosPersonales->NombreDatosPersonales}} {{$estudiante->datosPersonales->ApellidoPaternoDatosPersonales}} {{$estudiante->datosPersonales->ApellidoMaternoDatosPersonales}}" placeholder="Ej. Javier" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label name="MatriculaEstudiante">Matricula:</label>
-                        <input name="MatriculaEstudiante" type="text" class="form-control @error('MatriculaEstudiante') is-invalid @enderror" value="{{$estudiante->estudiante->MatriculaEstudiante}}" placeholder="Ej. S17016281" maxlength="9" disabled>
-                    </div>
-                    <div class="form-group">
+                        <div class="form-row">
+                            <div class="col">
+                                <label name="Matricula">Matricula:</label>
+                                <input name="Matricula" type="text" class="form-control @error('Matricula') is-invalid @enderror" value="{{old('Matricula')}}" placeholder="Ej. S17016281">
+                            </div>
+                            <div class="col">
+                                <label name="IdGrupo">Grupo:</label>
+                                <select name="IdGrupo" class="form-control @error('IdGrupo') is-invalid @enderror">
+                                    @foreach ($grupos as $grupo)
+                                    <option value="{{ $grupo->IdGrupo }}"> {{ $grupo->NombreGrupo }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-row">
                             <div class="col">
                                 <label name="IdPeriodoBaja">Periodo de Baja:</label>

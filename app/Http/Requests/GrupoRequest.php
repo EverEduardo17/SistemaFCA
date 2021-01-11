@@ -14,13 +14,14 @@ class GrupoRequest extends FormRequest
     public function rules()
     {
         return [
-            'NombreGrupo'       => 'required | String',
-            'DescripcionGrupo'  => 'required | String',
-            'TotalEstudiantesGrupo'  => 'required | Integer | Min:39 | Max:51',
-            'IdProgramaEducativo'  => 'required',
-            'IdCohorte'  => 'required',
-            'IdPeriodoInicio'  => 'required',
-            'IdPeriodoActivo'  => 'required'
+            'NombreGrupo'           => 'required | String',
+            'DescripcionGrupo'      => '',
+            'IdGrupo'               => '',
+            'IdProgramaEducativo'   => 'required',
+            'IdCohorte'             => 'required',
+            'IdPeriodoInicio'       => 'required',
+            'IdPeriodoActivo'       => 'required',
+            'IdFacultad'            => 'required'
         ];
     }
 }

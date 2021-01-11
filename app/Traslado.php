@@ -13,24 +13,25 @@ class Traslado extends Model
     protected $table = "traslado";
     protected $primaryKey = "IdTraslado";
     protected $fillable = [
-        'FacultadDestino', 'CampusDestino', 'IdGrupo', 'IdTrayectoria',  'IdPeriodo'
+        'FacultadDestino', 'CampusDestino', 'IdGrupo',
+        'IdTrayectoria',  'IdPeriodo'
     ];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
-
-    //Relacion Uno a Uno
+    
     public function grupo()
     {
         return $this->hasOne(Grupo::class, 'IdGrupo', 'IdGrupo');
     }
+
     public function trayectoria()
     {
         return $this->hasOne(Trayectoria::class, 'IdTrayectoria', 'IdTrayectoria');
     }
+    
     public function periodo()
     {
         return $this->hasOne(Periodo::class, 'IdPeriodo', 'IdPeriodo');
     }
-    
 }

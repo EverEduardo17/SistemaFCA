@@ -14,7 +14,7 @@ class CreateEmpresaTable extends Migration
      */
     public function up()
     {
-        Schema::create('empresa', function (Blueprint $table) {
+        Schema::create('Empresa', function (Blueprint $table) {
             $table->bigIncrements('IdEmpresa');
             $table->string('NombreEmpresa', 150)->nullable(false)->unique();
             $table->string('DireccionEmpresa', 100)->nullable(false);
@@ -43,6 +43,6 @@ class CreateEmpresaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('empresa');
+        Schema::dropIfExists('Empresa');
     }
 }

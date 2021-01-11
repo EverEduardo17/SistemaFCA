@@ -14,9 +14,8 @@ class CreateServicioSocialEstudiantesTable extends Migration
      */
     public function up()
     {
-        Schema::create('servicio_social_estudiante', function (Blueprint $table) {
+        Schema::create('Servicio_Estudiante', function (Blueprint $table) {
             $table->bigIncrements('IdServicioSocial');
-            $table->boolean('activo')->nullable(false)->unique();
 
             /*Realaciones*/
             $table->unsignedBigInteger('IdEmpresa')->nullable(false);
@@ -43,6 +42,6 @@ class CreateServicioSocialEstudiantesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('servicio_social_estudiante');
+        Schema::dropIfExists('Servicio_Estudiante');
     }
 }

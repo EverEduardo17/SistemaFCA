@@ -14,7 +14,7 @@ class CreateProgramaEducativoTable extends Migration
      */
     public function up()
     {
-        Schema::create('programa_educativo', function (Blueprint $table) {
+        Schema::create('Programa_Educativo', function (Blueprint $table) {
             $table->bigIncrements('IdProgramaEducativo');
             
             /*Realaciones*/
@@ -42,6 +42,6 @@ class CreateProgramaEducativoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('programa_educativo');
+        Schema::dropIfExists('Programa_Educativo');
     }
 }

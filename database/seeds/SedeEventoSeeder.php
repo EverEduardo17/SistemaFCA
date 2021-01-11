@@ -14,15 +14,15 @@ class SedeEventoSeeder extends Seeder
         $registros = [
             [
                 "IdSedeEvento" => 1,
-                "NombreSedeEvento" => "Auditorio - Fca",
-                "DescripcionSedeEvento" => "Auditorio - Fca",
+                "NombreSedeEvento" => "Auditorio - FCA",
+                "DescripcionSedeEvento" => "Auditorio - FCA",
                 'CreatedBy' => 1,
                 'UpdatedBy' => 1,
             ],
             [
                 "IdSedeEvento" => 2,
-                "NombreSedeEvento" => "Salón 6 - Fca",
-                "DescripcionSedeEvento" => "Salón 6 - Fca",
+                "NombreSedeEvento" => "Salón 6 - FCA",
+                "DescripcionSedeEvento" => "Salón 6 - FCA",
                 'CreatedBy' => 1,
                 'UpdatedBy' => 1,
             ],

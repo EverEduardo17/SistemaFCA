@@ -1,16 +1,17 @@
-@extends('layouts.app')
-
-@section('content')
+@extends('layouts.plantilla')
+@section('breadcrumb')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
         <li class="breadcrumb-item active" aria-current="page">Gestión de Empresas</li>
     </ol>
 </nav>
+@endsection
+@section('content')
 <div class="card">
     <div class="card-header">
         <div class="row">
-            <h5 class="card-title col-8">Empresas Registradas</h5>
+            <h5 class="card-title col-8"><strong>Gestión de Empresas</strong></h5>
             <a class="btn btn-success col-4" href="{{ route('empresas.create') }}" role="button">Agregar Empresa</a>
         </div>
     </div>
@@ -20,27 +21,25 @@
                 <caption>Empresas registradas en el sistema.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Responsable</th>
-                        <th scope="col">Teléfono</th>
-                        <th scope="col">Tamaño</th>
-                        <th scope="col">Actividad</th>
-                        <th scope="col">Sector</th>
-                        <th scope="col">Acciones</th>
+                        <th scope="col" class="border-right">Nombre</th>
+                        <th scope="col" class="border-right">Responsable</th>
+                        <th scope="col" class="border-right">Teléfono</th>
+                        <th scope="col" class="border-right">Sector</th>
+                        <th scope="col" class="border-right">Actividad</th>
+                        <th scope="col" class="border-right">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($empresas as $empresa)
                     <tr>
-                        <th scope="row">{{ $empresa->NombreEmpresa }}</th>
-                        <td>{{ $empresa->ResponsableEmpresa }}</td>
-                        <td>{{ $empresa->TelefonoEmpresa }}</td>
-                        <td>{{ $empresa->ClasificacionEmpresa }}</td>
-                        <td>{{ $empresa->ActividadEmpresa }}</td>
-                        <td>{{ $empresa->TipoEmpresa }}</td>
+                        <th scope="row" class="border-right">{{ $empresa->NombreEmpresa }}</th>
+                        <td class="border-right">{{ $empresa->ResponsableEmpresa }}</td>
+                        <td class="border-right">{{ $empresa->TelefonoEmpresa }}</td>
+                        <td class="border-right">{{ $empresa->TipoEmpresa }}</td>
+                        <td class="border-right">{{ $empresa->ActividadEmpresa }}</td>
                         <td class="btn-group btn-group-sm px-3">
                             <a class="btn btn-outline-primary btn-sm" href="{{ route('empresas.show', $empresa) }}">Detalles</a>
-                            <a class="btn btn-primary btn-sm" href="{{ route('empresas.edit', $empresa) }}">Editar</a>
+                            <!-- <a class="btn btn-primary btn-sm" href="{{ route('empresas.edit', $empresa) }}">Editar</a> -->
                             <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $empresa->IdEmpresa }}">Eliminar</a>
                         </td>
                     </tr>

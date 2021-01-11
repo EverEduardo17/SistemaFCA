@@ -1,6 +1,5 @@
-@extends('layouts.app')
-
-@section('content')
+@extends('layouts.plantilla')
+@section('breadcrumb')
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
@@ -9,10 +8,12 @@
     <li class="breadcrumb-item active" aria-current="page">Editar Empresa</li>
   </ol>
 </nav>
+@endsection
+@section('content')
 <div class="card">
   <div class="card-header">
     <div class="row">
-      <h5 class="card-title col-8">Editar Empresa</h5>
+      <h5 class="card-title col-8"><strong>Editar Empresa</strong></h5>
       <a class="btn btn-outline-info col-4" href="{{ route('empresas.index') }}" role="button">Ver Empresas</a>
     </div>
   </div>
@@ -22,23 +23,23 @@
       @csrf @method('PATCH')
       @include('layouts.validaciones')
       <div class="form-group">
-        <label name="NombreEmpresa">Nombre de la Empresa:</label>
+        <label name="NombreEmpresa">Nombre de la empresa:</label>
         <input name="NombreEmpresa" type="text" class="form-control @error('NombreEmpresa') is-invalid @enderror" value="{{old('NombreEmpresa', $empresa->NombreEmpresa)}}" placeholder="Ej. Universidad Veracruzana: Coordinación de Proyectos de Desarrollo">
       </div>
       <div class="form-group">
-        <label name="DireccionEmpresa">Dirección de la Empresa:</label>
+        <label name="DireccionEmpresa">Dirección de la empresa:</label>
         <input name="DireccionEmpresa" type="text" class="form-control @error('DireccionEmpresa') is-invalid @enderror" value="{{old('DireccionEmpresa', $empresa->DireccionEmpresa)}}" placeholder="Ej. Av. Universidad Km 7.5">
       </div>
       <div class="form-group">
-        <label name="LocalidadEmpresa">Localidad de residencia de la Empresa:</label>
+        <label name="LocalidadEmpresa">Localidad de residencia de la empresa:</label>
         <input name="LocalidadEmpresa" type="text" class="form-control @error('LocalidadEmpresa') is-invalid @enderror" value="{{old('LocalidadEmpresa', $empresa->LocalidadEmpresa)}}" placeholder="Ej. Coatzacoalcos">
       </div>
       <div class="form-group">
-        <label name="TelefonoEmpresa">Teléfono de la Empresa:</label>
+        <label name="TelefonoEmpresa">Teléfono de la empresa:</label>
         <input name="TelefonoEmpresa" type="text" class="form-control @error('TelefonoEmpresa') is-invalid @enderror" value="{{old('TelefonoEmpresa', $empresa->TelefonoEmpresa)}}" placeholder="Ej. 9212115700 ext 55714" maxlength="25">
       </div>
       <div class="form-group">
-        <label name="ResponsableEmpresa">Responsable de la Empresa:</label>
+        <label name="ResponsableEmpresa">Responsable de la empresa:</label>
         <input name="ResponsableEmpresa" type="text" class="form-control @error('ResponsableEmpresa') is-invalid @enderror" value="{{old('ResponsableEmpresa', $empresa->ResponsableEmpresa)}}" placeholder="Ej. Javier Pino Herrera">
       </div>
       <div class="form-group">
@@ -70,11 +71,6 @@
       <br>
       <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
       <a href="{{ route('empresas.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
-    </form>
-    <hr>
-    <form method="POST" id="form-eliminar" action="{{ route('empresas.destroy', $empresa) }}">
-      @csrf @method('DELETE')
-      <a href="#" data-toggle="modal" data-target="#delete" class="btn btn-danger btn-block">Eliminar Permanentemente</a>
     </form>
   </div>
 </div>

@@ -14,7 +14,7 @@ class CreateBajasTable extends Migration
      */
     public function up()
     {
-        Schema::create('baja', function (Blueprint $table) {
+        Schema::create('Baja', function (Blueprint $table) {
             $table->bigIncrements('IdBaja');
 
             /*Realaciones*/
@@ -53,6 +53,6 @@ class CreateBajasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('baja');
+        Schema::dropIfExists('Baja');
     }
 }

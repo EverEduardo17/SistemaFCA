@@ -1,17 +1,18 @@
-@extends('layouts.app')
-
-@section('content')
+@extends('layouts.plantilla')
+@section('breadcrumb')
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('programaEducativo.index') }}">Gestión de PP.EE.</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('programaEducativo.index') }}">Gestión de Programas Educativos</a></li>
     <li class="breadcrumb-item active" aria-current="page">Editar Programa Educativo</li>
   </ol>
 </nav>
+@endsection
+@section('content')
 <div class="card">
   <div class="card-header">
     <div class="row">
-      <h5 class="card-title col-8">Editar Programa Educativo</h5>
+      <h5 class="card-title col-8"><strong>Editar Programa Educativo</strong></h5>
       <a class="btn btn-outline-info col-4" href="{{ route('programaEducativo.index') }}" role="button">Ver Programas Educativos</a>
     </div>
   </div>
@@ -30,20 +31,12 @@
       </div>
       <div class="form-group">
         <label name="IdFacultad">Facultad de procedencia:</label>
-        <select name="IdFacultad" class="form-control @error('IdFacultad') is-invalid @enderror">
-          @foreach ($facultadoes as $facultad)
-          <option value="{{ $facultad->IdFacultad }}" @if($facultad->IdFacultad == $programas->IdFacultad)selected @endif>{{ $facultad->NombreFacultad }}</option>
-          @endforeach
-        </select>
+        <input name="NombreFacultad" class="form-control @error('NombreFacultad') is-invalid @enderror" value="{{old('$programas->facultad->IdFacultad', $facultad[0]->NombreFacultad)}}" placeholder="Ej. Facultad de Contaduría y Administración" disabled>
+        <input type="hidden" name="IdFacultad" class="form-control @error('IdFacultad') is-invalid @enderror" value="{{$facultad[0]->IdFacultad}}">
       </div>
       <br>
       <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
       <a href="{{ route('programaEducativo.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
-    </form>
-    <hr>
-    <form method="POST" id="form-eliminar" action="{{ route('programaEducativo.destroy', $programas) }}">
-      @csrf @method('DELETE')
-      <a href="#" data-toggle="modal" data-target="#delete" class="btn btn-danger btn-block">Eliminar Permanentemente</a>
     </form>
   </div>
 </div>

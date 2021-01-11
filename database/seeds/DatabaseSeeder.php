@@ -31,5 +31,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ProgramaEducativoSeeder::class);
         $this->call(CohortesSeeder::class);
         $this->call(ModalidadSeeder::class);
+        $this->call(MotivoSeeder::class);
     }
 }

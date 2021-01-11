@@ -14,11 +14,10 @@ class CreateTrayectoriasTable extends Migration
      */
     public function up()
     {
-        Schema::create('trayectoria', function (Blueprint $table) {
+        Schema::create('Trayectoria', function (Blueprint $table) {
             $table->bigIncrements('IdTrayectoria');
             $table->boolean('EstudianteRegular')->nullable(false);
-            $table->boolean('EstudianteActivo')->nullable(false);
-            $table->string('TotalPeriodos', 3)->nullable();
+            $table->integer('TotalPeriodos')->nullable();
 
             /*Realaciones*/
             $table->unsignedBigInteger('IdGrupo')->nullable(false);
@@ -57,6 +56,6 @@ class CreateTrayectoriasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trayectoria');
+        Schema::dropIfExists('Trayectoria');
     }
 }
