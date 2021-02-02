@@ -18,7 +18,7 @@ class AcademicoAcademia extends Model
 
     //Relacion Uno a Mucho
     public function academico(){
-        return $this->hasOne(Academico::class, 'IdAcademico', 'IdAcademico');
+        return $this->hasOne(Academico::class, 'IdAcademico', 'IdAcademico')->with('usuario');
     }
 
     //Relacion Uno a Mucho

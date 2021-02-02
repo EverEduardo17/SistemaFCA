@@ -12,27 +12,27 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
-class AcademicoController extends Controller
-{
-    public function index()
-    {
-        Gate::authorize('havepermiso', 'tipoorganizador-listar');
+class AcademicoController extends Controller {
+    public function index() {
+        //Gate::authorize('havepermiso', 'tipoorganizador-listar');
+
         $academicos = Academico::with('usuario.datosPersonales')->get();
+
         return view(
             'academicos.index',
             ["academicos" => $academicos]
         );
     }
 
-    public function create()
-    {
-        Gate::authorize('havepermiso', 'tipoorganizador-crear');
+    public function create() {
+        //Gate::authorize('havepermiso', 'tipoorganizador-crear');
+
         return view('academicos.create');
     }
 
-    public function store(AcademicoRequest $request)
-    {
-        Gate::authorize('havepermiso', 'tipoorganizador-crear');
+    public function store(AcademicoRequest $request) {
+        //Gate::authorize('havepermiso', 'tipoorganizador-crear');
+
         $input = $request->validated();
         try{
             DB::beginTransaction();
@@ -75,25 +75,31 @@ class AcademicoController extends Controller
         return redirect()->route('academicos.index');
     }
 
-    public function show(Academico $academico)
-    {
-        Gate::authorize('havepermiso', 'tipoorganizador-leer');
+    public function show($idAcademico) {
+        //Gate::authorize('havepermiso', 'tipoorganizador-leer');
+
+        $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
+
         return view('academicos.show', [
             "academico" => $academico
         ]);
     }
 
-    public function edit(Academico $academico)
-    {
-        Gate::authorize('havepermiso', 'tipoorganizador-editar');
+    public function edit($idAcademico) {
+        //Gate::authorize('havepermiso', 'tipoorganizador-editar');
+
+        $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
+
         return view('academicos.edit', [
             "academico" => $academico
         ]);
     }
 
-    public function update(Request $request, Academico $academico)
-    {
+    public function update(Request $request, $idAcademico) {
         Gate::authorize('havepermiso', 'tipoorganizador-editar');
+
+        $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
+
         $request->validate([
             'NombreDatosPersonales' => 'required',
             'ApellidoPaternoDatosPersonales' => 'required',
@@ -103,6 +109,7 @@ class AcademicoController extends Controller
             'name' => 'unique:Usuario,name,'.$academico->usuario->IdUsuario.',IdUsuario',
             'email' => 'unique:Usuario,email,'.$academico->usuario->IdUsuario.',IdUsuario'
         ]);
+
         try {
             DB::beginTransaction();
                 DB::table('Usuario')->where('IdUsuario', $academico->IdUsuario)->update([
@@ -128,9 +135,11 @@ class AcademicoController extends Controller
         return redirect()->route('academicos.index');
     }
 
-    public function destroy(Academico $academico)
-    {
-        Gate::authorize('havepermiso', 'tipoorganizador-eliminar');
+    public function destroy($idAcademico) {
+        //Gate::authorize('havepermiso', 'tipoorganizador-eliminar');
+
+        $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
+
         //!! Checar bien, aún no funciona actualizado: creo que ya funciona :D
         try {
             $academico->delete();

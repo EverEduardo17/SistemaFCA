@@ -15,7 +15,7 @@ class AcademiaController extends Controller
     public function index() {
         Gate::authorize('havepermiso', 'academias-listar');
         return view('academias.index', [
-            'academias' => Academia::get()
+            'academias' => Academia::with('coordinador')->get()
         ]);
     }
 
@@ -23,7 +23,7 @@ class AcademiaController extends Controller
         Gate::authorize('havepermiso', 'academias-crear');
         return view('academias.create', [
             'academia' => new Academia,
-            'coordinadores' => Academico::get()
+            'coordinadores' => Academico::with('usuario')->get()
         ]);
     }
 
@@ -54,10 +54,13 @@ class AcademiaController extends Controller
         }
     }
 
-    public function show(Academia $academia) {
+    public function show($idAcademia) {
         Gate::authorize('havepermiso', 'academias-leer');
+
+        $academia = Academia::with('academico_academia', 'coordinador')->findOrFail($idAcademia);
+
         $data = AcademicoAcademia::select('IdAcademico')->where('IdAcademia', $academia->IdAcademia)->get()->toArray();
-        $academicosNot = Academico::whereNotIn('IdAcademico', $data)->get();
+        $academicosNot = Academico::whereNotIn('IdAcademico', $data)->with('usuario')->get();
 
         return view('academias.show', [
             'academia'      => $academia,
@@ -69,7 +72,7 @@ class AcademiaController extends Controller
         Gate::authorize('havepermiso', 'academias-editar');
         return view('academias.edit', [
             'academia' => $academia,
-            'coordinadores' => Academico::get()
+            'coordinadores' => Academico::with('usuario')->get()
         ]);
     }
 

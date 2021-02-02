@@ -9,7 +9,7 @@ trait UserTrait {
     }
 
     public function userRoles() {
-        return $this->belongsToMany('App\Role', 'Role_Usuario', 'IdUsuario', 'IdRole');
+        return $this->belongsToMany('App\Role', 'Role_Usuario', 'IdUsuario', 'IdRole')->with('permisos');
     }
 
 

@@ -19,12 +19,12 @@ class Academia extends Model
 
     //Relacion Muchos a Uno
     public function academico_academia(){
-        return $this->hasMany(AcademicoAcademia::class, 'IdAcademia', 'IdAcademia');
+        return $this->hasMany(AcademicoAcademia::class, 'IdAcademia', 'IdAcademia')->with('academico');
         //return $this->belongsToMany(Academico::class, 'academico_academia', 'IdAcademia', 'IdAcademia');
     }
     //Relacion Uno a Mucho
     public function coordinador(){
-        return $this->hasOne(Academico::class, 'IdAcademico', 'Coordinador');
+        return $this->hasOne(Academico::class, 'IdAcademico', 'Coordinador')->with('usuario');
     }
 
 

@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+DB::listen(function($query){
+    var_dump($query->sql);
+});
+
 Auth::loginUsingId(1001);
 
 //Route::get('/home', function () {
