@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Titulacion;
+use App\Models\Titulacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -48,7 +48,7 @@ class TitulacionController extends Controller
             'IdGrupo'               => 'required',
             'IdTrayectoria'         => 'required',
             'IdPeriodoTitulacion'   => 'required'
-            
+
         ]);
         try {
             Titulacion::create($input);

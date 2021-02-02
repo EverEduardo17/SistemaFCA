@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Cohorte;
-use App\DatosPersonales;
-use App\Estudiante;
-use App\Facultad;
-use App\Grupo;
-use App\Grupo_Estudiante;
+use App\Models\Cohorte;
+use App\Models\DatosPersonales;
+use App\Models\Estudiante;
+use App\Models\Facultad;
+use App\Models\Grupo;
+use App\Models\Grupo_Estudiante;
 use App\Http\Requests\EstudianteRequest;
-use App\Modalidad;
-use App\Motivo;
-use App\Motivos;
-use App\Periodo;
-use App\Practicas_Estudiante;
-use App\ProgramaEducativo;
-use App\Reprobado;
+use App\Models\Modalidad;
+use App\Models\Motivo;
+use App\Models\Motivos;
+use App\Models\Periodo;
+use App\Models\Practicas_Estudiante;
+use App\Models\ProgramaEducativo;
+use App\Models\Reprobado;
 
-use App\Servicio_Social_Estudiante;
-use App\Titulacion;
-use App\Traslado;
-use App\Trayectoria;
+use App\Models\Servicio_Social_Estudiante;
+use App\Models\Titulacion;
+use App\Models\Traslado;
+use App\Models\Trayectoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;

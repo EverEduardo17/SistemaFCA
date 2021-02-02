@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Organizador;
+use App\Models\Organizador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;

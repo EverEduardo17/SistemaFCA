@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FechaEventoRequest;
-use App\Evento;
-use App\Evento_Fecha_Sede;
-use App\FechaEvento;
+use App\Models\Evento;
+use App\Models\Evento_Fecha_Sede;
+use App\Models\FechaEvento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

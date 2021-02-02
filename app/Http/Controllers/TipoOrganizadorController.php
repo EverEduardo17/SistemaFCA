@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TipoOrganizadorRequest;
-use App\Organizador;
-use App\TipoOrganizador;
-use App\TipoOrganizadoro;
+use App\Models\Organizador;
+use App\Models\TipoOrganizador;
+use App\Models\TipoOrganizadoro;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;

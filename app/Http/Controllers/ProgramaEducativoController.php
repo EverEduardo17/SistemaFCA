@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Facultad;
-use App\Grupo;
+use App\Models\Facultad;
+use App\Models\Grupo;
 use App\Http\Requests\ProgramaEducativoRequest;
-use App\ProgramaEducativo;
+use App\Models\ProgramaEducativo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;

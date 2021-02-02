@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Evento;
+use App\Models\Evento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;

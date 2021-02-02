@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Baja;
+use App\Models\Baja;
 use App\Http\Requests\BajaRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Cohorte;
-use App\Facultad;
-use App\Grupo;
-use App\Grupo_Estudiante;
+use App\Models\Cohorte;
+use App\Models\Facultad;
+use App\Models\Grupo;
+use App\Models\Grupo_Estudiante;
 use App\Http\Requests\GrupoRequest;
-use App\Periodo;
-use App\ProgramaEducativo;
-use App\Trayectoria;
+use App\Models\Periodo;
+use App\Models\ProgramaEducativo;
+use App\Models\Trayectoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -53,7 +53,7 @@ class GrupoController extends Controller
             Session::flash('flash', [['type' => "danger", 'message' => "El grupo " . $request->NombreGrupo . " ya fue registrado en ese cohorte."]]);
             return redirect()->route('grupos.index');
         }
-        
+
         if ($request->IdProgramaEducativo == $programaLis) {
             $cohorteOcupado = DB::table('Grupo')->where([
                 ['IdProgramaEducativo', '=', $programaLis],

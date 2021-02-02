@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Documento;
+use App\Models\Documento;
 use Illuminate\Http\Request;
-use App\Evento;
+use App\Models\Evento;
 use App\Http\Requests\DocumentoRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;

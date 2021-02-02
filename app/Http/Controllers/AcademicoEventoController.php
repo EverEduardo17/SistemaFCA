@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Academico;
-use App\AcademicoEvento;
-use App\Evento;
+use App\Models\Academico;
+use App\Models\AcademicoEvento;
+use App\Models\Evento;
 use Illuminate\Http\Request;
 use App\Http\Requests\AcademicoEventoRequest;
 use Illuminate\Support\Facades\DB;

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Cohorte;
-use App\Grupo;
-use App\Modalidad;
-use App\Periodo;
-use App\ProgramaEducativo;
+use App\Models\Cohorte;
+use App\Models\Grupo;
+use App\Models\Modalidad;
+use App\Models\Periodo;
+use App\Models\ProgramaEducativo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

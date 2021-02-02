@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Evento_Fecha_Sede;
-use App\SedeEvento;
+use App\Models\Evento_Fecha_Sede;
+use App\Models\SedeEvento;
 use App\Http\Requests\SedeEventoRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;

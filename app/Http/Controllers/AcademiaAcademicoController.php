@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Academia;
-use App\Academico;
-use App\AcademicoAcademia;
-use App\Organizador;
+use App\Models\Academia;
+use App\Models\Academico;
+use App\Models\AcademicoAcademia;
+use App\Models\Organizador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

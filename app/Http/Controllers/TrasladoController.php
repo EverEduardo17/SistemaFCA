@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TrasladoRequest;
-use App\Traslado;
+use App\Models\Traslado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -42,7 +42,7 @@ class TrasladoController extends Controller
         $trasladoPeriodo = Traslado::where("IdTrayectoria", "=", $input['IdTrayectoria'])->where("IdPeriodo", "=", $input['IdPeriodo'])->count();
         if ($trasladoPeriodo > 0) {
             Session::flash('flash', [['type' => "danger", 'message' => "El estudiante ya cuenta con un traslado en el periodo seleccionado."]]);
-            return redirect()->back(); 
+            return redirect()->back();
         }
         try {
             Traslado::create($request->validated());

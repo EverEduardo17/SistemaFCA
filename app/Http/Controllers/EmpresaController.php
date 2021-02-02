@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Facultad;
+use App\Models\Facultad;
 use App\Http\Requests\ProgramaEducativoRequest;
-use App\Empresa;
+use App\Models\Empresa;
 use App\Http\Requests\EmpresaRequest;
-use App\Practicas_Estudiante;
-use App\Servicio_Social_Estudiante;
+use App\Models\Practicas_Estudiante;
+use App\Models\Servicio_Social_Estudiante;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;

@@ -3,13 +3,15 @@
 namespace App\Traits;
 
 
+use App\Models\Role;
+
 trait UserTrait {
     public function roles() {
-        return $this->belongsTo('App\Role', 'role_id', 'id');
+        return $this->belongsTo(Role::class, 'role_id', 'id');
     }
 
     public function userRoles() {
-        return $this->belongsToMany('App\Role', 'Role_Usuario', 'IdUsuario', 'IdRole')->with('permisos');
+        return $this->belongsToMany(Role::class, 'Role_Usuario', 'IdUsuario', 'IdRole')->with('permisos');
     }
 
 

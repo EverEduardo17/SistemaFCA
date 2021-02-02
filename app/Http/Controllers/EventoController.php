@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Academico;
-use App\AcademicoEvento;
+use App\Models\Academico;
+use App\Models\AcademicoEvento;
 use App\Http\Requests\EventoRequest;
-use App\Evento;
-use App\Evento_Fecha_Sede;
+use App\Models\Evento;
+use App\Models\Evento_Fecha_Sede;
 use App\Mail\EventoRegistrado;
-use App\Role;
-use App\SedeEvento;
-use App\Organizador;
-use App\TipoOrganizador;
+use App\Models\Role;
+use App\Models\SedeEvento;
+use App\Models\Organizador;
+use App\Models\TipoOrganizador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Extensions\MongoSessionStore;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;

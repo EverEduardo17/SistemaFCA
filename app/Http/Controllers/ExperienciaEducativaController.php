@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\ExperienciaEducativa;
+use App\Models\ExperienciaEducativa;
 use Illuminate\Http\Request;
 
 class ExperienciaEducativaController extends Controller

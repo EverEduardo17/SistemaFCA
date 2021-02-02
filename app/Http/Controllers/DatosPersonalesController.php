@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DatosPersonales;
+use App\Models\DatosPersonales;
 use Illuminate\Http\Request;
 
 class DatosPersonalesController extends Controller

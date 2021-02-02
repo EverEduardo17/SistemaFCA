@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Academico;
-use App\DatosPersonales;
-use App\Usuario;
+use App\Models\Academico;
+use App\Models\DatosPersonales;
+use App\Models\Usuario;
 use App\Http\Requests\AcademicoRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;

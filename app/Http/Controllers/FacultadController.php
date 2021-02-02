@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FacultadRequest;
-use App\Facultad;
+use App\Models\Facultad;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
