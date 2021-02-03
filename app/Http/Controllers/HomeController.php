@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $nombreCohorte = DB::table('cohorte')->orderBy('IdCohorte', 'desc')->value('NombreCohorte');
+        $nombreCohorte = DB::table('Cohorte')->orderBy('IdCohorte', 'desc')->value('NombreCohorte');
         $colores = ["#00A639", "#0D47A1"];
         $opciones = [
             [
@@ -73,17 +73,8 @@ class HomeController extends Controller
             ],
 
             [
-                "titulo" => "Programas Educativos",
-                "background" => $colores[0],
-                "enlace" => "programaEducativo",
-                "operaciones" => [
-                    ["titulo" => "Nuevo Programa Educativo", "enlace" => "create"],
-                    ["titulo" => "Gestión de Programas Educativos", "enlace" => ""],
-                ]
-            ],
-            [
                 "titulo" => "Empresas",
-                "background" => $colores[1],
+                "background" => $colores[0],
                 "enlace" => "empresas",
                 "operaciones" => [
                     ["titulo" => "Nueva Empresa", "enlace" => "create"],
@@ -92,16 +83,18 @@ class HomeController extends Controller
             ],
 
             [
-                "titulo" => "Estudiantes",
-                "background" => $colores[0],
-                "enlace" => "cohortes",
+                "titulo" => "Programas Educativos",
+                "background" => $colores[1],
+                "enlace" => "programaEducativo",
                 "operaciones" => [
-                    ["titulo" => "Gestión de Estudiantes", "enlace" => $nombreCohorte],
+                    ["titulo" => "Nuevo Programa Educativo", "enlace" => "create"],
+                    ["titulo" => "Gestión de Programas Educativos", "enlace" => ""],
                 ]
             ],
+
             [
                 "titulo" => "Grupos",
-                "background" => $colores[1],
+                "background" => $colores[0],
                 "enlace" => "grupos",
                 "operaciones" => [
                     ["titulo" => "Nuevo Grupo", "enlace" => "create"],
@@ -109,7 +102,17 @@ class HomeController extends Controller
                 ]
             ],
 
+            [
+                "titulo" => "Estudiantes",
+                "background" => $colores[1],
+                "enlace" => "cohortes",
+                "operaciones" => [
+                    ["titulo" => "Gestión de Estudiantes", "enlace" => $nombreCohorte],
+                ]
+            ],
+
         ];
+
 
         return view("home", ['opciones' => $opciones]);
     }

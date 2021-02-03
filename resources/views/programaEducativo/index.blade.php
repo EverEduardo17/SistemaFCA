@@ -32,7 +32,7 @@
                     <tr>
                         <th scope="row" class="border-right">{{ $programa->NombreProgramaEducativo }}</th>
                         <td class="border-right">{{ $programa->AcronimoProgramaEducativo }}</td>
-                        <td class="border-right">{{ $programa->Facultad->NombreFacultad }}</td>
+                        <td class="border-right">{{ $programa->facultad->NombreFacultad }}</td>
                         <td class="btn-group btn-group-sm px-3">
                             <a class="btn btn-primary btn-sm" href="{{ route('programaEducativo.edit', $programa) }}">Editar</a>
                             <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $programa->IdProgramaEducativo }}">Eliminar</a>

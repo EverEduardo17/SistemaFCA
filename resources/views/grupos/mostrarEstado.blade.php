@@ -1,37 +1,53 @@
-@extends('layouts.app')
+@extends('layouts.plantilla')
 
-@section('content')
+@section('breadcrumb')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('cohortes.show', "S200") }}">Gestión de Grupos</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('cohortes.show', $grupos[0]->cohorte->NombreCohorte) }}">Cohorte {{$grupos[0]->cohorte->NombreCohorte}}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{$grupos[0]->NombreGrupo}} - {{$grupos[0]->cohorte->NombreCohorte}}</li>
+        <li class="breadcrumb-item"><a href="{{ route('cohortes.mostrarCohorte') }}">Gestión de Estudiantes</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('cohortes.show', $grupos[0]->cohorte->NombreCohorte) }}">Cohorte
+                {{$grupos[0]->cohorte->NombreCohorte}}</a></li>
+        <li class="breadcrumb-item"><a
+                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}">{{ $grupos[0]->NombreGrupo }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Estado</li>
     </ol>
 </nav>
+@endsection
+@section('content')
 <div class="card">
     <div class="card-header">
         <div class="row">
-            <h5 class="card-title col-8">Cohorte: <strong>{{$grupos[0]->cohorte->NombreCohorte}}</strong> - Grupo: <strong>{{$grupos[0]->NombreGrupo}}</strong></h5>
-            <div class="dropdown show col-4">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown link
-                </a>
-
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </div>
+            <h4 class="card-title col-12 contenedor-botones texto-primario"><strong>
+                    {{$grupos[0]->NombreGrupo}}</strong></h4>
         </div>
 
     </div>
     <div class="card-body">
-        <h6 class="pb-3">Resumen</h6>
+        <h5 class="pt-0 mt-0 contenedor-botones text-muted">Cohorte {{$grupos[0]->cohorte->NombreCohorte}}</h5>
+        <h6 class="contenedor-botones text-muted">Estado</h6>
+        <div class="contenedor-botones mt-3">
+            <a class="btn btn-outline-info px-6 mb-3"
+                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                role="button">Ver Resumen</a>
+            <a class="btn btn-info px-6 mb-3 ml-2"
+                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                role="button">Ver Estado</a>
+            <a class="btn btn-outline-info px-6 mb-3 ml-2"
+                href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                role="button">Ver Egresados</a>
+            <a class="btn btn-outline-info px-6 mb-3 ml-2"
+                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                role="button">Ver Traslados</a>
+            <a class="btn btn-outline-info px-6 mb-3 ml-2"
+                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                role="button">Ver Bajas</a>
+        </div>
+
         <div class="table-responsive-xl">
             <table class="table table-striped table-hover table-bordered" id="table_sede">
-                <caption>Estudiantes registrados en el sistema para el grupo {{$grupos[0]->NombreGrupo}} del cohorte {{$grupos[0]->cohorte->NombreCohorte}}.</caption>
+                <caption>Estudiantes registrados en el sistema para el grupo {{$grupos[0]->NombreGrupo}} del cohorte
+                    {{$grupos[0]->cohorte->NombreCohorte}}.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
                         <th scope="col"></th>

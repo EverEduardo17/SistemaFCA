@@ -10,7 +10,7 @@ class Periodo extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "periodo";
+    protected $table = "Periodo";
     protected $primaryKey = "IdPeriodo";
     protected $fillable = ['NombrePeriodo', 'FechaInicioPeriodo', 'FechaFinPeriodo','ActualPeriodo'];
     const CREATED_AT = 'CreatedAt';

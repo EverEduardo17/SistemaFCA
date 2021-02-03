@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
-use App\ProgramaEducativo;
-use App\Cohorte;
-use App\Periodo;
+use App\Models\ProgramaEducativo;
+use App\Models\Cohorte;
+use App\Models\Periodo;
 
 class Grupo extends Model
 {

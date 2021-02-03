@@ -10,7 +10,7 @@ class Trayectoria extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "trayectoria";
+    protected $table = "Trayectoria";
     protected $primaryKey = "IdTrayectoria";
     protected $fillable = [
         'EstudianteRegular', 'EstudianteActivo', 'TotalPeriodos',

@@ -39,16 +39,16 @@
                     <a class="nav-link active" href="{{ route('home') }}"><em class="fas fa-home"></em> Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('programaEducativo.index')}}"><em class="fas fa-chalkboard"></em> Gestión de Programas Educativos</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="{{route('empresas.index')}}"><em class="fas fa-building"></em> Gestión de Empresas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('cohortes.mostrarCohorte')}}"><em class="fas fa-user"></em> Gestión de Estudiantes</a>
+                    <a class="nav-link" href="{{route('programaEducativo.index')}}"><em class="fas fa-chalkboard"></em> Gestión de Programas Educativos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{{route('grupos.index')}}"><em class="fas fa-users"></em> Gestión de Grupos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('cohortes.mostrarCohorte')}}"><em class="fas fa-user"></em> Gestión de Estudiantes</a>
                 </li>
             </ul>
             @yield('content')

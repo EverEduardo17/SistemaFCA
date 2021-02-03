@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-DB::listen(function($query){
-    var_dump($query->sql);
-});
+// DB::listen(function($query){
+//     var_dump($query->sql);
+// });
 
 Auth::loginUsingId(1001);
 
@@ -62,8 +62,11 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/cohortes', 'CohorteController@mostrarCohorte')->name('cohortes.mostrarCohorte');
-Route::get('/cohortes/{nombreCohorte}/{idGrupo}', 'GrupoController@mostrarGrupo')->name('cohortes.mostrarGrupo');
-Route::get('/cohortes/{nombreCohorte}/{idGrupo}/estado', 'GrupoController@mostrarEstado')->name('cohortes.mostrarEstado');
+Route::get('/cohortes/{nombreCohorte}/estudiantes/agregar', 'CohorteController@agregarEstudiante')->name('cohortes.agregarEstudiante');
+Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}', 'GrupoController@mostrarGrupo')->name('cohortes.mostrarGrupo');
+Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/estado', 'GrupoController@mostrarEstado')->name('cohortes.mostrarEstado');
+Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/egresados', 'GrupoController@mostrarEgresados')->name('cohortes.mostrarEgresados');
+Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/egresados/{nombrePeriodo}', 'GrupoController@mostrarEgresadosPeriodo')->name('cohortes.mostrarEgresados.periodo');
 
 Route::get('grupos/{idGrupo}/estudiantes', 'EstudianteController@show')->name('estudiantesGrupo');
 Route::get('grupos/{idGrupo}/estudiantes/crear', 'EstudianteController@agregarEstudiante')->name('agregarEstudiante');

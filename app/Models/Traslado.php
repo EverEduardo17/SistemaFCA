@@ -10,7 +10,7 @@ class Traslado extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "traslado";
+    protected $table = "Traslado";
     protected $primaryKey = "IdTraslado";
     protected $fillable = [
         'FacultadDestino', 'CampusDestino', 'IdGrupo',

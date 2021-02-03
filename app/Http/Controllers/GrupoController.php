@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GrupoRequest;
 use App\Models\Cohorte;
 use App\Models\Facultad;
 use App\Models\Grupo;
 use App\Models\Grupo_Estudiante;
-use App\Http\Requests\GrupoRequest;
+use App\Models\Modalidad;
 use App\Models\Periodo;
 use App\Models\ProgramaEducativo;
+use App\Models\Titulacion;
 use App\Models\Trayectoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -173,9 +175,31 @@ class GrupoController extends Controller
         return [$hombre, $mujer];
     }
 
-
-    public function mostrarGrupo($nombreCohorte, int $idGrupo)
+    private function getPeriodos($estudiantes)
     {
+        $periodos = Periodo::get();
+        $cantidades = [$periodos->count()];
+        $contador = 0;
+        $titulacion = "";
+        foreach ($periodos as $periodo) {
+            foreach ($estudiantes as $estudiante) {
+                $titulacion = Titulacion::where('IdTrayectoria', '=', $estudiante->IdTrayectoria)->get()->last();
+                if ($periodo->IdPeriodo == $titulacion->IdPeriodoEgreso) {
+                    $cantidades[$contador] = $cantidades[$contador] + 1;
+                }
+            }
+            $contador++;
+        }
+        // dd($cantidades[$contador]);
+        dd($cantidades);
+        return $cantidades;
+    }
+
+
+    public function mostrarGrupo($nombreCohorte, $nombreGrupo)
+    {
+        $idCohorte = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
+        $idGrupo = Grupo::where('NombreGrupo', '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
         $estudiantes = DB::table('Grupo_Estudiante')
             ->where('Estado', '=', 'Activo')
             ->where('TipoTraslado', '=', null)
@@ -252,8 +276,10 @@ class GrupoController extends Controller
         ]);
     }
 
-    public function mostrarEstado($nombreCohorte, int $idGrupo)
+    public function mostrarEstado($nombreCohorte, $nombreGrupo)
     {
+        $idCohorte = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
+        $idGrupo = Grupo::where("NombreGrupo", '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
         $estudiantes = DB::table('Grupo_Estudiante')
             ->where('Estado', '=', 'Activo')
             ->where('IdGrupo', '=', $idGrupo)
@@ -298,6 +324,32 @@ class GrupoController extends Controller
             'totalBajas' => $totalBajas,
         ]);
     }
+
+    public function mostrarEgresados($nombreCohorte, $nombreGrupo)
+    {
+        $idCohorte      = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
+        $idGrupo        = Grupo::where("NombreGrupo", '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
+        $estudiantes    = DB::table('Grupo_Estudiante')
+            ->where('Estado', '=', 'Egresado')
+            ->where('IdGrupo', '=', $idGrupo)
+            ->get();
+        $resultados     = $this->getCantidades($estudiantes);
+        $activoHombre   = $resultados[0];
+        $activoMujer    = $resultados[1];
+        $totalActivos   = $activoHombre + $activoMujer;
+        // $cantidadesPeriodos = $this->getPeriodos($estudiantes);
+
+        return view('grupos.mostrarEgresados', [
+            'grupos'            => Grupo::where("IdGrupo", "=", $idGrupo)->get(),
+            'hombre'            => $activoHombre,
+            'mujer'             => $activoMujer,
+            'modalidades'       => Modalidad::where('TipoModalidad', '=', 'Titulación')->get(),
+            'periodos'          => Periodo::get(),
+            'totalEgresados'    => $totalActivos,
+            // 'egresadosPeriodo' => $cantidadesPeriodos
+        ]);
+    }
+
 
     public function contarEstudiantes($idGrupo)
     {

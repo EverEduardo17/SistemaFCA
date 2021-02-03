@@ -13,7 +13,7 @@
 <div class="card">
   <div class="card-header">
     <div class="row">
-      <h5 class="card-title col-8"><strong>Editar Grupo</strong></h5>
+      <h5 class="card-title col-8"><strong>Editar al Grupo: "{{ $grupos->NombreGrupo }}" del cohorte "{{$grupos->cohorte->NombreCohorte}}"</strong></h5>
       <a class="btn btn-outline-info col-4" href="{{ route('grupos.index') }}" role="button">Ver Grupos</a>
     </div>
   </div>

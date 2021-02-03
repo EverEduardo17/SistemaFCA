@@ -1,13 +1,15 @@
-@extends('layouts.app')
-
-@section('content')
+@extends('layouts.plantilla')
+@section('breadcrumb')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('cohortes.show', $cohorte[0]->NombreCohorte) }}">Gestión de Estudiantes</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('cohortes.mostrarCohorte') }}">Gestión de Estudiantes</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('cohortes.show', $cohorte->NombreCohorte) }}">Cohorte {{ $cohorte->NombreCohorte }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">Agregar Estudiante</li>
     </ol>
 </nav>
+@endsection
+@section('content')
 <div class="card">
     <div class="card-header">
         <div class="row">
@@ -34,8 +36,8 @@
                 <div class="form-row">
                     <div class="col">
                         <label name="IdCohorte">Cohorte de pertenencia:</label>
-                        <input name="NombreCohorte" type="text" class="form-control @error('NombreCohorte') is-invalid @enderror" value="{{$cohorte[0]->NombreCohorte}}" placeholder="Ej. S170" disabled></input>
-                        <input name="IdCohorte" type="hidden" class="form-control @error('IdCohorte') is-invalid @enderror" value="{{$cohorte[0]->IdCohorte}}"></input>
+                        <input name="NombreCohorte" type="text" class="form-control @error('NombreCohorte') is-invalid @enderror" value="{{$cohorte->NombreCohorte}}" placeholder="Ej. S170" disabled>
+                        <input name="IdCohorte" type="hidden" class="form-control @error('IdCohorte') is-invalid @enderror" value="{{$cohorte->IdCohorte}}">
                     </div>
                     <div class="col">
                         <label name="MatriculaEstudiante">Matrícula:</label>
@@ -87,7 +89,7 @@
 
             <br>
             <button type="submit" class="btn btn-primary btn-block">Agregar Estudiante</button>
-            <a href="{{ route('cohortes.show', $cohorte[0]->IdCohorte) }}" class="btn btn-secondary btn-block">Cancelar</a>
+            <a href="{{ route('cohortes.show', $cohorte->NombreCohorte) }}" class="btn btn-secondary btn-block">Cancelar</a>
 
         </form>
     </div>

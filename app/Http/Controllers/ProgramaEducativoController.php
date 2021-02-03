@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Facultad;
 use App\Models\Grupo;
-use App\Http\Requests\ProgramaEducativoRequest;
 use App\Models\ProgramaEducativo;
+use App\Http\Requests\ProgramaEducativoRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;

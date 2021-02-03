@@ -10,7 +10,7 @@ class Motivo extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "motivo";
+    protected $table = "Motivo";
     protected $primaryKey = "IdMotivo";
     protected $fillable = ['NombreMotivo', 'DescripcionMotivo'];
     const CREATED_AT = 'CreatedAt';

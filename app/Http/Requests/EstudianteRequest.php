@@ -18,7 +18,7 @@ class EstudianteRequest extends FormRequest
             'ApellidoPaternoDatosPersonales'    => 'required | String',
             'ApellidoMaternoDatosPersonales'    => 'required | String',
             'IdCohorte'                         => 'required | numeric',
-            'MatriculaEstudiante'               => 'required | String | unique:estudiante| max:9' ,
+            'MatriculaEstudiante'               => 'required | String | unique:Estudiante| max:9' ,
             'IdProgramaEducativo'               => 'required | numeric',
             'IdGrupo'                           => 'required | numeric',
             'IdModalidad'                       => 'required | numeric',

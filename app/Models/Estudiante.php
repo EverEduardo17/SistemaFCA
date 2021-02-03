@@ -10,7 +10,7 @@ class Estudiante extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "estudiante";
+    protected $table = "Estudiante";
     protected $primaryKey = "IdEstudiante";
     protected $fillable = ['MatriculaEstudiante','IdUsuario'];
     const CREATED_AT = 'CreatedAt';

@@ -85,7 +85,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">Agregar Estudiante</button>
-            <button type="button" class="btn btn-secondary btn-block">Cerrar</button>
+            <a href="{{ route('estudiantesGrupo', $grupo->IdGrupo) }}" class="btn btn-secondary btn-block ">Cancelar</a>
 
         </form>
     </div>

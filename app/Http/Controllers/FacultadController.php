@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FacultadRequest;
 use App\Models\Facultad;
+use App\Http\Requests\FacultadRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
