@@ -37,4 +37,9 @@ class Evento extends Model
         return $this->hasMany(AcademicoEvento::class, 'IdEvento', 'IdEvento');
     }
 
+    //Relacion Uno a Uno
+    public function eventoFechaSede(){
+        return $this->hasMany(Evento_Fecha_Sede::class, 'IdEvento', 'IdEvento');
+    }
+
 }

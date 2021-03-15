@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EditarEventoRequest;
 use App\Models\Academico;
 use App\Models\AcademicoEvento;
 use App\Http\Requests\EventoRequest;
@@ -19,12 +20,13 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
-class EventoController extends FcaController {
+class EventoController extends Controller {
     private $user;
     private $idUsuario;
 
     public function __construct() {
         $this->user = Auth::user();
+        $this->idUsuario = Auth::id();
     }
 
     public function index() {
@@ -59,6 +61,7 @@ class EventoController extends FcaController {
 
     public function create() {
         Gate::authorize('havepermiso', 'eventos-crear');
+
         return view('eventos.create', [
             "sedes" => SedeEvento::all()
         ]);
@@ -66,132 +69,100 @@ class EventoController extends FcaController {
 
     public function store(EventoRequest $request) {
         Gate::authorize('havepermiso', 'eventos-crear');
+
         $input = $request->validated();
 
-        /* Obtener fechas */
-        $fechaInicio = explode( '/', $input['fechaInicio'] );
-        $horaInicio  = explode( ' ', $input['horaInicio'] );
-        $PM          = strcmp ( 'PM', mb_strtoupper( $horaInicio[1] ) ) == 0;
-        $horaInicio  = explode( ':', $horaInicio[0] );
-        if( $PM ){
-            $horaInicio[0] += 12;
-        }
+        $fechaInicio    = formatearDateTime($input['fechaInicio'], $input['horaInicio']);
+        $fechaFin       = formatearDateTime($input['fechaInicio'], $input['horaFin']);
 
-        $fechaFin = $fechaInicio;
-        $horaFin  = explode(' ', $input['horaFin'] );
-        $PM       = strcmp ( 'PM', mb_strtoupper($horaFin[1]) ) == 0;
-        $horaFin  = explode(':', $horaFin[0] );
-        if( $PM ){
-            $horaFin[0] += 12;
-        }
-
-        //!!!! Validar que la fechaFin debe ser mayor a la fechaInicio
-
-        $fechaInicioFormat = sprintf("%d-%d-%d %d:%d",
-            $fechaInicio[2], $fechaInicio[1], $fechaInicio[0], $horaInicio[0], $horaInicio[1] );
-        $fechaFinFormat = sprintf("%d-%d-%d %d:%d",
-            $fechaFin[2], $fechaFin[1], $fechaFin[0], $horaFin[0], $horaFin[1] );
-        $hrInicio = sprintf("%d%d",
-            $horaInicio[0], $horaInicio[1] );
-        $hrFin = sprintf("%d%d",
-            $horaFin[0], $horaFin[1] );
-        if($hrInicio >= $hrFin){
+        if( formatearTime($input['horaInicio']) >= formatearTime($input['horaFin']) ) {
             Session::flash('flash', [ ['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."] ]);
+
             return redirect()->route('eventos.create')
                 ->withInput();
         }
 
         //!!! Validar que las fechas no chocan con otro evento
-        //dd($this->user);
-        DB::beginTransaction();
+        try {
+            DB::beginTransaction();
+                $idEvento = DB::table('Evento')->insertGetId([
+                    'NombreEvento'      => $input['nombre'],
+                    'DescripcionEvento' => $input['descripcion'],
+                    'CreatedBy'         => $this->idUsuario,
+                    'UpdatedBy'         => $this->idUsuario,
+                ]);
 
-            $idEvento = DB::table('Evento')->insertGetId([
-                'NombreEvento'      => $input['nombre'],
-                'DescripcionEvento' => $input['descripcion'],
-                'CreatedBy'         => $this->idUsuario,
-                'UpdatedBy'         => $this->idUsuario,
-            ]);
+                DB::table('Organizador')->insert([
+                    'IdEvento'           => $idEvento,
+                    'IdAcademico'        => $this->user->academico->IdAcademico,
+                    'IdTipoOrganizador'  => 1,
+                    'CreatedBy'          => $this->idUsuario,
+                    'UpdatedBy'          => $this->idUsuario,
+                ]);
 
-            $idOrganizador = DB::table('Organizador')->insertGetId([
-                'IdEvento'           => $idEvento,
-                'IdAcademico'        => $this->user->academico->IdAcademico,
-                'IdTipoOrganizador'  => 1,
-                'CreatedBy'          => $this->idUsuario,
-                'UpdatedBy'          => $this->idUsuario,
-            ]);
+                $idFechaEvento = DB::table('FechaEvento')->insertGetId([
+                    'InicioFechaEvento' => $fechaInicio,
+                    'FinFechaEvento'    => $fechaFin,
+                    'CreatedBy'         => $this->idUsuario,
+                    'UpdatedBy'         => $this->idUsuario,
+                ]);
 
-            $idFechaEvento = DB::table('FechaEvento')->insertGetId([
-                'InicioFechaEvento' => $fechaInicioFormat,
-                'FinFechaEvento'    => $fechaFinFormat,
-                'CreatedBy'         => $this->idUsuario,
-                'UpdatedBy'         => $this->idUsuario,
-            ]);
-
-            $idSedeEvento = DB::table('Evento_Fecha_Sede')->insertGetId([
-                'IdEvento'      => $idEvento,
-                'IdFechaEvento' => $idFechaEvento,
-                'IdSedeEvento'  => intval( $input['sede'] ),
-                'CreatedBy'     => $this->idUsuario,
-                'UpdatedBy'     => $this->idUsuario,
-            ]);
-
-            if( $idOrganizador == null || $idOrganizador == 0 || $idSedeEvento == null || $idSedeEvento == 0 ){
-                DB::rollBack();
-                Session::flash('flash', [ ['type' => "danger", 'message' => "Error al registrar el evento."] ]);
-                return redirect()->route('eventos.index');
-            }
-
-        DB::commit();
+                B::table('Evento_Fecha_Sede')->insert([
+                    'IdEvento'      => $idEvento,
+                    'IdFechaEvento' => $idFechaEvento,
+                    'IdSedeEvento'  => intval( $input['sede'] ),
+                    'CreatedBy'     => $this->idUsuario,
+                    'UpdatedBy'     => $this->idUsuario,
+                ]);
+            DB::commit();
+        }catch (\Throwable $e) {
+            DB::rollBack();
+            Session::flash('flash', [ ['type' => "danger", 'message' => "Error al registrar el evento."] ]);
+            return redirect()->route('eventos.index');
+        }
 
         //EnviarCorreos
         $users = Role::where('IdRole', 3)->first();
         foreach ($users->usuarios as $user){
-            //dd($user->email);
             Mail::to($user->email)->send(new EventoRegistrado($input));
         }
 
-        //$validator = Validator::make($input, $rules, $messages);
         Session::flash('flash', [ ['type' => "success", 'message' => "Evento registrado correctamente"] ]);
         return redirect()->route('eventos.show', $idEvento);
     }
 
-    public function show(Evento $evento) {
+    public function show($idEvento) {
         Gate::authorize('havepermiso', 'eventos-leer');
-        $evento_fecha_sede_s = Evento_Fecha_Sede::where('IdEvento', $evento->IdEvento)
-            ->with(['fechaEvento', 'sedeEvento'])
-            ->get()
-            ->sortBy('fechaEvento.InicioFechaEvento');
+
+        $evento = Evento::where('IdEvento', $idEvento)->with(['eventoFechaSede', 'organizador', 'documento', 'eventoFechaSede.fechaEvento', 'eventoFechaSede.sedeEvento'])->firstOrFail();
+
         $data = Organizador::select('IdAcademico')->where('IdEvento', $evento->IdEvento)->get()->toArray();
         $acemicosNot = Academico::whereNotIn('IdAcademico', $data)->get();
-
         $data = AcademicoEvento::select('IdAcademico')->where('IdEvento', $evento->IdEvento)->get()->toArray();
         $participanteNot = Academico::whereNotIn('IdAcademico', $data)->get();
+
         return view('eventos.show', [
-            "evento"=>$evento,
-            "evento_fecha_sede_s"=>$evento_fecha_sede_s,
-            "sedes" =>SedeEvento::all(),
-            "tipoorganizadores" => TipoOrganizador::get(),
-            "academicos"    => $acemicosNot,
-            'participantes'  => $participanteNot
+            "evento"                => $evento,
+            "evento_fecha_sede_s"   => $evento->eventoFechaSede,
+            "sedes"                 => SedeEvento::all(),
+            "tipoorganizadores"     => TipoOrganizador::get(),
+            "academicos"            => $acemicosNot,
+            'participantes'         => $participanteNot
         ]);
-    }
-    public function edit(Evento $evento) {
-        //
     }
 
-    public function update(Request $request, $evento) {
+    public function update(EditarEventoRequest $request, $evento) {
         Gate::authorize('havepermiso', 'eventos-editar');
+
         $evento = Evento::findOrFail( $evento );
-        $request->validate([
-            'NombreEvento'       => 'required | String',
-            'DescripcionEvento'  => 'required | String',
-        ]);
+        $request->validated();
 
         try {
             DB::beginTransaction();
                 DB::table('Evento')->where('IdEvento', $evento->IdEvento)->update([
                     'NombreEvento'       => $request->NombreEvento,
                     'DescripcionEvento'  => $request->DescripcionEvento,
+                    'UpdatedBy'         => $this->idUsuario,
                 ]);
             DB::commit();
         } catch (\Throwable $th) {

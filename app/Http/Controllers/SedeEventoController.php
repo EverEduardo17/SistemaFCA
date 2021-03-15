@@ -9,27 +9,26 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
-class SedeEventoController extends Controller
-{
-    public function index()
-    {
+class SedeEventoController extends Controller {
+    public function index() {
         Gate::authorize('havepermiso', 'sedes-listar');
+
         return view('sedeEvento.index', [
             'sedes' => SedeEvento::get()
         ]);
     }
 
-    public function create()
-    {
+    public function create() {
         Gate::authorize('havepermiso', 'sedes-crear');
+
         return view('sedeEvento.create', [
             'sedes' => new SedeEvento()
         ]);
     }
 
-    public function store(SedeEventoRequest $request)
-    {
+    public function store(SedeEventoRequest $request) {
         Gate::authorize('havepermiso', 'sedes-crear');
+
         if (DB::table('SedeEvento')->where([['NombreSedeEvento', $request->NombreSedeEvento]])->doesntExist()) {
             // dd($request->validated());
             SedeEvento::create($request->validated());
@@ -41,14 +40,13 @@ class SedeEventoController extends Controller
         }
     }
 
-    public function show(SedeEvento $sedeEvento)
-    {
+    public function show(SedeEvento $sedeEvento) {
         //
     }
 
-    public function edit(SedeEvento $sedeEvento)
-    {
+    public function edit(SedeEvento $sedeEvento) {
         Gate::authorize('havepermiso', 'sedes-editar');
+
         return view('sedeEvento.edit', [
             'sede' => $sedeEvento
         ]);
@@ -56,6 +54,7 @@ class SedeEventoController extends Controller
 
     public function update(SedeEventoRequest $request, SedeEvento $sedeEvento) {
         Gate::authorize('havepermiso', 'sedes-editar');
+
         try {
             $sedeEvento->update( $request->validated() );
             Session::flash('flash', [['type' => "success", 'message' => "Sede editada correctamente."]]);
@@ -69,6 +68,7 @@ class SedeEventoController extends Controller
 
     public function destroy(SedeEvento $sedeEvento) {
         Gate::authorize('havepermiso', 'sedes-eliminar');
+
         try {
             $sedeOcupada = Evento_Fecha_Sede::where('IdSedeEvento', $sedeEvento->IdSedeEvento)->count();
             if($sedeOcupada > 0){

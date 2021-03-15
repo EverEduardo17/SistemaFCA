@@ -29,7 +29,7 @@ class EventoRequest extends FormRequest
             'fechaInicio' => 'required|date_format:d/m/Y',
             'horaInicio' => 'required|date_format:g:i A',
             'horaFin' => 'required|date_format:g:i A',
-            'sede' => 'required|exists:App\SedeEvento,IdSedeEvento'
+            'sede' => 'required|exists:App\Models\SedeEvento,IdSedeEvento'
         ];
     }
 }
