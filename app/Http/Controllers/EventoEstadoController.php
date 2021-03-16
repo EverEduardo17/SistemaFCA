@@ -81,16 +81,38 @@ class EventoEstadoController extends Controller
         try {
             DB::beginTransaction();
                 DB::table('Evento')->where('IdEvento', $evento->IdEvento)->update([
-                    'EstadoEvento'      => "RECHAZADO",
+                    'EstadoEvento'      => "NO APROBADO",
                     'Motivo'            => $validated['Motivo']
                 ]);
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
-            Session::flash('flash', [ ['type' => "danger", 'message' => "Error al rechazar del Evento."] ]);
+            Session::flash('flash', [ ['type' => "danger", 'message' => "Error al NO APROBAR del Evento."] ]);
             return redirect()->route('eventos.show', $evento->IdEvento);
         }
-        Session::flash('flash', [ ['type' => "success", 'message' => "Evento rechazado con éxito."] ]);
+        Session::flash('flash', [ ['type' => "success", 'message' => "Evento NO APROBADO con éxito."] ]);
+        return redirect()->route('eventos.show', $evento->IdEvento);
+    }
+
+    public function cancelar(Request $request, Evento $evento)
+    {
+        Gate::authorize('havepermiso', 'eventoestado-aprobar');
+        $validated = $request->validate([
+            'Motivo' => 'required|max:255',
+        ]);
+        try {
+            DB::beginTransaction();
+            DB::table('Evento')->where('IdEvento', $evento->IdEvento)->update([
+                'EstadoEvento'      => "NO APROBADO",
+                'Motivo'            => $validated['Motivo']
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Session::flash('flash', [ ['type' => "danger", 'message' => "Error al Cancelar del Evento."] ]);
+            return redirect()->route('eventos.show', $evento->IdEvento);
+        }
+        Session::flash('flash', [ ['type' => "success", 'message' => "Evento cancelado con éxito."] ]);
         return redirect()->route('eventos.show', $evento->IdEvento);
     }
 }

@@ -26,7 +26,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-danger">
-                <h5 class="modal-title text-white" id="fechaModalLabel">Rechazar evento</h5>
+                <h5 class="modal-title text-white" id="fechaModalLabel">NO aprobar evento</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -34,7 +34,7 @@
             <form method="POST" action="{{ route('eventos.estado.rechazo', $evento) }}" autocomplete="off">
                 @csrf
                 <div class="modal-body">
-                    <p>Usted está por rechazar evento.</p>
+                    <p>Usted está por NO aprovar el evento.</p>
                     @include('layouts.validaciones')
                     <div class="form-group">
                         <label name="Motivo">Motivo del rechazo:</label>
@@ -71,6 +71,34 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary" form="form-editar-estado">Solicitar</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cancelarEvento" tabindex="-1" role="dialog" aria-labelledby="fechaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title text-white" id="fechaModalLabel">Cancelar evento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{{ route('eventos.estado.cancelar', $evento) }}" autocomplete="off">
+                @csrf
+                <div class="modal-body">
+                    <p>Usted está por cancelar este evento.</p>
+                    @include('layouts.validaciones')
+                    <div class="form-group">
+                        <label name="Motivo">Motivo de la cancelación:</label>
+                        <textarea name="Motivo" class="form-control @error('Motivo') is-invalid @enderror"rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-danger">Cancelar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

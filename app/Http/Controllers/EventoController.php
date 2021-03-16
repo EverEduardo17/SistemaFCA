@@ -34,7 +34,7 @@ class EventoController extends Controller {
         $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
             ->get()
-            ->where('fechaEvento.InicioFechaEvento','>=', (new \DateTime())->format("Y-m-d") )
+            //->where('fechaEvento.InicioFechaEvento','>=', (new \DateTime())->format("Y-m-d") )
             ->sortBy('fechaEvento.InicioFechaEvento');
 
         return view('eventos.index', [
@@ -88,6 +88,7 @@ class EventoController extends Controller {
                 $idEvento = DB::table('Evento')->insertGetId([
                     'NombreEvento'      => $input['nombre'],
                     'DescripcionEvento' => $input['descripcion'],
+                    'EstadoEvento'       => 'POR APROBAR',
                     'CreatedBy'         => $this->idUsuario,
                     'UpdatedBy'         => $this->idUsuario,
                 ]);
@@ -107,7 +108,7 @@ class EventoController extends Controller {
                     'UpdatedBy'         => $this->idUsuario,
                 ]);
 
-                B::table('Evento_Fecha_Sede')->insert([
+                DB::table('Evento_Fecha_Sede')->insert([
                     'IdEvento'      => $idEvento,
                     'IdFechaEvento' => $idFechaEvento,
                     'IdSedeEvento'  => intval( $input['sede'] ),

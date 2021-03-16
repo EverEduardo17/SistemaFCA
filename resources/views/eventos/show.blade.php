@@ -17,13 +17,18 @@
                     @can('havepermiso', 'eventos-editar')
                         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#editEvento">Editar</a>
                     @endcan
+                    @if($evento->EstadoEvento == "APROBADO")
+                        @can('havepermiso', 'eventoestado-aprobar')
+                            <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#cancelarEvento">Cancelar Evento</a>
+                        @endcan
+                    @endif
                     @if($evento->EstadoEvento == "POR APROBAR")
                         @can('havepermiso', 'eventoestado-aprobar')
                             <a href="#" class="btn btn-info" data-toggle="modal" data-target="#aprobarEvento">Aprobar</a>
-                            <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#rechazarEvento">Rechazar</a>
+                            <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#rechazarEvento">NO aprobar</a>
                         @endcan
                     @endif
-                    @if($evento->EstadoEvento == "RECHAZADO")
+                    @if($evento->EstadoEvento == "NO APROBADO")
                         @can('havepermiso', 'eventoestado-editar')
                             <a href="#" class="btn btn-info" data-toggle="modal" data-target="#solicitarEvento">Solicitar aprobación</a>
                         @endcan
@@ -56,7 +61,7 @@
                     <input type="text" class="form-control"value="{{ $evento->EstadoEvento }}" disabled>
                 </div>
             </div>
-            @if($evento->EstadoEvento == "RECHAZADO")
+            @if($evento->EstadoEvento == "NO APROBADO")
                 <div class="form-group row">
                     <label for="estado" class="col-md-3 col-form-label text-md-right">Motivo de rechazo</label>
                     <div class="col-md-8">
@@ -395,6 +400,11 @@
         })
 
         $('#rechazarEvento').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+        })
+
+        $('#cancelarEvento').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var modal = $(this);
         })

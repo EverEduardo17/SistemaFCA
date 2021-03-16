@@ -4,7 +4,7 @@
         $hora  = explode( ' ', $time );
         $PM          = strcmp ( 'PM', mb_strtoupper( $hora[1] ) ) == 0;
         $hora  = explode( ':', $hora[0] );
-        if( $PM ){
+        if( $PM && $hora[0] != 12){
             $hora[0] += 12;
         }
         $fecha = sprintf("%d-%d-%d %d:%d", $fecha[2], $fecha[1], $fecha[0], $hora[0], $hora[1] );
@@ -16,7 +16,7 @@
         $hora  = explode( ' ', $time );
         $PM          = strcmp ( 'PM', mb_strtoupper( $hora[1] ) ) == 0;
         $hora  = explode( ':', $hora[0] );
-        if( $PM ){
+        if( $PM && $hora[0] != 12){
             $hora[0] += 12;
         }
 

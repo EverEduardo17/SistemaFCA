@@ -18,6 +18,7 @@ class CreateEventoTable extends Migration
 
             $table->string('NombreEvento', 100)->nullable(false);
             $table->string('DescripcionEvento', 150)->nullable(false);
+            $table->string('Motivo')->nullable();
             $table->string('EstadoEvento', 150)->nullable(false)->default("POR APROBAR");
 
             $table->timestamp('CreatedAt')->useCurrent();

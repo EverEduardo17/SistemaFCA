@@ -45,12 +45,16 @@ class FechaEventoController extends Controller {
         //!!!! Validar que la fechaFin debe ser mayor a la fechaInicio
         if( formatearTime($input['horaInicio']) >= formatearTime($input['horaFin']) ) {
             Session::flash('flash', [ ['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."] ]);
-            return redirect()->route('eventos.create')->withInput();
+            return redirect()->back()->withInput();
         }
 
         //!!! Validar que las fechas no chocan con otro evento
         try {
             DB::beginTransaction();
+                DB::table('Evento')->where('IdEvento', $idEvento)->update([
+                    'EstadoEvento'       => 'POR APROBAR',
+                ]);
+
                 $idFechaEvento = DB::table('FechaEvento')->insertGetId([
                     'InicioFechaEvento' => $fechaInicio,
                     'FinFechaEvento'    => $fechaFin,
@@ -113,6 +117,10 @@ class FechaEventoController extends Controller {
         try{
 
             DB::beginTransaction();
+
+                DB::table('Evento')->where('IdEvento', $fechaEvento->evento->IdEvento)->update([
+                    'EstadoEvento'       => 'POR APROBAR',
+                ]);
 
             $fechaEvento = FechaEvento::find( $input['fechaEvento'] );
             $fechaEvento->InicioFechaEvento = $fechaInicio;

@@ -37,6 +37,7 @@ Route::resource('traslado', 'TrasladoController');
 Route::resource('sedeEventos', 'SedeEventoController');
 Route::resource('eventos.estado', 'EventoEstadoController')->shallow();
 Route::post('eventos/{evento}/estado/rechado', 'EventoEstadoController@rechazo')->name('eventos.estado.rechazo');
+Route::post('eventos/{evento}/estado/cancelar', 'EventoEstadoController@cancelar')->name('eventos.estado.cancelar');
 
 
 Route::resource('tipoorganizador', 'TipoOrganizadorController')->except('show', 'edit');
