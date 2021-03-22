@@ -15,7 +15,7 @@ class Titulacion extends Model
     protected $fillable = [
         'PromedioEgreso', 'FechaInicioTramite', 'FechaFinTramite',
         'EstadoTitulacion', 'ResultadoTitulacion', 'IdModalidad',
-        'IdGrupo', 'IdTrayectoria', 'IdPeriodoTitulacion', 'MencionHonorifica'
+        'IdGrupo', 'IdTrayectoria', 'IdPeriodoEgreso', 'MencionHonorifica'
     ];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
@@ -38,6 +38,6 @@ class Titulacion extends Model
 
     public function periodo()
     {
-        return $this->hasOne(Periodo::class, 'IdPeriodo', 'IdPeriodoTitulacion');
+        return $this->hasOne(Periodo::class, 'IdPeriodo', 'IdPeriodoEgreso');
     }
 }

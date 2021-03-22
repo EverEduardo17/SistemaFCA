@@ -46,8 +46,8 @@ class TitulacionController extends Controller
             'ResultadoTitulacion'   => '',
             'IdModalidad'           => 'required',
             'IdGrupo'               => 'required',
+            'IdPeriodoEgreso'       => 'required',
             'IdTrayectoria'         => 'required',
-            'IdPeriodoTitulacion'   => 'required'
 
         ]);
         try {

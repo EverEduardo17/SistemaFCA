@@ -45,7 +45,7 @@ class GrupoController extends Controller
 
     public function store(GrupoRequest $request)
     {
-        $existe = DB::table('Grupo')->where([
+        $existe      = DB::table('Grupo')->where([
             ['NombreGrupo', '=', $request->NombreGrupo],
             ['IdProgramaEducativo', '=', $request->IdProgramaEducativo],
             ['IdCohorte', '=', $request->IdCohorte]
@@ -177,21 +177,30 @@ class GrupoController extends Controller
 
     private function getPeriodos($estudiantes)
     {
-        $periodos = Periodo::get();
+        $periodos   = Periodo::get();
         $cantidades = [$periodos->count()];
-        $contador = 0;
+        $contador   = 0;
         $titulacion = "";
         foreach ($periodos as $periodo) {
             foreach ($estudiantes as $estudiante) {
                 $titulacion = Titulacion::where('IdTrayectoria', '=', $estudiante->IdTrayectoria)->get()->last();
                 if ($periodo->IdPeriodo == $titulacion->IdPeriodoEgreso) {
-                    $cantidades[$contador] = $cantidades[$contador] + 1;
+                    $idDatosPersonales = DB::table('Trayectoria')
+                        ->where('IdTrayectoria', '=', $estudiante->IdTrayectoria)
+                        ->value('IdDatosPersonales');
+                    $genero = DB::table('DatosPersonales')
+                        ->where('IdDatosPersonales', '=', $idDatosPersonales)
+                        ->value('genero');
+                    if ($genero == "Hombre") {
+                        $cantidades[$contador] = [$cantidades[$contador] + 1];
+                    } else if ($genero == "Mujer") {
+                        $cantidades[$contador] = $cantidades[$contador] + 1;
+                    }
                 }
             }
             $contador++;
         }
-        // dd($cantidades[$contador]);
-        dd($cantidades);
+        // dd($cantidades);
         return $cantidades;
     }
 
@@ -237,10 +246,10 @@ class GrupoController extends Controller
             ->where('IdGrupo', '=', $idGrupo)
             ->get();
 
-        $resultados = $this->getCantidades($estudiantes);
+        $resultados     = $this->getCantidades($estudiantes);
         $salienteHombre = $resultados[0];
-        $salienteMujer = $resultados[1];
-        $totalSalientes  = $salienteHombre + $salienteMujer;
+        $salienteMujer  = $resultados[1];
+        $totalSalientes = $salienteHombre + $salienteMujer;
 
         $estudiantes = DB::table('Grupo_Estudiante')
             ->where('Estado', '=', 'Baja')
@@ -254,24 +263,24 @@ class GrupoController extends Controller
 
         return view('grupos.mostrarGrupo', [
             'grupos' => Grupo::where("IdGrupo", "=", $idGrupo)->get(),
-            'activoHombre' => $activoHombre,
-            'activoMujer' => $activoMujer,
-            'totalActivos' => $totalActivos,
+            'activoHombre'  => $activoHombre,
+            'activoMujer'   => $activoMujer,
+            'totalActivos'  => $totalActivos,
 
             'egresadoHombre' => $egresadoHombre,
-            'egresadoMujer' => $egresadoMujer,
+            'egresadoMujer'  => $egresadoMujer,
             'totalEgresados' => $totalEgresados,
 
             'entranteHombre' => $entranteHombre,
-            'entranteMujer' => $entranteMujer,
+            'entranteMujer'  => $entranteMujer,
             'totalEntrantes' => $totalEntrantes,
 
             'salienteHombre' => $salienteHombre,
-            'salienteMujer' => $salienteMujer,
+            'salienteMujer'  => $salienteMujer,
             'totalSalientes' => $totalSalientes,
 
             'bajaHombre' => $bajaHombre,
-            'bajaMujer' => $bajaMujer,
+            'bajaMujer'  => $bajaMujer,
             'totalBajas' => $totalBajas,
         ]);
     }
@@ -333,11 +342,12 @@ class GrupoController extends Controller
             ->where('Estado', '=', 'Egresado')
             ->where('IdGrupo', '=', $idGrupo)
             ->get();
+        dd($estudiantes);
         $resultados     = $this->getCantidades($estudiantes);
         $activoHombre   = $resultados[0];
         $activoMujer    = $resultados[1];
         $totalActivos   = $activoHombre + $activoMujer;
-        // $cantidadesPeriodos = $this->getPeriodos($estudiantes);
+        $cantidadesPeriodos = $this->getPeriodos($estudiantes);
 
         return view('grupos.mostrarEgresados', [
             'grupos'            => Grupo::where("IdGrupo", "=", $idGrupo)->get(),
@@ -346,7 +356,7 @@ class GrupoController extends Controller
             'modalidades'       => Modalidad::where('TipoModalidad', '=', 'Titulación')->get(),
             'periodos'          => Periodo::get(),
             'totalEgresados'    => $totalActivos,
-            // 'egresadosPeriodo' => $cantidadesPeriodos
+            'egresadosPeriodo' => $cantidadesPeriodos
         ]);
     }
 

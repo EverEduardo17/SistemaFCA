@@ -19,15 +19,15 @@
                         <input name="PromedioEgreso" type="text" class="form-control @error('PromedioEgreso') is-invalid @enderror" value="{{old('PromedioEgreso')}}" placeholder="Ej. 10.0">
                     </div>
                     <div class="form-group">
-                        <label name="IdPeriodoTitulacion">Periodo de egreso:</label>
-                        <select name="IdPeriodoTitulacion" class="form-control @error('IdPeriodoTitulacion') is-invalid @enderror">
+                        <label name="IdPeriodoEgreso">Periodo de egreso:</label>
+                        <select name="IdPeriodoEgreso" class="form-control @error('IdPeriodoEgreso') is-invalid @enderror">
                             @foreach ($periodos as $periodo)
                             <option value="{{ $periodo->IdPeriodo }}"> {{ $periodo->NombrePeriodo }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label name="IdModalidad">Modalidad de titulación:</label>
+                        <label name="IdModalidad">Modalidad de acreditación de Experiencia Recepcional:</label>
                         <select name="IdModalidad" class="form-control @error('IdModalidad') is-invalid @enderror">
                             @foreach ($modalidades as $modalidad)
                             @if($modalidad->TipoModalidad == "Titulación")
@@ -64,11 +64,11 @@
                                 </div>
                             </div>
                             <div class="form-group mt-3">
-                                <label>¿Obtiene mención honorífica?:</label>
+                                <label>¿Obtiene mención honorífica?</label>
                                 <br>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="MencionHonorifica" id="inlineRadio1" value="1">
-                                    <label class="form-check-label" for="inlineRadio1">Si</label>
+                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="MencionHonorifica" id="inlineRadio2" value="0">

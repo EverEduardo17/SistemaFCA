@@ -11,23 +11,27 @@
                 @csrf
                 <div class="modal-body">
                     @include('layouts.validaciones')
+                    <input type="hidden" name="IdFacultad" value={{ $idFCA }}>
                     <div class="form-group">
                         <label name="NombreGrupo">Nombre del Grupo:</label>
-                        <input name="NombreGrupo" type="text" class="form-control @error('NombreGrupo') is-invalid @enderror" value="{{old('NombreGrupo')}}" placeholder="Ej. LIS 701">
+                        <input name="NombreGrupo" type="text"
+                            class="form-control @error('NombreGrupo') is-invalid @enderror"
+                            value="{{old('NombreGrupo')}}" placeholder="Ej. LIS 701">
                     </div>
                     <div class="form-group">
                         <label name="DescripcionGrupo">Descripción del Grupo:</label>
-                        <textarea name="DescripcionGrupo" type="text" class="form-control @error('DescripcionGrupo') is-invalid @enderror" value="{{old('DescripcionGrupo')}}" placeholder="Ej. Grupo de LIS en 7mo semestre." rows="2">{{old('DescripcionGrupo')}}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label name="TotalEstudiantesGrupo">Capacidad de Estudiantes:</label>
-                        <input name="TotalEstudiantesGrupo" type="number" class="form-control @error('TotalEstudiantesGrupo') is-invalid @enderror" step="1" value="40" @if($errors->any()) value={{old('TotalEstudiantesGrupo')}} @endif>
+                        <textarea name="DescripcionGrupo" type="text"
+                            class="form-control @error('DescripcionGrupo') is-invalid @enderror"
+                            value="{{old('DescripcionGrupo')}}" placeholder="Ej. Grupo de LIS en 7mo semestre."
+                            rows="2">{{old('DescripcionGrupo')}}</textarea>
                     </div>
                     <div class="form-group">
                         <label name="IdProgramaEducativo">Programa de pertenencia:</label>
-                        <select name="IdProgramaEducativo" class="form-control @error('IdProgramaEducativo') is-invalid @enderror">
+                        <select name="IdProgramaEducativo"
+                            class="form-control @error('IdProgramaEducativo') is-invalid @enderror">
                             @foreach ($programas as $programa)
-                            <option value="{{ $programa->IdProgramaEducativo }}">{{ $programa->NombreProgramaEducativo }}</option>
+                            <option value="{{ $programa->IdProgramaEducativo }}">
+                                {{ $programa->NombreProgramaEducativo }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -43,7 +47,8 @@
                         <div class="form-row">
                             <div class="col">
                                 <label name="IdPeriodoInicio">Periodo de inicio:</label>
-                                <select name="IdPeriodoInicio" class="form-control @error('IdPeriodoInicio') is-invalid @enderror">
+                                <select name="IdPeriodoInicio"
+                                    class="form-control @error('IdPeriodoInicio') is-invalid @enderror">
                                     @foreach ($periodos as $periodo)
                                     <option value="{{$periodo->IdPeriodo }}">{{ $periodo->NombrePeriodo }}</option>
                                     @endforeach
@@ -51,7 +56,8 @@
                             </div>
                             <div class="col">
                                 <label name="IdPeriodoActivo">Último periodo activo:</label>
-                                <select name="IdPeriodoActivo" class="form-control @error('IdPeriodoActivo') is-invalid @enderror">
+                                <select name="IdPeriodoActivo"
+                                    class="form-control @error('IdPeriodoActivo') is-invalid @enderror">
                                     @foreach ($periodos as $periodo)
                                     <option value="{{ $periodo->IdPeriodo }}">{{ $periodo->NombrePeriodo }}</option>
                                     @endforeach

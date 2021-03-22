@@ -85,28 +85,27 @@
                 </thead>
                 <tbody>
                     @foreach($periodos as $periodo)
-
-                    @if(!empty($egresadosPeriodo))
-                    <tr>
-                        <th scope="row" class="border-right"><a
-                                href="{{route('cohortes.mostrarEgresados.periodo',[$grupos[0]->cohorte->NombreCohorte , $grupos[0]->IdGrupo , $periodo->IdPeriodo])}}">{{$periodo->NombrePeriodo}}</a>
-                        </th>
-                        <td class="border-right">{{$egresadosPeriodo[$loop->index][0]}}</td>
-                        <td class="border-right">{{$egresadosPeriodo[$loop->index][1]}}</td>
-                        <td class="border-right">
-                            <strong>{{$egresadosPeriodo[$loop->index][0] + $egresadosPeriodo[$loop->index][1]}}</strong>
-                        </td>
-                    </tr>
-                    @else
-                    <tr>
-                        <th scope="row" class="border-right"><a
-                                href="{{route('cohortes.mostrarEgresados.periodo',[$grupos[0]->cohorte->NombreCohorte , $grupos[0]->IdGrupo , $periodo->IdPeriodo])}}">{{$periodo->NombrePeriodo}}</a>
-                        </th>
-                        <td class="border-right">0</td>
-                        <td class="border-right">0</td>
-                        <td class="border-right"><strong>0</strong></td>
-                    </tr>
-                    @endif
+                        @if(!empty($egresadosPeriodo))
+                        <tr>
+                            <th scope="row" class="border-right"><a
+                                    href="{{route('cohortes.mostrarEgresados.periodo',[$grupos[0]->cohorte->NombreCohorte , $grupos[0]->IdGrupo , $periodo->IdPeriodo])}}">{{$periodo->NombrePeriodo}}</a>
+                            </th>
+                            <td class="border-right">{{$egresadosPeriodo[$loop->index][0]}}</td>
+                            <td class="border-right">{{$egresadosPeriodo[$loop->index][1]}}</td>
+                            <td class="border-right">
+                                <strong>{{$egresadosPeriodo[$loop->index][0] + $egresadosPeriodo[$loop->index][1]}}</strong>
+                            </td>
+                        </tr>
+                        @else
+                        <tr>
+                            <th scope="row" class="border-right"><a
+                                    href="{{route('cohortes.mostrarEgresados.periodo',[$grupos[0]->cohorte->NombreCohorte , $grupos[0]->IdGrupo , $periodo->IdPeriodo])}}">{{$periodo->NombrePeriodo}}</a>
+                            </th>
+                            <td class="border-right">0</td>
+                            <td class="border-right">0</td>
+                            <td class="border-right"><strong>0</strong></td>
+                        </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>

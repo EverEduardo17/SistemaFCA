@@ -12,6 +12,7 @@ class Evento_Fecha_Sede extends Model
 
     protected $table = "Evento_Fecha_Sede";
     protected $primaryKey = "Id_Evento_Fecha_Sede";
+    protected $fillable = ['Id_Evento_Fecha_Sede','IdEvento','IdFechaEvento','IdSedeEvento'];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';

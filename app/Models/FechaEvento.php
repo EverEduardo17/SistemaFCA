@@ -10,8 +10,9 @@ class FechaEvento extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "FechaEvento";
-    protected $primaryKey = "IdFechaEvento";
+    protected $table        = "FechaEvento";
+    protected $primaryKey   = "IdFechaEvento";
+    protected $fillable     =  ['IdFechaEvento','InicioFechaEvento','FinFechaEvento'];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
