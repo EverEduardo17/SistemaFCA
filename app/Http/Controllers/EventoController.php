@@ -204,18 +204,16 @@ class EventoController extends Controller
         $fechaFinOcupada    = FechaEvento::whereBetween('FinFechaEvento', array($fechaInicio, $fechaFin))->count();
         if ($fechaInicioOcupada > 0 || $fechaFinOcupada > 0) {
             $fechaEvento    = FechaEvento::whereBetween('InicioFechaEvento', array($fechaInicio, $fechaFin))->orderBy('IdFechaEvento', 'desc')->first();
-            if ($fechaEvento != null) {
-                if ($sedeEvento == $fechaEvento->evento_fecha_sede->sedeEvento->IdSedeEvento) {
-                    return $fechaEvento->evento_fecha_sede->evento;
-                }
+            // dd($fechaEvento);
+            if ($fechaEvento != null && $sedeEvento == $fechaEvento->evento_fecha_sede->sedeEvento->IdSedeEvento) {
+                return $fechaEvento->evento_fecha_sede->evento;
             } else {
                 $fechaEvento = FechaEvento::whereBetween('FinFechaEvento', array($fechaInicio, $fechaFin))->orderBy('IdFechaEvento', 'desc')->first();
-                if ($fechaEvento != null) {
-                    if ($sedeEvento == $fechaEvento->evento_fecha_sede->sedeEvento->IdSedeEvento) {
-                        return $fechaEvento->evento_fecha_sede->evento;
-                    }
+                if ($fechaEvento != null && $sedeEvento == $fechaEvento->evento_fecha_sede->sedeEvento->IdSedeEvento) {
+                    return $fechaEvento->evento_fecha_sede->evento;
                 }
             }
+            return false;
         } else {
             return false;
         }
