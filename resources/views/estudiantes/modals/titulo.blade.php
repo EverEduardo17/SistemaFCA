@@ -67,12 +67,12 @@
                                 <label>¿Obtiene mención honorífica?</label>
                                 <br>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="MencionHonorifica" id="inlineRadio1" value="1">
-                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                    <input class="form-check-input" type="radio" name="MencionHonorifica" id="inlineRadio3" value="1">
+                                    <label class="form-check-label" for="inlineRadio3">Sí</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="MencionHonorifica" id="inlineRadio2" value="0">
-                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                    <input class="form-check-input" type="radio" name="MencionHonorifica" id="inlineRadio4" value="0">
+                                    <label class="form-check-label" for="inlineRadio4">No</label>
                                 </div>
                             </div>
                         </div>

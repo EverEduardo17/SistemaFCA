@@ -41,9 +41,10 @@
                             <td class="border-right">{{$estudiantes->contarEstudiantes($grupo->IdGrupo)[0]}}</td>
                             <td class="border-right"><strong>{{$estudiantes->contarEstudiantes($grupo->IdGrupo)[0] + $estudiantes->contarEstudiantes($grupo->IdGrupo)[1]}}</strong></td>
                         <td class="border-right">{{ $grupo->periodoActivo->NombrePeriodo }}</td>
-                        <td class="btn-group btn-group-sm px-3">
-                            <a class="btn btn-outline-primary btn-sm" href="{{ route('grupos.show', $grupo) }}">Detalles</a>
-                            <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#delete" data-id="{{ $grupo->IdGrupo }}">Eliminar</a>
+                        <td class="btn-group btn-group-sm">
+                            <a class="btn btn-sm btn-outline-primary" href="{{ route('grupos.show', $grupo) }}">Detalles</a>
+                            <a class="btn btn-sm btn-outline-info mx-2" href="{{ route('estudiantesGrupo', $grupo->IdGrupo) }}">Estudiantes</a>
+                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-id="{{ $grupo->IdGrupo }}">Eliminar</a>
                         </td>
                     </tr>
                     @endforeach

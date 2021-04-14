@@ -24,12 +24,12 @@ class TrasladoRequest extends FormRequest
     public function rules()
     {
         return [
-            'FacultadDestino'   => 'required',
-            'CampusDestino'      => 'required',
+            'FacultadDestino'   => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
+            'CampusDestino'     => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
             'IdGrupo'           => 'required',
             'IdTrayectoria'     => 'required',
             'IdPeriodo'         => 'required',
-            'TipoTraslado'         => 'required',
+            'TipoTraslado'      => 'required',
         ];
     }
 }

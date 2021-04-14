@@ -15,7 +15,7 @@
   <div class="card-header">
     <div class="row align-center">
       <h5 class="card-title col-8"><strong>Detalles del estudiante: "{{$trayectoria->estudiante->MatriculaEstudiante}}"</strong></h5>
-      <a class="btn btn-outline-info col-4" href="{{ route('estudiantesGrupo', $trayectoria->grupo->IdGrupo) }}" role="button">Ver Estudiantes</a>
+      <a class="btn btn-secondary col-4" href="{{ route('estudiantesGrupo', $trayectoria->grupo->IdGrupo) }}" role="button">Ver Estudiantes</a>
     </div>
   </div>
 
@@ -42,7 +42,7 @@
           <div class="card-body">
             <div class="form-group">
               <label name="Nombre">Nombre:</label>
-              <input name="Nombre" type="text" class="form-control @error('Nombre') is-invalid @enderror" value="{{$trayectoria->datosPersonales->NombreDatosPersonales}} {{$trayectoria->datosPersonales->ApellidoPaternoDatosPersonales}} {{$trayectoria->datosPersonales->ApellidoMaternoDatosPersonales}}" placeholder="Ej. Javier Pino Herrera" disabled>
+              <input name="Nombre" type="text" class="form-control @error('Nombre') is-invalid @enderror" value="{{$trayectoria->datosPersonales->ApellidoPaternoDatosPersonales}} {{$trayectoria->datosPersonales->ApellidoMaternoDatosPersonales}} {{$trayectoria->datosPersonales->NombreDatosPersonales}}" placeholder="Ej. Javier Pino Herrera" disabled>
             </div>
             <div class="form-group">
               <div class="form-row">

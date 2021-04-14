@@ -24,21 +24,23 @@ class ProgramaEducativoController extends Controller
     {
         return view('programaEducativo.create', [
             'programas' => new ProgramaEducativo(),
-            'facultad' => Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->get()
+            'facultad'  => Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->get()
         ]);
     }
 
     public function store(ProgramaEducativoRequest $request)
     {
         $request->validate([
-            'NombreProgramaEducativo' => 'unique:Programa_Educativo,NombreProgramaEducativo'
+            'NombreProgramaEducativo' => 'unique:Programa_Educativo,NombreProgramaEducativo',
+            'AcronimoProgramaEducativo' => 'unique:Programa_Educativo,AcronimoProgramaEducativo'
         ]);
         try {
             ProgramaEducativo::create($request->validated());
-            Session::flash('flash', [['type' => "success", 'message' => "Programa Educativo creado correctamente."]]);
+
+            Session::flash('flash', [['type' => "success", 'message' => "Programa Educativo registrado correctamente."]]);
             return redirect()->route('programaEducativo.index');
         } catch (\Throwable $throwable) {
-            Session::flash('flash', [['type' => "danger", 'message' => "El Programa Educativo NO pudo ser creado correctamente."]]);
+            Session::flash('flash', [['type' => "danger", 'message' => "El Programa Educativo NO pudo ser registrado."]]);
             return redirect()->route('programaEducativo.create');
         }
     }
@@ -47,18 +49,19 @@ class ProgramaEducativoController extends Controller
     {
         return view('programaEducativo.edit', [
             'programas' => $programaEducativo,
-            'facultad' => Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->get()
+            'facultad'  => Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->get()
         ]);
     }
 
     public function update(ProgramaEducativoRequest $request, ProgramaEducativo $programaEducativo)
     {
         $request->validate([
-            'NombreProgramaEducativo' => 'unique:Programa_Educativo,NombreProgramaEducativo,' . $programaEducativo->IdProgramaEducativo . ',IdProgramaEducativo',
-            'AcronimoProgramaEducativo' => 'unique:Programa_Educativo,NombreProgramaEducativo,' . $programaEducativo->IdProgramaEducativo . ',IdProgramaEducativo'
+            'NombreProgramaEducativo'   => 'unique:Programa_Educativo,NombreProgramaEducativo,' . $programaEducativo->IdProgramaEducativo . ',IdProgramaEducativo',
+            'AcronimoProgramaEducativo' => 'unique:Programa_Educativo,AcronimoProgramaEducativo,' . $programaEducativo->IdProgramaEducativo . ',IdProgramaEducativo'
         ]);
         try {
             $programaEducativo->update($request->validated());
+
             Session::flash('flash', [['type' => "success", 'message' => "Programa Educativo actualizado correctamente."]]);
             return redirect()->route('programaEducativo.index');
         } catch (\Throwable $throwable) {
@@ -72,7 +75,7 @@ class ProgramaEducativoController extends Controller
         try {
             $ocupado = Grupo::where('IdProgramaEducativo', $programaEducativo->IdProgramaEducativo)->count();
             if ($ocupado > 0) {
-                Session::flash('flash', [['type' => "danger", 'message' => "El Programa Educativo " . $programaEducativo->AcronimoProgramaEducativo . " ya fue ocupado, no puede ser eliminado."]]);
+                Session::flash('flash', [['type' => "danger", 'message' => "El Programa Educativo '" . $programaEducativo->AcronimoProgramaEducativo . "' ya se encuentra en uso, no puede ser eliminado."]]);
                 return redirect()->route('programaEducativo.index');
             } else {
                 $programaEducativo->forceDelete();
@@ -80,7 +83,7 @@ class ProgramaEducativoController extends Controller
                 return redirect()->route('programaEducativo.index');
             }
         } catch (\Throwable $throwable) {
-            Session::flash('flash', [['type' => "danger", 'message' => "El Programa Educativo NO pudo ser eliminado correctamente."]]);
+            Session::flash('flash', [['type' => "danger", 'message' => "El Programa Educativo NO pudo ser eliminado."]]);
             return redirect()->route('programaEducativo.index');
         }
     }

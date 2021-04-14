@@ -17,11 +17,11 @@ class CreateGruposTable extends Migration
         Schema::create('Grupo', function (Blueprint $table) {
             $table->bigIncrements('IdGrupo');
             $table->string('NombreGrupo', 100)->nullable(false);
-            $table->string('DescripcionGrupo', 150)->nullable();
+            $table->string('DescripcionGrupo', 150)->nullable()->default("Sin descripción");
 
             /*Realaciones*/
             $table->unsignedBigInteger('IdProgramaEducativo')->nullable(false);
-            $table->foreign('IdProgramaEducativo')->references('IdProgramaEducativo')->on('Programa_educativo');
+            $table->foreign('IdProgramaEducativo')->references('IdProgramaEducativo')->on('Programa_Educativo');
 
             $table->unsignedBigInteger('IdCohorte')->nullable(false);
             $table->foreign('IdCohorte')->references('IdCohorte')->on('Cohorte');

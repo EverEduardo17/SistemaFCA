@@ -35,15 +35,21 @@
                 href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
                 role="button">Ver Estado</a>
             <a class="btn btn-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
                 role="button">Ver Egresados</a>
             <a class="btn btn-outline-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarTraslados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
                 role="button">Ver Traslados</a>
             <a class="btn btn-outline-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarReprobados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                role="button">Ver Reprobados</a>
+            <a class="btn btn-outline-info px-6 mb-3 ml-2"
+                href="{{ route('cohortes.mostrarBajas', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
                 role="button">Ver Bajas</a>
         </div>
+        <br>
+        <hr class="mx-5">
+        <h6 class="contenedor-botones pb-3 text-muted">Egresados en general</h6>
         <div class="table-responsive-xl">
             <table class="table table-striped table-hover table-bordered" id="table_sede">
                 <caption>Estudiantes egresados registrados en el sistema para el grupo {{$grupos[0]->NombreGrupo}} del
@@ -85,17 +91,18 @@
                 </thead>
                 <tbody>
                     @foreach($periodos as $periodo)
-                        @if(!empty($egresadosPeriodo))
-                        <tr>
-                            <th scope="row" class="border-right"><a
-                                    href="{{route('cohortes.mostrarEgresados.periodo',[$grupos[0]->cohorte->NombreCohorte , $grupos[0]->IdGrupo , $periodo->IdPeriodo])}}">{{$periodo->NombrePeriodo}}</a>
-                            </th>
-                            <td class="border-right">{{$egresadosPeriodo[$loop->index][0]}}</td>
-                            <td class="border-right">{{$egresadosPeriodo[$loop->index][1]}}</td>
-                            <td class="border-right">
-                                <strong>{{$egresadosPeriodo[$loop->index][0] + $egresadosPeriodo[$loop->index][1]}}</strong>
-                            </td>
+                    @if(!empty($egresadosPeriodo))
+                    @if ($loop->index <= $totalPeriodos ) <tr>
+                        <th scope="row" class="border-right"><a
+                                href="{{route('cohortes.mostrarEgresados.periodo',[$grupos[0]->cohorte->NombreCohorte , $grupos[0]->NombreGrupo , $periodo->NombrePeriodo])}}">{{$periodo->NombrePeriodo}}</a>
+                        </th>
+                        <td class="border-right">{{$egresadosPeriodo[$loop->index]["hombre"]}}</td>
+                        <td class="border-right">{{$egresadosPeriodo[$loop->index]["mujer"]}}</td>
+                        <td class="border-right">
+                            <strong>{{$egresadosPeriodo[$loop->index]["hombre"] + $egresadosPeriodo[$loop->index]["mujer"]}}</strong>
+                        </td>
                         </tr>
+                        @endif
                         @else
                         <tr>
                             <th scope="row" class="border-right"><a
@@ -106,7 +113,12 @@
                             <td class="border-right"><strong>0</strong></td>
                         </tr>
                         @endif
-                    @endforeach
+                        @endforeach
+                        <tr>
+                            <th scope="col" colspan="3" class="text-align-right"><strong>Total de Estudiantes
+                                    Egresados</strong></th>
+                            <td><strong>{{$totalEgresados}}</strong></td>
+                        </tr>
                 </tbody>
             </table>
         </div>
@@ -128,35 +140,30 @@
                 </thead>
                 <tbody>
                     @foreach($modalidades as $modalidad)
-                    @if(!empty($resultados))
-                    @if(isset($resultados[$modalidad->IdModalidad]))
-                    <tr>
+                    @if(!empty($egresadosModalidad))
+                    @if ($loop->index <= $totalModalidades ) <tr>
                         <th scope="row" class="border-right">{{$modalidad->NombreModalidad}}</th>
-                        <td class="border-right">{{$resultados[$modalidad->IdModalidad][0]}}</td>
-                        <td class="border-right">{{$resultados[$modalidad->IdModalidad][1]}}</td>
+                        <td class="border-right">{{$egresadosModalidad[$loop->index]["hombre"]}}</td>
+                        <td class="border-right">{{$egresadosModalidad[$loop->index]["mujer"]}}</td>
                         <td class="border-right">
-                            {{$resultados[$modalidad->IdModalidad][0] + $resultados[$modalidad->IdModalidad][1]}}</td>
-                    </tr>
-                    @else
-                    <th scope="row" class="border-right">{{$modalidad->NombreModalidad}}</th>
-                    <td class="border-right">0</td>
-                    <td class="border-right">0</td>
-                    <td class="border-right">0</td>
-                    @endif
-                    @else
-                    <tr>
-                        <th scope="row" class="border-right">{{$modalidad->NombreModalidad}}</th>
-                        <td class="border-right">0</td>
-                        <td class="border-right">0</td>
-                        <td class="border-right">0</td>
-                    </tr>
-                    @endif
-                    @endforeach
-                    <tr>
-                        <th scope="col" colspan="3" class="text-align-right"><strong>Total de Estudiantes
-                                Egresados</strong></th>
-                        <td><strong>{{$totalEgresados}}</strong></td>
-                    </tr>
+                            <strong>{{$egresadosModalidad[$loop->index]["hombre"] + $egresadosModalidad[$loop->index]["mujer"]}}</strong>
+                        </td>
+                        </tr>
+                        @endif
+                        @else
+                        <tr>
+                            <th scope="row" class="border-right">{{$modalidad->NombreModalidad}}</th>
+                            <td class="border-right">0</td>
+                            <td class="border-right">0</td>
+                            <td class="border-right"><strong>0</strong></td>
+                        </tr>
+                        @endif
+                        @endforeach
+                        <tr>
+                            <th scope="col" colspan="3" class="text-align-right"><strong>Total de Estudiantes
+                                    Egresados</strong></th>
+                            <td><strong>{{$totalEgresados}}</strong></td>
+                        </tr>
                 </tbody>
             </table>
         </div>
@@ -167,20 +174,18 @@
 
 @section('head')
 <link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}" />
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 @endsection
 
 @section('script')
 <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
 <script>
-    $(document).ready(function() {
-        $('#table_periodos').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-            }
+    // $(document).ready(function() {
+    //     $('#table_periodos').DataTable({
+    //         "language": {
+    //             "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
+    //         }
 
-        });
-    });
+    //     });
+    // });
 </script>
 @endsection

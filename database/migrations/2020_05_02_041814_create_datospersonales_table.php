@@ -22,7 +22,7 @@ class CreateDatospersonalesTable extends Migration
             $table->date('FechaNacimientoDatosPersonales', 100)->nullable();
             $table->string('Genero', 10)->nullable();
 
-            $table->unsignedBigInteger('IdUsuario')->nullable(false)->unique();
+            $table->unsignedBigInteger('IdUsuario')->nullable()->unique();
             $table->foreign('IdUsuario')->references('IdUsuario')->on('Usuario');
 
             $table->timestamp('CreatedAt')->useCurrent();

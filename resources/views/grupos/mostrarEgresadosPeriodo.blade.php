@@ -4,10 +4,12 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('cohortes.show', "S200") }}">Gestión de Estudiantes</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('cohortes.show', $grupos[0]->cohorte->NombreCohorte) }}">Cohorte {{$grupos[0]->cohorte->NombreCohorte}}</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->IdGrupo]) }}">{{$grupos[0]->NombreGrupo}} - {{$grupos[0]->cohorte->NombreCohorte}}</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->IdGrupo, $periodos[0]->IdPeriodo]) }}">Egresados</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('cohortes.mostrarCohorte') }}">Gestión de Estudiantes</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('cohortes.show', $grupos[0]->cohorte->NombreCohorte) }}">Cohorte
+                {{$grupos[0]->cohorte->NombreCohorte}}</a></li>
+        <li class="breadcrumb-item"><a
+                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}">{{ $grupos[0]->NombreGrupo }}</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">{{$periodos[0]->NombrePeriodo}}</li>
     </ol>
 </nav>
@@ -21,7 +23,7 @@
     <div class="card-body">
         <h5 class="pt-0 mt-0 contenedor-botones text-muted">{{$grupos[0]->NombreGrupo}}</h5>
         <h6 class="contenedor-botones text-muted">Egresados del periodo {{$periodos[0]->NombrePeriodo}}</h6>
-        <a class="btn btn-outline-dark float-left px-6 mb-3" href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->IdGrupo]) }}" role="button"><em class="fas fa-arrow-left"></em> Regresar</a>
+        <a class="btn btn-outline-dark float-left px-6 mb-3" href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}" role="button"><em class="fas fa-arrow-left"></em> Regresar</a>
 
         <div class="table-responsive-xl">
             <table class="table table-striped table-hover table-bordered" id="table_periodo">

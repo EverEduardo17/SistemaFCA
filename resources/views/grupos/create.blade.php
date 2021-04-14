@@ -13,7 +13,7 @@
   <div class="card-header">
     <div class="row">
       <h5 class="card-title col-8"><strong>Agregar Grupo</strong></h5>
-      <a class="btn btn-outline-info col-4" href="{{ route('grupos.index') }}" role="button">Ver Grupos</a>
+      <a class="btn btn-secondary col-4" href="{{ route('grupos.index') }}" role="button">Ver Grupos</a>
     </div>
   </div>
   <div class="card-body">
@@ -24,11 +24,14 @@
       <input type="hidden" name="IdFacultad" value="{{$facultad}}">
       <div class="form-group">
         <label name="NombreGrupo">Nombre del grupo:</label>
-        <input name="NombreGrupo" type="text" class="form-control @error('NombreGrupo') is-invalid @enderror" value="{{old('NombreGrupo')}}" placeholder="Ej. LIS 701">
+        <input name="NombreGrupo" type="text" class="form-control @error('NombreGrupo') is-invalid @enderror"
+          value="{{old('NombreGrupo')}}" placeholder="Ej. LIS 701">
       </div>
       <div class="form-group">
         <label name="DescripcionGrupo">Descripción del grupo:</label>
-        <textarea name="DescripcionGrupo" type="text" class="form-control @error('DescripcionGrupo') is-invalid @enderror" value="{{old('DescripcionGrupo')}}" placeholder="Ej. Grupo de LIS en 7mo semestre." rows="2">{{old('DescripcionGrupo')}}</textarea>
+        <textarea name="DescripcionGrupo" type="text"
+          class="form-control @error('DescripcionGrupo') is-invalid @enderror" value="{{old('DescripcionGrupo')}}"
+          placeholder="Ej. Grupo de LIS en 7mo semestre." rows="2">{{old('DescripcionGrupo')}}</textarea>
       </div>
       <div class="form-group">
         <label name="IdProgramaEducativo">Programa Educativo de pertenencia:</label>
@@ -42,25 +45,29 @@
         <label name="IdCohorte">Cohorte de pertenencia:</label>
         <select name="IdCohorte" class="form-control @error('IdCohorte') is-invalid @enderror">
           @foreach ($cohortes as $cohorte)
-          <option value="{{ $cohorte->IdCohorte }}"> {{ $cohorte->NombreCohorte }}</option>
+          <option value="{{ $cohorte->IdCohorte }} @if(old('IdCohorte') == $cohorte->IdCohorte )selected @endif"> {{ $cohorte->NombreCohorte }}</option>
           @endforeach
         </select>
       </div>
       <div class="form-group">
-        <label name="IdPeriodoInicio">Periodo de inicio del grupo:</label>
-        <select name="IdPeriodoInicio" class="form-control @error('IdPeriodoInicio') is-invalid @enderror">
-          @foreach ($periodos as $periodo)
-          <option value="{{$periodo->IdPeriodo }}">{{ $periodo->NombrePeriodo }}</option>
-          @endforeach
-        </select>
-      </div>
-      <div class="form-group">
-        <label name="IdPeriodoActivo">Último periodo activo del grupo:</label>
-        <select name="IdPeriodoActivo" class="form-control @error('IdPeriodoActivo') is-invalid @enderror">
-          @foreach ($periodos as $periodo)
-          <option value="{{ $periodo->IdPeriodo }}">{{ $periodo->NombrePeriodo }}</option>
-          @endforeach
-        </select>
+        <div class="form-row">
+          <div class="col">
+            <label name="IdPeriodoInicio">Periodo de inicio del grupo:</label>
+            <select name="IdPeriodoInicio" class="form-control @error('IdPeriodoInicio') is-invalid @enderror">
+              @foreach ($periodos as $periodo)
+              <option value="{{$periodo->IdPeriodo }} @if(old('IdPeriodo') == $periodo->IdPeriodo )selected @endif">{{ $periodo->NombrePeriodo }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="col">
+            <label name="IdPeriodoActivo">Último periodo activo del grupo:</label>
+            <select name="IdPeriodoActivo" class="form-control @error('IdPeriodoActivo') is-invalid @enderror">
+              @foreach ($periodos as $periodo)
+              <option value="{{ $periodo->IdPeriodo }}  @if(old('IdPeriodo') == $periodo->IdPeriodo )selected @endif ">{{ $periodo->NombrePeriodo }}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
       </div>
 
       <br>

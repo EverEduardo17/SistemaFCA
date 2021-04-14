@@ -10,14 +10,20 @@ class DatosPersonales extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "DatosPersonales";
-    protected $primaryKey = "IdDatosPersonales";
+    protected $table        = "DatosPersonales";
+    protected $primaryKey   = "IdDatosPersonales";
+    protected $fillable     = [
+        'IdDatosPersonales', 'NombreDatosPersonales', 'ApellidoPaternoDatosPersonales',
+        'ApellidoMaternoDatosPersonales', 'FechaNacimientoDatosPersonales', 'Genero', 
+        'IdUsuario'
+    ];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
 
     //Relacion Uno a Uno
-    public function usuario(){
+    public function usuario()
+    {
         return $this->hasOne(User::class, 'IdUsuario', 'IdUsuario');
     }
 }

@@ -24,7 +24,7 @@
     </div>
     <div class="form-group">
       <label name="DescripcionGrupo">Descripción del grupo:</label>
-      <textarea name="DescripcionGrupo" type="text" class="form-control @error('DescripcionGrupo') is-invalid @enderror" value="{{old('DescripcionGrupo','$grupos->DescripcionGrupo')}}" placeholder="Ej. Grupo de LIS en 7mo semestre." rows="2" disabled>{{old('DescripcionGrupo',$grupos->DescripcionGrupo)}}</textarea>
+      <textarea name="DescripcionGrupo" type="text" class="form-control @error('DescripcionGrupo') is-invalid @enderror" value="{{old('DescripcionGrupo','$grupos->DescripcionGrupo')}}" placeholder="<-- Sin descripción -->" rows="2" disabled>{{old('DescripcionGrupo',$grupos->DescripcionGrupo)}}</textarea>
     </div>
     <div class="form-group">
       <div class="form-row">

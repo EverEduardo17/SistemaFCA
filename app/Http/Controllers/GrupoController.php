@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GrupoRequest;
+use App\Models\Baja;
 use App\Models\Cohorte;
 use App\Models\Facultad;
 use App\Models\Grupo;
 use App\Models\Grupo_Estudiante;
 use App\Models\Modalidad;
+use App\Models\Motivo;
 use App\Models\Periodo;
 use App\Models\ProgramaEducativo;
+use App\Models\Reprobado;
 use App\Models\Titulacion;
+use App\Models\Traslado;
 use App\Models\Trayectoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,11 +32,12 @@ class GrupoController extends Controller
 
     public function create()
     {
-        $idFCA = DB::table('Facultad')
-            ->where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
+        $idFCA = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
         return view('grupos.create', [
             'grupos'        => new Grupo(),
-            'periodos'      => Periodo::get(),
+            'periodos'      => DB::table('Periodo')
+                ->orderBy('IdPeriodo', 'desc')
+                ->get(),
             'cohortes'      => DB::table('Cohorte')
                 ->orderBy('IdCohorte', 'desc')
                 ->get(),
@@ -45,17 +50,18 @@ class GrupoController extends Controller
 
     public function store(GrupoRequest $request)
     {
+        //<--- Comprueba si existe algún grupo registrado en el cohorte y PE ingresado con el mismo nombre --->
         $existe      = DB::table('Grupo')->where([
-            ['NombreGrupo', '=', $request->NombreGrupo],
+            ['NombreGrupo',         '=', $request->NombreGrupo],
             ['IdProgramaEducativo', '=', $request->IdProgramaEducativo],
-            ['IdCohorte', '=', $request->IdCohorte]
+            ['IdCohorte',           '=', $request->IdCohorte]
         ])->count();
-        $programaLis = ProgramaEducativo::where("NombreProgramaEducativo", "=", "Licenciatura en Ingeniería de Software")->value('IdProgramaEducativo');
         if ($existe > 0) {
-            Session::flash('flash', [['type' => "danger", 'message' => "El grupo " . $request->NombreGrupo . " ya fue registrado en ese cohorte."]]);
-            return redirect()->route('grupos.index');
+            Session::flash('flash', [['type' => "danger", 'message' => "El grupo '" . $request->NombreGrupo . "' ya se encuentra registrado en el cohorte seleccionado."]]);
+            return redirect()->back();
         }
-
+        //<--- Comprueba si existe algún grupo de LIS registrado en el cohorte ingresado --->
+        $programaLis = ProgramaEducativo::where("NombreProgramaEducativo", "=", "Licenciatura en Ingeniería de Software")->value('IdProgramaEducativo');
         if ($request->IdProgramaEducativo == $programaLis) {
             $cohorteOcupado = DB::table('Grupo')->where([
                 ['IdProgramaEducativo', '=', $programaLis],
@@ -63,29 +69,33 @@ class GrupoController extends Controller
             ])->count();
             if ($cohorteOcupado > 0) {
                 $nombreCohorte = Cohorte::where("IdCohorte", "=", $request->IdCohorte)->value('NombreCohorte');
-                Session::flash('flash', [['type' => "danger", 'message' => "El cohorte " . $nombreCohorte . " ya cuenta con un grupo de LIS registrado."]]);
-                return redirect()->route('grupos.index');
+                Session::flash('flash', [['type' => "danger", 'message' => "El cohorte '" . $nombreCohorte . "' ya cuenta con un grupo de LIS registrado."]]);
+                return redirect()->back();
             }
+        }
+        //<--- Comprueba si el número de periodos seleccionados es coherente, máximo 9 periodos --->
+        if (($request->IdPeriodoActivo - $request->IdPeriodoInicio  > 9)) {
+            Session::flash('flash', [['type' => "danger", 'message' => "Seleccione un rango de periodos válido."]]);
+            return redirect()->back();
         }
 
         try {
             Grupo::create($request->validated());
-            Session::flash('flash', [['type' => "success", 'message' => "Grupo creado correctamente."]]);
+            Session::flash('flash', [['type' => "success", 'message' => "Grupo registrado correctamente."]]);
             return redirect()->route('grupos.index');
         } catch (\Throwable $throwable) {
-            dd($throwable);
-            Session::flash('flash', [['type' => "danger", 'message' => "El Grupo NO pudo ser creado."]]);
-            return redirect()->route('grupos.create');
+            Session::flash('flash', [['type' => "danger", 'message' => "El Grupo NO pudo ser registrado."]]);
+            return redirect()->route('grupos.index');
         }
     }
 
     public function show(Grupo $grupo)
     {
-        $activos = Grupo_Estudiante::where("Estado", "=", "Activo")->count();
-        $inactivos = Grupo_Estudiante::where("Estado", "<>", "Activo")->count();
+        $activos    = Grupo_Estudiante::where("Estado", "=",  "Activo")->where("IdGrupo", "=", $grupo->IdGrupo)->count();
+        $inactivos  = Grupo_Estudiante::where("Estado", "<>", "Activo")->where("IdGrupo", "=", $grupo->IdGrupo)->count();
         return view('grupos.show', [
-            'grupos' => $grupo,
-            'activos' => $activos,
+            'grupos'    => $grupo,
+            'activos'   => $activos,
             'inactivos' => $inactivos,
         ]);
     }
@@ -93,11 +103,12 @@ class GrupoController extends Controller
 
     public function edit(Grupo $grupo)
     {
-        $idFCA = DB::table('Facultad')
-            ->where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
+        $idFCA = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
         return view('grupos.edit', [
             'grupos'        => $grupo,
-            'periodos'      => Periodo::get(),
+            'periodos'      => DB::table('Periodo')
+                ->orderBy('IdPeriodo', 'desc')
+                ->get(),
             'cohortes'      => DB::table('Cohorte')
                 ->orderBy('IdCohorte', 'desc')
                 ->get(),
@@ -117,20 +128,35 @@ class GrupoController extends Controller
             ['IdCohorte', '=', $request->IdCohorte]
         ])->count();
         if ($ocupado > 0) {
-            Session::flash('flash', [['type' => "danger", 'message' => "El grupo " . $request->NombreGrupo . " ya fue registrado en ese cohorte."]]);
-            return redirect()->route('grupos.index');
+            Session::flash('flash', [['type' => "danger", 'message' => "El grupo '" . $request->NombreGrupo . "' ya fue registrado en el cohorte seleccionado."]]);
+            return redirect()->route('grupos.edit', $grupo);
         } else {
-            $grupoOcupado = Grupo_Estudiante::where("IdGrupo", "=", $request->IdGrupo)->count();
-            if ($grupoOcupado > 0) {
-                Session::flash('flash', [['type' => "danger", 'message' => "El grupo " . $request->NombreGrupo . " ya está ocupado, no puede ser actualizado."]]);
-                return redirect()->route('grupos.index');
+            //<--- Comprueba si existe algún grupo de LIS registrado en el cohorte ingresado --->
+            $programaLis = ProgramaEducativo::where("NombreProgramaEducativo", "=", "Licenciatura en Ingeniería de Software")->value('IdProgramaEducativo');
+            if ($request->IdProgramaEducativo == $programaLis) {
+                $cohorteOcupado = DB::table('Grupo')->where([
+                    ['IdGrupo', '<>', $request->IdGrupo],
+                    ['IdProgramaEducativo', '=', $programaLis],
+                    ['IdCohorte', '=', $request->IdCohorte]
+                ])->count();
+                if ($cohorteOcupado > 0) {
+                    $nombreCohorte = Cohorte::where("IdCohorte", "=", $request->IdCohorte)->value('NombreCohorte');
+                    Session::flash('flash', [['type' => "danger", 'message' => "El cohorte '" . $nombreCohorte . "' ya cuenta con un grupo de LIS registrado."]]);
+                    return redirect()->back();
+                }
             }
+            //<--- Comprueba si el número de periodos seleccionados es coherente, máximo 9 periodos --->
+            if (($request->IdPeriodoActivo - $request->IdPeriodoInicio  > 9)) {
+                Session::flash('flash', [['type' => "danger", 'message' => "Seleccione un rango de periodos válido."]]);
+                return redirect()->back();
+            }
+
             try {
                 $grupo->update($request->validated());
-                Session::flash('flash', [['type' => "success", 'message' => "Grupo editado correctamente."]]);
+                Session::flash('flash', [['type' => "success", 'message' => "Grupo actualizado correctamente."]]);
                 return redirect()->route('grupos.index');
             } catch (\Throwable $throwable) {
-                Session::flash('flash', [['type' => "danger", 'message' => "El grupo NO pudo ser editado."]]);
+                Session::flash('flash', [['type' => "danger", 'message' => "El grupo NO pudo ser actualizado."]]);
                 return redirect()->route('grupos.edit', $grupo);
             }
         }
@@ -140,104 +166,55 @@ class GrupoController extends Controller
     {
         $ocupado = Grupo_Estudiante::where('IdGrupo', $grupo->IdGrupo)->count();
         if ($ocupado > 0) {
-            Session::flash('flash', [['type' => "danger", 'message' => "El grupo " . $grupo->NombreGrupo . " ya está ocupado, no puede ser eliminado."]]);
+            Session::flash('flash', [['type' => "danger", 'message' => "El grupo '" . $grupo->NombreGrupo . "' ya está ocupado, no puede ser eliminado."]]);
             return redirect()->route('grupos.index');
         } else {
             try {
                 $grupo->forceDelete();
-                Session::flash('flash', [['type' => "success", 'message' => "El grupo " . $grupo->NombreGrupo . " fue eliminado correctamente."]]);
+                Session::flash('flash', [['type' => "success", 'message' => "El grupo '" . $grupo->NombreGrupo . "' fue eliminado correctamente."]]);
                 return redirect()->route('grupos.index');
             } catch (\Throwable $throwable) {
-                Session::flash('flash', [['type' => "danger", 'message' => "El grupo " . $grupo->NombreGrupo . " NO pudo ser eliminado correctamente."]]);
+                Session::flash('flash', [['type' => "danger", 'message' => "El grupo '" . $grupo->NombreGrupo . "' NO pudo ser eliminado."]]);
                 return redirect()->route('grupos.index');
             }
         }
     }
 
-    private function getCantidades($estudiantes)
-    {
-        $hombre = 0;
-        $mujer = 0;
-
-        foreach ($estudiantes as $estudiante) {
-            $idDatosPersonales = DB::table('Trayectoria')
-                ->where('IdTrayectoria', '=', $estudiante->IdTrayectoria)
-                ->value('IdDatosPersonales');
-            $genero = DB::table('DatosPersonales')
-                ->where('IdDatosPersonales', '=', $idDatosPersonales)
-                ->value('genero');
-            if ($genero == "Hombre") {
-                $hombre++;
-            } else if ($genero == "Mujer") {
-                $mujer++;
-            }
-        }
-        return [$hombre, $mujer];
-    }
-
-    private function getPeriodos($estudiantes)
-    {
-        $periodos   = Periodo::get();
-        $cantidades = [$periodos->count()];
-        $contador   = 0;
-        $titulacion = "";
-        foreach ($periodos as $periodo) {
-            foreach ($estudiantes as $estudiante) {
-                $titulacion = Titulacion::where('IdTrayectoria', '=', $estudiante->IdTrayectoria)->get()->last();
-                if ($periodo->IdPeriodo == $titulacion->IdPeriodoEgreso) {
-                    $idDatosPersonales = DB::table('Trayectoria')
-                        ->where('IdTrayectoria', '=', $estudiante->IdTrayectoria)
-                        ->value('IdDatosPersonales');
-                    $genero = DB::table('DatosPersonales')
-                        ->where('IdDatosPersonales', '=', $idDatosPersonales)
-                        ->value('genero');
-                    if ($genero == "Hombre") {
-                        $cantidades[$contador] = [$cantidades[$contador] + 1];
-                    } else if ($genero == "Mujer") {
-                        $cantidades[$contador] = $cantidades[$contador] + 1;
-                    }
-                }
-            }
-            $contador++;
-        }
-        // dd($cantidades);
-        return $cantidades;
-    }
-
+    //<---- Funciones para visualizar las tablas resumen de los grupos ---->
 
     public function mostrarGrupo($nombreCohorte, $nombreGrupo)
     {
-        $idCohorte = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
-        $idGrupo = Grupo::where('NombreGrupo', '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
-        $estudiantes = DB::table('Grupo_Estudiante')
+        $idCohorte      = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
+        $idGrupo        = Grupo::where('NombreGrupo', '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
+        $estudiantes    = DB::table('Grupo_Estudiante')
             ->where('Estado', '=', 'Activo')
             ->where('TipoTraslado', '=', null)
             ->where('IdGrupo', '=', $idGrupo)
             ->get();
-        $resultados = $this->getCantidades($estudiantes);
-        $activoHombre = $resultados[0];
-        $activoMujer = $resultados[1];
-        $totalActivos  = $activoHombre + $activoMujer;
+        $resultados     = $this->getCantidadesGenero($estudiantes);
+        $activoHombre   = $resultados[0];
+        $activoMujer    = $resultados[1];
+        $totalActivos   = $activoHombre + $activoMujer;
 
-        $estudiantes = DB::table('Grupo_Estudiante')
+        $estudiantes    = DB::table('Grupo_Estudiante')
             ->where('Estado', '=', 'Egresado')
             ->where('IdGrupo', '=', $idGrupo)
             ->get();
 
-        $resultados = $this->getCantidades($estudiantes);
+        $resultados     = $this->getCantidadesGenero($estudiantes);
         $egresadoHombre = $resultados[0];
-        $egresadoMujer = $resultados[1];
-        $totalEgresados  = $egresadoHombre + $egresadoMujer;
+        $egresadoMujer  = $resultados[1];
+        $totalEgresados = $egresadoHombre + $egresadoMujer;
 
-        $estudiantes = DB::table('Grupo_Estudiante')
+        $estudiantes    = DB::table('Grupo_Estudiante')
             ->where('Estado', '=', 'Activo')
             ->where('TipoTraslado', '=', 'Entrante')
             ->where('IdGrupo', '=', $idGrupo)
             ->get();
 
-        $resultados = $this->getCantidades($estudiantes);
+        $resultados     = $this->getCantidadesGenero($estudiantes);
         $entranteHombre = $resultados[0];
-        $entranteMujer = $resultados[1];
+        $entranteMujer  = $resultados[1];
         $totalEntrantes = $entranteHombre + $entranteMujer;
 
         $estudiantes = DB::table('Grupo_Estudiante')
@@ -246,7 +223,7 @@ class GrupoController extends Controller
             ->where('IdGrupo', '=', $idGrupo)
             ->get();
 
-        $resultados     = $this->getCantidades($estudiantes);
+        $resultados     = $this->getCantidadesGenero($estudiantes);
         $salienteHombre = $resultados[0];
         $salienteMujer  = $resultados[1];
         $totalSalientes = $salienteHombre + $salienteMujer;
@@ -256,32 +233,32 @@ class GrupoController extends Controller
             ->where('IdGrupo', '=', $idGrupo)
             ->get();
 
-        $resultados = $this->getCantidades($estudiantes);
-        $bajaHombre = $resultados[0];
-        $bajaMujer = $resultados[1];
-        $totalBajas  = $bajaHombre + $bajaMujer;
+        $resultados     = $this->getCantidadesGenero($estudiantes);
+        $bajaHombre     = $resultados[0];
+        $bajaMujer      = $resultados[1];
+        $totalBajas     = $bajaHombre + $bajaMujer;
 
         return view('grupos.mostrarGrupo', [
-            'grupos' => Grupo::where("IdGrupo", "=", $idGrupo)->get(),
-            'activoHombre'  => $activoHombre,
-            'activoMujer'   => $activoMujer,
-            'totalActivos'  => $totalActivos,
+            'grupos'            => Grupo::where("IdGrupo", "=", $idGrupo)->get(),
+            'activoHombre'      => $activoHombre,
+            'activoMujer'       => $activoMujer,
+            'totalActivos'      => $totalActivos,
 
-            'egresadoHombre' => $egresadoHombre,
-            'egresadoMujer'  => $egresadoMujer,
-            'totalEgresados' => $totalEgresados,
+            'egresadoHombre'    => $egresadoHombre,
+            'egresadoMujer'     => $egresadoMujer,
+            'totalEgresados'    => $totalEgresados,
 
-            'entranteHombre' => $entranteHombre,
-            'entranteMujer'  => $entranteMujer,
-            'totalEntrantes' => $totalEntrantes,
+            'entranteHombre'    => $entranteHombre,
+            'entranteMujer'     => $entranteMujer,
+            'totalEntrantes'    => $totalEntrantes,
 
-            'salienteHombre' => $salienteHombre,
-            'salienteMujer'  => $salienteMujer,
-            'totalSalientes' => $totalSalientes,
+            'salienteHombre'    => $salienteHombre,
+            'salienteMujer'     => $salienteMujer,
+            'totalSalientes'    => $totalSalientes,
 
-            'bajaHombre' => $bajaHombre,
-            'bajaMujer'  => $bajaMujer,
-            'totalBajas' => $totalBajas,
+            'bajaHombre'        => $bajaHombre,
+            'bajaMujer'         => $bajaMujer,
+            'totalBajas'        => $totalBajas,
         ]);
     }
 
@@ -293,7 +270,7 @@ class GrupoController extends Controller
             ->where('Estado', '=', 'Activo')
             ->where('IdGrupo', '=', $idGrupo)
             ->get();
-        $resultados = $this->getCantidades($estudiantes);
+        $resultados = $this->getCantidadesGenero($estudiantes);
         $activoHombre = $resultados[0];
         $activoMujer = $resultados[1];
         $totalActivos  = $activoHombre + $activoMujer;
@@ -303,7 +280,7 @@ class GrupoController extends Controller
             ->where('IdGrupo', '=', $idGrupo)
             ->get();
 
-        $resultados = $this->getCantidades($estudiantes);
+        $resultados = $this->getCantidadesGenero($estudiantes);
         $egresadoHombre = $resultados[0];
         $egresadoMujer = $resultados[1];
         $totalEgresados  = $egresadoHombre + $egresadoMujer;
@@ -313,7 +290,7 @@ class GrupoController extends Controller
             ->where('IdGrupo', '=', $idGrupo)
             ->get();
 
-        $resultados = $this->getCantidades($estudiantes);
+        $resultados = $this->getCantidadesGenero($estudiantes);
         $bajaHombre = $resultados[0];
         $bajaMujer = $resultados[1];
         $totalBajas  = $bajaHombre + $bajaMujer;
@@ -336,30 +313,175 @@ class GrupoController extends Controller
 
     public function mostrarEgresados($nombreCohorte, $nombreGrupo)
     {
-        $idCohorte      = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
-        $idGrupo        = Grupo::where("NombreGrupo", '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
-        $estudiantes    = DB::table('Grupo_Estudiante')
-            ->where('Estado', '=', 'Egresado')
-            ->where('IdGrupo', '=', $idGrupo)
-            ->get();
-        dd($estudiantes);
-        $resultados     = $this->getCantidades($estudiantes);
-        $activoHombre   = $resultados[0];
-        $activoMujer    = $resultados[1];
-        $totalActivos   = $activoHombre + $activoMujer;
-        $cantidadesPeriodos = $this->getPeriodos($estudiantes);
-
+        $idCohorte          = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
+        $idGrupo            = Grupo::where("NombreGrupo", '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
+        $estudiantes        = Grupo_Estudiante::where('Estado', '=', 'Egresado')->where('IdGrupo', '=', $idGrupo)->get();
+        $resultados         = $this->getCantidadesGenero($estudiantes);
+        $activoHombre       = $resultados[0];
+        $activoMujer        = $resultados[1];
+        $totalActivos       = $activoHombre + $activoMujer;
+        $cantidadesPeriodos = $this->getEstudiantesPorPeriodo($estudiantes, $idGrupo);
+        $estudiantes        = Grupo_Estudiante::where('Estado', '=', 'Egresado')->where('IdGrupo', '=', $idGrupo)->get();
+        $cantidadesModalidad = $this->getEstudiantesPorModalidad($estudiantes);
+        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
+        $periodoInicio      = $grupo[0]->IdPeriodoInicio + 7;
+        $periodos           = Periodo::whereBetween('IdPeriodo', array($periodoInicio, $periodoInicio + 4))->get();
+        $modalidades        = Modalidad::where('TipoModalidad', '=', 'Titulación')->get();
         return view('grupos.mostrarEgresados', [
-            'grupos'            => Grupo::where("IdGrupo", "=", $idGrupo)->get(),
+            'grupos'            => $grupo,
             'hombre'            => $activoHombre,
             'mujer'             => $activoMujer,
-            'modalidades'       => Modalidad::where('TipoModalidad', '=', 'Titulación')->get(),
-            'periodos'          => Periodo::get(),
+            'modalidades'       => $modalidades,
+            'periodos'          => $periodos,
             'totalEgresados'    => $totalActivos,
-            'egresadosPeriodo' => $cantidadesPeriodos
+            'egresadosPeriodo'  => $cantidadesPeriodos,
+            'egresadosModalidad' => $cantidadesModalidad,
+            'totalPeriodos'     => $periodos->count(),
+            'totalModalidades'  => $modalidades->count(),
         ]);
     }
 
+    public function mostrarEgresadosPeriodo($nombreCohorte, $nombreGrupo, $nombrePeriodo)
+    {
+        $periodo            = Periodo::where('NombrePeriodo', '=', $nombrePeriodo)->get()->last();
+        $idCohorte          = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
+        $idGrupo            = Grupo::where("NombreGrupo", '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
+        $alumnos            = Grupo_Estudiante::where('Estado', '=', 'Egresado')->where('IdGrupo', '=', $idGrupo)->get();
+        $estudiantes        = [];
+        foreach ($alumnos as $alumno) {
+            $titulacion     = Titulacion::where('IdTrayectoria', '=', $alumno->IdTrayectoria)->get()->last();
+            if ($titulacion->IdPeriodoEgreso == $periodo->IdPeriodo) {
+                $estudiantes[] = $titulacion;
+            }
+        }
+        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
+        $periodos           = Periodo::where('NombrePeriodo', '=', $nombrePeriodo)->get();
+        $modalidades        = Modalidad::where('TipoModalidad', '=', 'Titulación')->get();
+
+        return view('grupos.mostrarEgresadosPeriodo', [
+            'grupos'            => $grupo,
+            'estudiantes'       => $estudiantes,
+            'modalidades'       => $modalidades,
+            'periodos'          => $periodos,
+        ]);
+    }
+
+    public function mostrarTraslados($nombreCohorte, $nombreGrupo)
+    {
+        $idCohorte          = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
+        $idGrupo            = Grupo::where("NombreGrupo", '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
+        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
+        $alumnos            = Grupo_Estudiante::where('TipoTraslado', '<>', 'null')->where('IdGrupo', '=', $idGrupo)->get();
+        $estudiantesSalientes        = [];
+        $estudiantesEntrantes        = [];
+        foreach ($alumnos as $alumno) {
+            $traslado     = Traslado::where('IdTrayectoria', '=', $alumno->IdTrayectoria)->get()->last();
+            if ($alumno->TipoTraslado == 'Entrante') {
+                $estudiantesEntrantes[] = $traslado;
+            } elseif ($alumno->TipoTraslado == 'Saliente') {
+                $estudiantesSalientes[] = $traslado;
+            }
+        }
+        return view('grupos.mostrarTraslados', [
+            'grupos'                => $grupo,
+            'estudiantesEntrantes'  => $estudiantesEntrantes,
+            'estudiantesSalientes'  => $estudiantesSalientes,
+        ]);
+    }
+
+    public function mostrarReprobados($nombreCohorte, $nombreGrupo)
+    {
+        $idCohorte          = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
+        $idGrupo            = Grupo::where("NombreGrupo", '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
+        $estudiantes        = Grupo_Estudiante::where('IdGrupo', '=', $idGrupo)->get();
+        foreach ($estudiantes as $clave => $estudiante) {
+            $reprobado = Reprobado::where('IdTrayectoria', '=', $estudiante->IdTrayectoria)->get()->last();
+            if ($reprobado == null) {
+                unset($estudiantes[$clave]);
+            }
+        }
+        $resultados         = $this->getCantidadesGenero($estudiantes);
+        $hombre             = $resultados[0];
+        $mujer              = $resultados[1];
+        $totalReprobados    = $hombre + $mujer;
+        $cantidadesPeriodos = $this->getReprobadosPorPeriodo($estudiantes, $idGrupo);
+        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
+        $periodoInicio      = $grupo[0]->IdPeriodoInicio;
+        $periodos           = Periodo::whereBetween('IdPeriodo', array($periodoInicio, $periodoInicio + 9))->get();
+        return view('grupos.mostrarReprobados', [
+            'grupos'            => $grupo,
+            'hombre'            => $hombre,
+            'mujer'             => $mujer,
+            'totalReprobados'   => $totalReprobados,
+            'periodos'          => $periodos,
+            'reprobadosPeriodo' => $cantidadesPeriodos,
+            'totalPeriodos'     => $periodos->count(),
+        ]);
+    }
+
+    public function mostrarReprobadosPeriodo($nombreCohorte, $nombreGrupo, $nombrePeriodo)
+    {
+        $periodo            = Periodo::where('NombrePeriodo', '=', $nombrePeriodo)->get()->last();
+        $idCohorte          = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
+        $idGrupo            = Grupo::where("NombreGrupo", '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
+        $alumnos            = Grupo_Estudiante::where('IdGrupo', '=', $idGrupo)->get();
+        $estudiantes        = [];
+        foreach ($alumnos as $alumno) {
+            $reprobado      = Reprobado::where('IdTrayectoria', '=', $alumno->IdTrayectoria)->get()->last();
+            if ($reprobado != null && $reprobado->IdPeriodo == $periodo->IdPeriodo) {
+                $estudiantes[] = $reprobado;
+            }
+        }
+        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
+        $periodos           = Periodo::where('NombrePeriodo', '=', $nombrePeriodo)->get();
+        $modalidades        = Modalidad::where('TipoModalidad', '=', 'Titulación')->get();
+
+        return view('grupos.mostrarReprobadosPeriodo', [
+            'grupos'            => $grupo,
+            'estudiantes'       => $estudiantes,
+            'modalidades'       => $modalidades,
+            'periodos'          => $periodos,
+        ]);
+    }
+
+
+    public function mostrarBajas($nombreCohorte, $nombreGrupo)
+    {
+        $idCohorte              = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
+        $idGrupo                = Grupo::where("NombreGrupo", '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
+        $estudiantes            = Grupo_Estudiante::where('Estado', '=', 'Baja')->where('IdGrupo', '=', $idGrupo)->get();
+        $bajasTemporales        = [];
+        $bajasDefinitivas       = [];
+        foreach ($estudiantes as $estudiante) {
+            $baja = Baja::where('IdTrayectoria', '=', $estudiante->IdTrayectoria)->get()->last();
+            if ($baja->TipoBaja == "Temporal") {
+                $bajasTemporales[] = $estudiante;
+            } else {
+                $bajasDefinitivas[] = $estudiante;
+            }
+        }
+        $resultadosTemporal     = $this->getCantidadesGenero($bajasTemporales);
+        $hombreTemporal         = $resultadosTemporal[0];
+        $mujerTemporal          = $resultadosTemporal[1];
+        $resultadosDefinitivo   = $this->getCantidadesGenero($bajasDefinitivas);
+        $hombreDefinitivo       = $resultadosDefinitivo[0];
+        $mujerDefinitivo        = $resultadosDefinitivo[1];
+        $grupo                  = Grupo::where('IdGrupo', '=', $idGrupo)->get();
+        $motivos                = Motivo::get();
+        $bajasMotivos           = $this->getEstudiantesPorMotivo($estudiantes);
+
+        return view('grupos.mostrarBajas', [
+            'grupos'            => $grupo,
+            'hombreTemporal'    => $hombreTemporal,
+            'mujerTemporal'     => $mujerTemporal,
+            'hombreDefinitivo'  => $hombreDefinitivo,
+            'mujerDefinitivo'   => $mujerDefinitivo,
+            'resultados'        => $bajasMotivos,
+            'motivos'           => $motivos,
+        ]);
+    }
+
+    //<---- Métodos auxiliares ---->
 
     public function contarEstudiantes($idGrupo)
     {
@@ -368,5 +490,162 @@ class GrupoController extends Controller
         $inactivos = Grupo_Estudiante::where("Estado", "<>", "Activo")
             ->where("IdGrupo", "=", $idGrupo)->count();
         return [$activos, $inactivos];
+    }
+
+    private function getCantidadesGenero($estudiantes)
+    {
+        $hombre = 0;
+        $mujer = 0;
+
+        foreach ($estudiantes as $estudiante) {
+            $idDatosPersonales = DB::table('Trayectoria')
+                ->where('IdTrayectoria', '=', $estudiante->IdTrayectoria)
+                ->value('IdDatosPersonales');
+            $genero = DB::table('DatosPersonales')
+                ->where('IdDatosPersonales', '=', $idDatosPersonales)
+                ->value('genero');
+            if ($genero == "Hombre") {
+                $hombre++;
+            } else if ($genero == "Mujer") {
+                $mujer++;
+            }
+        }
+        return [$hombre, $mujer];
+    }
+
+    private function getEstudiantesPorPeriodo($estudiantes, $idGrupo)
+    {
+        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get()->last();
+        $periodoInicio      = $grupo->IdPeriodoInicio + 7;
+        $periodos           = Periodo::whereBetween('IdPeriodo', array($periodoInicio, $periodoInicio + 4))->get();
+        $hombres            = 0;
+        $mujeres            = 0;
+        $cantidades         = [];
+        $contador           = 0;
+        foreach ($periodos as $periodo) {
+            foreach ($estudiantes as $clave => $estudiante) {
+                $titulacion = Titulacion::where('IdTrayectoria', '=', $estudiante->IdTrayectoria)->get()->last();
+                if ($periodo->IdPeriodo == $titulacion->IdPeriodoEgreso) {
+                    $idDatosPersonales = DB::table('Trayectoria')
+                        ->where('IdTrayectoria', '=', $estudiante->IdTrayectoria)
+                        ->value('IdDatosPersonales');
+                    $genero = DB::table('DatosPersonales')
+                        ->where('IdDatosPersonales', '=', $idDatosPersonales)
+                        ->value('genero');
+                    if ($genero == "Hombre") {
+                        $hombres = $hombres + 1;
+                    } else if ($genero == "Mujer") {
+                        $mujeres = $mujeres + 1;
+                    }
+                    unset($estudiantes[$clave]);
+                }
+            }
+            $cantidades[$contador] = ['hombre' => $hombres, 'mujer' => $mujeres];
+            $hombres = 0;
+            $mujeres = 0;
+            $contador++;
+        }
+        return $cantidades;
+    }
+
+    private function getReprobadosPorPeriodo($estudiantes, $idGrupo)
+    {
+        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get()->last();
+        $periodoInicio      = $grupo->IdPeriodoInicio;
+        $periodos           = Periodo::whereBetween('IdPeriodo', array($periodoInicio, $periodoInicio + 9))->get();
+        $hombres            = 0;
+        $mujeres            = 0;
+        $cantidades         = [];
+        $contador           = 0;
+        foreach ($periodos as $periodo) {
+            foreach ($estudiantes as $clave => $estudiante) {
+                $reprobado = Reprobado::where('IdTrayectoria', '=', $estudiante->IdTrayectoria)->get()->last();
+                if ($reprobado != null && $periodo->IdPeriodo == $reprobado->IdPeriodo) {
+                    $idDatosPersonales = DB::table('Trayectoria')
+                        ->where('IdTrayectoria', '=', $estudiante->IdTrayectoria)
+                        ->value('IdDatosPersonales');
+                    $genero = DB::table('DatosPersonales')
+                        ->where('IdDatosPersonales', '=', $idDatosPersonales)
+                        ->value('genero');
+                    if ($genero == "Hombre") {
+                        $hombres = $hombres + 1;
+                    } else if ($genero == "Mujer") {
+                        $mujeres = $mujeres + 1;
+                    }
+                    unset($estudiantes[$clave]);
+                }
+            }
+            $cantidades[$contador] = ['hombre' => $hombres, 'mujer' => $mujeres];
+            $hombres = 0;
+            $mujeres = 0;
+            $contador++;
+        }
+        return $cantidades;
+    }
+
+    private function getEstudiantesPorModalidad($estudiantes)
+    {
+        $modalidades        = Modalidad::where('TipoModalidad', '=', 'Titulación')->get();
+        $hombres            = 0;
+        $mujeres            = 0;
+        $cantidades         = [];
+        $contador           = 0;
+        foreach ($modalidades as $modalidad) {
+            foreach ($estudiantes as $clave => $estudiante) {
+                $titulacion = Titulacion::where('IdTrayectoria', '=', $estudiante->IdTrayectoria)->get()->last();
+                if ($modalidad->IdModalidad == $titulacion->IdModalidad) {
+                    $idDatosPersonales = DB::table('Trayectoria')
+                        ->where('IdTrayectoria', '=', $estudiante->IdTrayectoria)
+                        ->value('IdDatosPersonales');
+                    $genero = DB::table('DatosPersonales')
+                        ->where('IdDatosPersonales', '=', $idDatosPersonales)
+                        ->value('genero');
+                    if ($genero == "Hombre") {
+                        $hombres = $hombres + 1;
+                    } else if ($genero == "Mujer") {
+                        $mujeres = $mujeres + 1;
+                    }
+                    unset($estudiantes[$clave]);
+                }
+            }
+            $cantidades[$contador] = ['hombre' => $hombres, 'mujer' => $mujeres];
+            $hombres = 0;
+            $mujeres = 0;
+            $contador++;
+        }
+        return $cantidades;
+    }
+
+    private function getEstudiantesPorMotivo($estudiantes)
+    {
+        $motivos            = Motivo::get();
+        $hombres            = 0;
+        $mujeres            = 0;
+        $cantidades         = [];
+        $contador           = 0;
+        foreach ($motivos as $motivo) {
+            foreach ($estudiantes as $clave => $estudiante) {
+                $baja = Baja::where('IdTrayectoria', '=', $estudiante->IdTrayectoria)->get()->last();
+                if ($motivo->IdMotivo == $baja->IdMotivo) {
+                    $idDatosPersonales = DB::table('Trayectoria')
+                        ->where('IdTrayectoria', '=', $estudiante->IdTrayectoria)
+                        ->value('IdDatosPersonales');
+                    $genero = DB::table('DatosPersonales')
+                        ->where('IdDatosPersonales', '=', $idDatosPersonales)
+                        ->value('genero');
+                    if ($genero == "Hombre") {
+                        $hombres = $hombres + 1;
+                    } else if ($genero == "Mujer") {
+                        $mujeres = $mujeres + 1;
+                    }
+                    unset($estudiantes[$clave]);
+                }
+            }
+            $cantidades[$contador] = ['hombre' => $hombres, 'mujer' => $mujeres];
+            $hombres = 0;
+            $mujeres = 0;
+            $contador++;
+        }
+        return $cantidades;
     }
 }

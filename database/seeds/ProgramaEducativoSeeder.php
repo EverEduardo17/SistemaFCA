@@ -13,8 +13,8 @@ class ProgramaEducativoSeeder extends Seeder
     public function run()
     {
         $idFCA = DB::table('Facultad')
-            ->where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('idFacultad');
-        DB::table('programa_educativo')->insert([
+            ->where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
+        DB::table('Programa_Educativo')->insert([
             [
                 'IdFacultad'                => $idFCA,
                 'NombreProgramaEducativo'   => 'Licenciatura en Administración',

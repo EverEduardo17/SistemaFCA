@@ -24,8 +24,8 @@ class ServicioSocialEstudianteRequest extends FormRequest
     public function rules()
     {
         return [
-            'NombreEmpresa' => 'required',
+            'NombreEmpresa' => ['required', 'String', 'regex:/^[A-Za-zÁéÉíÍóÓúÚüÜñÑ\d:,;.]+(\s{1}[-A-Za-záÁéÉíÍóÓúÚüÜñÑ\d:;,.-]+)*$/'],
             'IdTrayectoria' => 'required'
-         ];
+        ];
     }
 }

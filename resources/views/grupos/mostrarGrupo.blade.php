@@ -34,10 +34,13 @@
                 href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
                 role="button">Ver Egresados</a>
             <a class="btn btn-outline-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarTraslados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
                 role="button">Ver Traslados</a>
             <a class="btn btn-outline-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarReprobados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                role="button">Ver Reprobados</a>
+            <a class="btn btn-outline-info px-6 mb-3 ml-2"
+                href="{{ route('cohortes.mostrarBajas', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
                 role="button">Ver Bajas</a>
         </div>
         <div class="table-responsive-xl">

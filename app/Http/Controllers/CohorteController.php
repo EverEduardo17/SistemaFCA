@@ -38,7 +38,7 @@ class CohorteController extends Controller
             'programas'     => ProgramaEducativo::where('IdFacultad', '=', $idFCA)
                 ->get(),
             'grupos'        => Grupo::where('IdCohorte', '=', $idCohorte)->get(),
-            'periodos'      => Periodo::get(),
+            'periodos'      => Periodo::orderBy("IdPeriodo","desc")->get(),
             'idCohorte'     => $idCohorte,
             'nombreCohorte' => $nombreCohorte,
             'modalidades'   => Modalidad::get(),

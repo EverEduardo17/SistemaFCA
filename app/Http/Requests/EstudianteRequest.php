@@ -14,11 +14,12 @@ class EstudianteRequest extends FormRequest
     public function rules()
     {
         return [
-            'NombreDatosPersonales'             => 'required | String',
-            'ApellidoPaternoDatosPersonales'    => 'required | String',
-            'ApellidoMaternoDatosPersonales'    => 'required | String',
+            'NombreDatosPersonales'             => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
+            'ApellidoPaternoDatosPersonales'    => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
+            'ApellidoMaternoDatosPersonales'    => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
             'IdCohorte'                         => 'required | numeric',
-            'MatriculaEstudiante'               => 'required | String | unique:Estudiante| max:9' ,
+            // El formato para las matrículas está diseñado para aceptar únicamente S0.., S1.. y S2..
+            'MatriculaEstudiante'               => ['required', 'String', 'unique:Estudiante', 'max:9', 'regex:/^S[012][\d]{1}[0]{1}\d{5}$/'],
             'IdProgramaEducativo'               => 'required | numeric',
             'IdGrupo'                           => 'required | numeric',
             'IdModalidad'                       => 'required | numeric',

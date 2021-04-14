@@ -54,6 +54,10 @@ Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}', 'GrupoController@mostrarGr
 Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/estado', 'GrupoController@mostrarEstado')->name('cohortes.mostrarEstado');
 Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/egresados', 'GrupoController@mostrarEgresados')->name('cohortes.mostrarEgresados');
 Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/egresados/{nombrePeriodo}', 'GrupoController@mostrarEgresadosPeriodo')->name('cohortes.mostrarEgresados.periodo');
+Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/traslados', 'GrupoController@mostrarTraslados')->name('cohortes.mostrarTraslados');
+Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/reprobados', 'GrupoController@mostrarReprobados')->name('cohortes.mostrarReprobados');
+Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/reprobados/{nombrePeriodo}', 'GrupoController@mostrarReprobadosPeriodo')->name('cohortes.mostrarReprobados.periodo');
+Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/bajas', 'GrupoController@mostrarBajas')->name('cohortes.mostrarBajas');
 
 Route::get('grupos/{idGrupo}/estudiantes', 'EstudianteController@show')->name('estudiantesGrupo');
 Route::get('grupos/{idGrupo}/estudiantes/crear', 'EstudianteController@agregarEstudiante')->name('agregarEstudiante');

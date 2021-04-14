@@ -24,9 +24,9 @@ class ProgramaEducativoRequest extends FormRequest
     public function rules()
     {
         return [
-            'NombreProgramaEducativo' => 'required',
-            'AcronimoProgramaEducativo' => 'required',
-            'IdFacultad' => 'required'
+            'NombreProgramaEducativo'   => ['required', 'String', 'regex:/^[A-Za-záÁéÉíÍóÓúÚüÜñÑ]+(\s{1}[-A-Za-záÁéÉíÍóÓúÚüÜñÑ]+)*$/'],
+            'AcronimoProgramaEducativo' => ['required', 'String', 'regex:/^[A-Za-z]{2,5}$/'],
+            'IdFacultad'                => 'required'
         ];
     }
 }

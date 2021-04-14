@@ -13,7 +13,7 @@
   <div class="card-header">
     <div class="row">
       <h5 class="card-title col-8"><strong>Editar Programa Educativo</strong></h5>
-      <a class="btn btn-outline-info col-4" href="{{ route('programaEducativo.index') }}" role="button">Ver Programas Educativos</a>
+      <a class="btn btn-secondary col-4" href="{{ route('programaEducativo.index') }}" role="button">Ver Programas Educativos</a>
     </div>
   </div>
 

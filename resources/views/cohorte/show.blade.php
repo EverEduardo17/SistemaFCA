@@ -19,12 +19,10 @@
     </div>
     <div class="card-body">
         <div class="contenedor-botones justify-content-center align-items-center">
-            <a class="btn btn-outline-dark mr-2" href="#"> <em class="fas fa-eye"></em> Ver Cohorte</a>
+            {{-- <a class="btn btn-outline-dark mr-2" href="#"> <em class="fas fa-eye"></em> Ver Cohorte</a> --}}
             <a href="{{ route('cohortes.agregarEstudiante',$nombreCohorte) }}" class="btn btn-outline-dark mr-2"><em
-                    class="fas fa-plus-circle"></em> Agregar Estudiante</a>
-            <a class="btn btn-outline-dark mr-2" href="#"><em class="fas fa-pen"></em> Editar Estudiante</a>
-            <a class="btn btn-outline-dark mr-2" href="#"><em class="fas fa-minus-circle"></em> Dar de Baja
-                Estudiante</a>
+                    class="fas fa-plus-circle"></em> Carga masiva de Estudiante</a>
+            </a>
         </div>
         <h5 class="py-2">Cohortes</h5>
         <div class="testimonial-group mx-3 my-2">
@@ -34,6 +32,12 @@
                     href="{{ route('cohortes.show', $cohorte->NombreCohorte) }}">{{$cohorte->NombreCohorte}}</a>
                 @endforeach
             </div>
+        </div>
+        <div class="contenedor-botones justify-content-center align-items-center">
+            <a class="btn btn-outline-dark mr-2" href="#"> <em class="fas fa-eye"></em> Ver Cohorte</a>
+            {{-- <a href="{{ route('cohortes.agregarEstudiante',$nombreCohorte) }}" class="btn btn-outline-dark
+            mr-2"><em class="fas fa-plus-circle"></em> Carga masiva de Estudiante</a>
+            </a> --}}
         </div>
         <hr class="my-4">
         <h5 class="py-2">Grupos</h5>
@@ -136,34 +140,16 @@
 @section('script')
 <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
 <script>
-    //TODO Checar, cuando se agreguen nuevos PE va a fallar.
-    $(document).ready(function() {
-        $('#table_LA').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
+    @foreach ($programas as $programa)
+        $(document).ready(function() {
+            $('#table_{{$programa->AcronimoProgramaEducativo}}').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
             }
         });
-        $('#table_LC').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-            }
-        });
-        $('#table_LGDN').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-            }
-        });
-        $('#table_LIS').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-            }
-        });
-        $('#table_LSCA').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-            }
-        });
+        
     });
+    @endforeach
 </script>
 <script>
     $('#delete').on('show.bs.modal', function(event) {

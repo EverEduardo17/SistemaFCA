@@ -37,10 +37,9 @@
                         <td class="border-right">{{ $empresa->TelefonoEmpresa }}</td>
                         <td class="border-right">{{ $empresa->TipoEmpresa }}</td>
                         <td class="border-right">{{ $empresa->ActividadEmpresa }}</td>
-                        <td class="btn-group btn-group-sm px-3">
-                            <a class="btn btn-outline-primary btn-sm" href="{{ route('empresas.show', $empresa) }}">Detalles</a>
-                            <!-- <a class="btn btn-primary btn-sm" href="{{ route('empresas.edit', $empresa) }}">Editar</a> -->
-                            <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $empresa->IdEmpresa }}">Eliminar</a>
+                        <td class="btn-group btn-group-sm py-2">
+                            <a class="btn btn-sm btn-outline-primary mx-2" href="{{ route('empresas.show', $empresa) }}">Detalles</a>
+                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $empresa->IdEmpresa }}">Eliminar</a>
                         </td>
                     </tr>
                     @endforeach
