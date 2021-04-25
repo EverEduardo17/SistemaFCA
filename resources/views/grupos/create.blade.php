@@ -36,8 +36,9 @@
       <div class="form-group">
         <label name="IdProgramaEducativo">Programa Educativo de pertenencia:</label>
         <select name="IdProgramaEducativo" class="form-control @error('IdProgramaEducativo') is-invalid @enderror">
+          <option></option>
           @foreach ($programas as $programa)
-          <option value="{{ $programa->IdProgramaEducativo }}">{{ $programa->NombreProgramaEducativo }}</option>
+            <option value="{{ $programa->IdProgramaEducativo }}">{{ $programa->NombreProgramaEducativo }}</option>
           @endforeach
         </select>
       </div>
@@ -45,7 +46,7 @@
         <label name="IdCohorte">Cohorte de pertenencia:</label>
         <select name="IdCohorte" class="form-control @error('IdCohorte') is-invalid @enderror">
           @foreach ($cohortes as $cohorte)
-          <option value="{{ $cohorte->IdCohorte }} @if(old('IdCohorte') == $cohorte->IdCohorte )selected @endif"> {{ $cohorte->NombreCohorte }}</option>
+          <option value="{{ $cohorte->IdCohorte }}" {{   (old('IdCohorte') == $cohorte->IdCohorte ) ? "selected = selected":"" }}> {{ $cohorte->NombreCohorte }}</option>
           @endforeach
         </select>
       </div>
@@ -55,7 +56,7 @@
             <label name="IdPeriodoInicio">Periodo de inicio del grupo:</label>
             <select name="IdPeriodoInicio" class="form-control @error('IdPeriodoInicio') is-invalid @enderror">
               @foreach ($periodos as $periodo)
-              <option value="{{$periodo->IdPeriodo }} @if(old('IdPeriodo') == $periodo->IdPeriodo )selected @endif">{{ $periodo->NombrePeriodo }}</option>
+              <option value="{{$periodo->IdPeriodo }} @if(old('IdPeriodo') == $periodo->IdPeriodo )selected = selected @endif">{{ $periodo->NombrePeriodo }}</option>
               @endforeach
             </select>
           </div>

@@ -8,7 +8,7 @@
         <li class="breadcrumb-item"><a href="{{ route('cohortes.show', $grupos[0]->cohorte->NombreCohorte) }}">Cohorte
                 {{$grupos[0]->cohorte->NombreCohorte}}</a></li>
         <li class="breadcrumb-item"><a
-                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->IdGrupo]) }}">{{$grupos[0]->NombreGrupo}}</a>
+                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}">{{$grupos[0]->NombreGrupo}}</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">Bajas</li>
     </ol>
@@ -26,6 +26,7 @@
     <div class="card-body">
         <h5 class="pt-0 mt-0 contenedor-botones text-muted">Cohorte {{$grupos[0]->cohorte->NombreCohorte}}</h5>
         <h6 class="contenedor-botones text-muted">Bajas</h6>
+
         <div class="contenedor-botones mt-3">
             <a class="btn btn-outline-info px-6 mb-3"
                 href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
@@ -46,7 +47,7 @@
                 href="{{ route('cohortes.mostrarBajas', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
                 role="button">Ver Bajas</a>
         </div>
-
+        <a class="btn btn-outline-info float-right mb-2" href="{{ route('cohortes.imprimirBajas', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"  target="_blank" role="button">Descargar PDF</a>
         <br>
         <hr class="mx-5">
         <h6 class="contenedor-botones pb-3 text-muted">Bajas totales</h6>
@@ -77,7 +78,8 @@
                         <td class="border-right">{{$hombreDefinitivo + $mujerDefinitivo}}</td>
                     </tr>
                     <tr>
-                        <th scope="col" colspan="3" class="text-align-right"><strong>Total de Estudiantes</strong></th>
+                        <th scope="col" colspan="3" class="text-align-right"><strong>Total de bajas de
+                                Estudiantes</strong></th>
                         <td><strong>{{$hombreTemporal + $mujerTemporal + $hombreDefinitivo + $mujerDefinitivo}}</strong>
                         </td>
                     </tr>
@@ -89,8 +91,9 @@
         <hr class="mx-5">
         <h6 class="contenedor-botones pb-3 text-muted">Bajas por motivo</h6>
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover" id="table_periodos">
-                <caption>Estudiantes dados de baja por motivo registrados en el sistema para el grupo {{$grupos[0]->NombreGrupo}}
+            <table class="table table-striped table-hover">
+                <caption>Estudiantes dados de baja por motivo registrados en el sistema para el grupo
+                    {{$grupos[0]->NombreGrupo}}
                     del cohorte {{$grupos[0]->cohorte->NombreCohorte}}.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
@@ -102,33 +105,39 @@
                 </thead>
                 <tbody>
                     @foreach($motivos as $motivo)
-                        @if(!empty($resultados))
-                            @if(isset($resultados[$motivo->IdMotivo]))
-                            <tr>
-                                <th scope="row" class="border-right">{{$motivo->NombreMotivo}}</th>
-                                <td class="border-right">{{$resultados[$motivo->IdMotivo - 1 ]["hombre"]}}</td>
-                                <td class="border-right">{{$resultados[$motivo->IdMotivo - 1 ]["mujer"]}}</td>
-                                <td class="border-right">
-                                    <strong>{{$resultados[$motivo->IdMotivo - 1 ]["hombre"] + $resultados[$motivo->IdMotivo]["mujer"]}}</strong>
-                                </td>
-                            </tr>
-                            @else
-                            <tr>
-                                <th scope="row" class="border-right">{{$motivo->NombreMotivo}}</th>
-                                <td class="border-right">0</td>
-                                <td class="border-right">0</td>
-                                <td class="border-right"><strong>0</strong></td>
-                            </tr>
-                            @endif
-                        @else
-                        <tr>
-                            <th scope="row" class="border-right">{{$motivo->NombreMotivo}}</th>
-                            <td class="border-right">0</td>
-                            <td class="border-right">0</td>
-                            <td class="border-right"><strong>0</strong></td>
-                        </tr>
-                        @endif
+                    @if(!empty($resultados))
+                    @if(isset($resultados[$motivo->IdMotivo]))
+                    <tr>
+                        <th scope="row" class="border-right">{{$motivo->NombreMotivo}}</th>
+                        <td class="border-right">{{$resultados[$motivo->IdMotivo - 1 ]["hombre"]}}</td>
+                        <td class="border-right">{{$resultados[$motivo->IdMotivo - 1 ]["mujer"]}}</td>
+                        <td class="border-right">
+                            <strong>{{$resultados[$motivo->IdMotivo - 1 ]["hombre"] + $resultados[$motivo->IdMotivo]["mujer"]}}</strong>
+                        </td>
+                    </tr>
+                    @else
+                    <tr>
+                        <th scope="row" class="border-right">{{$motivo->NombreMotivo}}</th>
+                        <td class="border-right">0</td>
+                        <td class="border-right">0</td>
+                        <td class="border-right"><strong>0</strong></td>
+                    </tr>
+                    @endif
+                    @else
+                    <tr>
+                        <th scope="row" class="border-right">{{$motivo->NombreMotivo}}</th>
+                        <td class="border-right">0</td>
+                        <td class="border-right">0</td>
+                        <td class="border-right"><strong>0</strong></td>
+                    </tr>
+                    @endif
                     @endforeach
+                    <tr>
+                        <th scope="col" colspan="3" class="text-align-right"><strong>Total de bajas de
+                                Estudiantes</strong></th>
+                        <td><strong>{{$hombreTemporal + $mujerTemporal + $hombreDefinitivo + $mujerDefinitivo}}</strong>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -138,19 +147,7 @@
 @endsection
 
 @section('head')
-<link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}" />
 @endsection
 
 @section('script')
-<script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
-<script>
-    $(document).ready(function() {
-        $('#table_periodos').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-            }
-
-        });
-    });
-</script>
 @endsection

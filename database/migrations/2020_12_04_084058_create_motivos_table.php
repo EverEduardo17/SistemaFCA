@@ -18,6 +18,7 @@ class CreateMotivosTable extends Migration
             $table->bigIncrements('IdMotivo');
             $table->string('NombreMotivo',150)->nullable(false)->unique();
             $table->string('DescripcionMotivo',150)->nullable();
+            $table->string('TipoBaja',15)->nullable(false);
 
             $table->timestamp('CreatedAt')->useCurrent();
             $table->timestamp('UpdatedAt')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

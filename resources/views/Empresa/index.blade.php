@@ -48,7 +48,7 @@
         </div>
     </div>
 </div>
-@include('Empresa.modals.delete')
+@include('empresa.modals.delete')
 @endsection
 
 @section('head')

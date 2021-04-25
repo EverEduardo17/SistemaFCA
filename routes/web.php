@@ -58,6 +58,7 @@ Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/traslados', 'GrupoController
 Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/reprobados', 'GrupoController@mostrarReprobados')->name('cohortes.mostrarReprobados');
 Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/reprobados/{nombrePeriodo}', 'GrupoController@mostrarReprobadosPeriodo')->name('cohortes.mostrarReprobados.periodo');
 Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/bajas', 'GrupoController@mostrarBajas')->name('cohortes.mostrarBajas');
+Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/bajas/imprimir', 'GrupoController@imprimirBajas')->name('cohortes.imprimirBajas');
 
 Route::get('grupos/{idGrupo}/estudiantes', 'EstudianteController@show')->name('estudiantesGrupo');
 Route::get('grupos/{idGrupo}/estudiantes/crear', 'EstudianteController@agregarEstudiante')->name('agregarEstudiante');

@@ -16,6 +16,7 @@ use App\Models\Reprobado;
 use App\Models\Titulacion;
 use App\Models\Traslado;
 use App\Models\Trayectoria;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -647,5 +648,44 @@ class GrupoController extends Controller
             $contador++;
         }
         return $cantidades;
+    }
+
+    //<---- Métodos Para imprimir tablas ---->
+
+    public function imprimirBajas($nombreCohorte, $nombreGrupo)
+    {
+        $idCohorte              = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
+        $idGrupo                = Grupo::where("NombreGrupo", '=', $nombreGrupo)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
+        $estudiantes            = Grupo_Estudiante::where('Estado', '=', 'Baja')->where('IdGrupo', '=', $idGrupo)->get();
+        $bajasTemporales        = [];
+        $bajasDefinitivas       = [];
+        foreach ($estudiantes as $estudiante) {
+            $baja = Baja::where('IdTrayectoria', '=', $estudiante->IdTrayectoria)->get()->last();
+            if ($baja->TipoBaja == "Temporal") {
+                $bajasTemporales[] = $estudiante;
+            } else {
+                $bajasDefinitivas[] = $estudiante;
+            }
+        }
+        $resultadosTemporal     = $this->getCantidadesGenero($bajasTemporales);
+        $hombreTemporal         = $resultadosTemporal[0];
+        $mujerTemporal          = $resultadosTemporal[1];
+        $resultadosDefinitivo   = $this->getCantidadesGenero($bajasDefinitivas);
+        $hombreDefinitivo       = $resultadosDefinitivo[0];
+        $mujerDefinitivo        = $resultadosDefinitivo[1];
+        $grupo                  = Grupo::where('IdGrupo', '=', $idGrupo)->get();
+        $motivos                = Motivo::get();
+        $bajasMotivos           = $this->getEstudiantesPorMotivo($estudiantes);
+
+        $pdf = PDF::loadView('grupos\pdf\imprimirBajas', [
+            'grupos'            => $grupo,
+            'hombreTemporal'    => $hombreTemporal,
+            'mujerTemporal'     => $mujerTemporal,
+            'hombreDefinitivo'  => $hombreDefinitivo,
+            'mujerDefinitivo'   => $mujerDefinitivo,
+            'resultados'        => $bajasMotivos,
+            'motivos'           => $motivos,
+        ]);
+        return $pdf->stream();
     }
 }

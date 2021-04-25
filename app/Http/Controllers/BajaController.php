@@ -4,22 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Baja;
 use App\Http\Requests\BajaRequest;
+use App\Models\Motivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class BajaController extends Controller
 {
-    private function comprobarMotivo($input)
-    {
-        $motivo = $input['IdMotivo'];
-        if ($input['TipoBaja'] == "Temporal") {
-            return ($motivo == 1 || $motivo == 2 || $motivo == 4 || $motivo == 5 || $motivo == 6);
-        } else {
-            return ($motivo == 3 || $motivo == 7 || $motivo == 8 || $motivo == 9);
-        }
-    }
-
     public function store(BajaRequest $request)
     {
         $input  = $request->validated();
@@ -28,10 +19,26 @@ class BajaController extends Controller
             Session::flash('flash', [['type' => "danger", 'message' => "El estudiante ya está dado de baja en el periodo seleccionado."]]);
             return redirect()->route('estudiantesGrupo', $input['IdGrupo']);
         }
+
+        $bajas = Baja::where("IdTrayectoria", "=", $input['IdTrayectoria'])->get();
+        //TODO: Preguntar el número máximo de bajas y bajas simultáneas
+        //TODO: Si existen más de una baja, cómo se va a manejar en la tabla.
+        if ($bajas->count() > 5) {
+            Session::flash('flash', [['type' => "danger", 'message' => "El estudiante no puede realizar más bajas."]]);
+            return redirect()->route('estudiantesGrupo', $input['IdGrupo']);
+        }
+        foreach ($bajas as $baja) {
+            if ($baja != null && $baja->TipoBaja == "Definitiva") {
+                Session::flash('flash', [['type' => "danger", 'message' => "El estudiante ya está dado de baja definitiva."]]);
+                return redirect()->route('estudiantesGrupo', $input['IdGrupo']);
+            }
+        }
+
         if (!$this->comprobarMotivo($input)) {
             Session::flash('flash', [['type' => "danger", 'message' => "El motivo seleccionado no es aplicable para el tipo de baja seleccionado."]]);
             return redirect()->back();
         }
+
         try {
             Baja::create($request->validated());
             DB::beginTransaction();
@@ -48,7 +55,15 @@ class BajaController extends Controller
         }
     }
 
-
+    private function comprobarMotivo($input)
+    {
+        $motivo = Motivo::where('IdMotivo', '=', $input['IdMotivo'])->get()->last();
+        if ($input['TipoBaja'] == "Temporal") {
+            return ($motivo->TipoBaja == "Temporal");
+        } else {
+            return ($motivo->TipoBaja == "Definitiva");
+        }
+    }
 
     public function edit($id)
     {

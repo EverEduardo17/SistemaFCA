@@ -12,7 +12,7 @@ class Motivo extends Model
 
     protected $table = "Motivo";
     protected $primaryKey = "IdMotivo";
-    protected $fillable = ['NombreMotivo', 'DescripcionMotivo'];
+    protected $fillable = ['NombreMotivo', 'DescripcionMotivo', 'TipoBaja'];
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';

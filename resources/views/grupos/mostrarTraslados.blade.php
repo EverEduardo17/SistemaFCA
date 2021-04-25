@@ -8,7 +8,7 @@
         <li class="breadcrumb-item"><a href="{{ route('cohortes.show', $grupos[0]->cohorte->NombreCohorte) }}">Cohorte
                 {{$grupos[0]->cohorte->NombreCohorte}}</a></li>
         <li class="breadcrumb-item"><a
-                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->IdGrupo]) }}">{{$grupos[0]->NombreGrupo}}</a>
+                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}">{{$grupos[0]->NombreGrupo}}</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">Traslados</li>
     </ol>

@@ -89,9 +89,9 @@ class EventoController extends Controller
                 ->withInput();
         }
 
+        //TODO: Validar que las fechas no chocan con otro evento
         $comprobarFecha = $this->comprobarFecha($fechaInicio, $fechaFin, intval($input['sede']));
         if (!$comprobarFecha) {
-            //!!! Validar que las fechas no chocan con otro evento
             try {
                 DB::beginTransaction();
                 $idEvento = DB::table('Evento')->insertGetId([
@@ -142,7 +142,6 @@ class EventoController extends Controller
         } else {
             Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar el evento, el evento " . $comprobarFecha->NombreEvento . " ya se encuentra registrado en ese horario."]]);
             return redirect()->route('eventos.index');
-            dd($comprobarFecha->NombreEvento);
         }
     }
 
@@ -200,11 +199,21 @@ class EventoController extends Controller
     private function comprobarFecha($fechaInicio, $fechaFin, $sedeEvento)
     {
         //TODO: Comprobar que no sea el primer evento el que tome.
-        $fechaInicioOcupada = FechaEvento::whereBetween('InicioFechaEvento', array($fechaInicio, $fechaFin))->count();
-        $fechaFinOcupada    = FechaEvento::whereBetween('FinFechaEvento', array($fechaInicio, $fechaFin))->count();
-        if ($fechaInicioOcupada > 0 || $fechaFinOcupada > 0) {
+        $fechaInicioOcupada = FechaEvento::whereBetween('InicioFechaEvento', array($fechaInicio, $fechaFin))->get();
+        $fechaFinOcupada    = FechaEvento::whereBetween('FinFechaEvento', array($fechaInicio, $fechaFin))->get();
+        $eventoAprobado     = false;
+        foreach ($fechaInicioOcupada as $fechaInicio) {
+            if ($fechaInicio->evento->EstadoEvento == "Aprobado") {
+                $eventoAprobado = true;
+            }
+        }
+        foreach ($fechaFinOcupada as $fechaFin) {
+            if ($fechaFin->evento->EstadoEvento == "Aprobado") {
+                $eventoAprobado = true;
+            }
+        }
+        if ($fechaInicioOcupada->count() > 0 || $fechaFinOcupada->count() > 0 || $eventoAprobado) {
             $fechaEvento    = FechaEvento::whereBetween('InicioFechaEvento', array($fechaInicio, $fechaFin))->orderBy('IdFechaEvento', 'desc')->first();
-            // dd($fechaEvento);
             if ($fechaEvento != null && $sedeEvento == $fechaEvento->evento_fecha_sede->sedeEvento->IdSedeEvento) {
                 return $fechaEvento->evento_fecha_sede->evento;
             } else {

@@ -13,24 +13,29 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 
-class FechaEventoController extends Controller {
+class FechaEventoController extends Controller
+{
     private $user;
     private $idUsuario;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->user = Auth::user();
         $this->idUsuario = Auth::id();
     }
 
-    public function index() {
+    public function index()
+    {
         //
     }
 
-    public function create() {
+    public function create()
+    {
         //
     }
 
-    public function store(FechaEventoRequest $request) {
+    public function store(FechaEventoRequest $request)
+    {
         Gate::authorize('havepermiso', 'fechaevento-crear');
 
         $input = $request->validated();
@@ -43,14 +48,17 @@ class FechaEventoController extends Controller {
         $fechaFin       = formatearDateTime($input['fechaInicio'], $input['horaFin']);
 
         //!!!! Validar que la fechaFin debe ser mayor a la fechaInicio
-        if( formatearTime($input['horaInicio']) >= formatearTime($input['horaFin']) ) {
-            Session::flash('flash', [ ['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."] ]);
+        if (formatearTime($input['horaInicio']) >= formatearTime($input['horaFin'])) {
+            Session::flash('flash', [['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."]]);
             return redirect()->back()->withInput();
         }
 
-        //!!! Validar que las fechas no chocan con otro evento
-        try {
-            DB::beginTransaction();
+        //TODO: Validar que las fechas no chocan con otro evento
+        //TODO: Crear un método único en EventoController se duplica.
+        $comprobarFecha = $this->comprobarFecha($fechaInicio, $fechaFin, intval($input['sede']));
+        if (!$comprobarFecha) {
+            try {
+                DB::beginTransaction();
                 DB::table('Evento')->where('IdEvento', $idEvento)->update([
                     'EstadoEvento'       => 'POR APROBAR',
                 ]);
@@ -65,30 +73,37 @@ class FechaEventoController extends Controller {
                 DB::table('Evento_Fecha_Sede')->insert([
                     'IdEvento'      => $idEvento,
                     'IdFechaEvento' => $idFechaEvento,
-                    'IdSedeEvento'  => intval( $input['sede'] ),
+                    'IdSedeEvento'  => intval($input['sede']),
                     'CreatedBy'     => $this->idUsuario,
                     'UpdatedBy'     => $this->idUsuario,
                 ]);
-            DB::commit();
-        }catch (\Throwable $e) {
-            DB::rollBack();
-            Session::flash('flash', [ ['type' => "danger", 'message' => "No fue posible realizar la operación solicitada."] ]);
+                DB::commit();
+            } catch (\Throwable $e) {
+                DB::rollBack();
+                Session::flash('flash', [['type' => "danger", 'message' => "No fue posible realizar la operación solicitada."]]);
+                return redirect()->back()->withInput();
+            }
+        } else {
+            Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar el evento, el evento " . $comprobarFecha->NombreEvento . " ya se encuentra registrado en ese horario."]]);
             return redirect()->back()->withInput();
         }
 
-        Session::flash('flash', [ ['type' => "success", 'message' => "Fecha agregada con éxito."] ]);
-        return redirect()->back();
+        Session::flash('flash', [['type' => "success", 'message' => "Fecha agregada con éxito."]]);
+        return redirect()->back()->withInput();
     }
 
-    public function show(FechaEvento $fechaEvento){
+    public function show(FechaEvento $fechaEvento)
+    {
         //
     }
 
-    public function edit(FechaEvento $fechaEvento){
+    public function edit(FechaEvento $fechaEvento)
+    {
         //
     }
 
-    public function update(FechaEventoRequest $request) {
+    public function update(FechaEventoRequest $request)
+    {
         Gate::authorize('havepermiso', 'fechaevento-editar');
 
         $input = $request->validated();
@@ -98,31 +113,31 @@ class FechaEventoController extends Controller {
         $fechaFin       = formatearDateTime($input['fechaInicio'], $input['horaFin']);
 
         //!!!! Validar que la fechaFin debe ser mayor a la fechaInicio
-        if( formatearTime($input['horaInicio']) >= formatearTime($input['horaFin']) ) {
-            Session::flash('flash', [ ['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."] ]);
+        if (formatearTime($input['horaInicio']) >= formatearTime($input['horaFin'])) {
+            Session::flash('flash', [['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."]]);
             return redirect()->route('eventos.create')->withInput();
         }
 
         //!!! Validar que las fechas no chocan con otro evento
 
-        $fechaEvento = FechaEvento::find( $input['fechaEvento'] );
+        $fechaEvento = FechaEvento::find($input['fechaEvento']);
 
-        if( intval( $input['evento'] ) != $fechaEvento->evento->IdEvento ) {
-            Session::flash('flash', [ ['type' => "danger", 'message' => "No fue posible realizar la operación solicitada."] ]);
+        if (intval($input['evento']) != $fechaEvento->evento->IdEvento) {
+            Session::flash('flash', [['type' => "danger", 'message' => "No fue posible realizar la operación solicitada."]]);
             return redirect()
                 ->back()
                 ->withInput();
         }
 
-        try{
+        try {
 
             DB::beginTransaction();
 
-                DB::table('Evento')->where('IdEvento', $fechaEvento->evento->IdEvento)->update([
-                    'EstadoEvento'       => 'POR APROBAR',
-                ]);
+            DB::table('Evento')->where('IdEvento', $fechaEvento->evento->IdEvento)->update([
+                'EstadoEvento'       => 'POR APROBAR',
+            ]);
 
-            $fechaEvento = FechaEvento::find( $input['fechaEvento'] );
+            $fechaEvento = FechaEvento::find($input['fechaEvento']);
             $fechaEvento->InicioFechaEvento = $fechaInicio;
             $fechaEvento->FinFechaEvento = $fechaFin;
             $fechaEvento->UpdatedBy = $this->idUsuario;
@@ -137,17 +152,18 @@ class FechaEventoController extends Controller {
         } catch (\Throwable $e) {
             DB::rollBack();
 
-            Session::flash('flash', [ ['type' => "danger", 'message' => "No fue posible realizar la operación solicitada."] ]);
+            Session::flash('flash', [['type' => "danger", 'message' => "No fue posible realizar la operación solicitada."]]);
             return redirect()
                 ->back()
                 ->withInput();
         }
 
-        Session::flash('flash', [ ['type' => "success", 'message' => "Fecha actualizada con éxito."] ]);
+        Session::flash('flash', [['type' => "success", 'message' => "Fecha actualizada con éxito."]]);
         return redirect()->back();
     }
 
-    public function destroy(Request $request) {
+    public function destroy(Request $request)
+    {
         Gate::authorize('havepermiso', 'fechaevento-eliminar');
 
         $input = $request->all();
@@ -157,19 +173,40 @@ class FechaEventoController extends Controller {
         $validator = Validator::make($input, $rules);
 
         if ($validator->fails()) {
-            Session::flash('flash', [ ['type' => "danger", 'message' => "No fue posible realizar la operación solicitada."] ]);
+            Session::flash('flash', [['type' => "danger", 'message' => "No fue posible realizar la operación solicitada."]]);
             return redirect()->back();
         }
 
-        $fecha_sede_evento_s = Evento_Fecha_Sede::where('IdFechaEvento',$input['fechaEvento'])->first();
+        $fecha_sede_evento_s = Evento_Fecha_Sede::where('IdFechaEvento', $input['fechaEvento'])->first();
         $fechaEvento = $fecha_sede_evento_s->fechaEvento;
-        if( $fecha_sede_evento_s->delete() ){
+        if ($fecha_sede_evento_s->delete()) {
             $fechaEvento->delete();
-            Session::flash('flash', [ ['type' => "success", 'message' => "Fecha <strong>eliminada</strong> con éxito."] ]);
+            Session::flash('flash', [['type' => "success", 'message' => "Fecha <strong>eliminada</strong> con éxito."]]);
             return redirect()->back();
         }
 
-        Session::flash('flash', [ ['type' => "danger", 'message' => "No fue posible realizar la operación solicitada."] ]);
+        Session::flash('flash', [['type' => "danger", 'message' => "No fue posible realizar la operación solicitada."]]);
         return redirect()->back();
+    }
+
+    private function comprobarFecha($fechaInicio, $fechaFin, $sedeEvento)
+    {
+        //TODO: Comprobar que no sea el primer evento el que tome.
+        $fechaInicioOcupada = FechaEvento::whereBetween('InicioFechaEvento', array($fechaInicio, $fechaFin))->count();
+        $fechaFinOcupada    = FechaEvento::whereBetween('FinFechaEvento', array($fechaInicio, $fechaFin))->count();
+        if ($fechaInicioOcupada > 0 || $fechaFinOcupada > 0) {
+            $fechaEvento    = FechaEvento::whereBetween('InicioFechaEvento', array($fechaInicio, $fechaFin))->orderBy('IdFechaEvento', 'desc')->first();
+            if ($fechaEvento != null && $sedeEvento == $fechaEvento->evento_fecha_sede->sedeEvento->IdSedeEvento) {
+                return $fechaEvento->evento_fecha_sede->evento;
+            } else {
+                $fechaEvento = FechaEvento::whereBetween('FinFechaEvento', array($fechaInicio, $fechaFin))->orderBy('IdFechaEvento', 'desc')->first();
+                if ($fechaEvento != null && $sedeEvento == $fechaEvento->evento_fecha_sede->sedeEvento->IdSedeEvento) {
+                    return $fechaEvento->evento_fecha_sede->evento;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
     }
 }

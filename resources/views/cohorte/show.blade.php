@@ -65,8 +65,7 @@
                         <div class="d-flex align-items-center mb-0 pb-0">
                             <h5 class="mr-auto pl-3">{{$programa->AcronimoProgramaEducativo}} - {{$nombreCohorte}}</h5>
                             <div class="btn-group" role="group">
-                                <button class="btn btn-success" data-toggle="modal" data-target="#create">Agregar
-                                    Grupo</button>
+                                <button class="btn btn-success" data-toggle="modal" data-target="#create">Agregar Grupo</button>
                             </div>
                         </div>
                         <hr>
@@ -105,16 +104,18 @@
                                     <td><strong>{{ $cantidades->contarEstudiantes($grupo->IdGrupo)[0]+ $cantidades->contarEstudiantes($grupo->IdGrupo)[1]}}</strong>
                                     </td>
                                     <td>{{ $grupo->periodoActivo->NombrePeriodo }}</td>
-                                    <td class="btn-group btn-group-sm px-3">
+                                    <td class="btn-group btn-group-sm">
+                                        <a class="btn btn-success btn-sm"
+                                            href="{{ route('cohortes.mostrarGrupo', [$nombreCohorte, $grupo->NombreGrupo]) }}">Agregar Estudiante</a>
                                         <a class="btn btn-outline-primary btn-sm"
-                                            href="{{ route('cohortes.mostrarGrupo', [$nombreCohorte, $grupo->NombreGrupo]) }}">Visualizar</a>
-                                        <a class="btn btn-info btn-sm"
-                                            href="{{ route('grupos.show', $grupo) }}">Detalles</a>
+                                            href="{{ route('cohortes.mostrarGrupo', [$nombreCohorte, $grupo->NombreGrupo]) }}">Visualizar grupo</a>
+                                        <a class="btn btn-outline-info btn-sm"
+                                            href="{{ route('grupos.show', $grupo) }}">Detalles grupo</a>
                                         <form method="POST" id="form-eliminar"
                                             action="{{ route('grupos.destroy', $grupo) }}">
                                             @csrf @method('DELETE')
                                             <a href="#" data-toggle="modal" data-target="#delete"
-                                                class="btn btn-danger btn-sm">Eliminar</a>
+                                                class="btn btn-outline-danger btn-sm">Eliminar grupo</a>
                                         </form>
                                     </td>
                                 </tr>
@@ -140,15 +141,15 @@
 @section('script')
 <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
 <script>
-    @foreach ($programas as $programa)
+    @foreach ($programas as $programa){
         $(document).ready(function() {
             $('#table_{{$programa->AcronimoProgramaEducativo}}').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-            }
+                }        
+            });
         });
-        
-    });
+    }
     @endforeach
 </script>
 <script>
@@ -156,6 +157,7 @@
         var button = $(event.relatedTarget);
         var modal = $(this);
     })
+
     $('#create').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget);
         var modal = $(this);

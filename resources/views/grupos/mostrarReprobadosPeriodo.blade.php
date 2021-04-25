@@ -6,7 +6,7 @@
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('cohortes.show', "S200") }}">Gestión de Estudiantes</a></li>
         <li class="breadcrumb-item"><a href="{{ route('cohortes.show', $grupos[0]->cohorte->NombreCohorte) }}">Cohorte {{$grupos[0]->cohorte->NombreCohorte}}</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->IdGrupo]) }}">{{$grupos[0]->NombreGrupo}}</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}">{{$grupos[0]->NombreGrupo}}</a></li>
         <li class="breadcrumb-item"><a  href="{{ route('cohortes.mostrarReprobados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}">Reprobados</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{$periodos[0]->NombrePeriodo}}</li>
     </ol>
