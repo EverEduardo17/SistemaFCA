@@ -28,6 +28,14 @@ class FechaEvento extends Model
         return $this->evento_fecha_sede->sedeEvento();
     }
 
+    public function efs(){
+        return $this->hasOne(Evento_Fecha_Sede::class, 'IdFechaEvento', 'IdFechaEvento');
+    }
+
+    public function even(){
+        return $this->efs->evento();
+    }
+
     public function evento(){
         return $this->evento_fecha_sede->evento();
     }

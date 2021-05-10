@@ -111,6 +111,7 @@
                             <table id="table_eventos" class="display">
                                 <thead>
                                     <tr>
+                                        <th>Conflicto</th>
                                         <th>Fecha</th>
                                         <th>Inicio</th>
                                         <th>Fin</th>
@@ -121,6 +122,18 @@
                                 <tbody>
                                     @foreach($evento_fecha_sede_s as $efs)
                                         <tr>
+                                            <td>@if($evento->EstadoEvento == "APROBADO")
+                                                    APROBADO
+                                                @else
+                                                    @if(count(conflicto($efs->Id_Evento_Fecha_Sede)) > 0)
+                                                        @foreach(conflicto($efs->Id_Evento_Fecha_Sede) as $item )
+                                                            <a href="{{route('eventos.show', $item['id'])}}">{{$item['evento']}}</a><br>
+                                                        @endforeach
+                                                    @else
+                                                        Sin conflicto
+                                                    @endif
+                                                @endif
+                                            </td>
                                             <td>{{$efs->fechaEvento->InicioFechaEvento->format('d/m/Y') ?? ""}}</td>
                                             <td>{{$efs->fechaEvento->InicioFechaEvento->format('h:i A') ?? ""}}</td>
                                             <td>{{$efs->fechaEvento->FinFechaEvento->format('h:i A') ?? ""}}</td>

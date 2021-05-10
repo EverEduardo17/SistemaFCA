@@ -1,4 +1,8 @@
 <?php
+    use App\Models\Evento_Fecha_Sede;
+    use App\Models\FechaEvento;
+    use Illuminate\Support\Collection;
+
     function formatearDateTime($date, $time){
         $fecha = explode( '/', $date );
         $hora  = explode( ' ', $time );
@@ -27,4 +31,30 @@
         }
 
         return $hora;
+    }
+
+    function conflicto($fecha_evento) {
+        $fecha_evento = Evento_Fecha_Sede::with('evento', 'fechaEvento')->findOrFail($fecha_evento);
+        if($fecha_evento->evento->EstadoEvento == "APROBADO"){
+            return "APROBADO";
+        }
+        $fecha = $fecha_evento->fechaEvento;
+        $fechas = FechaEvento::where('IdFechaEvento', '!=', $fecha->IdFechaEvento)
+            ->where(function($q) use ($fecha) {
+                $q->whereBetween('InicioFechaEvento', [$fecha->InicioFechaEvento, $fecha->FinFechaEvento])
+                ->orWhereBetween('FinFechaEvento', [$fecha->InicioFechaEvento, $fecha->FinFechaEvento]);
+            })->get();
+        $confictos =  new Collection();
+        foreach ($fechas as $fecha) {
+            if($fecha->evento_fecha_sede->IdSedeEvento == $fecha_evento->IdSedeEvento){
+                $confictos->push(
+                    array(
+                        "id" => $fecha->even->IdEvento,
+                        "evento" => $fecha->even->NombreEvento
+                    )
+                );
+            }
+        }
+        $confictos->all();
+        return $confictos;
     }

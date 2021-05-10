@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Evento;
+use App\Models\Evento_Fecha_Sede;
+use App\Models\FechaEvento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -24,11 +26,17 @@ class EventoEstadoController extends Controller
     {
         Gate::authorize('havepermiso', 'eventoestado-aprobar');
         try {
-            DB::beginTransaction();
-                DB::table('Evento')->where('IdEvento', $evento->IdEvento)->update([
-                    'EstadoEvento'       => "APROBADO"
-                ]);
-            DB::commit();
+            $bandera = $this->existeConflicto($evento);
+            if($bandera){
+                Session::flash('flash', [ ['type' => "danger", 'message' => "Una fecha tiene conflicto con un evento aprobado."] ]);
+                return redirect()->route('eventos.show', $evento->IdEvento);
+            }else{
+                DB::beginTransaction();
+                    DB::table('Evento')->where('IdEvento', $evento->IdEvento)->update([
+                        'EstadoEvento'       => "APROBADO"
+                    ]);
+                DB::commit();
+            }
         } catch (\Throwable $th) {
             DB::rollBack();
             Session::flash('flash', [ ['type' => "danger", 'message' => "Error al aprobar el Evento."] ]);
@@ -114,5 +122,31 @@ class EventoEstadoController extends Controller
         }
         Session::flash('flash', [ ['type' => "success", 'message' => "Evento cancelado con éxito."] ]);
         return redirect()->route('eventos.show', $evento->IdEvento);
+    }
+
+    private function existeConflicto($evento)
+    {
+        $fechas = Evento_Fecha_Sede::where('IdEvento', $evento->IdEvento)->get();
+
+        foreach ($fechas as $fecha){
+            if($this->conflicto($fecha->fechaEvento, $fecha)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function conflicto($fecha, $fechaEvento) {
+        $fechas = FechaEvento::where('IdFechaEvento', '!=', $fecha->IdFechaEvento)
+            ->where(function($q) use ($fecha) {
+                $q->whereBetween('InicioFechaEvento', [$fecha->InicioFechaEvento, $fecha->FinFechaEvento])
+                    ->orWhereBetween('FinFechaEvento', [$fecha->InicioFechaEvento, $fecha->FinFechaEvento]);
+            })->get();
+        foreach ($fechas as $fecha) {
+            if($fecha->even->EstadoEvento == "APROBADO" && $fecha->evento_fecha_sede->IdSedeEvento == $fechaEvento->IdSedeEvento ){
+                return true;
+            }
+        }
+        return false;
     }
 }

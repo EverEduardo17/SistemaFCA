@@ -59,24 +59,24 @@ class FechaEventoController extends Controller
         if (!$comprobarFecha) {
             try {
                 DB::beginTransaction();
-                DB::table('Evento')->where('IdEvento', $idEvento)->update([
-                    'EstadoEvento'       => 'POR APROBAR',
-                ]);
+                    DB::table('Evento')->where('IdEvento', $idEvento)->update([
+                        'EstadoEvento'       => 'POR APROBAR',
+                    ]);
 
-                $idFechaEvento = DB::table('FechaEvento')->insertGetId([
-                    'InicioFechaEvento' => $fechaInicio,
-                    'FinFechaEvento'    => $fechaFin,
-                    'CreatedBy'         => $this->idUsuario,
-                    'UpdatedBy'         => $this->idUsuario,
-                ]);
+                    $idFechaEvento = DB::table('FechaEvento')->insertGetId([
+                        'InicioFechaEvento' => $fechaInicio,
+                        'FinFechaEvento'    => $fechaFin,
+                        'CreatedBy'         => $this->idUsuario,
+                        'UpdatedBy'         => $this->idUsuario,
+                    ]);
 
-                DB::table('Evento_Fecha_Sede')->insert([
-                    'IdEvento'      => $idEvento,
-                    'IdFechaEvento' => $idFechaEvento,
-                    'IdSedeEvento'  => intval($input['sede']),
-                    'CreatedBy'     => $this->idUsuario,
-                    'UpdatedBy'     => $this->idUsuario,
-                ]);
+                    DB::table('Evento_Fecha_Sede')->insert([
+                        'IdEvento'      => $idEvento,
+                        'IdFechaEvento' => $idFechaEvento,
+                        'IdSedeEvento'  => intval($input['sede']),
+                        'CreatedBy'     => $this->idUsuario,
+                        'UpdatedBy'     => $this->idUsuario,
+                    ]);
                 DB::commit();
             } catch (\Throwable $e) {
                 DB::rollBack();
