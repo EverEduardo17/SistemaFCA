@@ -58,7 +58,7 @@ class BajaController extends Controller
     private function comprobarMotivo($input)
     {
         $motivo = Motivo::where('IdMotivo', '=', $input['IdMotivo'])->get()->last();
-        if ($input['TipoBaja'] == "Temporal") {
+        if ($input['TipoBaja'] == "Temporal" || $input['TipoBaja'] == "Ambos") {
             return ($motivo->TipoBaja == "Temporal");
         } else {
             return ($motivo->TipoBaja == "Definitiva");

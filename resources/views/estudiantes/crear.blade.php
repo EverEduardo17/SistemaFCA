@@ -30,7 +30,7 @@
                     <label name="NombreDatosPersonales">Nombre(s):</label>
                     <input name="NombreDatosPersonales" type="text"
                         class="form-control @error('NombreDatosPersonales') is-invalid @enderror"
-                        value="{{old('NombreDatosPersonales')}}" placeholder="Ej. Javier">
+                        value="{{old('NombreDatosPersonales')}}" placeholder="Ej. Javier" autofocus>
                 </div>
                 <div class="form-group">
                     <label name="ApellidoPaternoDatosPersonales">Apellido Paterno:</label>
@@ -50,10 +50,10 @@
                             <label name="IdCohorte">Cohorte de pertenencia:</label>
                             <input name="NombreCohorte" type="text"
                                 class="form-control @error('NombreCohorte') is-invalid @enderror"
-                                value="{{$cohorte->NombreCohorte}}" placeholder="Ej. S170" disabled></input>
+                                value="{{$cohorte->NombreCohorte}}" placeholder="Ej. S170" disabled>
                             <input name="IdCohorte" type="hidden"
                                 class="form-control @error('IdCohorte') is-invalid @enderror"
-                                value="{{$cohorte->IdCohorte}}"></input>
+                                value="{{$cohorte->IdCohorte}}">
                         </div>
                         <div class="col">
                             <label name="MatriculaEstudiante">Matricula:</label>
@@ -92,6 +92,7 @@
                             <label name="IdModalidad">Modalidad de entrada:</label>
                             <select name="IdModalidad" class="form-control @error('IdModalidad') is-invalid @enderror"
                                 id="modalidad">
+                                <option></option>
                                 @foreach ($modalidades as $modalidad)
                                 <option value="{{ $modalidad->IdModalidad }}"@if(old('IdModalidad')==$modalidad->IdModalidad)selected @endif>{{ $modalidad->NombreModalidad }}</option>
                                 @endforeach

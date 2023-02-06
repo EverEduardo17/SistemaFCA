@@ -8,10 +8,10 @@
         <li class="breadcrumb-item"><a href="{{ route('cohortes.show', $grupos[0]->cohorte->NombreCohorte) }}">Cohorte
                 {{$grupos[0]->cohorte->NombreCohorte}}</a></li>
         <li class="breadcrumb-item"><a
-                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}">{{ $grupos[0]->NombreGrupo }}</a>
+                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}">{{ $grupos[0]->NombreGrupo }}</a>
         </li>
         <li class="breadcrumb-item"><a
-                href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}">Egresados</a>
+                href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}">Egresados</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">{{$periodos[0]->NombrePeriodo}}</li>
     </ol>
@@ -30,8 +30,30 @@
     <div class="card-body">
         <h5 class="pt-0 mt-0 contenedor-botones text-muted">Cohorte {{$grupos[0]->cohorte->NombreCohorte}} </h5>
         <h6 class="contenedor-botones text-muted">Egresados del periodo {{$periodos[0]->NombrePeriodo}}</h6>
+        
+        <div class="row justify-content-center  mt-3">
+            <a class="btn btn-outline-info px-6 mb-3"
+                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
+                role="button">Ver Resumen</a>
+            <a class="btn btn-outline-info px-6 mb-3 ml-2"
+                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
+                role="button">Ver Estado</a>
+            <a class="btn btn-info px-6 mb-3 ml-2"
+                href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
+                role="button">Ver Egresados</a>
+            <a class="btn btn-outline-info px-6 mb-3 ml-2"
+                href="{{ route('cohortes.mostrarTraslados', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
+                role="button">Ver Traslados</a>
+            <a class="btn btn-outline-info px-6 mb-3 ml-2"
+                href="{{ route('cohortes.mostrarReprobados', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
+                role="button">Ver Reprobados</a>
+            <a class="btn btn-outline-info px-6 mb-3 ml-2"
+                href="{{ route('cohortes.mostrarBajas', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
+                role="button">Ver Bajas</a>
+        </div>
+
         <a class="btn btn-outline-dark float-left px-6 mb-3"
-            href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+            href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
             role="button"><em class="fas fa-arrow-left"></em> Regresar</a>
 
         <div class="table-responsive-xl">

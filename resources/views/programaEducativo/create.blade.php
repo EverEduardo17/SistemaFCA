@@ -23,7 +23,7 @@
       @include('layouts.validaciones')
       <div class="form-group">
         <label name="NombreProgramaEducativo">Nombre del Programa Educativo:</label>
-        <input name="NombreProgramaEducativo" type="text" class="form-control @error('NombreProgramaEducativo') is-invalid @enderror" value="{{old('NombreProgramaEducativo')}}" placeholder="Ej. Licenciatura en Ingeniería de Software">
+        <input name="NombreProgramaEducativo" type="text" class="form-control @error('NombreProgramaEducativo') is-invalid @enderror" value="{{old('NombreProgramaEducativo')}}" placeholder="Ej. Licenciatura en Ingeniería de Software" autofocus>
       </div>
       <div class="form-group">
         <label name="AcronimoProgramaEducativo">Acrónimo del Programa Educativo:</label>

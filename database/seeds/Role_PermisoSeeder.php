@@ -17,21 +17,22 @@ class Role_PermisoSeeder extends Seeder
             [3,15],
             [3,16],
             [3,17],
-            [5,16],
-            [5,17],
-            [4,13],
-            [4,16],
-            [4,17],
-            [4,18],
-            [4,19],
-            [4,20],
-            [4,21],
+
         ];
         $registros=[];
         foreach($relaciones as $registro){
             $registros[] = [
                 'IdRole'    => $registro[0],
                 'IdPermiso' => $registro[1],
+                'CreatedBy' => 1,
+                'UpdatedBy' => 1,
+            ];
+        }
+
+        for($i=1; $i<94; $i++){
+            $registros[] = [
+                'IdRole'    => 2,
+                'IdPermiso' => $i,
                 'CreatedBy' => 1,
                 'UpdatedBy' => 1,
             ];

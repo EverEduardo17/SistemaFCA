@@ -140,8 +140,8 @@ class PeriodoSeeder extends Seeder
             ],
 
             [
-                'NombrePeriodo'          => 'Agosto 209 - Enero 2010',
-                'FechaInicioPeriodo'     => new DateTime("209-08-01"),
+                'NombrePeriodo'          => 'Agosto 2009 - Enero 2010',
+                'FechaInicioPeriodo'     => new DateTime("2009-08-01"),
                 'FechaFinPeriodo'        => new DateTime("2010-01-31"),
                 'ActualPeriodo'          => false,
                 'CreatedBy'              => 1,
@@ -352,6 +352,17 @@ class PeriodoSeeder extends Seeder
                 'CreatedBy'              => 1,
                 'UpdatedBy'              => 1,
             ],
+
+            [
+                'NombrePeriodo'          => 'Agosto 2021 - Enero 2022',
+                'FechaInicioPeriodo'     => new DateTime("2021-08-01"),
+                'FechaFinPeriodo'        => new DateTime("2022-01-31"),
+                'ActualPeriodo'          => false,
+                'CreatedBy'              => 1,
+                'UpdatedBy'              => 1,
+            ],
+
+
         ]);
     }
 }

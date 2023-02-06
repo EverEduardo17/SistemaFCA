@@ -20,6 +20,7 @@ class CreateEmpresaTable extends Migration
             $table->string('DireccionEmpresa', 100)->nullable(false);
             $table->string('LocalidadEmpresa', 100)->nullable(false);
             $table->string('TelefonoEmpresa', 25)->nullable(false);
+            $table->string('EmailEmpresa', 50)->nullable(false);
             $table->string('ResponsableEmpresa', 100)->nullable(false);
             $table->string('TipoEmpresa', 50)->nullable(false);
             $table->string('ActividadEmpresa', 50)->nullable(false);

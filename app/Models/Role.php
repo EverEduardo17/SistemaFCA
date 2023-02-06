@@ -17,7 +17,7 @@ class Role extends Model
     const DELETED_AT = 'DeletedAt';
 
     public function permisos() {
-        return $this->belongsToMany(Permiso::class, 'role_permiso', 'IdRole', 'IdPermiso');
+        return $this->belongsToMany(Permiso::class, 'Role_Permiso', 'IdRole', 'IdPermiso');
     }
 
     public function usuarios() {

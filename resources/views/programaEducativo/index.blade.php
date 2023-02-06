@@ -34,8 +34,8 @@
                         <td class="border-right">{{ $programa->AcronimoProgramaEducativo }}</td>
                         <td class="border-right">{{ $programa->facultad->NombreFacultad }}</td>
                         <td class="py-2">
-                            <a class="btn btn-sm btn-primary mx-2" href="{{ route('programaEducativo.edit', $programa) }}">Editar</a>
-                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $programa->IdProgramaEducativo }}">Eliminar</a>
+                            <a class="btn btn-sm btn-outline-primary mx-2" href="{{ route('programaEducativo.edit', $programa->AcronimoProgramaEducativo) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><em class="fas fa-pencil-alt"></em></a>
+                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $programa->IdProgramaEducativo }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar"><em class="fas fa-trash-alt"></em></a>
                         </td>
                     </tr>
                     @endforeach
@@ -64,7 +64,7 @@
     });
 </script>
 <script>
-    /*Eliminar Grupo*/
+    /*Eliminar PE*/
     $('#delete').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget);
         var id = button.data('documento');

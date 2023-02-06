@@ -42,9 +42,9 @@
                             <td class="border-right"><strong>{{$estudiantes->contarEstudiantes($grupo->IdGrupo)[0] + $estudiantes->contarEstudiantes($grupo->IdGrupo)[1]}}</strong></td>
                         <td class="border-right">{{ $grupo->periodoActivo->NombrePeriodo }}</td>
                         <td class="btn-group btn-group-sm">
-                            <a class="btn btn-sm btn-outline-primary" href="{{ route('grupos.show', $grupo) }}">Detalles</a>
-                            <a class="btn btn-sm btn-outline-info mx-2" href="{{ route('estudiantesGrupo', $grupo->IdGrupo) }}">Estudiantes</a>
-                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-id="{{ $grupo->IdGrupo }}">Eliminar</a>
+                            <a class="btn btn-sm btn-outline-primary" href="{{ route('grupos.show', $grupo) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles" ><em class="far fa-eye"></em></a>
+                            <a class="btn btn-sm btn-outline-info mx-2" href="{{ route('estudiantesGrupo', $grupo->IdGrupo) }}" data-toggle="tooltip" data-placement="bottom" title="Estudiantes"><em class="fas fa-user"></em></a>
+                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-id="{{ $grupo->IdGrupo }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar"><em class="fas fa-trash-alt"></em></a>
                         </td>
                     </tr>
                     @endforeach

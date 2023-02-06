@@ -45,6 +45,7 @@
       <div class="form-group">
         <label name="IdCohorte">Cohorte de pertenencia:</label>
         <select name="IdCohorte" class="form-control @error('IdCohorte') is-invalid @enderror">
+          <option></option>
           @foreach ($cohortes as $cohorte)
           <option value="{{ $cohorte->IdCohorte }}" {{   (old('IdCohorte') == $cohorte->IdCohorte ) ? "selected = selected":"" }}> {{ $cohorte->NombreCohorte }}</option>
           @endforeach
@@ -55,6 +56,7 @@
           <div class="col">
             <label name="IdPeriodoInicio">Periodo de inicio del grupo:</label>
             <select name="IdPeriodoInicio" class="form-control @error('IdPeriodoInicio') is-invalid @enderror">
+              <option></option>
               @foreach ($periodos as $periodo)
               <option value="{{$periodo->IdPeriodo }} @if(old('IdPeriodo') == $periodo->IdPeriodo )selected = selected @endif">{{ $periodo->NombrePeriodo }}</option>
               @endforeach
@@ -63,6 +65,7 @@
           <div class="col">
             <label name="IdPeriodoActivo">Último periodo activo del grupo:</label>
             <select name="IdPeriodoActivo" class="form-control @error('IdPeriodoActivo') is-invalid @enderror">
+              <option></option>
               @foreach ($periodos as $periodo)
               <option value="{{ $periodo->IdPeriodo }}  @if(old('IdPeriodo') == $periodo->IdPeriodo )selected @endif ">{{ $periodo->NombrePeriodo }}</option>
               @endforeach

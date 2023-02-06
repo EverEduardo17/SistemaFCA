@@ -19,10 +19,13 @@
     </div>
     <div class="card-body">
         <div class="contenedor-botones justify-content-center align-items-center">
-            {{-- <a class="btn btn-outline-dark mr-2" href="#"> <em class="fas fa-eye"></em> Ver Cohorte</a> --}}
-            <a href="{{ route('cohortes.agregarEstudiante',$nombreCohorte) }}" class="btn btn-outline-dark mr-2"><em
-                    class="fas fa-plus-circle"></em> Carga masiva de Estudiante</a>
-            </a>
+
+            <form method="POST" id="importar" action="">
+                @csrf @method('DELETE')
+                <a href="#" data-toggle="modal" data-target="#import" class="btn btn-outline-dark">
+                    <em class="fas fa-plus-circle"></em> Carga masiva de Estudiantes</a>
+            </form>
+
         </div>
         <h5 class="py-2">Cohortes</h5>
         <div class="testimonial-group mx-3 my-2">
@@ -34,10 +37,8 @@
             </div>
         </div>
         <div class="contenedor-botones justify-content-center align-items-center">
-            <a class="btn btn-outline-dark mr-2" href="#"> <em class="fas fa-eye"></em> Ver Cohorte</a>
-            {{-- <a href="{{ route('cohortes.agregarEstudiante',$nombreCohorte) }}" class="btn btn-outline-dark
-            mr-2"><em class="fas fa-plus-circle"></em> Carga masiva de Estudiante</a>
-            </a> --}}
+            <a class="btn btn-outline-dark mr-2" href="{{ route('cohortes.mostrarResumen', $nombreCohorte) }}"> <em
+                    class="fas fa-eye"></em> Ver Cohorte</a>
         </div>
         <hr class="my-4">
         <h5 class="py-2">Grupos</h5>
@@ -50,7 +51,7 @@
                     href="#nav-{{$programa->AcronimoProgramaEducativo}}" role="tab"
                     aria-controls="nav-{{$programa->AcronimoProgramaEducativo}}"
                     aria-selected="@if($programa->AcronimoProgramaEducativo == $programas[0]->AcronimoProgramaEducativo)true"
-                    @endif @if($programa->AcronimoProgramaEducativo != $programas[0]->AcronimoProgramaEducativo)"false"
+                    @elseif($programa->AcronimoProgramaEducativo != $programas[0]->AcronimoProgramaEducativo)"false"
                     @endif >{{ $programa->AcronimoProgramaEducativo }}</a>
             </li>
             @endforeach
@@ -65,7 +66,8 @@
                         <div class="d-flex align-items-center mb-0 pb-0">
                             <h5 class="mr-auto pl-3">{{$programa->AcronimoProgramaEducativo}} - {{$nombreCohorte}}</h5>
                             <div class="btn-group" role="group">
-                                <button class="btn btn-success" data-toggle="modal" data-target="#create">Agregar Grupo</button>
+                                <button class="btn btn-success" data-toggle="modal" data-target="#create">Agregar
+                                    Grupo</button>
                             </div>
                         </div>
                         <hr>
@@ -105,10 +107,12 @@
                                     </td>
                                     <td>{{ $grupo->periodoActivo->NombrePeriodo }}</td>
                                     <td class="btn-group btn-group-sm">
-                                        <a class="btn btn-success btn-sm"
-                                            href="{{ route('cohortes.mostrarGrupo', [$nombreCohorte, $grupo->NombreGrupo]) }}">Agregar Estudiante</a>
+                                        <a class="btn btn-success mr-2"
+                                            href="{{ route('cohortes.agregarEstudiante', [$nombreCohorte, $grupo->NombreGrupo]) }}">Agregar
+                                            Estudiante</a>
                                         <a class="btn btn-outline-primary btn-sm"
-                                            href="{{ route('cohortes.mostrarGrupo', [$nombreCohorte, $grupo->NombreGrupo]) }}">Visualizar grupo</a>
+                                            href="{{ route('cohortes.mostrarGrupo', [$nombreCohorte, $nombreGrupos[$loop->index]]) }}">Visualizar
+                                            grupo</a>
                                         <a class="btn btn-outline-info btn-sm"
                                             href="{{ route('grupos.show', $grupo) }}">Detalles grupo</a>
                                         <form method="POST" id="form-eliminar"
@@ -133,6 +137,7 @@
 </div>
 @include('grupos.modals.create')
 @include('grupos.modals.delete')
+@include('cohorte.modals.import')
 @endsection
 @section('head')
 <link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}" />
@@ -159,6 +164,11 @@
     })
 
     $('#create').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+    })
+    
+    $('#import').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget);
         var modal = $(this);
     })

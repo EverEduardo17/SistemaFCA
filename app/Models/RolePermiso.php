@@ -10,7 +10,7 @@ class RolePermiso extends Model
 {
     use Notifiable, SoftDeletes;
 
-    protected $table = "role_permiso";
+    protected $table = "Role_Permiso"; 
     protected $primaryKey = "Id_Role_Permiso";
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';

@@ -63,7 +63,7 @@ class HomeController extends Controller
             ],
 
             [
-                "titulo" => "Academinas",
+                "titulo" => "Academias",
                 "background" => $colores[0],
                 "enlace" => "academias",
                 "operaciones" => [

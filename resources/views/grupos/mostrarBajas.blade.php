@@ -8,7 +8,7 @@
         <li class="breadcrumb-item"><a href="{{ route('cohortes.show', $grupos[0]->cohorte->NombreCohorte) }}">Cohorte
                 {{$grupos[0]->cohorte->NombreCohorte}}</a></li>
         <li class="breadcrumb-item"><a
-                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}">{{$grupos[0]->NombreGrupo}}</a>
+                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}">{{$grupos[0]->NombreGrupo}}</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">Bajas</li>
     </ol>
@@ -24,32 +24,37 @@
 
     </div>
     <div class="card-body">
-        <h5 class="pt-0 mt-0 contenedor-botones text-muted">Cohorte {{$grupos[0]->cohorte->NombreCohorte}}</h5>
-        <h6 class="contenedor-botones text-muted">Bajas</h6>
+        <h5 class="mt-0 contenedor-botones text-muted">Cohorte {{$grupos[0]->cohorte->NombreCohorte}}</h5>
+        <h6 class="mt-3 contenedor-botones text-muted">Último Periodo: {{ $grupos[0]->PeriodoActivo->NombrePeriodo }}
+        </h6>
 
-        <div class="contenedor-botones mt-3">
+        <div class="row justify-content-center  mt-3">
             <a class="btn btn-outline-info px-6 mb-3"
-                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
                 role="button">Ver Resumen</a>
             <a class="btn btn-outline-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
                 role="button">Ver Estado</a>
             <a class="btn btn-outline-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
                 role="button">Ver Egresados</a>
             <a class="btn btn-outline-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarTraslados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarTraslados', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
                 role="button">Ver Traslados</a>
             <a class="btn btn-outline-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarReprobados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarReprobados', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
                 role="button">Ver Reprobados</a>
             <a class="btn btn-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarBajas', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarBajas', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
                 role="button">Ver Bajas</a>
         </div>
-        <a class="btn btn-outline-info float-right mb-2" href="{{ route('cohortes.imprimirBajas', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"  target="_blank" role="button">Descargar PDF</a>
-        <br>
-        <hr class="mx-5">
+        <a class="btn btn-outline-success float-right mb-3"
+            href="{{ route('cohortes.imprimirBajas', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
+            target="_blank" role="button"><em class="fas fa-save"></em> Guardar PDF</a>
+        <div class="mt-3">
+            <br>
+            <hr class="mx-5">
+        </div>
         <h6 class="contenedor-botones pb-3 text-muted">Bajas totales</h6>
         <div class="table-responsive-xl">
             <table class="table table-striped table-hover table-bordered" id="table_sede">
@@ -91,7 +96,7 @@
         <hr class="mx-5">
         <h6 class="contenedor-botones pb-3 text-muted">Bajas por motivo</h6>
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-bordered">
                 <caption>Estudiantes dados de baja por motivo registrados en el sistema para el grupo
                     {{$grupos[0]->NombreGrupo}}
                     del cohorte {{$grupos[0]->cohorte->NombreCohorte}}.</caption>
@@ -112,7 +117,7 @@
                         <td class="border-right">{{$resultados[$motivo->IdMotivo - 1 ]["hombre"]}}</td>
                         <td class="border-right">{{$resultados[$motivo->IdMotivo - 1 ]["mujer"]}}</td>
                         <td class="border-right">
-                            <strong>{{$resultados[$motivo->IdMotivo - 1 ]["hombre"] + $resultados[$motivo->IdMotivo]["mujer"]}}</strong>
+                            <strong>{{$resultados[$motivo->IdMotivo - 1 ]["hombre"] + $resultados[$motivo->IdMotivo -1]["mujer"]}}</strong>
                         </td>
                     </tr>
                     @else

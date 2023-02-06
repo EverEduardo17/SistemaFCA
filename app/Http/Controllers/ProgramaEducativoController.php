@@ -16,7 +16,7 @@ class ProgramaEducativoController extends Controller
     {
         $idFCA = Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->value("IdFacultad");
         return view('programaEducativo.index', [
-            'programas' => ProgramaEducativo::where("IdFacultad", "=", $idFCA)->get()
+            'programas' => ProgramaEducativo::where("IdFacultad", "=", $idFCA)->get(),
         ]);
     }
 
@@ -45,8 +45,9 @@ class ProgramaEducativoController extends Controller
         }
     }
 
-    public function edit(ProgramaEducativo $programaEducativo)
+    public function edit($acronimoPrograma)
     {
+        $programaEducativo = ProgramaEducativo::where('AcronimoProgramaEducativo', '=', $acronimoPrograma)->get()->last();
         return view('programaEducativo.edit', [
             'programas' => $programaEducativo,
             'facultad'  => Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->get()

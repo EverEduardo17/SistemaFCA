@@ -22,7 +22,7 @@
       <label name="NombreGrupo">Nombre del grupo:</label>
       <input name="NombreGrupo" type="text" class="form-control @error('NombreGrupo') is-invalid @enderror" value="{{old('NombreGrupo',$grupos->NombreGrupo)}}" placeholder="Ej. LIS 701" disabled>
     </div>
-    <div class="form-group">
+    <div class="form-group" @if($grupos->DescripcionGrupo == null )style="display:none"@endif>
       <label name="DescripcionGrupo">Descripción del grupo:</label>
       <textarea name="DescripcionGrupo" type="text" class="form-control @error('DescripcionGrupo') is-invalid @enderror" value="{{old('DescripcionGrupo','$grupos->DescripcionGrupo')}}" placeholder="<-- Sin descripción -->" rows="2" disabled>{{old('DescripcionGrupo',$grupos->DescripcionGrupo)}}</textarea>
     </div>

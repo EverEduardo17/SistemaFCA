@@ -38,6 +38,30 @@ class PermisoSeeder extends Seeder
             "evento-ver-propio",
             "evento-ver-todos-propio",
 
+            "eventos-crear",
+            "eventos-listar",
+            "eventos-leer",
+            "eventos-editar",
+            "eventos-elimiar",
+
+            "eventoestado-aprobar",
+            "eventoestado-editar",
+
+            "fechaevento-crear",
+            "fechaevento-editar",
+            "fechaevento-eliminar",
+
+            "responsable-crear",
+            "responsable-eliminar",
+
+            "participantes-crear",
+            "participantes-eliminar",
+
+            "documentos-crear",
+            "documentos-leer",
+            "documentos-editar",
+            "documentos-eliminar",
+
             "estudiante-crear",
             "estudiante-editar-cualquiera",
             "estudiante-eliminar-cualquiera",
@@ -82,6 +106,11 @@ class PermisoSeeder extends Seeder
             "roles-editar",
             "roles-eliminar",
 
+			"sedes-listar",
+			"sedes-crear",
+			"sedes-editar",
+			"sedes-eliminar",
+			
             "sedeEventos-crear",
             "sedeEventos-editar",
             "sedeEventos-eliminar",
@@ -99,6 +128,8 @@ class PermisoSeeder extends Seeder
             "usuario-eliminar-propio",
             "usuario-ver-propio",
             "usuario-ver-todos-propio",
+
+            
         ];
 
         $descripciones = [
@@ -127,6 +158,30 @@ class PermisoSeeder extends Seeder
             "Permiso para eliminar un evento creado por mi usuario.",
             "Permiso para poder ver un evento creado por mi usuario.",
             "Permiso para poder ver todos los eventos creados por mi usuario.",
+
+            "Permiso para Crear eventos",
+            "Permiso para Listar eventos",
+            "Permiso para Leer eventos",
+            "Permiso para Editar eventos",
+            "Permiso para Eliminar eventos",
+
+            "eventoestado-aprobar",
+            "eventoestado-editar",
+
+            "fechaevento-crear",
+            "fechaevento-editar",
+            "fechaevento-eliminar",
+
+            "responsable-crear",
+            "responsable-eliminar",
+
+            "participantes-crear",
+            "participantes-eliminar",
+
+            "documentos-crear",
+            "documentos-leer",
+            "documentos-editar",
+            "documentos-eliminar",
 
             "Permiso para crear un estudiante.",
             "Permiso para editar un estudiante creado por cualquier persona.",
@@ -171,6 +226,11 @@ class PermisoSeeder extends Seeder
             "Permiso para crear roles.",
             "Permiso para editar roles.",
             "Permiso para eliminar roles.",
+			
+			"sedes-listar",
+			"sedes-crear",
+			"sedes-editar",
+			"sedes-eliminar",
 
             "Permiso para crear una sede.",
             "Permiso para editar una sede.",

@@ -72,7 +72,21 @@ class ModalidadSeeder extends Seeder
             ],
             [
                 'NombreModalidad'         => 'Examen CENEVAL',
-                'DescripcionModalidad' => 'Titulación por modalidad de Examen CENEVAL',
+                'DescripcionModalidad' => 'Titulación por modalidad de examen CENEVAL',
+                'TipoModalidad'         => 'Titulación',
+                'CreatedBy' => 1,
+                'UpdatedBy' => 1,
+            ],
+            [
+                'NombreModalidad'         => 'Promedio',
+                'DescripcionModalidad' => 'Titulación por modalidad de promedio',
+                'TipoModalidad'         => 'Titulación',
+                'CreatedBy' => 1,
+                'UpdatedBy' => 1,
+            ],
+            [
+                'NombreModalidad'         => 'Trabajo Práctico',
+                'DescripcionModalidad' => 'Titulación por modalidad de trabajo práctico',
                 'TipoModalidad'         => 'Titulación',
                 'CreatedBy' => 1,
                 'UpdatedBy' => 1,

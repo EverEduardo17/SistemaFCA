@@ -34,7 +34,7 @@
         <div class="container">
             @include('layouts.messages')
             @yield('breadcrumb')
-            <ul class="nav justify-content-center  text-dark mb-2">
+            <ul class="nav justify-content-center  mb-2">
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ route('home') }}"><em class="fas fa-home"></em> Inicio</a>
                 </li>

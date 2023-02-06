@@ -175,8 +175,7 @@ class EstudianteController extends Controller
     {
         $grupo              = Grupo::where('IdGrupo', $idGrupo)->get()->last();
         $cohorte            = Cohorte::where('IdCohorte', $grupo->IdCohorte)->get()->last();
-        $idFCA              = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
-        $programaEducativo  = ProgramaEducativo::where('IdProgramaEducativo', $grupo->IdProgramaEducativo)->get()->last();
+        $idFCA              = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');        $programaEducativo  = ProgramaEducativo::where('IdProgramaEducativo', $grupo->IdProgramaEducativo)->get()->last();
         return view('estudiantes.show', [
             'grupo'             => $grupo,
             'cohorte'           => $cohorte,
@@ -194,8 +193,10 @@ class EstudianteController extends Controller
         ]);
     }
 
-    public function mostrarEstudiante($idGrupo, $idTrayectoria)
+    public function mostrarEstudiante($idGrupo, $matriculaEstudiante)
     {
+        $idEstudiante   = Estudiante::where('MatriculaEstudiante', '=', $matriculaEstudiante)->value('IdEstudiante');
+        $idTrayectoria  = Trayectoria::where('IdEstudiante', '=', $idEstudiante)->value('IdTrayectoria');
         $estado         = Grupo_Estudiante::where('IdTrayectoria', $idTrayectoria)->value("Estado");
         $motivos        = Motivo::get();
         $movilidad      = Traslado::where('IdTrayectoria', $idTrayectoria)->get()->last();
@@ -240,6 +241,18 @@ class EstudianteController extends Controller
         $reprobados     = Reprobado::where('IdTrayectoria', $idTrayectoria)->get()->last();
         $servicioSocial = Servicio_Social_Estudiante::where('IdTrayectoria', $idTrayectoria)->get()->last();
         $titulacion     = Titulacion::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        //TODO: Limitar la modalidad si no es LSCA o LIS
+        /*
+$idLIS              = ProgramaEducativo::where('AcronimoProgramaEducativo', '=','LIS')->value('IdProgramaEducativo');
+        $idLSCA              = ProgramaEducativo::where('AcronimoProgramaEducativo', '=','LSCA')->value('IdProgramaEducativo');
+
+        if($grupo[0]->IdProgramaEducativo == $idLIS || $grupo[0]->IdProgramaEducativo == $idLSCA ){
+            $modalidades        = Modalidad::where('TipoModalidad', '=', 'Titulación')->get();
+        }else{
+            $modalidades        = Modalidad::where('TipoModalidad', '=', 'Titulación')->where('NombreModalidad', '<>', 'Trabajo Práctico')->get();
+        }
+*/
+
 
         return view('estudiantes.edit', [
             'trayectoria'   => $trayectoria,

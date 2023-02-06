@@ -48,31 +48,31 @@
         </thead>
         <tbody>
           @foreach ($estudiantes as $estudiante)
-          <tr>
-            <th scope="row" class="border-right">{{$estudiante->estudiante->MatriculaEstudiante}}</th>
-            <td class="border-right">{{$estudiante->datosPersonales->ApellidoPaternoDatosPersonales}}
-              {{$estudiante->datosPersonales->ApellidoMaternoDatosPersonales}}
-              {{ $estudiante->datosPersonales->NombreDatosPersonales }} </td>
-            <td class="border-right">{{$estudiante->datosPersonales->Genero}}</td>
-            <td class="border-right">{{$estudiante->modalidad->NombreModalidad}}</td>
-            @foreach($estados as $estado)
-            @if($estudiante->IdTrayectoria == $estado->IdTrayectoria )
-            <td class="border-right">
-              @if($estado->Estado == "Activo")
-              Activo
-            </td>
-            @else
-              {{$estado->Estado}}
-            </td>
-            @endif
-            <td class="btn-group btn-group-sm">
-              <a class="btn btn-outline-primary btn-sm mx-2"
-                href="{{ route('mostrarEstudiante', [$grupo->IdGrupo, $estudiante]) }}">Detalles</a>
-              <a class="btn btn-primary btn-sm"
-                href="{{ route('editarEstudiante', [$grupo->IdGrupo, $estudiante->IdTrayectoria]) }}">Editar</a>
-            </td>
-            @endif
-            @endforeach
+            <tr>
+              <th scope="row" class="border-right">{{$estudiante->estudiante->MatriculaEstudiante}}</th>
+              <td class="border-right">{{$estudiante->datosPersonales->ApellidoPaternoDatosPersonales}}
+                {{$estudiante->datosPersonales->ApellidoMaternoDatosPersonales}}
+                {{ $estudiante->datosPersonales->NombreDatosPersonales }} </td>
+              <td class="border-right">{{$estudiante->datosPersonales->Genero}}</td>
+              <td class="border-right">{{$estudiante->modalidad->NombreModalidad}}</td>
+              @foreach($estados as $estado)
+                @if($estudiante->IdTrayectoria == $estado->IdTrayectoria )
+                  <td class="border-right">
+                    @if($estado->Estado == "Activo")
+                      Activo
+                      </td>
+                    @else
+                      {{$estado->Estado}}
+                      </td>
+                    @endif
+                @endif
+                @endforeach
+                <td class="btn-group btn-group-sm">
+                    <a class="btn btn-outline-primary btn-sm mx-2"
+                      href="{{ route('mostrarEstudiante', [$grupo->IdGrupo, $estudiante->estudiante->MatriculaEstudiante]) }}">Detalles</a>
+                    <a class="btn btn-primary btn-sm"
+                      href="{{ route('editarEstudiante', [$grupo->IdGrupo, $estudiante->IdTrayectoria]) }}">Editar</a>
+                </td>
           </tr>
           @endforeach
         </tbody>

@@ -8,7 +8,7 @@
         <li class="breadcrumb-item"><a href="{{ route('cohortes.show', $grupos[0]->cohorte->NombreCohorte) }}">Cohorte
                 {{$grupos[0]->cohorte->NombreCohorte}}</a></li>
         <li class="breadcrumb-item"><a
-                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}">{{ $grupos[0]->NombreGrupo }}</a>
+                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}">{{ $grupos[0]->NombreGrupo }}</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">Egresados</li>
     </ol>
@@ -25,33 +25,39 @@
 
     </div>
     <div class="card-body">
-        <h5 class="pt-0 mt-0 contenedor-botones text-muted">Cohorte {{$grupos[0]->cohorte->NombreCohorte}}</h5>
-        <h6 class="contenedor-botones text-muted">Egresados</h6>
-        <div class="contenedor-botones mt-3">
+        <h5 class="mt-0 contenedor-botones text-muted">Cohorte {{$grupos[0]->cohorte->NombreCohorte}}</h5>
+        <h6 class="mt-3 contenedor-botones text-muted">Último Periodo: {{ $grupos[0]->PeriodoActivo->NombrePeriodo }}</h6>
+        
+        <div class="row justify-content-center  mt-3">
             <a class="btn btn-outline-info px-6 mb-3"
-                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarGrupo', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
                 role="button">Ver Resumen</a>
             <a class="btn btn-outline-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarEstado', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
                 role="button">Ver Estado</a>
             <a class="btn btn-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarEgresados', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
                 role="button">Ver Egresados</a>
             <a class="btn btn-outline-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarTraslados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarTraslados', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
                 role="button">Ver Traslados</a>
             <a class="btn btn-outline-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarReprobados', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarReprobados', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
                 role="button">Ver Reprobados</a>
             <a class="btn btn-outline-info px-6 mb-3 ml-2"
-                href="{{ route('cohortes.mostrarBajas', [$grupos[0]->cohorte->NombreCohorte, $grupos[0]->NombreGrupo]) }}"
+                href="{{ route('cohortes.mostrarBajas', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
                 role="button">Ver Bajas</a>
         </div>
-        <br>
-        <hr class="mx-5">
+        <a class="btn btn-outline-success float-right mb-3"
+            href="{{ route('cohortes.imprimirEgresados', [$grupos[0]->cohorte->NombreCohorte, $nombreGrupo]) }}"
+            target="_blank" role="button"><em class="fas fa-save"></em> Guardar PDF</a>
+        <div class="mt-3">
+            <br>
+            <hr class="mx-5">
+        </div>
         <h6 class="contenedor-botones pb-3 text-muted">Egresados en general</h6>
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover table-bordered" id="table_sede">
+            <table class="table table-striped table-hover table-bordered" id="table_egresados">
                 <caption>Estudiantes egresados registrados en el sistema para el grupo {{$grupos[0]->NombreGrupo}} del
                     cohorte {{$grupos[0]->cohorte->NombreCohorte}}.</caption>
                 <thead class="bg-table">
@@ -78,7 +84,7 @@
         <h6 class="contenedor-botones pb-3 text-muted">Egresados por periodo</h6>
 
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover" id="table_periodos">
+            <table class="table table-striped table-hover table-bordered" id="table_periodos">
                 <caption>Estudiantes egresados registrados en el sistema para el grupo {{$grupos[0]->NombreGrupo}} del
                     cohorte {{$grupos[0]->cohorte->NombreCohorte}}.</caption>
                 <thead class="bg-table">
@@ -94,7 +100,7 @@
                     @if(!empty($egresadosPeriodo))
                     @if ($loop->index <= $totalPeriodos ) <tr>
                         <th scope="row" class="border-right"><a
-                                href="{{route('cohortes.mostrarEgresados.periodo',[$grupos[0]->cohorte->NombreCohorte , $grupos[0]->NombreGrupo , $periodo->NombrePeriodo])}}">{{$periodo->NombrePeriodo}}</a>
+                                href="{{route('cohortes.mostrarEgresados.periodo',[$grupos[0]->cohorte->NombreCohorte , $nombreGrupo , $nombresPeriodos[$loop->index]])}}">{{$periodo->NombrePeriodo}}</a>
                         </th>
                         <td class="border-right">{{$egresadosPeriodo[$loop->index]["hombre"]}}</td>
                         <td class="border-right">{{$egresadosPeriodo[$loop->index]["mujer"]}}</td>
@@ -106,7 +112,7 @@
                         @else
                         <tr>
                             <th scope="row" class="border-right"><a
-                                    href="{{route('cohortes.mostrarEgresados.periodo',[$grupos[0]->cohorte->NombreCohorte , $grupos[0]->IdGrupo , $periodo->IdPeriodo])}}">{{$periodo->NombrePeriodo}}</a>
+                                href="{{route('cohortes.mostrarEgresados.periodo',[$grupos[0]->cohorte->NombreCohorte , $nombreGrupo , $nombresPeriodos[$loop->index]])}}">{{$periodo->NombrePeriodo}}</a>
                             </th>
                             <td class="border-right">0</td>
                             <td class="border-right">0</td>
@@ -127,7 +133,7 @@
         <h6 class="contenedor-botones py-3 text-muted">Egresados por modalidad</h6>
 
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover" id="table_periodos">
+            <table class="table table-striped table-hover table-bordered" id="table_modalidades">
                 <caption>Estudiantes egresados registrados en el sistema para el grupo {{$grupos[0]->NombreGrupo}} del
                     cohorte {{$grupos[0]->cohorte->NombreCohorte}}.</caption>
                 <thead class="bg-table">
