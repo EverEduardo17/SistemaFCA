@@ -57,7 +57,7 @@ class EventoController extends Controller
             ->get()
             ->where('fechaEvento.InicioFechaEvento', '>=', $from)
             ->where('fechaEvento.InicioFechaEvento', '<', $to)
-            ->sortBy('fechaEvento.InicioFechaEvento', 1, false);
+            ->sortBy('fechaEvento.InicioFechaEvento',  false);
 
         return view('eventos.index', [
             "evento_fecha_sede_s" => $evento_fecha_sede_s
