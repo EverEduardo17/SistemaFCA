@@ -2,9 +2,14 @@
 
 namespace Maatwebsite\Excel;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\PendingDispatch;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Jobs\SyncJob;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ShouldQueueWithoutChain;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithLimit;
@@ -20,10 +25,19 @@ use Throwable;
 class ChunkReader
 {
     /**
-     * @param WithChunkReading $import
-     * @param Reader           $reader
-     * @param TemporaryFile    $temporaryFile
-     *
+     * @var Container
+     */
+    protected $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @param  WithChunkReading  $import
+     * @param  Reader  $reader
+     * @param  TemporaryFile  $temporaryFile
      * @return \Illuminate\Foundation\Bus\PendingDispatch|null
      */
     public function read(WithChunkReading $import, Reader $reader, TemporaryFile $temporaryFile)
@@ -32,9 +46,11 @@ class ChunkReader
             $reader->beforeImport($import);
         }
 
-        $chunkSize  = $import->chunkSize();
-        $totalRows  = $reader->getTotalRows();
-        $worksheets = $reader->getWorksheets($import);
+        $chunkSize    = $import->chunkSize();
+        $totalRows    = $reader->getTotalRows();
+        $worksheets   = $reader->getWorksheets($import);
+        $queue        = property_exists($import, 'queue') ? $import->queue : null;
+        $delayCleanup = property_exists($import, 'delayCleanup') ? $import->delayCleanup : 600;
 
         if ($import instanceof WithProgressBar) {
             $import->getConsoleOutput()->progressStart(array_sum($totalRows));
@@ -65,7 +81,17 @@ class ChunkReader
             }
         }
 
-        $jobs->push(new AfterImportJob($import, $reader));
+        $afterImportJob = new AfterImportJob($import, $reader);
+
+        if ($import instanceof ShouldQueueWithoutChain) {
+            $jobs->push($afterImportJob->delay($delayCleanup));
+
+            return $jobs->each(function ($job) use ($queue) {
+                dispatch($job->onQueue($queue));
+            });
+        }
+
+        $jobs->push($afterImportJob);
 
         if ($import instanceof ShouldQueue) {
             return new PendingDispatch(
@@ -75,7 +101,9 @@ class ChunkReader
 
         $jobs->each(function ($job) {
             try {
-                dispatch_now($job);
+                function_exists('dispatch_now')
+                    ? dispatch_now($job)
+                    : $this->dispatchNow($job);
             } catch (Throwable $e) {
                 if (method_exists($job, 'failed')) {
                     $job->failed($e);
@@ -91,5 +119,27 @@ class ChunkReader
         unset($jobs);
 
         return null;
+    }
+
+    /**
+     * Dispatch a command to its appropriate handler in the current process without using the synchronous queue.
+     *
+     * @param  object  $command
+     * @param  mixed  $handler
+     * @return mixed
+     */
+    protected function dispatchNow($command, $handler = null)
+    {
+        $uses = class_uses_recursive($command);
+
+        if (in_array(InteractsWithQueue::class, $uses) &&
+            in_array(Queueable::class, $uses) && !$command->job
+        ) {
+            $command->setJob(new SyncJob($this->container, json_encode([]), 'sync', 'sync'));
+        }
+
+        $method = method_exists($command, 'handle') ? 'handle' : '__invoke';
+
+        return $this->container->call([$command, $method]);
     }
 }

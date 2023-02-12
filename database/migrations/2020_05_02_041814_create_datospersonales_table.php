@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+
 
 class CreateDatospersonalesTable extends Migration
 {
@@ -19,7 +21,7 @@ class CreateDatospersonalesTable extends Migration
             $table->string('NombreDatosPersonales', 100)->nullable(false);
             $table->string('ApellidoPaternoDatosPersonales', 100)->nullable(false);
             $table->string('ApellidoMaternoDatosPersonales', 100)->nullable();
-            $table->date('FechaNacimientoDatosPersonales', 100)->nullable();
+            $table->date('FechaNacimientoDatosPersonales'/*, 100*/)->nullable();
             $table->string('Genero', 10)->nullable();
 
             $table->unsignedBigInteger('IdUsuario')->nullable()->unique();
