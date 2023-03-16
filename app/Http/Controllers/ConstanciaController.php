@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ConstanciaRequest;
 use App\Models\Constancia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -37,7 +38,14 @@ class ConstanciaController extends Controller
     public function store(ConstanciaRequest $request)
     {
         $input = $request->validated();
-        $vigenteHasta    = formatearDate($input['VigenteHasta']);
+        
+        if ($input['VigenteHasta'] !== null) {
+            $vigenteHasta    = formatearDate($input['VigenteHasta']);
+        } 
+        else {
+            $vigenteHasta    = '9999-12-31';
+        }
+        // TODO - agregar dueño de la plantilla
         try {
             DB::beginTransaction();
 
@@ -47,6 +55,9 @@ class ConstanciaController extends Controller
                     'VigenteHasta'             => $vigenteHasta,
                 ]);
             DB::commit();
+
+            $plantilla = $request->file('Plantilla');
+            $plantilla->storeAs('constancias/' . Auth::user()->name, $input['NombreConstancia'].'.docx');
         }
         catch (\Throwable $throwable){
             DB::rollBack();

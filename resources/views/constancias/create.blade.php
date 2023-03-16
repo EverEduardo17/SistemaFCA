@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="card-body">
-        <form method="POST" action="{{ route('constancias.store') }}" autocomplete="off">
+        <form method="POST" action="{{ route('constancias.store') }}" autocomplete="off" enctype="multipart/form-data">
             @csrf
             @include('layouts.validaciones')
             <div class="form-group">
@@ -39,7 +39,10 @@
                 <label name="VigenteHasta">Vigente Hasta:</label>
                 <input name="VigenteHasta" id="fecha" value="{{ old('VigenteHasta') }}" type="text" class="form-control @error('VigenteHasta') is-invalid @enderror" placeholder="Día/Mes/Año">
                 </div>
-                <hr>
+                <div class=" form-group">
+                    <label name="Plantilla">Subir plantilla en formato DOCX (Word):</label> <br>
+                    <input name="Plantilla" value="Subir Archivo" type="file" class="@error('Plantilla') is-invalid @enderror">
+                </div>
             </div>
             <hr>
             <button type="submit" class="btn btn-primary btn-block">Guardar</button>

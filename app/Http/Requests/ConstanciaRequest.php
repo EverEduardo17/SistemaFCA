@@ -14,9 +14,9 @@ class ConstanciaRequest extends FormRequest
     public function rules()
     {
         return [
-            'NombreConstancia'        => 'required | String',
-            'DescripcionConstancia'   => 'required | String',
-            'VigenteHasta'            => 'date_format:d/m/Y',
+            'NombreConstancia'        => 'required | string | unique:Constancia,NombreConstancia',
+            'DescripcionConstancia'   => 'required | string',
+            'VigenteHasta'            => 'date_format:d/m/Y | nullable',
         ];
     }
 }

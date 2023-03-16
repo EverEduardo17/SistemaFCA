@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 
 // DB::listen(function($query){
 //     var_dump($query->sql);
