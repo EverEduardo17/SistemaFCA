@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -93,8 +92,18 @@ class HomeController extends Controller
             ],
 
             [
-                "titulo" => "Grupos",
+                "titulo" => "Constancias",
                 "background" => $colores[0],
+                "enlace" => "constancias",
+                "operaciones" => [
+                    ["titulo" => "Nueva Constancia", "enlace" => "create"],
+                    ["titulo" => "Gestión de Constancias", "enlace" => ""],
+                ]
+            ],
+
+            [
+                "titulo" => "Grupos",
+                "background" => $colores[1],
                 "enlace" => "grupos",
                 "operaciones" => [
                     ["titulo" => "Nuevo Grupo", "enlace" => "create"],
@@ -104,7 +113,7 @@ class HomeController extends Controller
 
             [
                 "titulo" => "Estudiantes",
-                "background" => $colores[1],
+                "background" => $colores[0],
                 "enlace" => "cohortes",
                 "operaciones" => [
                     ["titulo" => "Gestión de Estudiantes", "enlace" => $nombreCohorte],

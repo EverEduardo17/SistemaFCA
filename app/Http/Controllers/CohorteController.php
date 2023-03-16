@@ -14,13 +14,12 @@ use App\Models\ProgramaEducativo;
 use App\Models\Reprobado;
 use App\Models\Titulacion;
 use App\Models\Traslado;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
-use function PHPUnit\Framework\isEmpty;
 
 class CohorteController extends Controller
 {
@@ -254,7 +253,7 @@ class CohorteController extends Controller
             'estudiantes'       => $estudiantes,
             'modalidades'       => $modalidades,
             'periodos'          => $periodos,
-            
+
         ]);
     }
 
@@ -930,7 +929,7 @@ class CohorteController extends Controller
                 'temporal'        => ['hombre' => $temporalHombre, 'mujer' => $temporalMujer, 'total' => $totalTemporales],
                 'definitivo'        => ['hombre' => $definitivoHombre, 'mujer' => $definitivoMujer, 'total' => $totalDefinitivos]
             ];
-            
+
             $estudiantesDefinitivos = [];
             $definitivoHombre       = 0;
             $definitivoMujer        = 0;

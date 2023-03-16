@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 // DB::listen(function($query){
 //     var_dump($query->sql);
@@ -19,6 +18,7 @@ Route::resource('academicos', 'AcademicoController');
 Route::resource('academicoEvento', 'AcademicoEventoController')->except('index', 'create', 'show', 'edit', 'update');
 Route::resource('bajas', 'BajaController')->except('show', 'create');
 Route::resource('cohortes', 'CohorteController');
+Route::resource('constancias', 'ConstanciaController');
 Route::resource('documento', 'DocumentoController');
 Route::resource('estudiantes', 'EstudianteController')->except('agregarEstudiante', 'mostrarEstudiante');
 Route::resource('empresas', 'EmpresaController')->except('show', 'edit');

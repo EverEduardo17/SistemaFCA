@@ -16,6 +16,13 @@
         return $fecha;
     }
 
+    function formatearDate($date){
+        $fecha = explode( '/', $date );
+        $fecha = sprintf("%d-%d-%d", $fecha[2], $fecha[1], $fecha[0]);
+        
+        return $fecha;
+    }
+
     function formatearTime($time){
         $hora  = explode( ' ', $time );
         $PM          = strcmp ( 'PM', mb_strtoupper( $hora[1] ) ) == 0;
