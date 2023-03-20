@@ -105,3 +105,5 @@ Route::get('/eventos/{year}/{month}/{day}', 'EventoController@indexWithDate')->n
 // Route::post('/fechaEvento/store', 'FechaEventoController@store')->name("fechaEventos_store");
 
 Route::delete('/fechaEvento/delete', 'FechaEventoController@destroy')->name('fechaeventos_delete');
+
+Route::get('/constancias/{IdConstancia}/download', 'ConstanciaController@downloadConstancia')->name('constancias.download');

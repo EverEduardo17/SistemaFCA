@@ -23,31 +23,36 @@
             {{-- @endcan --}}
         </div>
     </div>
+
     <div class="card-body">
         <form method="POST" action="{{ route('constancias.store') }}" autocomplete="off" enctype="multipart/form-data">
             @csrf
             @include('layouts.validaciones')
+
             <div class="form-group">
-                <label name="NombreConstancia">Nombre de la Constancia:</label>
-                <input name="NombreConstancia" value="{{ old('NombreConstancia') }}" type="text" class="form-control @error('NombreConstancia') is-invalid @enderror" placeholder="Ej. Constancia de Evento">
-                </div>
-                <div class=" form-group">
-                <label name="DescripcionConstancia">Descripción de la Constancia:</label>
+                <label name="NombreConstancia">Nombre de la Constancia*:</label>
+                <input name="NombreConstancia" value="{{ old('NombreConstancia') }}" type="text" 
+                class="form-control @error('NombreConstancia') is-invalid @enderror" placeholder="Ej. Constancia de Evento">
+            </div>
+
+            <div class=" form-group">
+                <label name="DescripcionConstancia">Descripción de la Constancia*:</label>
                 <input name="DescripcionConstancia" value="{{ old('DescripcionConstancia') }}" type="text" class="form-control @error('DescripcionConstancia') is-invalid @enderror" placeholder="Ej. Detalles">
-                </div>
-                <div class=" form-group">
+            </div>
+
+            <div class=" form-group">
                 <label name="VigenteHasta">Vigente Hasta:</label>
                 <input name="VigenteHasta" id="fecha" value="{{ old('VigenteHasta') }}" type="text" class="form-control @error('VigenteHasta') is-invalid @enderror" placeholder="Día/Mes/Año">
-                </div>
-                <div class=" form-group">
-                    <label name="Plantilla">Subir plantilla en formato DOCX (Word):</label> <br>
-                    <input name="Plantilla" value="Subir Archivo" type="file" class="@error('Plantilla') is-invalid @enderror">
-                </div>
+            </div>
+
+            <div class=" form-group">
+                <label name="Plantilla">Subir plantilla en formato DOCX (Word):</label> <br>
+                <input name="Plantilla" type="file" class="@error('Plantilla') form-control is-invalid @enderror">
             </div>
             <hr>
             <button type="submit" class="btn btn-primary btn-block">Guardar</button>
             {{-- @can('havepermiso', 'academicos-listar') --}}
-                <a href="{{ route('academicos.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
+                <a href="{{ route('constancias.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
             {{-- @endcan --}}
         </form>
     </div>

@@ -7,7 +7,6 @@ use App\Models\Grupo;
 use App\Models\ProgramaEducativo;
 use App\Http\Requests\ProgramaEducativoRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class ProgramaEducativoController extends Controller
@@ -18,6 +17,13 @@ class ProgramaEducativoController extends Controller
         return view('programaEducativo.index', [
             'programas' => ProgramaEducativo::where("IdFacultad", "=", $idFCA)->get(),
         ]);
+
+        /* testear luego de actualizar las migraciones
+         
+        $facultad = Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->firstOrFail();
+        $programas = $facultad->programasEducativos;
+        return view('programaEducativo.index', compact('programas'));
+        */
     }
 
     public function create()

@@ -47,7 +47,6 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{{route('grupos.index')}}"><em class="fas fa-users"></em> Gestión de Grupos</a>
                 </li>
-                <li class="nav-item">
                     <a class="nav-link" href="{{route('cohortes.mostrarCohorte')}}"><em class="fas fa-user"></em> Gestión de Estudiantes</a>
                 </li>
             </ul>

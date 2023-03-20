@@ -23,6 +23,17 @@
         return $fecha;
     }
 
+    function printDate($date) {
+        if ($date === null) {
+            return null;
+        }
+
+        $fecha = explode( '-', $date );
+        $a = sprintf("%d/%d/%d", $fecha[2], $fecha[1], $fecha[0]);
+        
+        return $a;
+    }
+
     function formatearTime($time){
         $hora  = explode( ' ', $time );
         $PM          = strcmp ( 'PM', mb_strtoupper( $hora[1] ) ) == 0;
