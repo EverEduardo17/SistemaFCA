@@ -21,6 +21,7 @@ use App\Models\Servicio_Social_Estudiante;
 use App\Models\Titulacion;
 use App\Models\Traslado;
 use App\Models\Trayectoria;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -87,18 +88,31 @@ class EstudianteController extends Controller
         try {
             $input = $request->validated();
             $idGrupo = $input['IdGrupo'];
+            $timestamp = Carbon::now()->toDateTimeString();
+
+            $matricula = $input['MatriculaEstudiante'];
 
             DB::beginTransaction();
 
+            $idUsuarioDB = DB::table('Usuario')->insertGetId([
+                'name'     => $matricula,
+                'email'   => $matricula . '@estudiantes.uv.mx',
+                'password' => bcrypt($matricula),
+                'CreatedAt' => $timestamp,
+                'UpdatedAt' => $timestamp,
+            ]);
+
             $idEstudianteDB = DB::table('Estudiante')->insertGetId([
-                'matriculaEstudiante'   => $input['MatriculaEstudiante']
+                'matriculaEstudiante'   => $matricula,
+                'IdUsuario'   => $idUsuarioDB,
             ]);
 
             $idDatosPersonales = DB::table('DatosPersonales')->insertGetId([
                 'NombreDatosPersonales'               => $input['NombreDatosPersonales'],
                 'ApellidoPaternoDatosPersonales'      => $input['ApellidoPaternoDatosPersonales'],
                 'ApellidoMaternoDatosPersonales'      => $input['ApellidoMaternoDatosPersonales'],
-                'Genero'                              => $input['Genero']
+                'Genero'                              => $input['Genero'],
+                'IdUsuario'   => $idUsuarioDB,
             ]);
 
             $idTrayectoria = DB::table('Trayectoria')->insertGetId([

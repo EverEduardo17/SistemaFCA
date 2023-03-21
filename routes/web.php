@@ -21,7 +21,7 @@ Route::resource('bajas', 'BajaController')->except('show', 'create');
 Route::resource('cohortes', 'CohorteController');
 Route::resource('constancias', 'ConstanciaController');
 Route::resource('documento', 'DocumentoController');
-Route::resource('estudiantes', 'EstudianteController')->except('agregarEstudiante', 'mostrarEstudiante');
+Route::resource('estudiantes', 'EstudianteController')->except('mostrarEstudiante');
 Route::resource('empresas', 'EmpresaController')->except('show', 'edit');
 Route::resource('eventos', 'EventoController');
 Route::resource('facultades', 'FacultadController')->except('show');

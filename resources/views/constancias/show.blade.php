@@ -56,7 +56,51 @@
 <br> <br>
 
 <div class="card">
-    <h1>ss</h1>
+    <div class="card-header">
+        <div class="row">
+            <h5 class="card-title col-8">Estudiantes</h5>
+            {{-- @can('havepermiso', 'estudiante-ver-cualquiera') --}}
+                <a class="btn btn-primary col-4" href="/grupos" role="button">Gestión de Estudiantes</a>
+            {{-- @endcan --}}
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive-xl">
+            <table class="table table-striped table-hover" id="table_Programa">
+                <caption>Estudiantes que participaron en el evento.</caption>
+                <thead class="bg-table">
+                    <tr class="text-white">
+                        <th scope="col" class="border-right">Matrícula</th>
+                        <th scope="col" class="border-right">Nombre</th>
+                        <th scope="col" class="border-right">Grupo</th>
+                        <th scope="col" class="border-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($estudiantes as $estudiante)
+                    <tr>
+                        <th scope="row" class="border-right">{{ $estudiante->MatriculaEstudiante }}</th>
+
+                        <td class="border-right">
+                            {{ $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales }}
+                            {{ $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales }}
+                            {{ $estudiante->Usuario->DatosPersonales->NombreDatosPersonales }}
+                        </td>
+
+                        <td class="border-right">{{ $estudiante->Trayectoria->Grupo->NombreGrupo }}</td>
+
+                        <td class="py-2">
+                            <a class="btn btn-sm btn-outline-success" href="{{ route('constancias.show', $estudiante->IdEstudiante) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles"><em class="fas fa-eye"></em></a>
+                            <a class="btn btn-sm btn-outline-primary" href="{{ route('constancias.edit', $estudiante->IdEstudiante) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><em class="fas fa-pencil-alt"></em></a>
+                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $estudiante->IdEstudiante }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar"><em class="fas fa-trash-alt"></em></a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 @endsection

@@ -26,4 +26,10 @@ class Constancia extends Model
     public function usuario(){
         return $this->hasOne(User::class, 'IdUsuario', 'CreatedBy');
     }
+
+    public function estudiantes()
+    {
+        return $this->belongsToMany(Estudiante::class, 'constancia_estudiante', 'IdConstancia', 'IdEstudiante')
+                    ->withPivot('created_at', 'updated_at');
+    }
 }

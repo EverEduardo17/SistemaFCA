@@ -1,4 +1,8 @@
 @extends('layouts.plantilla')
+
+{{-- El equivalente al index en todos los demás --}}
+
+
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -36,24 +40,34 @@
                 @endforeach
             </div>
         </div>
+
         <div class="contenedor-botones justify-content-center align-items-center">
             <a class="btn btn-outline-dark mr-2" href="{{ route('cohortes.mostrarResumen', $nombreCohorte) }}"> <em
                     class="fas fa-eye"></em> Ver Cohorte</a>
         </div>
+
         <hr class="my-4">
         <h5 class="py-2">Grupos</h5>
         <ul class="nav nav-tabs" id="nav-tab" role="tablist">
+
             @foreach ($programas as $programa)
+
             <li class="nav-item" role="presentation">
                 <a class="btn-outline-primary nav-link 
+
                 @if($programa->AcronimoProgramaEducativo == $programas[0]->AcronimoProgramaEducativo) active" @endif
-                    id="nav-{{$programa->AcronimoProgramaEducativo}}-tab" data-toggle="tab"
-                    href="#nav-{{$programa->AcronimoProgramaEducativo}}" role="tab"
-                    aria-controls="nav-{{$programa->AcronimoProgramaEducativo}}"
-                    aria-selected="@if($programa->AcronimoProgramaEducativo == $programas[0]->AcronimoProgramaEducativo)true"
-                    @elseif($programa->AcronimoProgramaEducativo != $programas[0]->AcronimoProgramaEducativo)"false"
-                    @endif >{{ $programa->AcronimoProgramaEducativo }}</a>
+                        id="nav-{{$programa->AcronimoProgramaEducativo}}-tab" data-toggle="tab"
+                        href="#nav-{{$programa->AcronimoProgramaEducativo}}" role="tab"
+                        aria-controls="nav-{{$programa->AcronimoProgramaEducativo}}"
+                        aria-selected="@if($programa->AcronimoProgramaEducativo == $programas[0]->AcronimoProgramaEducativo)true"
+                        @elseif($programa->AcronimoProgramaEducativo != $programas[0]->AcronimoProgramaEducativo)"false"
+                        @endif >
+
+                    {{ $programa->AcronimoProgramaEducativo }}
+
+                </a>
             </li>
+
             @endforeach
         </ul>
         <div class="tab-content" id="nav-tabContent">

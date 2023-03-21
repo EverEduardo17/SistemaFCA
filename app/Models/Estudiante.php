@@ -19,7 +19,17 @@ class Estudiante extends Model
 
     //Relacion Uno a Uno
     public function usuario(){
-        return $this->hasOne(User::class, 'IdUsuario', 'IdUsuario');
+        return $this->belongsTo(User::class, 'IdUsuario', 'IdUsuario');
+    }
+
+    public function trayectoria(){
+        return $this->belongsTo(Trayectoria::class, 'IdEstudiante', 'IdEstudiante');
+    }
+
+    public function constancias()
+    {
+        return $this->belongsToMany(Constancia::class, 'constancia_estudiante', 'IdEstudiante', 'IdConstancia')
+                    ->withPivot('created_at', 'updated_at');
     }
 
 }

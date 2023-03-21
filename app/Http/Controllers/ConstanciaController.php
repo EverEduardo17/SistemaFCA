@@ -82,7 +82,9 @@ class ConstanciaController extends Controller
      */
     public function show(Constancia $constancia)
     {
-        return view('constancias.show', compact('constancia'));
+        $estudiantes = $constancia->estudiantes;
+        
+        return view('constancias.show', compact('constancia', 'estudiantes'));
     }
 
     /**
