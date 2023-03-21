@@ -17,7 +17,7 @@ class ConstanciaRequest extends FormRequest
             'NombreConstancia'        => 'required | string',
             'DescripcionConstancia'   => 'required | string',
             'VigenteHasta'            => 'nullable | date_format:d/m/Y',
-            'Plantilla'               => 'required | file | mimes:doc,docx,odt,'
+            'Plantilla'               => 'required | file | mimes:doc,docx'
         ];
     }
 }

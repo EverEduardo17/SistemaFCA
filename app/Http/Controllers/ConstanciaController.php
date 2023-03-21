@@ -79,11 +79,10 @@ class ConstanciaController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Constancia  $constancia
-     * @return \Illuminate\Http\Response
      */
     public function show(Constancia $constancia)
     {
-        //
+        return view('constancias.show', compact('constancia'));
     }
 
     /**
@@ -109,7 +108,12 @@ class ConstanciaController extends Controller
             'NombreConstancia'        => 'required | string',
             'DescripcionConstancia'   => 'required | string',
             'VigenteHasta'            => 'nullable | date_format:d/m/Y',
+            'Plantilla'               => 'nullable | file | mimes:doc,docx',
         ]);
+
+        if ($request->hasFile('Plantilla')) {
+                $request->file('Plantilla')->storeAs('constancias' , 'c_'.$constancia->IdConstancia.'.docx');
+            }
 
         $timestamp = Carbon::now()->toDateTimeString();
 
@@ -138,10 +142,6 @@ class ConstanciaController extends Controller
             DB::table('Constancia')->where('IdConstancia',$constancia->IdConstancia)->update($datos);
 
             DB::commit();
-            if ($request->hasFile('Plantilla')) {
-                $plantilla = $request->file('Plantilla');
-                $plantilla->storeAs('constancias/' , 'c_'.$constancia->IdConstancia.'.docx');
-            }
         }
         catch (\Throwable $throwable){
             DB::rollBack();
@@ -163,14 +163,23 @@ class ConstanciaController extends Controller
         //
     }
 
-    public function downloadConstancia($id)
+    public function downloadConstancia($id, $nombreConstancia)
     {
         $constancia = Constancia::findOrFail($id);
-        $pathToFile = storage_path('app/constancias/c_' . $constancia->IdConstancia . '.docx');
+        $pathToFile = storage_path('app/constancias/c_' . $id . '.docx');
         $headers = [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         ];
-        return response()->download($pathToFile, $constancia->NombreConstancia . '.docx', $headers);
+        return response()->download($pathToFile, $nombreConstancia . '.docx', $headers);
+    }
+
+    public function downloadConstanciaGenerica()
+    {
+        $pathToFile = public_path('constancias plantilla/Plantilla.docx');
+        $headers = [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ];
+        return response()->download($pathToFile, 'Plantilla.docx', $headers);
     }
 
 }

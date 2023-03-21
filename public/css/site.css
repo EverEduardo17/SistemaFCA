@@ -171,3 +171,13 @@ code {
     transition: fill 0.3s ease;
     fill: #B5B5C3;
 }
+
+.descargar-plantilla {
+    display: flex;
+    font-size: small;
+    justify-content: flex-end;
+}
+
+.mi-plantilla {
+    font-size: 15px;
+}

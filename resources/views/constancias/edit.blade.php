@@ -3,6 +3,7 @@
 @section('head')
     <link rel="stylesheet" href="{{asset('lib/bootstrap3/css/bootstrap-mod.css')}}" />
     <link rel="stylesheet" href="{{asset('lib/datetimepicker/css/bootstrap-datetimepicker.min.css')}}" />
+
 @endsection
 
 
@@ -13,6 +14,7 @@
         <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Constancias</a></li>
         <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">{{ $constancia->NombreConstancia }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">Editar Constancia</li>
+        <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica', $constancia->IdConstancia) }}"> Descargar Plantilla Generica </a></li>
     </ol>
 </nav>
 <div class="card">
@@ -25,7 +27,7 @@
         </div>
     </div>
     <div class="card-body">
-        <form method="POST" action="{{ route('constancias.update', $constancia) }}" autocomplete="off">
+        <form method="POST" action="{{ route('constancias.update', $constancia->IdConstancia) }}" autocomplete="off" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             @include('layouts.validaciones')
@@ -49,9 +51,16 @@
             </div>
 
             <div class=" form-group">
-                <label name="Plantilla">Plantilla en formato DOCX (Word):</label> <br>
-                <input name="Plantilla" type="file" value="{{ "app/constancias/c_" .$constancia->IdConstancia. ".docx" }}" class="@error('Plantilla') form-control is-invalid @enderror"> <br>
-                <a href="{{ route('constancias.download', $constancia->IdConstancia) }}">Descargar Plantilla</a>
+                <label name="Plantilla">Cambiar Plantilla en formato DOCX (Word):</label> <br>
+                <input name="Plantilla" type="file" class="@error('Plantilla') form-control is-invalid @enderror"> <br>
+                
+                <a class="mi-plantilla" 
+                        href="{{ route('constancias.download', [
+                        'IdConstancia' => $constancia->IdConstancia, 
+                        'NombreConstancia' => $constancia->NombreConstancia
+                        ]) }}">
+                    Descargar mi Plantilla
+                </a>
             </div>
 
             <hr>
