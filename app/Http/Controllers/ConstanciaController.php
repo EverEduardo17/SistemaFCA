@@ -62,8 +62,10 @@ class ConstanciaController extends Controller
 
             DB::commit();
 
+            $filename = 'c_' . str_pad($idConstanciaDB, 5, '0', STR_PAD_LEFT) . '.docx';
+
             $plantilla = $request->file('Plantilla');
-            $plantilla->storeAs('constancias/' , 'c_'.$idConstanciaDB.'.docx');
+            $plantilla->storeAs('constancias/' , $filename.'.docx');
         }
         catch (\Throwable $throwable){
             DB::rollBack();
@@ -83,7 +85,7 @@ class ConstanciaController extends Controller
     public function show(Constancia $constancia)
     {
         $estudiantes = $constancia->estudiantes;
-        
+
         return view('constancias.show', compact('constancia', 'estudiantes'));
     }
 
@@ -114,7 +116,9 @@ class ConstanciaController extends Controller
         ]);
 
         if ($request->hasFile('Plantilla')) {
-                $request->file('Plantilla')->storeAs('constancias' , 'c_'.$constancia->IdConstancia.'.docx');
+                $filename = 'c_' . str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT) . '.docx';
+
+                $request->file('Plantilla')->storeAs('constancias' , $filename.'.docx');
             }
 
         $timestamp = Carbon::now()->toDateTimeString();
@@ -167,8 +171,10 @@ class ConstanciaController extends Controller
 
     public function downloadConstancia($id, $nombreConstancia)
     {
+        $filename = 'c_' . str_pad($id, 5, '0', STR_PAD_LEFT) . '.docx';
+
         $constancia = Constancia::findOrFail($id);
-        $pathToFile = storage_path('app/constancias/c_' . $id . '.docx');
+        $pathToFile = storage_path('app/constancias/' . $filename . '.docx');
         $headers = [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         ];
