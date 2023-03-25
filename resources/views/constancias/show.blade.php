@@ -58,10 +58,12 @@
 <div class="card">
     <div class="card-header">
         <div class="row">
-            <h5 class="card-title col-8">Estudiantes</h5>
+            <h5 class="card-title col-5">Estudiantes</h5>
             {{-- @can('havepermiso', 'estudiante-ver-cualquiera') --}}
-                <a class="btn btn-primary col-4" href="/grupos" role="button">Gestión de Estudiantes</a>
+                <a class="btn btn-primary col-3 mr-4 ml-5" href="/grupos" role="button">Gestión de Estudiantes</a>
             {{-- @endcan --}}
+            <a class="btn btn-success col-3" href="{{ route('constancias.addEstudiantes', $constancia) }}" role="button">Agregar Estudiantes</a>
+
         </div>
     </div>
 
@@ -91,8 +93,7 @@
                         <td class="border-right">{{ $estudiante->Trayectoria->Grupo->NombreGrupo }}</td>
 
                         <td class="py-2">
-                            <a class="btn btn-sm btn-outline-success" href="{{ route('constancias.show', $estudiante->IdEstudiante) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles"><em class="fas fa-eye"></em></a>
-                            <a class="btn btn-sm btn-outline-primary" href="{{ route('constancias.edit', $estudiante->IdEstudiante) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><em class="fas fa-pencil-alt"></em></a>
+                            <a class="btn btn-sm btn-outline-success" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles"><em class="fas fa-eye"></em></a>
                             <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $estudiante->IdEstudiante }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar"><em class="fas fa-trash-alt"></em></a>
                         </td>
                     </tr>

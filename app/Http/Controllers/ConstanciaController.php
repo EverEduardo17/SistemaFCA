@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ConstanciaRequest;
 use App\Models\Constancia;
+use App\Models\Estudiante;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -173,7 +174,6 @@ class ConstanciaController extends Controller
     {
         $filename = 'c_' . str_pad($id, 5, '0', STR_PAD_LEFT) . '.docx';
 
-        $constancia = Constancia::findOrFail($id);
         $pathToFile = storage_path('app/constancias/' . $filename . '.docx');
         $headers = [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -190,4 +190,11 @@ class ConstanciaController extends Controller
         return response()->download($pathToFile, 'Plantilla.docx', $headers);
     }
 
+    public function showEstudiante(Constancia $constancia, Estudiante $estudiante) {
+        return view('constancias.estudiantes.showEstudiante', compact('constancia', 'estudiante'));
+    }
+
+    public function addEstudiantes(Constancia $constancia) {
+        return view('constancias.estudiantes.addEstudiantes', compact('constancia'));
+    }
 }

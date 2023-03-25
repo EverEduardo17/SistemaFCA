@@ -106,5 +106,11 @@ Route::get('/eventos/{year}/{month}/{day}', 'EventoController@indexWithDate')->n
 
 Route::delete('/fechaEvento/delete', 'FechaEventoController@destroy')->name('fechaeventos_delete');
 
+
+//<---- Constancias ---->
 Route::get('/constancias/{IdConstancia}/download/{NombreConstancia}', 'ConstanciaController@downloadConstancia')->name('constancias.download');
 Route::get('/constancias/{IdConstancia}/downloadConstanciaGenerica', 'ConstanciaController@downloadConstanciaGenerica')->name('constancias.downloadGenerica');
+Route::get('constancias/{constancia}/estudiantes/{estudiante}', 'ConstanciaController@showEstudiante')
+    ->name('constancias.showEstudiante');
+Route::get('constancias/{constancia}/estudiantes/', 'ConstanciaController@addEstudiantes')
+    ->name('constancias.addEstudiantes');
