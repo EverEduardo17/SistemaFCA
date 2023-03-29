@@ -91,7 +91,12 @@
 <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
 <script>
     $(document).ready(function() {
-        $('#table_academicos').DataTable();
+        $('#table_academicos').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
+            }
+
+        });
     });
     $('#deleteAcademico').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);

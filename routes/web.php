@@ -108,9 +108,11 @@ Route::delete('/fechaEvento/delete', 'FechaEventoController@destroy')->name('fec
 
 
 //<---- Constancias ---->
-Route::get('/constancias/{IdConstancia}/download/{NombreConstancia}', 'ConstanciaController@downloadConstancia')->name('constancias.download');
-Route::get('/constancias/{IdConstancia}/downloadConstanciaGenerica', 'ConstanciaController@downloadConstanciaGenerica')->name('constancias.downloadGenerica');
-Route::get('constancias/{constancia}/estudiantes/{estudiante}', 'ConstanciaController@showEstudiante')
-    ->name('constancias.showEstudiante');
-Route::get('constancias/{constancia}/estudiantes/', 'ConstanciaController@addEstudiantes')
-    ->name('constancias.addEstudiantes');
+Route::get('constancias/{IdConstancia}/download/{NombreConstancia}', 'ConstanciaController@downloadConstancia')->name('constancias.download');
+Route::get('constancias/{IdConstancia}/downloadConstanciaGenerica', 'ConstanciaController@downloadConstanciaGenerica')->name('constancias.downloadGenerica');
+Route::get('constancias/{constancia}/estudiantes/{estudiante}', 'ConstanciaController@showEstudiante')->name('constancias.showEstudiante');
+Route::get('constancias/{constancia}/grupos/', 'ConstanciaController@indexGrupos')->name('constancias.indexGrupos');
+Route::get('constancias/{constancia}/grupos/{grupo}', 'ConstanciaController@indexEstudiantes')->name('constancias.indexEstudiantes');
+Route::post('constancias/agregar-estudiante', 'ConstanciaController@addEstudianteConstancia')->name('constancias.addEstudiante');
+Route::delete('constancias/{constancia}/{estudiante}', 'ConstanciaController@destroyEstudianteConstancia')->name('constancias.destroyEstudiante');
+

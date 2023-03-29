@@ -16,9 +16,8 @@ use App\Models\Reprobado;
 use App\Models\Titulacion;
 use App\Models\Traslado;
 use App\Models\Trayectoria;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -504,7 +503,7 @@ class GrupoController extends Controller
         $periodoInicio      = $grupo[0]->IdPeriodoInicio;
         $periodos           = Periodo::whereBetween('IdPeriodo', array($periodoInicio, $periodoInicio + 12))->get();
 
-        $pdf = PDF::loadView('grupos.pdf.imprimirReprobados', [
+        $pdf = Pdf::loadView('grupos.pdf.imprimirReprobados', [
             'grupos'            => $grupo,
             'hombre'            => $informacion['hombre'],
             'mujer'             => $informacion['mujer'],

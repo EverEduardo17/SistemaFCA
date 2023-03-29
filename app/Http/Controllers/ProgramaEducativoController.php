@@ -85,7 +85,7 @@ class ProgramaEducativoController extends Controller
                 Session::flash('flash', [['type' => "danger", 'message' => "El Programa Educativo '" . $programaEducativo->AcronimoProgramaEducativo . "' ya se encuentra en uso, no puede ser eliminado."]]);
                 return redirect()->route('programaEducativo.index');
             } else {
-                $programaEducativo->forceDelete();
+                $programaEducativo->delete();
                 Session::flash('flash', [['type' => "success", 'message' => "El Programa Educativo fue eliminado correctamente."]]);
                 return redirect()->route('programaEducativo.index');
             }

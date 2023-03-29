@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ConstanciaRequest;
+use App\Models\Cohorte;
 use App\Models\Constancia;
 use App\Models\Estudiante;
+use App\Models\Grupo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -167,7 +169,14 @@ class ConstanciaController extends Controller
      */
     public function destroy(Constancia $constancia)
     {
-        //
+        try {
+            $constancia->delete();
+            Session::flash('flash', [['type' => "success", 'message' => "La constancia fue eliminada correctamente."]]);
+            return redirect()->route('constancias.index');
+        } catch (\Throwable $throwable) {
+            Session::flash('flash', [['type' => "danger", 'message' => "La constancia NO pudo ser eliminada."]]);
+            return redirect()->route('constancias.index');
+        }
     }
 
     public function downloadConstancia($id, $nombreConstancia)
@@ -194,7 +203,45 @@ class ConstanciaController extends Controller
         return view('constancias.estudiantes.showEstudiante', compact('constancia', 'estudiante'));
     }
 
-    public function addEstudiantes(Constancia $constancia) {
-        return view('constancias.estudiantes.addEstudiantes', compact('constancia'));
+    public function indexGrupos(Constancia $constancia) {
+        $grupos = Grupo::all();
+        return view('constancias.estudiantes.indexGrupos', compact('constancia', 'grupos'));
     }
+    public function indexEstudiantes(Constancia $constancia, Grupo $grupo) {
+        $cohorte = Cohorte::where('IdCohorte', $grupo->IdCohorte)->get()->last();
+        $estudiantes = $grupo->trayectorias;
+        return view('constancias.estudiantes.indexEstudiantes', compact('constancia', 'grupo', 'cohorte', 'estudiantes'));
+    }
+
+    public function addEstudianteConstancia(Request $request)
+    {
+        $idEstudiante = $request->input('idEstudiante');
+        $idConstancia = $request->input('idConstancia');
+        $estudiante = Estudiante::findOrFail($idEstudiante);
+        $constancia = Constancia::findOrFail($idConstancia);
+        if ($estudiante->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists()) {
+            $estudiante->constancias()->detach($constancia);
+            $success = false;
+        } else {
+            $estudiante->constancias()->attach($constancia);
+            $success = true;
+        }
+        return response()->json(['success' => $success]);
+    }
+
+    public function destroyEstudianteConstancia(Request $request, $idConstancia, $idEstudiante)
+    {
+        if($request->ajax()){
+            $estudiante = Estudiante::findOrFail($idEstudiante);
+            $constancia = Constancia::findOrFail($idConstancia);
+            if ($estudiante->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists()) {
+                $estudiante->constancias()->detach($constancia);
+            }
+            return response()->json(['success' => true]);
+        } else {
+            return redirect()->back();
+        }
+    }
+
+
 }

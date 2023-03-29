@@ -1,14 +1,19 @@
 @extends('layouts.app')
 
+@section('head')
+<link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}" />
+@endsection
+
 @section('content')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Constancias</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ $constancia->NombreConstancia }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ $constancia->NombreConstancia }}</li>
         <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica', $constancia->IdConstancia) }}"> Descargar Plantilla Generica </a></li>
     </ol>
 </nav>
+
 <div class="card">
     <div class="card-header">
         <div class="row">
@@ -62,14 +67,13 @@
             {{-- @can('havepermiso', 'estudiante-ver-cualquiera') --}}
                 <a class="btn btn-primary col-3 mr-4 ml-5" href="/grupos" role="button">Gestión de Estudiantes</a>
             {{-- @endcan --}}
-            <a class="btn btn-success col-3" href="{{ route('constancias.addEstudiantes', $constancia) }}" role="button">Agregar Estudiantes</a>
-
+            <a class="btn btn-success col-3" href="{{ route('constancias.indexGrupos', $constancia) }}" role="button">Agregar Estudiantes</a>
         </div>
     </div>
 
     <div class="card-body">
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover" id="table_Programa">
+            <table class="table table-striped table-hover" id="table_Constancia">
                 <caption>Estudiantes que participaron en el evento.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
@@ -81,7 +85,7 @@
                 </thead>
                 <tbody>
                     @foreach ($estudiantes as $estudiante)
-                    <tr>
+                    <tr id="fila-{{ $estudiante->IdEstudiante }}">
                         <th scope="row" class="border-right">{{ $estudiante->MatriculaEstudiante }}</th>
 
                         <td class="border-right">
@@ -93,8 +97,12 @@
                         <td class="border-right">{{ $estudiante->Trayectoria->Grupo->NombreGrupo }}</td>
 
                         <td class="py-2">
-                            <a class="btn btn-sm btn-outline-success" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles"><em class="fas fa-eye"></em></a>
-                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $estudiante->IdEstudiante }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar"><em class="fas fa-trash-alt"></em></a>
+                            <a class="btn btn-sm btn-outline-success" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
+                                <em class="fas fa-eye"></em>
+                            </a>
+                            <a class="btn btn-sm btn-outline-danger btn-constancia" data-url="{{ route('constancias.destroyEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-method="delete">
+                                <em class="fas fa-trash-alt btn-outline-danger"></em>
+                            </a>
                         </td>
                     </tr>
                     @endforeach
@@ -103,5 +111,45 @@
         </div>
     </div>
 </div>
+@endsection
 
+@section('script')
+<script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
+<script>
+    $(document).ready(function() {
+        $('#table_Constancia').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
+            }
+
+        });
+    });
+
+
+    $(document).on('click', '.btn-constancia', function (e) {
+        e.preventDefault();
+
+        var url = $(this).data('url');
+        var token = $('meta[name="csrf-token"]').attr('content');
+        var idEstudiante = url.split('/').pop();
+
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            data: {
+                '_token': token
+            },
+            success: function (data) {
+                // Aquí puedes actualizar la tabla con los datos actualizados
+                console.log('Eliminado exitosamente');
+                var filaEstudiante = $('#fila-' + idEstudiante);
+                filaEstudiante.closest('tr').remove();
+            },
+            error: function (data) {
+                console.log('Ocurrió un error al eliminar');
+            }
+        });
+    });
+
+</script>    
 @endsection

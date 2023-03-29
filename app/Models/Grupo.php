@@ -49,4 +49,9 @@ class Grupo extends Model
     {
         return $this->hasOne(Facultad::class, 'IdFacultad', 'IdFacultad');
     }
+
+    public function trayectorias()
+    {
+        return $this->hasMany(Trayectoria::class, 'IdGrupo', 'IdGrupo');
+    }
 }

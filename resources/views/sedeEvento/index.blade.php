@@ -51,7 +51,11 @@
     <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
     <script>
         $(document).ready(function() {
-            $('#table_sede').DataTable();
+            $('#table_sede').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
+            }
         });
+    });
     </script>
 @endsection
