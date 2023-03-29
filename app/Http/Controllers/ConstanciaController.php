@@ -68,7 +68,7 @@ class ConstanciaController extends Controller
             $filename = 'c_' . str_pad($idConstanciaDB, 5, '0', STR_PAD_LEFT) . '.docx';
 
             $plantilla = $request->file('Plantilla');
-            $plantilla->storeAs('constancias/' , $filename.'.docx');
+            $plantilla->storeAs('constancias/' , $filename);
         }
         catch (\Throwable $throwable){
             DB::rollBack();
@@ -121,7 +121,7 @@ class ConstanciaController extends Controller
         if ($request->hasFile('Plantilla')) {
                 $filename = 'c_' . str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT) . '.docx';
 
-                $request->file('Plantilla')->storeAs('constancias' , $filename.'.docx');
+                $request->file('Plantilla')->storeAs('constancias' , $filename);
             }
 
         $timestamp = Carbon::now()->toDateTimeString();
