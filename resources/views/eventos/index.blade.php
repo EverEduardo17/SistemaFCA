@@ -16,7 +16,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-3 col-md-4 mb-3 text-center">
             <hr>
-            <div id="dateStaevento_fecha_sede_srt" class="ui-datepicker-div"></div>
+            <div id="dateStart" class="ui-datepicker-div"></div>
             <hr>
             @can('havepermiso', 'eventos-crear')
                 <a class="btn btn-primary btn-lg" href="{{route('eventos.create')}}">Registrar un evento</a>
