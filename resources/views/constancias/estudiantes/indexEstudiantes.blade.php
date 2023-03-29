@@ -19,10 +19,11 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <div class="row align-center">
-        <h5 class="card-title col-8"><strong> Estudiantes del grupo "{{$grupo->NombreGrupo}}" del cohorte
-            "{{$cohorte->NombreCohorte}}"</strong></h5>
-        <a class="btn btn-outline-info col-4" href="{{ route('constancias.show', $constancia->IdConstancia) }}" role="button">Ver Constancia</a>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title"><strong> Estudiantes del grupo "{{$grupo->NombreGrupo}}" del cohorte
+                "{{$cohorte->NombreCohorte}}"</strong></h5>
+                <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
+                <a class="btn btn-success col-4" href="{{ route('constancias.show', $constancia->IdConstancia) }}" role="button">Ver Constancia</a>
         </div>
     </div>
 

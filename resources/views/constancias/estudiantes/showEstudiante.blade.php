@@ -11,14 +11,15 @@
 </nav>
 <div class="card">
     <div class="card-header">
-        <div class="row">
-            <h5 class="card-title col-8">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">
                 {{ $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales }}
                 {{ $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales }}
                 {{ $estudiante->Usuario->DatosPersonales->NombreDatosPersonales }}
             </h5>
             {{-- @can('havepermiso', 'academicos-listar') --}}
-                <a class="btn btn-primary col-4" href="{{ route('constancias.show', $constancia->IdConstancia) }}" role="button">Ver Estudiantes Participantes</a>
+                <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
+                <a class="btn btn-primary col-4" href="{{ route('constancias.show', $constancia->IdConstancia) }}" role="button">Ver Constancia</a>
             {{-- @endcan --}}
         </div>
     </div>

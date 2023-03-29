@@ -10,8 +10,9 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <div class="row">
-            <h5 class="card-title col-8"><strong>Gestión de Grupos</strong></h5>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title"><strong>Gestión de Grupos</strong></h5>
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
             <a class="btn btn-success col-4" href="{{ route('grupos.create') }}" role="button">Agregar Grupo</a>
         </div>
     </div>
