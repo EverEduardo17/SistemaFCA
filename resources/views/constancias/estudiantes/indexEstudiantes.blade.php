@@ -52,7 +52,8 @@
             @foreach ($estudiantes as $estudiante)
                 <tr>
                     <th scope="row" class="border-right">{{$estudiante->estudiante->MatriculaEstudiante}}</th>
-                    <td class="border-right">{{$estudiante->datosPersonales->ApellidoPaternoDatosPersonales}}
+                    <td class="border-right">
+                        {{$estudiante->datosPersonales->ApellidoPaternoDatosPersonales}}
                         {{$estudiante->datosPersonales->ApellidoMaternoDatosPersonales}}
                         {{ $estudiante->datosPersonales->NombreDatosPersonales }} 
                     </td>

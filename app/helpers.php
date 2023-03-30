@@ -76,3 +76,4 @@
         $confictos->all();
         return $confictos;
     }
+

@@ -62,10 +62,10 @@
 
 <div class="card">
     <div class="card-header">
-        <div class="row">
-            <h5 class="card-title col-5">Estudiantes</h5>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Estudiantes</h5>
             {{-- @can('havepermiso', 'estudiante-ver-cualquiera') --}}
-                <a class="btn btn-primary col-3 mr-4 ml-5" href="/grupos" role="button">Gestión de Estudiantes</a>
+                <a class="btn btn-primary col-3 ml-auto mr-4" href="/grupos" role="button">Gestión de Estudiantes</a>
             {{-- @endcan --}}
             <a class="btn btn-success col-3" href="{{ route('constancias.indexGrupos', $constancia) }}" role="button">Agregar Estudiantes</a>
         </div>

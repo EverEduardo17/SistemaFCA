@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class ConstanciaController extends Controller
 {
@@ -183,11 +184,11 @@ class ConstanciaController extends Controller
     {
         $filename = 'c_' . str_pad($id, 5, '0', STR_PAD_LEFT) . '.docx';
 
-        $pathToFile = storage_path('app/constancias/' . $filename . '.docx');
+        $pathToFile = storage_path('app/constancias/' . $filename);
         $headers = [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         ];
-        return response()->download($pathToFile, $nombreConstancia . '.docx', $headers);
+        return response()->download($pathToFile, ($nombreConstancia . '.docx'), $headers);
     }
 
     public function downloadConstanciaGenerica()
@@ -243,5 +244,50 @@ class ConstanciaController extends Controller
         }
     }
 
+    public function generarConstancia(Constancia $constancia, Estudiante $estudiante) 
+    {
+        $filename = 'c_' . str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT) . '.docx';
+        $pathPlantilla = storage_path('app/constancias/' . $filename);
 
+        $templateProcessor = new TemplateProcessor($pathPlantilla);
+        
+
+        $templateProcessor->setValues([
+            'nombre_estudiante'    => $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales . ' ' . 
+                                      $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales . ' ' . 
+                                      $estudiante->Usuario->DatosPersonales->NombreDatosPersonales,
+
+            'matricula'            => $estudiante->MatriculaEstudiante,
+
+            'programa_educativo'   => $estudiante->Trayectoria->ProgramaEducativo->NombreProgramaEducativo,
+
+            'nombre_constancia'    => $constancia->NombreConstancia,
+
+        ]);
+
+        if ($constancia->VigenteHasta !== null) {
+            $templateProcessor->setValue('vigencia',printDate($constancia->VigenteHasta));
+        }
+        else {
+            $templateProcessor->setValue('vigencia','Indefinida');
+        }
+
+        $templateProcessor->setImageValue(
+            'codigo_qr', 
+            [
+                'path' => public_path('constancias plantilla/QR.jpg'),
+                'width' => 200,
+                'height' => 200,
+                'ratio' => false,
+            ]
+        );
+
+
+        $estudianteConstancia = $estudiante->MatriculaEstudiante . "_" . $filename;
+        $pathEstudiante = storage_path('app/constancias/' . $estudianteConstancia);
+
+        $templateProcessor->saveAs($pathEstudiante);
+
+        return response()->download($pathEstudiante)->deleteFileAfterSend(true);
+    }
 }
