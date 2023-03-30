@@ -11,8 +11,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\TemplateProcessor;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -274,14 +274,15 @@ class ConstanciaController extends Controller
             $templateProcessor->setValue('vigencia','Indefinida');
         }
 
-        $pathQr = storage_path('app/constancias/' . $constancia->IdConstancia);
-        QrCode::size(200)->format('png')->generate(
-            route('constancias.showEstudiante', [
-                    'constancia' => $constancia->IdConstancia, 
-                    'estudiante' => $estudiante->IdEstudiante
-                ]),
-            $pathQr
-        );
+        $pathQr = public_path('constancias plantilla/QR.jpg');
+        // $pathQr = storage_path('app/constancias/' . $constancia->IdConstancia);
+        // QrCode::size(200)->format('png')->generate(
+        //     route('constancias.showEstudiante', [
+        //             'constancia' => $constancia->IdConstancia, 
+        //             'estudiante' => $estudiante->IdEstudiante
+        //         ]),
+        //     $pathQr
+        // );
 
         $templateProcessor->setImageValue(
             'codigo_qr', 
@@ -292,7 +293,7 @@ class ConstanciaController extends Controller
                 'ratio' => false,
             ]
         );
-
+        Storage::delete('app/constancias/' . $constancia->IdConstancia);
 
         $estudianteConstancia = $estudiante->MatriculaEstudiante . "_" . $filename;
         $pathEstudiante = storage_path('app/constancias/' . $estudianteConstancia);
