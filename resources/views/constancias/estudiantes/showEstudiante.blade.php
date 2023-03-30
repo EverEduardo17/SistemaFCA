@@ -42,6 +42,10 @@
         <p>
             {{ ($constancia->VigenteHasta === null)? " " : "Está constancia es valida hasta el: " .  printDate($constancia->VigenteHasta)}}
         </p>
+
+        <p>
+            
+        </p>
     </div>
 </div>
 @endsection
