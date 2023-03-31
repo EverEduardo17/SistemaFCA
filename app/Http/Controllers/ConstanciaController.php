@@ -274,15 +274,15 @@ class ConstanciaController extends Controller
             $templateProcessor->setValue('vigencia','Indefinida');
         }
 
-        $pathQr = public_path('constancias plantilla/QR.jpg');
-        // $pathQr = storage_path('app/constancias/' . $constancia->IdConstancia);
-        // QrCode::size(200)->format('png')->generate(
-        //     route('constancias.showEstudiante', [
-        //             'constancia' => $constancia->IdConstancia, 
-        //             'estudiante' => $estudiante->IdEstudiante
-        //         ]),
-        //     $pathQr
-        // );
+        // $pathQr = public_path('constancias plantilla/QR.jpg');
+        $pathQr = storage_path('app/constancias/' . $constancia->IdConstancia);
+        QrCode::size(200)->format('png')->generate(
+            route('constancias.showEstudiante', [
+                    'constancia' => $constancia->IdConstancia, 
+                    'estudiante' => $estudiante->IdEstudiante
+                ]),
+            $pathQr
+        );
 
         $templateProcessor->setImageValue(
             'codigo_qr', 
