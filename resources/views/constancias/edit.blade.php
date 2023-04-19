@@ -54,7 +54,7 @@
                 <label name="Plantilla">Cambiar Plantilla en formato DOCX (Word):</label> <br>
                 <input name="Plantilla" type="file" class="@error('Plantilla') form-control is-invalid @enderror"> <br>
                 
-                <a class="mi-plantilla" 
+                <a class="mi-plantilla"
                         href="{{ route('constancias.download', [
                         'IdConstancia' => $constancia->IdConstancia, 
                         'NombreConstancia' => $constancia->NombreConstancia
@@ -65,10 +65,11 @@
 
             <hr>
             <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
-            {{-- @can('havepermiso', 'academicos-listar') --}}
-                <a href="{{ route('constancias.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
-            {{-- @endcan --}}
+            
         </form>
+        {{-- @can('havepermiso', 'academicos-listar') --}}
+        <a href="javascript:history.back()" class="btn btn-secondary btn-block mt-2">Cancelar</a>
+        {{-- @endcan --}}
     </div>
 </div>
 @endsection

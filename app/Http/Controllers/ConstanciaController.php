@@ -75,7 +75,8 @@ class ConstanciaController extends Controller
         }
         catch (\Throwable $throwable){
             DB::rollBack();
-            Session::flash('flash', [['type' => "danger", 'message' => $throwable->getMessage()]]);
+            // Session::flash('flash', [['type' => "danger", 'message' => $throwable->getMessage()]]);
+            Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar la constancia."]]);
             return redirect()->route('constancias.index');
         }
 
@@ -248,8 +249,8 @@ class ConstanciaController extends Controller
 
     public function generarConstancia(Constancia $constancia, Estudiante $estudiante) 
     {
-        $filename = 'c_' . str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT) . '.docx';
-        $pathPlantilla = storage_path('app/constancias/' . $filename);
+        $filename = 'c_' . str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT);
+        $pathPlantilla = storage_path('app/constancias/' . $filename . '.docx');
 
         $templateProcessor = new TemplateProcessor($pathPlantilla);
         
@@ -293,14 +294,30 @@ class ConstanciaController extends Controller
                 'ratio' => false,
             ]
         );
-        Storage::delete('app/constancias/' . $constancia->IdConstancia);
 
         $estudianteConstancia = $estudiante->MatriculaEstudiante . "_" . $filename;
         $pathEstudiante = storage_path('app/constancias/' . $estudianteConstancia);
 
         $templateProcessor->saveAs($pathEstudiante);
 
-        return response()->download($pathEstudiante)->deleteFileAfterSend(true);
+        exec('soffice --convert-to pdf '. $pathEstudiante .' --outdir ' . storage_path('app/constancias/'));
+
+        // Eliminar archivos temporales
+        unlink($pathEstudiante);
+        unlink($pathQr);
+        return response()->download($pathEstudiante . '.pdf')->deleteFileAfterSend(true);
+
+
+        // Convertir a PDF
+        // \PhpOffice\PhpWord\Settings::setPdfRendererPath(base_path('vendor/dompdf/dompdf/'));
+        // \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+
+        // $pdf = \PhpOffice\PhpWord\IOFactory::load($pathEstudiante); 
+        // $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($pdf , 'PDF');
+        // $xmlWriter->save($pathEstudiante . "pdf");  
+
+        // Storage::delete($pathEstudiante);  // borrar archivo de word
+        // return response()->download($pathEstudiante . "pdf")->deleteFileAfterSend(true);
     }
 
     public function qr(Constancia $constancia) {

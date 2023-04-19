@@ -56,18 +56,18 @@ class ImportarController extends Controller
         }
     }
 
-    public function save($array)
+    public function save($datos)
     {
         try {
             $cohorte = Cohorte::where('NombreCohorte', '=', $datos['nombreCohorte'])->get()->last();
             if ($cohorte == null) {
                 Session::flash('flash', [['type' => "danger", 'message' => "El cohorte ingresado no es válido."]]);
-                return redirect()->route('cohortes.mostrarCohorte');
+                return redirect()->route('home');
             }
             $grupo = Grupo::where('NombreGrupo', '=', $datos['nombreGrupo'])->where('IdCohorte', '=', $cohorte->IdCohorte)->get()->last();
             if ($grupo == null) {
                 Session::flash('flash', [['type' => "danger", 'message' => "El grupo ingresado no es válido."]]);
-                return redirect()->route('cohortes.mostrarCohorte');
+                return redirect()->route('home');
             }
 
 

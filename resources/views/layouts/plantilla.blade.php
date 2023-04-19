@@ -39,15 +39,18 @@
                     <a class="nav-link active" href="{{ route('home') }}"><em class="fas fa-home"></em> Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('empresas.index')}}"><em class="fas fa-building"></em> Gestión de Empresas</a>
+                    <a class="nav-link" href="{{ route('empresas.index') }}"><em class="fas fa-building"></em> Empresas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('programaEducativo.index')}}"><em class="fas fa-chalkboard"></em> Gestión de Programas Educativos</a>
+                    <a class="nav-link" href="{{ route('programaEducativo.index') }}"><em class="fas fa-chalkboard"></em> Programas Educativos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{route('grupos.index')}}"><em class="fas fa-users"></em> Gestión de Grupos</a>
+                    <a class="nav-link active" href="{{ route('grupos.index') }}"><em class="fas fa-users"></em> Grupos</a>
                 </li>
-                    <a class="nav-link" href="{{route('cohortes.mostrarCohorte')}}"><em class="fas fa-user"></em> Gestión de Estudiantes</a>
+                    <a class="nav-link" href="{{ route('estudiantes.index') }}"><em class="fas fa-user"></em> Estudiantes</a>
+                </li>
+                </li>
+                    <a class="nav-link" href="{{ route('constancias.index') }}"><em class="fas fa-file-pdf"></em> Constancias</a>
                 </li>
             </ul>
             @yield('content')

@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GrupoRequest;
 use App\Models\Baja;
 use App\Models\Cohorte;
+use App\Models\Estudiante;
 use App\Models\Facultad;
 use App\Models\Grupo;
 use App\Models\Grupo_Estudiante;
 use App\Models\Modalidad;
 use App\Models\Motivo;
 use App\Models\Periodo;
+use App\Models\Practicas_Estudiante;
 use App\Models\ProgramaEducativo;
 use App\Models\Reprobado;
+use App\Models\Servicio_Social_Estudiante;
 use App\Models\Titulacion;
 use App\Models\Traslado;
 use App\Models\Trayectoria;
@@ -98,7 +101,7 @@ class GrupoController extends Controller
         $activos    = Grupo_Estudiante::where("Estado", "=",  "Activo")->where("IdGrupo", "=", $grupo->IdGrupo)->count();
         $inactivos  = Grupo_Estudiante::where("Estado", "<>", "Activo")->where("IdGrupo", "=", $grupo->IdGrupo)->count();
         return view('grupos.show', [
-            'grupos'    => $grupo,
+            'grupo'    => $grupo,
             'activos'   => $activos,
             'inactivos' => $inactivos,
         ]);
@@ -185,361 +188,105 @@ class GrupoController extends Controller
     }
 
 
-    //<---- Funciones para visualizar las tablas resumen de los grupos ---->
-
-    public function mostrarGrupo($nombreCohorte, $nombreGrupo)
+    public function indexEstudiantes($idGrupo)
     {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $informacion        = $this->getDatosResumen($idGrupo);
-
-        return view('grupos.mostrarGrupo', [
-            'grupos'            => Grupo::where("IdGrupo", "=", $idGrupo)->get(),
-            'activoHombre'      => $informacion['activoHombre'],
-            'activoMujer'       => $informacion['activoMujer'],
-            'totalActivos'      => $informacion['totalActivos'],
-
-            'egresadoHombre'    => $informacion['egresadoHombre'],
-            'egresadoMujer'     => $informacion['egresadoMujer'],
-            'totalEgresados'    => $informacion['totalEgresados'],
-
-            'entranteHombre'    => $informacion['entranteHombre'],
-            'entranteMujer'     => $informacion['entranteMujer'],
-            'totalEntrantes'    => $informacion['totalEntrantes'],
-
-            'salienteHombre'    => $informacion['salienteHombre'],
-            'salienteMujer'     => $informacion['salienteMujer'],
-            'totalSalientes'    => $informacion['totalSalientes'],
-
-            'bajaHombre'        => $informacion['bajaHombre'],
-            'bajaMujer'         => $informacion['bajaMujer'],
-            'totalBajas'        => $informacion['totalBajas'],
-
-            'nombreGrupo'       => $nombreGrupo,
+        $grupo              = Grupo::where('IdGrupo', $idGrupo)->get()->last();
+        $cohorte            = Cohorte::where('IdCohorte', $grupo->IdCohorte)->get()->last();
+        $idFCA              = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');        $programaEducativo  = ProgramaEducativo::where('IdProgramaEducativo', $grupo->IdProgramaEducativo)->get()->last();
+        return view('grupos.estudiantes.index', [
+            'grupo'             => $grupo,
+            'cohorte'           => $cohorte,
+            'estudiantes'       => Trayectoria::where('IdGrupo', $idGrupo)->get(),
+            'cohortes'          => Cohorte::orderBy('IdCohorte', 'desc')->get(),
+            'programas'         => ProgramaEducativo::where('IdFacultad', $idFCA)->get(),
+            'grupos'            => Grupo::where("IdFacultad", "=", $idFCA)->get(),
+            'modalidades'       => Modalidad::where("TipoModalidad", "=", "Entrada")->get(),
+            'programaEducativo' => $programaEducativo,
+            'periodos'          => DB::table('Periodo')
+                ->orderBy('IdPeriodo', 'desc')
+                ->get(),
+            'motivos'           => Motivo::get(),
+            'estados'           => Grupo_Estudiante::where("IdGrupo", "=", $idGrupo)->get()
         ]);
     }
 
-    public function mostrarEstado($nombreCohorte, $nombreGrupo)
+    public function showEstudiante($idGrupo, $matriculaEstudiante)
     {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $informacion        = $this->getDatosEstado($idGrupo);
-
-        return view('grupos.mostrarEstado', [
-            'grupos'            => Grupo::where("IdGrupo", "=", $idGrupo)->get(),
-            'activoHombre'      => $informacion['activoHombre'],
-            'activoMujer'       => $informacion['activoMujer'],
-            'totalActivos'      => $informacion['totalActivos'],
-
-            'egresadoHombre'    => $informacion['egresadoHombre'],
-            'egresadoMujer'     => $informacion['egresadoMujer'],
-            'totalEgresados'    => $informacion['totalEgresados'],
-
-            'bajaHombre'        => $informacion['bajaHombre'],
-            'bajaMujer'         => $informacion['bajaMujer'],
-            'totalBajas'        => $informacion['totalBajas'],
-
-            'nombreGrupo'       => $nombreGrupo,
+        $idEstudiante   = Estudiante::where('MatriculaEstudiante', '=', $matriculaEstudiante)->value('IdEstudiante');
+        $idTrayectoria  = Trayectoria::where('IdEstudiante', '=', $idEstudiante)->value('IdTrayectoria');
+        $estado         = Grupo_Estudiante::where('IdTrayectoria', $idTrayectoria)->value("Estado");
+        $motivos        = Motivo::get();
+        $movilidad      = Traslado::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $periodos       = DB::table('Periodo')
+            ->orderBy('IdPeriodo', 'desc')
+            ->get();
+        $practicas      = Practicas_Estudiante::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $reprobados     = Reprobado::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $servicioSocial = Servicio_Social_Estudiante::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $titulacion     = Titulacion::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $trayectoria    = Trayectoria::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        return view('grupos.estudiantes.show', [
+            'trayectoria'   => $trayectoria,
+            'reprobado'     => $reprobados,
+            'servicio'      => $servicioSocial,
+            'practicas'     => $practicas,
+            'titulacion'    => $titulacion,
+            'movilidad'     => $movilidad,
+            'estado'        => $estado,
+            'periodos'      => $periodos,
+            'motivos'       => $motivos,
         ]);
     }
 
-    public function mostrarEgresados($nombreCohorte, $nombreGrupo)
+    public function editarEstudiante($idGrupo, $idTrayectoria)
     {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $informacion        = $this->getDatosEgresados($idGrupo);
-        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
-        $periodoInicio      = $grupo[0]->IdPeriodoInicio + 7;
-        $periodos           = Periodo::whereBetween('IdPeriodo', array($periodoInicio, $periodoInicio + 4))->get();
-        $nombrePeriodos     = [];
-        $contador           = 0;
-        foreach ($periodos as $periodo) {
-            $nombrePeriodos[$contador] = str_replace(" ", "_", $periodo->NombrePeriodo);
-            $contador++;
+
+        $trayectoria    = Trayectoria::where('IdTrayectoria', $idTrayectoria)->get()->last();
+
+        $cohortes       = Cohorte::orderBy('IdCohorte', 'desc')->get();
+        $estado         = Grupo_Estudiante::where('IdTrayectoria', $idTrayectoria)->value("Estado");
+        $grupos         = Grupo::where("IdCohorte", "=", $trayectoria->IdCohorte)->get();
+        $motivos        = Motivo::get();
+        $movilidad      = Traslado::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $periodoInicio  = $grupos[0]->IdPeriodoInicio;
+        $periodos       = DB::table('Periodo')
+            ->whereBetween('IdPeriodo', array($periodoInicio, $periodoInicio + 9))
+            ->orderBy('IdPeriodo', 'desc')
+            ->get();
+        $practicas      = Practicas_Estudiante::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $programas      = ProgramaEducativo::where("IdFacultad", "=", Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->value("IdFacultad"))->get();
+        $reprobados     = Reprobado::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $servicioSocial = Servicio_Social_Estudiante::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        $titulacion     = Titulacion::where('IdTrayectoria', $idTrayectoria)->get()->last();
+        //TODO: Limitar la modalidad si no es LSCA o LIS
+        /*
+        $idLIS              = ProgramaEducativo::where('AcronimoProgramaEducativo', '=','LIS')->value('IdProgramaEducativo');
+        $idLSCA              = ProgramaEducativo::where('AcronimoProgramaEducativo', '=','LSCA')->value('IdProgramaEducativo');
+
+        if($grupo[0]->IdProgramaEducativo == $idLIS || $grupo[0]->IdProgramaEducativo == $idLSCA ){
+            $modalidades        = Modalidad::where('TipoModalidad', '=', 'Titulación')->get();
+        }else{
+            $modalidades        = Modalidad::where('TipoModalidad', '=', 'Titulación')->where('NombreModalidad', '<>', 'Trabajo Práctico')->get();
         }
-        $modalidades        = $this->getModalidades($grupo[0]->IdProgramaEducativo);
-        return view('grupos.mostrarEgresados', [
-            'grupos'            => $grupo,
-            'hombre'            => $informacion['activoHombre'],
-            'mujer'             => $informacion['activoMujer'],
-            'totalEgresados'    => $informacion['totalActivos'],
-            'egresadosPeriodo'  => $informacion['cantidadesPeriodos'],
-            'egresadosModalidad' => $informacion['cantidadesModalidad'],
-            'modalidades'       => $modalidades,
-            'periodos'          => $periodos,
-            'nombresPeriodos'    => $nombrePeriodos,
-            'totalPeriodos'     => $periodos->count(),
-            'totalModalidades'  => $modalidades->count(),
-            'nombreGrupo'       => $nombreGrupo,
+*/
+
+
+        return view('grupos.estudiantes.edit', [
+            'trayectoria'   => $trayectoria,
+            'reprobado'     => $reprobados,
+            'servicio'      => $servicioSocial,
+            'practicas'     => $practicas,
+            'titulacion'    => $titulacion,
+            'movilidad'     => $movilidad,
+            'estado'        => $estado,
+            'periodos'      => $periodos,
+            'motivos'       => $motivos,
+            'cohortes'      => $cohortes,
+            'modalidades'   => Modalidad::get(),
+            'programas'     => $programas,
+            'grupos'        => $grupos,
         ]);
     }
-
-    public function mostrarEgresadosPeriodo($nombreCohorte, $nombreGrupo, $nombrePeriodo)
-    {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $nombrePeriodoReal    = $this->getNombrePeriodoLimpio($nombrePeriodo);
-        $periodo            = Periodo::where('NombrePeriodo', '=', $nombrePeriodoReal)->get()->last();
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $alumnos            = Grupo_Estudiante::where('Estado', '=', 'Egresado')->where('IdGrupo', '=', $idGrupo)->get();
-        $estudiantes        = [];
-        foreach ($alumnos as $alumno) {
-            $titulacion     = Titulacion::where('IdTrayectoria', '=', $alumno->IdTrayectoria)->get()->last();
-            if ($titulacion->IdPeriodoEgreso == $periodo->IdPeriodo) {
-                $estudiantes[] = $titulacion;
-            }
-        }
-        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
-        $periodos           = Periodo::where('NombrePeriodo', '=', $nombrePeriodoReal)->get();
-        $modalidades        = Modalidad::where('TipoModalidad', '=', 'Titulación')->get();
-
-        return view('grupos.mostrarEgresadosPeriodo', [
-            'grupos'            => $grupo,
-            'estudiantes'       => $estudiantes,
-            'modalidades'       => $modalidades,
-            'periodos'          => $periodos,
-            'nombreGrupo'       => $nombreGrupo,
-        ]);
-    }
-
-    public function mostrarTraslados($nombreCohorte, $nombreGrupo)
-    {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $informacion        = $this->getDatosTraslados($idGrupo);
-        return view('grupos.mostrarTraslados', [
-            'grupos'                =>  Grupo::where('IdGrupo', '=', $idGrupo)->get(),
-            'estudiantesEntrantes'  => $informacion['estudiantesEntrantes'],
-            'estudiantesSalientes'  => $informacion['estudiantesSalientes'],
-            'nombreGrupo'       => $nombreGrupo,
-        ]);
-    }
-
-    public function mostrarReprobados($nombreCohorte, $nombreGrupo)
-    {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $informacion        = $this->getDatosReprobados($idGrupo);
-        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
-        $periodoInicio      = $grupo[0]->IdPeriodoInicio;
-        $periodos           = Periodo::whereBetween('IdPeriodo', array($periodoInicio, $periodoInicio + 12))->get();
-        $nombresPeriodos     = [];
-        $contador           = 0;
-        foreach ($periodos as $periodo) {
-            $nombresPeriodos[$contador] = str_replace(" ", "_", $periodo->NombrePeriodo);
-            $contador++;
-        }
-        return view('grupos.mostrarReprobados', [
-            'grupos'            => $grupo,
-            'hombre'            => $informacion['hombre'],
-            'mujer'             => $informacion['mujer'],
-            'totalReprobados'   => $informacion['totalReprobados'],
-            'reprobadosPeriodo' => $informacion['cantidadesPeriodos'],
-            'periodos'          => $periodos,
-            'nombresPeriodos'    => $nombresPeriodos,
-            'totalPeriodos'     => $periodos->count(),
-            'nombreGrupo'       => $nombreGrupo,
-        ]);
-    }
-
-    public function mostrarReprobadosPeriodo($nombreCohorte, $nombreGrupo, $nombrePeriodo)
-    {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $nombrePeriodoReal    = $this->getNombrePeriodoLimpio($nombrePeriodo);
-        $periodo            = Periodo::where('NombrePeriodo', '=', $nombrePeriodoReal)->get()->last();
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $alumnos            = Grupo_Estudiante::where('IdGrupo', '=', $idGrupo)->get();
-        $estudiantes        = [];
-        foreach ($alumnos as $alumno) {
-            $reprobado      = Reprobado::where('IdTrayectoria', '=', $alumno->IdTrayectoria)->get()->last();
-            if ($reprobado != null && $reprobado->IdPeriodo == $periodo->IdPeriodo) {
-                $estudiantes[] = $reprobado;
-            }
-        }
-        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
-        $periodos           = Periodo::where('NombrePeriodo', '=', $nombrePeriodoReal)->get();
-        $modalidades        = Modalidad::where('TipoModalidad', '=', 'Titulación')->get();
-
-        return view('grupos.mostrarReprobadosPeriodo', [
-            'grupos'            => $grupo,
-            'estudiantes'       => $estudiantes,
-            'modalidades'       => $modalidades,
-            'periodos'          => $periodos,
-            'nombreGrupo'       => $nombreGrupo,
-        ]);
-    }
-
-
-    public function mostrarBajas($nombreCohorte, $nombreGrupo)
-    {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $informacion        = $this->getDatosBajas($idGrupo);
-        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
-        $motivos            = Motivo::get();
-        return view('grupos.mostrarBajas', [
-            'grupos'            => $grupo,
-            'hombreTemporal'    => $informacion['hombreTemporal'],
-            'mujerTemporal'     => $informacion['mujerTemporal'],
-            'hombreDefinitivo'  => $informacion['hombreDefinitivo'],
-            'mujerDefinitivo'   => $informacion['mujerDefinitivo'],
-            'resultados'        => $informacion['bajasMotivos'],
-            'motivos'           => $motivos,
-            'nombreGrupo'       => $nombreGrupo,
-        ]);
-    }
-
-    //<---- Métodos Para imprimir tablas ---->
-
-    public function imprimirGrupo($nombreCohorte, $nombreGrupo)
-    {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $informacion        = $this->getDatosResumen($idGrupo);
-        $pdf = PDF::loadView('grupos.pdf.imprimirGrupo', [
-            'grupos'            => Grupo::where("IdGrupo", "=", $idGrupo)->get(),
-            'activoHombre'      => $informacion['activoHombre'],
-            'activoMujer'       => $informacion['activoMujer'],
-            'totalActivos'      => $informacion['totalActivos'],
-
-            'egresadoHombre'    => $informacion['egresadoHombre'],
-            'egresadoMujer'     => $informacion['egresadoMujer'],
-            'totalEgresados'    => $informacion['totalEgresados'],
-
-            'entranteHombre'    => $informacion['entranteHombre'],
-            'entranteMujer'     => $informacion['entranteMujer'],
-            'totalEntrantes'    => $informacion['totalEntrantes'],
-
-            'salienteHombre'    => $informacion['salienteHombre'],
-            'salienteMujer'     => $informacion['salienteMujer'],
-            'totalSalientes'    => $informacion['totalSalientes'],
-
-            'bajaHombre'        => $informacion['bajaHombre'],
-            'bajaMujer'         => $informacion['bajaMujer'],
-            'totalBajas'        => $informacion['totalBajas'],
-
-            'nombreGrupo'       => $nombreGrupo,
-            'fecha'                     => Carbon::now()->format('j/m/Y'),
-            'hora'                      => Carbon::now()->format('h:i:s A'),
-        ]);
-        return $pdf->stream('Resumen_' . $nombreGrupo . '_' . $nombreCohorte . '.pdf');
-    }
-
-    public function imprimirEstado($nombreCohorte, $nombreGrupo)
-    {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $informacion        = $this->getDatosEstado($idGrupo);
-
-        $pdf = PDF::loadView('grupos.pdf.imprimirEstado', [
-            'grupos'            => Grupo::where("IdGrupo", "=", $idGrupo)->get(),
-            'activoHombre'      => $informacion['activoHombre'],
-            'activoMujer'       => $informacion['activoMujer'],
-            'totalActivos'      => $informacion['totalActivos'],
-
-            'egresadoHombre'    => $informacion['egresadoHombre'],
-            'egresadoMujer'     => $informacion['egresadoMujer'],
-            'totalEgresados'    => $informacion['totalEgresados'],
-
-            'bajaHombre'        => $informacion['bajaHombre'],
-            'bajaMujer'         => $informacion['bajaMujer'],
-            'totalBajas'        => $informacion['totalBajas'],
-
-            'fecha'                     => Carbon::now()->format('j/m/Y'),
-            'hora'                      => Carbon::now()->format('h:i:s A'),
-        ]);
-        return $pdf->stream('Estado_' . $nombreGrupo . '_' . $nombreCohorte . '.pdf');
-    }
-
-    public function imprimirEgresados($nombreCohorte, $nombreGrupo)
-    {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $informacion        = $this->getDatosEgresados($idGrupo);
-        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
-        $periodoInicio      = $grupo[0]->IdPeriodoInicio + 7;
-        $periodos           = Periodo::whereBetween('IdPeriodo', array($periodoInicio, $periodoInicio + 4))->get();
-        $modalidades        = $this->getModalidades($grupo[0]->IdProgramaEducativo);
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView('grupos.pdf.imprimirEgresados', [
-            'grupos'            => $grupo,
-            'hombre'            => $informacion['activoHombre'],
-            'mujer'             => $informacion['activoMujer'],
-            'totalEgresados'    => $informacion['totalActivos'],
-            'egresadosPeriodo'  => $informacion['cantidadesPeriodos'],
-            'egresadosModalidad' => $informacion['cantidadesModalidad'],
-            'modalidades'       => $modalidades,
-            'periodos'          => $periodos,
-            'totalPeriodos'     => $periodos->count(),
-            'totalModalidades'  => $modalidades->count(),
-            'fecha'                     => Carbon::now()->format('j/m/Y'),
-            'hora'                      => Carbon::now()->format('h:i:s A'),
-        ]);
-        return $pdf->stream('Egresados_' . $nombreGrupo . '_' . $nombreCohorte . '.pdf');
-    }
-
-    public function imprimirTraslados($nombreCohorte, $nombreGrupo)
-    {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $informacion        = $this->getDatosTraslados($idGrupo);
-        $pdf = PDF::loadView('grupos.pdf.imprimirTraslados', [
-            'grupos'                =>  Grupo::where('IdGrupo', '=', $idGrupo)->get(),
-            'estudiantesEntrantes'  => $informacion['estudiantesEntrantes'],
-            'estudiantesSalientes'  => $informacion['estudiantesSalientes'],
-
-            'fecha'                     => Carbon::now()->format('j/m/Y'),
-            'hora'                      => Carbon::now()->format('h:i:s A'),
-        ]);
-        return $pdf->stream('Traslados_' . $nombreGrupo . '_' . $nombreCohorte . '.pdf');
-    }
-
-    public function imprimirReprobados($nombreCohorte, $nombreGrupo)
-    {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $informacion        = $this->getDatosReprobados($idGrupo);
-        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
-        $periodoInicio      = $grupo[0]->IdPeriodoInicio;
-        $periodos           = Periodo::whereBetween('IdPeriodo', array($periodoInicio, $periodoInicio + 12))->get();
-
-        $pdf = Pdf::loadView('grupos.pdf.imprimirReprobados', [
-            'grupos'            => $grupo,
-            'hombre'            => $informacion['hombre'],
-            'mujer'             => $informacion['mujer'],
-            'totalReprobados'   => $informacion['totalReprobados'],
-            'reprobadosPeriodo' => $informacion['cantidadesPeriodos'],
-            'periodos'          => $periodos,
-            'totalPeriodos'     => $periodos->count(),
-            'fecha'                     => Carbon::now()->format('j/m/Y'),
-            'hora'                      => Carbon::now()->format('h:i:s A'),
-        ]);
-        return $pdf->stream('Reprobados_' . $nombreGrupo . '_' . $nombreCohorte . '.pdf');
-    }
-
-    public function imprimirBajas($nombreCohorte, $nombreGrupo)
-    {
-        $nombreGrupoReal    = $this->getNombreGrupoLimpio($nombreGrupo);
-        $idGrupo            = $this->getIdGrupo($nombreCohorte, $nombreGrupoReal);
-        $informacion        = $this->getDatosBajas($idGrupo);
-        $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get();
-        $motivos            = Motivo::get();
-
-        $pdf = PDF::loadView('grupos.pdf.imprimirBajas', [
-            'grupos'            => $grupo,
-            'hombreTemporal'    => $informacion['hombreTemporal'],
-            'mujerTemporal'     => $informacion['mujerTemporal'],
-            'hombreDefinitivo'  => $informacion['hombreDefinitivo'],
-            'mujerDefinitivo'   => $informacion['mujerDefinitivo'],
-            'resultados'        => $informacion['bajasMotivos'],
-            'motivos'           => $motivos,
-            'nombreGrupo'       => $nombreGrupo,
-            'fecha'                     => Carbon::now()->format('j/m/Y'),
-            'hora'                      => Carbon::now()->format('h:i:s A'),
-        ]);
-        return $pdf->stream('Bajas_' . $nombreGrupo . '_' . $nombreCohorte . '.pdf');
-    }
-
 
     //<---- Métodos auxiliares ---->
 
@@ -735,6 +482,16 @@ class GrupoController extends Controller
             return Modalidad::where('TipoModalidad', '=', 'Titulación')->where('NombreModalidad', '<>', 'Trabajo Práctico')->get();
         }
     }
+
+
+ //<---- Funciones para visualizar las tablas resumen de los grupos ---->
+
+ public function mostrarGrupo($nombreCohorte, $nombreGrupo)
+ {
+     return view('grupos.index', [
+         'grupos'            => Grupo::all()
+     ]);
+ }
 
     //<---- Métodos de apoyo para obtener los datos---->
 

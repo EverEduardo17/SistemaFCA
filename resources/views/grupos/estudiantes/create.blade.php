@@ -6,7 +6,7 @@
         <li class="breadcrumb-item"><a href="{{ route('grupos.index') }}">Gestión de Grupos</a></li>
         <li class="breadcrumb-item"><a href="{{ route('grupos.show', $grupo->IdGrupo) }}">{{$grupo->NombreGrupo}} -
                 {{$cohorte->NombreCohorte}}</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('estudiantesGrupo', $grupo->IdGrupo) }}">Estudiantes</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('grupos.estudiantes', $grupo->IdGrupo) }}">Estudiantes</a></li>
         <li class="breadcrumb-item active" aria-current="page">Agregar Estudiante</li>
     </ol>
 </nav>
@@ -14,13 +14,18 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <div class="row">
-            <h5 class="card-title col-8"><strong>Agregar estudiante al grupo "{{$grupo->NombreGrupo}}" del cohorte
-                    "{{$grupo->cohorte->NombreCohorte}}"</strong></h5>
-            <a class="btn btn-outline-info col-4" href="{{ route('estudiantesGrupo', $grupo->IdGrupo) }}"
-                role="button">Ver Estudiantes</a>
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h5 class="card-title">
+                <strong>Agregar estudiante al grupo "{{$grupo->NombreGrupo}}" del cohorte "{{$grupo->cohorte->NombreCohorte}}"</strong>
+            </h5>
+
+            <a class="btn btn-outline-info col-4" href="javascript:history.back()" role="button">
+                Ver Estudiantes
+            </a>
         </div>
     </div>
+
     <div class="card-body">
         <form method="POST" action="{{ route('estudiantes.store') }}" autocomplete="off">
             @csrf
@@ -127,7 +132,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">Agregar Estudiante</button>
-            <a href="{{ route('estudiantesGrupo', $grupo->IdGrupo) }}" class="btn btn-secondary btn-block ">Cancelar</a>
+            <a href="{{ route('grupos.estudiantes', $grupo->IdGrupo) }}" class="btn btn-secondary btn-block ">Cancelar</a>
 
         </form>
     </div>

@@ -5,29 +5,42 @@
     <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
     <li class="breadcrumb-item"><a href="{{ route('grupos.index') }}">Gestión de Grupos</a></li>
     <li class="breadcrumb-item"><a href="{{ route('grupos.show', $trayectoria->grupo->IdGrupo) }}">{{$trayectoria->grupo->NombreGrupo}} - {{$trayectoria->cohorte->NombreCohorte}}</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('estudiantesGrupo', $trayectoria->grupo->IdGrupo) }}">Estudiantes</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('grupos.estudiantes', $trayectoria->grupo->IdGrupo) }}">Estudiantes</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{$trayectoria->estudiante->MatriculaEstudiante}}</li>
   </ol>
 </nav>
 @endsection
 @section('content')
+
 <div class="card">
+
   <div class="card-header">
-    <div class="row align-center">
-      <h5 class="card-title col-8"><strong>Detalles del estudiante: "{{$trayectoria->estudiante->MatriculaEstudiante}}"</strong></h5>
-      <a class="btn btn-secondary col-4" href="{{ route('estudiantesGrupo', $trayectoria->grupo->IdGrupo) }}" role="button">Ver Estudiantes</a>
+    <div class="d-flex justify-content-between align-items-center">
+
+      <h5 class="card-title">
+        <strong>Detalles del estudiante: "{{$trayectoria->estudiante->MatriculaEstudiante}}"</strong>
+      </h5>
+
+      <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">
+        Regresar
+      </a>
+      <a class="btn btn-secondary col-4" href="{{ route('grupos.estudiantes', $trayectoria->grupo->IdGrupo) }}" role="button">
+        Ver Estudiantes
+      </a>
     </div>
   </div>
 
   <div class="card-body">
     @csrf @method('PATCH')
     @include('layouts.validaciones')
+
     @if ($estado=="Activo" )
     <div class="contenedor-botones justify-content-center align-items-center my-3">
-      <a class="btn btn-outline-dark mr-2" href="{{ route('editarEstudiante', [$trayectoria->grupo->IdGrupo, $trayectoria->IdTrayectoria]) }}"><em class="fas fa-pen"></em> Editar Estudiante</a>
+      <a class="btn btn-outline-dark mr-2" href="{{ route('grupos.editarEstudiante', [$trayectoria->grupo->IdGrupo, $trayectoria->IdTrayectoria]) }}"><em class="fas fa-pen"></em> Editar Estudiante</a>
       <a href="#" data-toggle="modal" data-target="#baja" class="btn btn-outline-dark"><em class="fas fa-minus-circle"></em> Dar de Baja</a>
     </div>
     @endif
+
     <div class="accordion my-4" id="accordionExample">
       <div class="card">
         <div class="card-header" id="headingOne">
@@ -247,7 +260,7 @@
 </div>
 </div>
 
-@include('estudiantes.modals.baja')
+@include('grupos.estudiantes.modals.baja')
 @endsection
 
 @section('head')

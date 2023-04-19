@@ -21,7 +21,7 @@ Route::resource('bajas', 'BajaController')->except('show', 'create');
 Route::resource('cohortes', 'CohorteController');
 Route::resource('constancias', 'ConstanciaController');
 Route::resource('documento', 'DocumentoController');
-Route::resource('estudiantes', 'EstudianteController')->except('mostrarEstudiante');
+Route::resource('estudiantes', 'EstudianteController');
 Route::resource('empresas', 'EmpresaController')->except('show', 'edit');
 Route::resource('eventos', 'EventoController');
 Route::resource('facultades', 'FacultadController')->except('show');
@@ -95,10 +95,10 @@ Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/bajas', 'GrupoController@mos
 Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/bajas/imprimir', 'GrupoController@imprimirBajas')->name('cohortes.imprimirBajas');
 
 //<---- Grupos ---->
-Route::get('grupos/{idGrupo}/estudiantes', 'EstudianteController@show')->name('estudiantesGrupo');
-Route::get('grupos/{idGrupo}/estudiantes/agregar', 'EstudianteController@agregarEstudiante')->name('agregarEstudiante');
-Route::get('grupos/{idGrupo}/estudiantes/{matriculaEstudiante}', 'EstudianteController@mostrarEstudiante')->name('mostrarEstudiante');
-Route::get('grupos/{idGrupo}/estudiantes/{idEstudiante}/editar', 'EstudianteController@editarEstudiante')->name('editarEstudiante');
+Route::get('grupos/{idGrupo}/estudiantes', 'GrupoController@indexEstudiantes')->name('grupos.estudiantes');
+Route::get('grupos/{idGrupo}/estudiantes/agregar', 'EstudianteController@agregarEstudiante')->name('grupos.agregarEstudiante');
+Route::get('grupos/{idGrupo}/estudiantes/{matriculaEstudiante}', 'GrupoController@showEstudiante')->name('grupos.showEstudiante');
+Route::get('grupos/{idGrupo}/estudiantes/{idEstudiante}/editar', 'GrupoController@editarEstudiante')->name('grupos.editarEstudiante');
 
 Route::get('/eventos/{year}/{month}/{day}', 'EventoController@indexWithDate')->name("eventosWithDate");
 

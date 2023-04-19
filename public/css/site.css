@@ -10,7 +10,8 @@ a.navbar-brand {
 /* Provide sufficient contrast against white background */
 
 .logo {
-    width: 4%;
+    width: 1.8rem;
+    margin: 0 0.5rem 0 0;
 }
 
 .navbar {

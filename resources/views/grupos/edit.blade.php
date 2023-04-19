@@ -16,14 +16,16 @@
     <div class="row">
       <h5 class="card-title col-8"><strong>Editar al Grupo: "{{ $grupos->NombreGrupo }}" del cohorte
           "{{$grupos->cohorte->NombreCohorte}}"</strong></h5>
-      <a class="btn btn-secondary col-4" href="{{ route('grupos.index') }}" role="button">Ver Grupos</a>
+      <a class="btn btn-secondary col-4" href="javascript:history.back()" role="button">Ver Grupos</a>
     </div>
   </div>
   <div class="card-body">
 
     <form method="POST" action="{{ route('grupos.update', $grupos) }}" autocomplete="off">
-      @csrf @method('PATCH')
+      @csrf 
+      @method('PATCH')
       @include('layouts.validaciones')
+      
       <input type="hidden" name="IdFacultad" value="{{$facultad}}">
       <input type="hidden" name="IdGrupo" value="{{$grupos->IdGrupo}}">
       <div class="form-group">
@@ -82,8 +84,9 @@
 
       <br>
       <button type="submit" class="btn btn-primary btn-block">Guardar</button>
-      <a href="{{ route('grupos.show',$grupos) }}" class="btn btn-secondary btn-block">Cancelar</a>
+      
     </form>
+    <a href="javascript:history.back()" class="btn btn-secondary btn-block mt-2">Cancelar</a>
 
   </div>
 </div>

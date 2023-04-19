@@ -7,45 +7,53 @@
     </ol>
 </nav>
 @endsection
+
 @section('content')
 <div class="card">
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title"><strong>Gestión de Grupos</strong></h5>
+            <h5 class="card-title"><strong>Gestión de Estudiantes</strong></h5>
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
-            <a class="btn btn-success col-4" href="{{ route('grupos.create') }}" role="button">Agregar Grupo</a>
+            <a class="btn btn-success col-4" href="{{ route('estudiantes.create') }}" role="button">Agregar Estudiante</a>
         </div>
     </div>
     <div class="card-body">
 
         <div class="table-responsive-xl">
             <table class="table table-striped table-hover" id="table_sede">
-                <caption>Grupos registrados en el sistema.</caption>
+                <caption>Estudiantes registrados en el sistema.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
+                        <th scope="col" class="border-right">Matrícula</th>
                         <th scope="col" class="border-right">Nombre</th>
-                        <th scope="col" class="border-right">Programa Educativo</th>
-                        <th scope="col" class="border-right">Cohorte de pertenencia</th>
-                        <th scope="col" class="border-right">Estudiantes activos</th>
-                        <th scope="col" class="border-right">Total de estudiantes</th>
-                        <th scope="col" class="border-right">Último periodo activo</th>
+                        <th scope="col" class="border-right">Grupo</th>
+                        <th scope="col" class="border-right">Género</th>
                         <th scope="col" class="border-right">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($grupos as $grupo)
+                    @foreach ($estudiantes as $estudiante)
                     <tr>
-                        <th scope="row" class="border-right">{{ $grupo->NombreGrupo }}</th>
-                        <td class="border-right">{{ $grupo->programaEducativo->AcronimoProgramaEducativo }}</td>
-                        <td class="border-right">{{ $grupo->cohorte->NombreCohorte }}</td>
-                        @inject('estudiantes', 'App\Http\Controllers\GrupoController')
-                            <td class="border-right">{{$estudiantes->contarEstudiantes($grupo->IdGrupo)[0]}}</td>
-                            <td class="border-right"><strong>{{$estudiantes->contarEstudiantes($grupo->IdGrupo)[0] + $estudiantes->contarEstudiantes($grupo->IdGrupo)[1]}}</strong></td>
-                        <td class="border-right">{{ $grupo->periodoActivo->NombrePeriodo }}</td>
+                        <th scope="row" class="border-right">{{ $estudiante->MatriculaEstudiante }}</th>
+
+                        <td class="border-right">
+                            {{ $estudiante->trayectoria->datosPersonales->ApellidoPaternoDatosPersonales }}
+                            {{ $estudiante->trayectoria->datosPersonales->ApellidoMaternoDatosPersonales }}
+                            {{ $estudiante->trayectoria->datosPersonales->NombreDatosPersonales }}
+
+                        </td>
+
+                        <td class="border-right">{{ $estudiante->trayectoria->grupo->NombreGrupo }}</td>
+
+                        <td class="border-right">{{ $estudiante->trayectoria->datosPersonales->Genero }}</td>
+
                         <td class="btn-group btn-group-sm">
-                            <a class="btn btn-sm btn-outline-primary" href="{{ route('grupos.show', $grupo) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles" ><em class="fas fa-eye"></em></a>
-                            <a class="btn btn-sm btn-outline-info mx-2" href="{{ route('grupos.edit',$grupo) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><em class="fas fa-pen"></em></a>
-                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-id="{{ $grupo->IdGrupo }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar"><em class="fas fa-trash-alt"></em></a>
+                            <a class="btn btn-outline-primary btn-sm mx-2" href="{{ route('estudiantes.show', $estudiante) }}">
+                                Detalles
+                              </a>
+                              <a class="btn btn-primary btn-sm" href="{{ route('estudiantes.edit', $estudiante) }}">
+                                Editar
+                              </a>
                         </td>
                     </tr>
                     @endforeach

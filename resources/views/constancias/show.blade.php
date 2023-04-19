@@ -100,6 +100,9 @@
                             <a class="btn btn-sm btn-outline-success" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
                                 <em class="fas fa-eye"></em>
                             </a>
+                            <a class="btn btn-sm btn-outline-primary" href="{{ route('constancias.generar', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Descargar PDF">
+                                <em class="fas fa-file-pdf"></em>
+                            </a>
                             <a class="btn btn-sm btn-outline-danger btn-constancia" data-url="{{ route('constancias.destroyEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-method="delete">
                                 <em class="fas fa-trash-alt btn-outline-danger"></em>
                             </a>
