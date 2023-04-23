@@ -65,7 +65,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title">Estudiantes</h5>
             {{-- @can('havepermiso', 'estudiante-ver-cualquiera') --}}
-                <a class="btn btn-primary col-3 ml-auto mr-4" href="/grupos" role="button">Gestión de Estudiantes</a>
+                <a class="btn btn-primary col-3 ml-auto mr-4" href="{{ route('estudiantes.index') }}" role="button">Gestión de Estudiantes</a>
             {{-- @endcan --}}
             <a class="btn btn-success col-3" href="{{ route('constancias.indexGrupos', $constancia) }}" role="button">Agregar Estudiantes</a>
         </div>
@@ -143,7 +143,6 @@
                 '_token': token
             },
             success: function (data) {
-                // Aquí puedes actualizar la tabla con los datos actualizados
                 console.log('Eliminado exitosamente');
                 var filaEstudiante = $('#fila-' + idEstudiante);
                 filaEstudiante.closest('tr').remove();

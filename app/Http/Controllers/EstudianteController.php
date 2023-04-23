@@ -46,7 +46,12 @@ class EstudianteController extends Controller
 
     public function edit(Estudiante $estudiante) 
     {
-        return view('estudiantes.edit', compact('estudiante'));
+        $cohortes = Cohorte::orderBy('NombreCohorte', 'desc')->get();
+        $programasEducativos = ProgramaEducativo::orderBy('NombreProgramaEducativo', 'asc')->get();
+        $modalidades = Modalidad::orderBy('NombreModalidad', 'asc')->get();
+        $grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
+
+        return view('estudiantes.edit', compact('estudiante', 'cohortes', 'programasEducativos', 'modalidades', 'grupos'));
     }
 
 

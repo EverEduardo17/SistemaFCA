@@ -22,9 +22,15 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <div class="row align-center">
-            <h5 class="card-title col-8"><strong>Editar información del Estudiante:
-                    "{{$estudiante->trayectoria->estudiante->MatriculaEstudiante}}"</strong></h5>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">
+                <strong>
+                    Editar información del Estudiante: 
+                    "{{$estudiante->trayectoria->estudiante->MatriculaEstudiante}}"
+                </strong>
+            </h5>
+
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
             <a class="btn btn-secondary col-4" href="javascript:history.back()" role="button">
                 Ver Estudiantes
             </a>
@@ -65,11 +71,16 @@
                         </div>
                         <div class="form-group">
                             <div class="form-row">
+
                                 <div class="col">
-                                    <label for="IdProgramaEducativo">Programa Educativo de pertenencia:</label>
-                                    <select name="IdProgramaEducativo" id="IdProgramaEducativo"
-                                        class="form-control @error('IdProgramaEducativo') is-invalid @enderror">
-                                        
+                                    <label for="IdCohorte">Cohorte de pertenencia:</label>
+
+                                    <select name="IdCohorte" id="IdCohorte" class="form-control @error('IdCohorte') is-invalid @enderror">
+                                        @foreach ($cohortes as $cohorte)
+                                            <option value="{{ $cohorte->IdCohorte }}" @if($estudiante->trayectoria->IdCohorte === $cohorte->IdCohorte) selected @endif > 
+                                                {{ $cohorte->NombreCohorte }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
 
@@ -78,46 +89,67 @@
                                     <input name="MatriculaEstudiante" type="text"
                                         class="form-control @error('MatriculaEstudiante') is-invalid @enderror"
                                         value="{{old('MatriculaEstudiante', $estudiante->trayectoria->estudiante->MatriculaEstudiante)}}"
-                                        placeholder="Ej. S17016281" id="MatriculaEstudiante">
+                                        placeholder="Ej. S17000000" id="MatriculaEstudiante">
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
+
                             <div class="form-row">
                                 <div class="col">
                                     <label for="IdProgramaEducativo">Programa Educativo de pertenencia:</label>
-                                    <select name="IdProgramaEducativo" id="IdProgramaEducativo"
-                                        class="form-control @error('IdProgramaEducativo') is-invalid @enderror">
-                                        
+                                    
+                                    <select name="IdProgramaEducativo" id="IdProgramaEducativo" class="form-control @error('IdProgramaEducativo') is-invalid @enderror">
+                                        @foreach ($programasEducativos as $programaEducativo)
+                                            <option value="{{ $programaEducativo->IdProgramaEducativo }}" @if($estudiante->trayectoria->IdProgramaEducativo === $programaEducativo->IdProgramaEducativo) selected @endif > 
+                                                {{ $programaEducativo->NombreProgramaEducativo }}
+                                            </option>
+                                        @endforeach
                                     </select>
+
                                 </div>
+                                
                                 <div class="col">
                                     <label for="IdGrupo">Grupo de pertenencia:</label>
-                                    <select name="IdGrupo" id="IdGrupo"
-                                        class="form-control @error('IdGrupo') is-invalid @enderror">
-                                        
+
+                                    <select name="IdGrupo" id="IdGrupo" class="form-control @error('IdGrupo') is-invalid @enderror">
+                                        @foreach ($grupos as $grupo)
+                                            <option value="{{ $grupo->IdGrupo }}" @if($estudiante->trayectoria->IdGrupo === $grupo->IdGrupo) selected @endif > 
+                                                {{ $grupo->NombreGrupo }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
+
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="form-row">
+
                                 <div class="col">
                                     <label for="modalidad">Modalidad de entrada:</label>
-                                    <select name="IdModalidad" class="form-control @error('IdModalidad') is-invalid @enderror"
-                                        id="modalidad">
-                                        
+
+                                    <select name="IdModalidad" class="form-control @error('IdModalidad') is-invalid @enderror" id="modalidad">
+                                        @foreach ($modalidades as $modalidad)
+                                            <option value="{{ $modalidad->IdModalidad }}" @if($estudiante->trayectoria->IdModalidad === $modalidad->IdModalidad) selected @endif > 
+                                                {{ $modalidad->NombreModalidad }}
+                                            </option>                                            
+                                        @endforeach
                                     </select>
+
                                 </div>
+
                                 <div class="col">
                                     <label for="Genero">Género:</label>
-                                    <select name="Genero" id="Genero"
-                                        class="form-control @error('Genero') is-invalid @enderror">
-                                        <option value="Mujer" @if($estudiante->trayectoria->datosPersonales->Genero == "Mujer")
-                                            selected @endif >Mujer</option>
-                                        <option value="Hombre" @if($estudiante->trayectoria->datosPersonales->Genero ==
-                                            "Hombre") selected @endif >Hombre</option>
+
+                                    <select name="Genero" id="Genero" class="form-control @error('Genero') is-invalid @enderror">
+                                        <option value="Mujer" @if($estudiante->trayectoria->datosPersonales->Genero === "Mujer") selected @endif >
+                                            Mujer
+                                        </option>
+                                        <option value="Hombre" @if($estudiante->trayectoria->datosPersonales->Genero === "Hombre") selected @endif >
+                                            Hombre
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -139,7 +171,9 @@
                             </div>
                         </div>
                         <hr class="my-4">
+
                         <div class="form-group">
+                            
                             <button type="submit" class="btn btn-primary btn-block">
                                 Actualizar Información
                             </button>
