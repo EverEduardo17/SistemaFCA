@@ -17,4 +17,8 @@ class Cohorte extends Model
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
 
+    public function trayectoria()
+    {
+        return $this->belongsTo(Trayectoria::class, 'IdCohorte', 'IdCohorte');
+    }
 }

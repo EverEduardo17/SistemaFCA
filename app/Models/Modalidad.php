@@ -16,4 +16,5 @@ class Modalidad extends Model
     const CREATED_AT = 'CreatedAt';
     const UPDATED_AT = 'UpdatedAt';
     const DELETED_AT = 'DeletedAt';
+
 }

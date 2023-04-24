@@ -77,7 +77,7 @@
                 </div>
                 <div class="col">
                   <label name="Cohorte">Cohorte de pertenencia:</label>
-                  <input name="Cohorte" type="text" class="form-control @error('Cohorte') is-invalid @enderror" value="{{$trayectoria->cohorte->NombreCohorte}}" placeholder="Ej. S170" disabled></input>
+                  <input name="Cohorte" type="text" class="form-control @error('Cohorte') is-invalid @enderror" value="{{$trayectoria->cohorte->NombreCohorte}}" placeholder="Ej. S170" disabled>
                 </div>
               </div>
             </div>
@@ -85,7 +85,7 @@
               <div class="form-row">
                 <div class="col">
                   <label name="Programa">Programa Educativo de pertenencia:</label>
-                  <input name="Programa" type="text" class="form-control @error('Programa') is-invalid @enderror" value="{{$trayectoria->programaEducativo->NombreProgramaEducativo}}" placeholder="Ej. LIS" disabled></input>
+                  <input name="Programa" type="text" class="form-control @error('Programa') is-invalid @enderror" value="{{$trayectoria->programaEducativo->NombreProgramaEducativo}}" placeholder="Ej. LIS" disabled>
                 </div>
                 <div class="col">
                   <label name="Grupo">Grupo de pertenencia:</label>

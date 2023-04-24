@@ -14,7 +14,7 @@ class GrupoRequest extends FormRequest
     public function rules()
     {
         return [
-            'NombreGrupo'           => ['required', 'String', 'regex:/^([A-Za-z]{2,3})+(\s{1}[1-9]{1}[0][1-3]{1})$/'],
+            'NombreGrupo'           => ['required', 'String', 'unique:Grupo'],  //regex:/^([A-Za-z]{2,3})+(\s{1}[1-9]{1}[0][1-3]{1})$/
             'DescripcionGrupo'      => '',
             'IdGrupo'               => '',
             'IdProgramaEducativo'   => 'required',

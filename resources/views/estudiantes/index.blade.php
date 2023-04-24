@@ -13,28 +13,28 @@
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title"><strong>Gestión de Estudiantes</strong></h5>
-            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
             <a class="btn btn-success col-4" href="{{ route('estudiantes.create') }}" role="button">Agregar Estudiante</a>
         </div>
     </div>
     <div class="card-body">
 
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover" id="table_sede">
+            <table class="table table-striped table-hover border-bottom" id="table_grupos">
                 <caption>Estudiantes registrados en el sistema.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
-                        <th scope="col" class="border-right">Matrícula</th>
-                        <th scope="col" class="border-right">Nombre</th>
-                        <th scope="col" class="border-right">Grupo</th>
-                        <th scope="col" class="border-right">Género</th>
-                        <th scope="col" class="border-right">Acciones</th>
+                        <th scope="col" class="border">Matrícula</th>
+                        <th scope="col" class="border">Nombre</th>
+                        <th scope="col" class="border">Grupo</th>
+                        <th scope="col" class="border">Género</th>
+                        <th scope="col" class="border actions-col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($estudiantes as $estudiante)
                     <tr>
-                        <th scope="row" class="border-right">{{ $estudiante->MatriculaEstudiante }}</th>
+                        <th scope="row" class="border-right border-left">{{ $estudiante->MatriculaEstudiante }}</th>
 
                         <td class="border-right">
                             {{ $estudiante->trayectoria->datosPersonales->ApellidoPaternoDatosPersonales }}
@@ -47,13 +47,13 @@
 
                         <td class="border-right">{{ $estudiante->trayectoria->datosPersonales->Genero }}</td>
 
-                        <td class="btn-group btn-group-sm">
+                        <td class="btn-group btn-group-sm border-right">
                             <a class="btn btn-outline-primary btn-sm mx-2" href="{{ route('estudiantes.show', $estudiante) }}">
                                 Detalles
-                              </a>
-                              <a class="btn btn-primary btn-sm" href="{{ route('estudiantes.edit', $estudiante) }}">
+                            </a>
+                            <a class="btn btn-primary btn-sm" href="{{ route('estudiantes.edit', $estudiante) }}">
                                 Editar
-                              </a>
+                            </a>
                         </td>
                     </tr>
                     @endforeach
@@ -74,7 +74,7 @@
 <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
 <script>
     $(document).ready(function() {
-        $('#table_sede').DataTable({
+        $('#table_grupos').DataTable({
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
             }

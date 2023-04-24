@@ -7,20 +7,13 @@ use App\Models\DatosPersonales;
 use App\Models\Estudiante;
 use App\Models\Facultad;
 use App\Models\Grupo;
-use App\Models\Grupo_Estudiante;
 use App\Http\Requests\EstudianteRequest;
 use App\Models\Modalidad;
 use App\Models\Motivo;
-use App\Models\Practicas_Estudiante;
 use App\Models\ProgramaEducativo;
-use App\Models\Reprobado;
 
-use App\Models\Servicio_Social_Estudiante;
-use App\Models\Titulacion;
-use App\Models\Traslado;
 use App\Models\Trayectoria;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -36,12 +29,18 @@ class EstudianteController extends Controller
 
     public function create() 
     {
-        return view('estudiantes.create');
+        $cohortes = Cohorte::orderBy('NombreCohorte', 'desc')->get();
+        $grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
+        $modalidades = Modalidad::orderBy('NombreModalidad', 'asc')->get();
+        $programasEducativos = ProgramaEducativo::orderBy('NombreProgramaEducativo', 'asc')->get();
+        $grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
+
+        return view('estudiantes.create', compact('cohortes', 'grupos', 'modalidades', 'programasEducativos'));
     }
 
-    public function show($idGrupo)
+    public function show(Estudiante $estudiante)
     {
-        
+        return view('estudiantes.show', compact('estudiante'));   
     }
 
     public function edit(Estudiante $estudiante) 
@@ -99,7 +98,7 @@ class EstudianteController extends Controller
         $cohorte = Cohorte::where('IdCohorte', '=', $request->IdCohorte)->value('NombreCohorte');
         if (strpos($matricula, $cohorte) !== 0) {
             Session::flash('flash', [['type' => "danger", 'message' => "La matrícula ingresada no corresponde al cohorte seleccionado."]]);
-            return redirect()->route('estudiantes.agregarEstudiante');
+            return redirect()->route('estudiantes.create');
         }
 
         //<---- Verifica si es un traslado  ---->
@@ -122,7 +121,7 @@ class EstudianteController extends Controller
 
             $idUsuarioDB = DB::table('Usuario')->insertGetId([
                 'name'     => $matricula,
-                'email'   => $matricula . '@estudiantes.uv.mx',
+                'email'   => 'z' . $matricula . '@estudiantes.uv.mx',
                 'password' => bcrypt($matricula),
                 'CreatedAt' => $timestamp,
                 'UpdatedAt' => $timestamp,
@@ -205,10 +204,10 @@ class EstudianteController extends Controller
             DB::rollBack();
             dd($th);
             Session::flash('flash', [['type' => "danger", 'message' => "El estudiante NO pudo ser registrado."]]);
-            return redirect()->route('estudiantes.show', $idGrupo);
+            return redirect()->route('estudiantes.index');
         }
         Session::flash('flash', [['type' => "success", 'message' => "Estudiante registrado correctamente."]]);
-        return redirect()->route('estudiantes.show', $idGrupo);
+        return redirect()->route('estudiantes.index');
     }
 
 
@@ -217,6 +216,11 @@ class EstudianteController extends Controller
         $request->validated();
 
         $estudiante->update($request->all());
+        $estudiante->trayectoria->datosPersonales->update($request->all());
+        
+        $estudiante->trayectoria->update($request->all());
+        
+
         return redirect()->route('estudiantes.index');
     }
 
@@ -224,4 +228,6 @@ class EstudianteController extends Controller
     {
         //
     }
+
+    
 }

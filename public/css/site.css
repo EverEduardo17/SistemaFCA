@@ -182,3 +182,8 @@ code {
 .mi-plantilla {
     font-size: 15px;
 }
+
+.actions-col {
+    width: 1%;
+    white-space: nowrap;
+}

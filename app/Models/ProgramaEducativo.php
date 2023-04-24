@@ -22,4 +22,6 @@ class ProgramaEducativo extends Model
     {
         return $this->hasOne(Facultad::class, 'IdFacultad', 'IdFacultad');
     }
+
+    
 }

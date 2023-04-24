@@ -22,7 +22,7 @@ class Trayectoria extends Model
 
     public function grupo()
     {
-        return $this->hasOne(Grupo::class, 'IdGrupo', 'IdGrupo');
+        return $this->belongsTo(Grupo::class, 'IdGrupo', 'IdGrupo');
     }
 
     public function estudiante()
@@ -32,7 +32,7 @@ class Trayectoria extends Model
 
     public function programaEducativo()
     {
-        return $this->hasOne(ProgramaEducativo::class, 'IdProgramaEducativo', 'IdProgramaEducativo');
+        return $this->belongsTo(ProgramaEducativo::class, 'IdProgramaEducativo', 'IdProgramaEducativo');
     }
 
     public function modalidad()

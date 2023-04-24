@@ -15,7 +15,10 @@ class EstudianteRequest extends FormRequest
 
     public function rules()
     {
-        $IdEstudiante = $this->route('estudiante')->IdEstudiante; // obtenemos el ID del estudiante actual
+        $estudiante = $this->route('estudiante');
+        $IdEstudiante = $estudiante ? $estudiante->IdEstudiante : null;
+
+        // $IdEstudiante = $this->route('estudiante')->IdEstudiante; // obtenemos el ID del estudiante actual
 
 
         return [

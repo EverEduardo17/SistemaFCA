@@ -20,6 +20,7 @@
 @endsection
 
 @section('content')
+
 <div class="card">
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
@@ -52,7 +53,7 @@
                             <label for="NombreDatosPersonales">Nombre(s):</label>
                             <input name="NombreDatosPersonales" type="text"
                                 class="form-control @error('NombreDatosPersonales') is-invalid @enderror"
-                                value="{{old('NombreDatosPersonales').$estudiante->trayectoria->datosPersonales->NombreDatosPersonales}}"
+                                value="{{old('NombreDatosPersonales', $estudiante->trayectoria->datosPersonales->NombreDatosPersonales ) }}"
                                 placeholder="Ej. Javier" id="NombreDatosPersonales">
                         </div>
                         <div class="form-group">
@@ -130,11 +131,15 @@
                                 <div class="col">
                                     <label for="modalidad">Modalidad de entrada:</label>
 
-                                    <select name="IdModalidad" class="form-control @error('IdModalidad') is-invalid @enderror" id="modalidad">
+                                    <select name="IdModalidad" class="form-control @error('IdModalidad') is-invalid @enderror" id="IdModalidad">
                                         @foreach ($modalidades as $modalidad)
-                                            <option value="{{ $modalidad->IdModalidad }}" @if($estudiante->trayectoria->IdModalidad === $modalidad->IdModalidad) selected @endif > 
-                                                {{ $modalidad->NombreModalidad }}
-                                            </option>                                            
+
+                                            @if ($modalidad->TipoModalidad == "Entrada") 
+                                                <option value="{{ $modalidad->IdModalidad }}" @if($estudiante->trayectoria->IdModalidad === $modalidad->IdModalidad) selected @endif > 
+                                                    {{ $modalidad->NombreModalidad }}
+                                                </option>
+                                            @endif     
+                                                                                   
                                         @endforeach
                                     </select>
 
@@ -154,26 +159,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group" id="trasladoEntrante" @if((old('IdModalidad') != 4) || $estudiante->trayectoria->IdModalidad != 4) style="display:none"@endif>
-                            <div class="form-row">
-                                <div class="col">
-                                    <label for="Facultad">Facultad de procedencia:</label>
-                                    <input name="NombreFacultad" type="text" 
-                                        class="form-control @error('NombreFacultad') is-invalid @enderror"
-                                        value="{{old('NombreFacultad')}}" placeholder="Ej. FCA" id="Facultad">
-                                </div>
-                                <div class="col">
-                                    <label for="Campus">Campus de procedencia:</label>
-                                    <input name="NombreCampus" type="text"
-                                        class="form-control @error('NombreCampus') is-invalid @enderror"
-                                        value="{{old('NombreCampus')}}" placeholder="Ej. Coatzacoalcos" id="Campus">
-                                </div>
-                            </div>
-                        </div>
+                        
                         <hr class="my-4">
 
                         <div class="form-group">
-                            
                             <button type="submit" class="btn btn-primary btn-block">
                                 Actualizar Información
                             </button>
@@ -187,71 +176,8 @@
             </div>
         </div>
     </div>
-
-            
-{{-- @include('estudiantes.modals.traslado')
-@include('estudiantes.modals.reprobado')
-@include('estudiantes.modals.baja')
-@include('estudiantes.modals.practica')
-@include('estudiantes.modals.servicio')
-@include('estudiantes.modals.titulo') --}}
-
 @endsection
 
 @section('head')
 <link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}" />
-@endsection
-
-@section('script')
-<script>
-    $(document).ready( function(){
-        $(document).on('change','#modalidad', function(){
-            alert.show("Hola :D");
-            var seleccion = $('#modalidad option:selected').text();
-            if( seleccion == "Traslado" ){
-                alert.show("Traslado");
-                $('#trasladoEntrante').show();
-            }else{
-                alert.show("Otro");
-                $('#trasladoEntrante').hide();
-            }
-        });
-    });
-</script>
-<script>
-    $('#traslado').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var modal = $(this);
-    })
-</script>
-<script>
-    $('#reprobado').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var modal = $(this);
-    })
-</script>
-<script>
-    $('#baja').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var modal = $(this);
-    })
-</script>
-<script>
-    $('#practica').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var modal = $(this);
-    })
-</script>
-<script>
-    $('#servicio').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var modal = $(this);
-    })
-</script>
-<script>
-    $('#titulo').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var modal = $(this);
-    })
-</script>
 @endsection
