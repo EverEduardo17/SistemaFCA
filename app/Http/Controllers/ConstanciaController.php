@@ -211,6 +211,7 @@ class ConstanciaController extends Controller
         $grupos = Grupo::all();
         return view('constancias.estudiantes.indexGrupos', compact('constancia', 'grupos'));
     }
+    
     public function indexEstudiantes(Constancia $constancia, Grupo $grupo) {
         $cohorte = Cohorte::where('IdCohorte', $grupo->IdCohorte)->get()->last();
         $estudiantes = $grupo->trayectorias;
