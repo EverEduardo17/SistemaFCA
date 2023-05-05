@@ -19,23 +19,23 @@
             </h5>
             {{-- @can('havepermiso', 'academicos-listar') --}}
                 <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
-                <a class="btn btn-primary col-4" href="{{ route('constancias.generar', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" role="button">
-                    Descargar Constancia
-                </a>
             {{-- @endcan --}}
+            <a class="btn btn-primary col-4" href="{{ route('constancias.generar', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" role="button">
+                Descargar Constancia
+            </a>
         </div>
     </div>
     <div class="card-body">
         <p>
-            Esta página hace constancia de que el estudiante 
+            Nombre Completo: 
                 {{ $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales }}
                 {{ $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales }}
                 {{ $estudiante->Usuario->DatosPersonales->NombreDatosPersonales }}
-            con matrícula 
+            Matrícula: 
                 {{ $estudiante->MatriculaEstudiante }}
-            perteneciente al programa educativo 
+            Programa Educativo: 
                 {{ $estudiante->Trayectoria->ProgramaEducativo->NombreProgramaEducativo }}
-            participó en el evento 
+            Constancia: 
                 {{ $constancia->NombreConstancia }}
         </p>
 
