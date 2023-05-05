@@ -280,11 +280,6 @@ class ConstanciaController extends Controller
         $pathQr = storage_path('app/constancias/' . $constancia->IdConstancia);
         QrCode::size(200)
             ->style('round')
-            ->color(0,64,120)
-            ->eyeColor(0,0,64,120,0,171,79)
-            ->eyeColor(1,0,64,120,0,171,79)
-            ->eyeColor(2,0,64,120,0,171,79)
-            ->merge("/public/img/logo-qr.png", .28)
             ->format('png')
             ->generate(
                 route('constancias.showEstudiante', [
