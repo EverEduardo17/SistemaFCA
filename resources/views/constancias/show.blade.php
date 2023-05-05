@@ -66,27 +66,31 @@
             <h5 class="card-title">Estudiantes</h5>
             {{-- @can('havepermiso', 'estudiante-ver-cualquiera') --}}
                 <a class="btn btn-primary col-3 ml-auto mr-4" href="{{ route('estudiantes.index') }}" role="button">Gestión de Estudiantes</a>
+                <a class="btn btn-success col-3" href="{{ route('constancias.indexGrupos', $constancia) }}" role="button">Agregar Estudiantes</a>
             {{-- @endcan --}}
-            <a class="btn btn-success col-3" href="{{ route('constancias.indexGrupos', $constancia) }}" role="button">Agregar Estudiantes</a>
         </div>
     </div>
 
     <div class="card-body">
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover" id="table_Constancia">
+            <table class="table table-striped table-hover border-bottom" id="table_Constancia">
                 <caption>Estudiantes que participaron en el evento.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
-                        <th scope="col" class="border-right">Matrícula</th>
-                        <th scope="col" class="border-right">Nombre</th>
-                        <th scope="col" class="border-right">Grupo</th>
-                        <th scope="col" class="border-right">Acciones</th>
+                        <th scope="col" class="border">Matrícula</th>
+                        <th scope="col" class="border">Nombre</th>
+                        <th scope="col" class="border">Grupo</th>
+                        <th scope="col" class="border actions-col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($estudiantes as $estudiante)
                     <tr id="fila-{{ $estudiante->IdEstudiante }}">
-                        <th scope="row" class="border-right">{{ $estudiante->MatriculaEstudiante }}</th>
+                        <th scope="row" class="border-right border-left">
+                            <a href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}">
+                                {{ $estudiante->MatriculaEstudiante }}
+                            </a>
+                        </th>
 
                         <td class="border-right">
                             {{ $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales }}
@@ -96,11 +100,11 @@
 
                         <td class="border-right">{{ $estudiante->Trayectoria->Grupo->NombreGrupo }}</td>
 
-                        <td class="py-2">
-                            <a class="btn btn-sm btn-outline-success" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
+                        <td class="py-2 btn-group border-right">
+                            <a class="btn btn-sm btn-outline-success mr-1" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
                                 <em class="fas fa-eye"></em>
                             </a>
-                            <a class="btn btn-sm btn-outline-primary" href="{{ route('constancias.generar', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Descargar PDF">
+                            <a class="btn btn-sm btn-outline-primary mr-1" href="{{ route('constancias.generar', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Descargar PDF">
                                 <em class="fas fa-file-pdf"></em>
                             </a>
                             <a class="btn btn-sm btn-outline-danger btn-constancia" href="#" data-url="{{ route('constancias.destroyEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-method="delete" title="Quitar">
