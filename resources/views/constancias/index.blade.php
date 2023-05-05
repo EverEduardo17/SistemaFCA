@@ -26,21 +26,25 @@
     
     <div class="card-body">
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover" id="table_Constancia">
+            <table class="table table-striped table-hover border-bottom" id="table_Constancia">
                 <caption>Constancias registradas en el sistema.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
-                        <th scope="col" class="border-right">Nombre</th>
-                        <th scope="col" class="border-right">Descripción</th>
-                        <th scope="col" class="border-right">Autor</th>
-                        <th scope="col" class="border-right">Valido Hasta</th>
-                        <th scope="col" class="border-right">Acciones</th>
+                        <th scope="col" class="border">Nombre</th>
+                        <th scope="col" class="border">Descripción</th>
+                        <th scope="col" class="border">Autor</th>
+                        <th scope="col" class="border">Valido Hasta</th>
+                        <th scope="col" class="border actions-col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($constancias as $constancia)
                     <tr>
-                        <th scope="row" class="border-right">{{ $constancia->NombreConstancia }}</th>
+                        <th scope="row" class="border-right border-left">
+                            <a href="{{ route('constancias.show', $constancia->IdConstancia) }}">
+                                {{ $constancia->NombreConstancia }}
+                            </a>
+                        </th>
 
                         <td class="border-right">{{ $constancia->DescripcionConstancia }}</td>
 
@@ -51,10 +55,17 @@
                         </td>
 
                         <td class="border-right">{{ printDate(($constancia->VigenteHasta)) }}</td>
-                        <td class="py-2">
-                            <a class="btn btn-sm btn-outline-success" href="{{ route('constancias.show', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles"><em class="fas fa-eye"></em></a>
-                            <a class="btn btn-sm btn-outline-primary" href="{{ route('constancias.edit', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><em class="fas fa-pencil-alt"></em></a>
-                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $constancia->IdConstancia }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar"><em class="fas fa-trash-alt"></em></a>
+
+                        <td class="btn-group py-2 border-right">
+                            <a class="btn btn-sm btn-outline-success mx-1" href="{{ route('constancias.show', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
+                                <em class="fas fa-eye"></em>
+                            </a>
+                            <a class="btn btn-sm btn-outline-primary" href="{{ route('constancias.edit', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Editar">
+                                <em class="fas fa-pencil-alt"></em>
+                            </a>
+                            <a class="btn btn-sm btn-outline-danger mx-1" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $constancia->IdConstancia }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar">
+                                <em class="fas fa-trash-alt"></em>
+                            </a>
                         </td>
                     </tr>
                     @endforeach
@@ -75,7 +86,6 @@
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
             }
-
         });
     });
 

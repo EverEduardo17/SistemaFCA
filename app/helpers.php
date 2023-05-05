@@ -27,11 +27,13 @@
         if ($date === null) {
             return null;
         }
-
-        $fecha = explode( '-', $date );
-        $a = sprintf("%d/%d/%d", $fecha[2], $fecha[1], $fecha[0]);
-        
-        return $a;
+    
+        $fecha = explode('-', $date);
+        $dia = sprintf("%02d", $fecha[2]);
+        $mes = sprintf("%02d", $fecha[1]);
+        $anio = sprintf("%d", $fecha[0]);
+    
+        return "$dia/$mes/$anio";
     }
 
     function formatearTime($time){

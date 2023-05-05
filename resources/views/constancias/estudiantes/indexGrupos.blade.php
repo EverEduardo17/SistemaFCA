@@ -42,27 +42,27 @@
                 <caption>Grupos registrados en el sistema.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
-                        <th scope="col" class="border-right">Nombre</th>
-                        <th scope="col" class="border-right">Programa Educativo</th>
-                        <th scope="col" class="border-right">Cohorte de pertenencia</th>
-                        <th scope="col" class="border-right">Estudiantes activos</th>
-                        <th scope="col" class="border-right">Total de estudiantes</th>
-                        <th scope="col" class="border-right">Último periodo activo</th>
-                        <th scope="col" class="border-right">Acciones</th>
+                        <th scope="col" class="border">Nombre</th>
+                        <th scope="col" class="border">Programa Educativo</th>
+                        <th scope="col" class="border">Cohorte de pertenencia</th>
+                        <th scope="col" class="border">Estudiantes activos</th>
+                        <th scope="col" class="border">Total de estudiantes</th>
+                        <th scope="col" class="border">Último periodo activo</th>
+                        <th scope="col" class="border">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($grupos as $grupo)
                     <tr>
-                        <th scope="row" class="border-right">{{ $grupo->NombreGrupo }}</th>
+                        <th scope="row" class="border-right border-left">{{ $grupo->NombreGrupo }}</th>
                         <td class="border-right">{{ $grupo->programaEducativo->AcronimoProgramaEducativo }}</td>
                         <td class="border-right">{{ $grupo->cohorte->NombreCohorte }}</td>
                         @inject('estudiantes', 'App\Http\Controllers\GrupoController')
                             <td class="border-right">{{$estudiantes->contarEstudiantes($grupo->IdGrupo)[0]}}</td>
                             <td class="border-right"><strong>{{$estudiantes->contarEstudiantes($grupo->IdGrupo)[0] + $estudiantes->contarEstudiantes($grupo->IdGrupo)[1]}}</strong></td>
                         <td class="border-right">{{ $grupo->periodoActivo->NombrePeriodo }}</td>
-                        <td class="btn-group btn-group-sm">
-                            <a class="btn btn-sm btn-outline-info mx-2" href="{{ route('constancias.indexEstudiantes', ['constancia' => $constancia, 'grupo' => $grupo]) }}" data-toggle="tooltip" data-placement="bottom" title="Estudiantes"><em class="fas fa-user"></em></a>
+                        <td class="btn-group btn-group-sm d-flex justify-content-center">
+                            <a class="btn btn-sm btn-outline-info mx-4" href="{{ route('constancias.indexEstudiantes', ['constancia' => $constancia, 'grupo' => $grupo]) }}" data-toggle="tooltip" data-placement="bottom" title="Estudiantes"><em class="fas fa-user"></em></a>
                         </td>
                     </tr>
                     @endforeach
