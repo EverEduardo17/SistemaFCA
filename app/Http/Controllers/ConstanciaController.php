@@ -278,13 +278,21 @@ class ConstanciaController extends Controller
 
         // $pathQr = public_path('constancias plantilla/QR.jpg');
         $pathQr = storage_path('app/constancias/' . $constancia->IdConstancia);
-        QrCode::size(200)->format('png')->generate(
-            route('constancias.showEstudiante', [
+        QrCode::size(200)
+            ->style('round')
+            ->color(0,64,120)
+            ->eyeColor(0,0,64,120,0,171,79)
+            ->eyeColor(1,0,64,120,0,171,79)
+            ->eyeColor(2,0,64,120,0,171,79)
+            ->merge("/public/img/logo-qr.png", .28)
+            ->format('png')
+            ->generate(
+                route('constancias.showEstudiante', [
                     'constancia' => $constancia->IdConstancia, 
                     'estudiante' => $estudiante->IdEstudiante
                 ]),
-            $pathQr
-        );
+                $pathQr
+            );
 
         $templateProcessor->setImageValue(
             'codigo_qr', 
@@ -296,7 +304,7 @@ class ConstanciaController extends Controller
             ]
         );
 
-        $estudianteConstancia = $estudiante->MatriculaEstudiante . "_" . $filename;
+        $estudianteConstancia = $filename . "_" . $estudiante->MatriculaEstudiante;
         $pathEstudiante = storage_path('app/constancias/' . $estudianteConstancia);
 
         $templateProcessor->saveAs($pathEstudiante);
@@ -319,8 +327,5 @@ class ConstanciaController extends Controller
 
         // Storage::delete($pathEstudiante);  // borrar archivo de word
         // return response()->download($pathEstudiante . "pdf")->deleteFileAfterSend(true);
-    }
-
-    public function qr(Constancia $constancia) {
     }
 }
