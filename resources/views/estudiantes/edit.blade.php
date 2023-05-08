@@ -1,25 +1,13 @@
-@extends('layouts.plantilla')
+@extends('layouts.app')
 
-@section('breadcrumb')
+@section('content')
 <nav aria-label="breadcrumb">
-    
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('grupos.index') }}">Gestión de Grupos</a></li>
-        <li class="breadcrumb-item">
-            <a href="{{ route('grupos.show', $estudiante->trayectoria->grupo->IdGrupo) }}">
-                {{$estudiante->trayectoria->grupo->NombreGrupo}} - {{$estudiante->trayectoria->cohorte->NombreCohorte}}
-            </a>
-        </li>
-
-        <li class="breadcrumb-item"><a
-                href="{{ route('grupos.estudiantes', $estudiante->trayectoria->grupo->IdGrupo) }}">Estudiantes</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('estudiantes.index') }}">Gestión de Estudiantes</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{$estudiante->trayectoria->estudiante->MatriculaEstudiante}}</li>
     </ol>
 </nav>
-@endsection
-
-@section('content')
 
 <div class="card">
     <div class="card-header">

@@ -1,10 +1,11 @@
-@extends('layouts.plantilla')
+@extends('layouts.app')
 
 @section('head')
 <link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}" />
 @endsection
 
-@section('breadcrumb')
+
+@section('content')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
@@ -14,9 +15,7 @@
         <li class="breadcrumb-item active" aria-current="page">{{ $grupo->NombreGrupo }} - {{ $cohorte->NombreCohorte }}</li>
     </ol>
 </nav>
-@endsection
 
-@section('content')
 <div class="card">
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
@@ -39,7 +38,7 @@
 
         <div class="table-responsive-xl">
 
-        <table class="table table-striped table-hover" id="table_estudiante">
+        <table class="table table-striped table-hover" id="table-jquery">
             <caption>Estudiantes registrados en el sistema para el grupo {{$grupo->NombreGrupo}} del cohorte {{$cohorte->NombreCohorte}}.</caption>
 
             <thead class="bg-table">
@@ -87,15 +86,7 @@
 
 @section('script')
 <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
-<script>
-  $(document).ready(function() {
-    $('#table_estudiante').DataTable({
-      "language": {
-        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-      }
-    });
-  });
-</script>
+<script src="{{ asset('js/table-script.js') }}"></script>
 
 {{-- botones reactivos en Acciones --}}
 <script>

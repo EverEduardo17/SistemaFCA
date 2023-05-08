@@ -31,14 +31,19 @@
                 {{ $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales }}
                 {{ $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales }}
                 {{ $estudiante->Usuario->DatosPersonales->NombreDatosPersonales }}
-            Matrícula: 
-                {{ $estudiante->MatriculaEstudiante }}
+        </p>
+        <p>
+            Matrícula: {{ $estudiante->MatriculaEstudiante }}
+        </p>
             Programa Educativo: 
                 {{ $estudiante->Trayectoria->ProgramaEducativo->NombreProgramaEducativo }}
+        </p>
+        <p>
             Constancia: 
                 {{ $constancia->NombreConstancia }}
         </p>
-
+        
+        <br>
         <p>
             {{ ($constancia->VigenteHasta === null)? " " : "Está constancia es valida hasta el: " .  printDate($constancia->VigenteHasta)}}
         </p>

@@ -1,5 +1,6 @@
-@extends('layouts.plantilla')
-@section('breadcrumb')
+@extends('layouts.app')
+
+@section('content')
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
@@ -9,14 +10,18 @@
     <li class="breadcrumb-item active" aria-current="page">Editar Grupo</li>
   </ol>
 </nav>
-@endsection
-@section('content')
+
 <div class="card">
   <div class="card-header">
-    <div class="row">
-      <h5 class="card-title col-8"><strong>Editar al Grupo: "{{ $grupos->NombreGrupo }}" del cohorte
-          "{{$grupos->cohorte->NombreCohorte}}"</strong></h5>
-      <a class="btn btn-secondary col-4" href="javascript:history.back()" role="button">Ver Grupos</a>
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="card-title">
+        <strong>
+          Editar al Grupo: "{{ $grupos->NombreGrupo }}" del cohorte "{{$grupos->cohorte->NombreCohorte}}"
+        </strong>
+      </h5>
+
+      <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
+      <a class="btn btn-secondary col-4" href="{{ route('grupos.index') }}" role="button">Ver Grupos</a>
     </div>
   </div>
   <div class="card-body">

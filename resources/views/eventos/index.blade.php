@@ -23,7 +23,7 @@
             @endcan
         </div>
         <div class="col-lg-9 col-md-8">
-            <table id="table_eventos" class="display">
+            <table id="table-jquery" class="display">
                 <thead>
                     <tr>
                         <th>Fecha</th>
@@ -69,21 +69,13 @@
 @endsection
 
 @section('script')
+<script src="{{ asset('js/table-script.js') }}"></script>
 <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
 <!-- DatePicker -->
 <script src="{{asset('lib/datePicker/js/bootstrap-datepicker.min.js')}}"></script>
 <script src="{{asset('lib/datePicker/locales/bootstrap-datepicker.es.min.js')}}"></script>
 
 <script>
-    $(document).ready(function() {
-        $('#table_eventos').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-            }
-
-        });
-    });
-
     $('#dateStart').datepicker({
         format: "dd/mm/yyyy",
         maxViewMode: 2,

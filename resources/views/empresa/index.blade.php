@@ -1,14 +1,14 @@
-@extends('layouts.plantilla')
-@section('breadcrumb')
+@extends('layouts.app')
+
+@section('content')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
         <li class="breadcrumb-item active" aria-current="page">Gestión de Empresas</li>
     </ol>
 </nav>
-@endsection
+
 <div class="card">
-@section('content')
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8"><strong>Gestión de Empresas</strong></h5>
@@ -17,7 +17,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover" id="table_Empresa">
+            <table class="table table-striped table-hover" id="table-jquery">
                 <caption>Empresas registradas en el sistema.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
@@ -59,16 +59,8 @@
 
 @section('script')
 <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
-<script>
-    $(document).ready(function() {
-        $('#table_Empresa').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-            }
+<script src="{{ asset('js/table-script.js') }}"></script>
 
-        });
-    });
-</script>
 <script>
     /*Eliminar Grupo*/
     $('#delete').on('show.bs.modal', function(event) {

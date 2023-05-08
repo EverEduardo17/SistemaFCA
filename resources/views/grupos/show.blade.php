@@ -16,7 +16,7 @@
     <div class="d-flex justify-content-between align-items-center">
       <h5 class="card-title"><strong>Detalles del grupo "{{$grupo->NombreGrupo}}" del cohorte "{{$grupo->cohorte->NombreCohorte}}"</strong></h5>
       <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
-      <a class="btn btn-success col-4" href="{{ route('grupos.estudiantes', $grupo->IdGrupo) }}" role="button">Ver Estudiantes</a>
+      <a class="btn btn-secondary col-4" href="{{ route('grupos.index') }}" role="button">Ver Grupos</a>
     </div>
   </div>
 

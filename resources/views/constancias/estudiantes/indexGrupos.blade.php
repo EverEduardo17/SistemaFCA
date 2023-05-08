@@ -8,13 +8,13 @@
     y quiza mostrar el boton de eliminar si ya está agregado (?)
 --}}
 
-@extends('layouts.plantilla')
+@extends('layouts.app')
 
 @section('head')
 <link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}" />
 @endsection
 
-@section('breadcrumb')
+@section('content')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
@@ -23,22 +23,18 @@
         <li class="breadcrumb-item active" aria-current="page">Elegir Grupo</li>
     </ol>
 </nav>
-@endsection
 
-
-@section('content')
 <div class="card">
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mr-auto"><strong>Elegir Grupo</strong></h5>
-            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('constancias.show', $constancia->IdConstancia) }}" role="button">Regresar</a>
-            <a class="btn btn-success col-4" href="{{ route('grupos.index') }}" role="button">Gestión de Grupos</a>
+            <a class="btn btn-outline-info col-4 ml-auto mr-4 " href="{{ route('constancias.show', $constancia->IdConstancia) }}" role="button">Regresar</a>
         </div>
     </div>
     <div class="card-body">
 
-        <div class="table-responsive-xl">
-            <table class="table table-striped table-hover" id="table_sede">
+        <div class="table-responsive-">
+            <table class="table table-striped table-hover border-bottom" id="table-jquery">
                 <caption>Grupos registrados en el sistema.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
@@ -75,14 +71,5 @@
 
 @section('script')
 <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
-<script>
-    $(document).ready(function() {
-        $('#table_sede').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-            }
-
-        });
-    });
-</script>
+<script src="{{ asset('js/table-script.js') }}"></script>
 @endsection

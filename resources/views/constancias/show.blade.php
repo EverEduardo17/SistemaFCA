@@ -65,7 +65,6 @@
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title">Estudiantes</h5>
             {{-- @can('havepermiso', 'estudiante-ver-cualquiera') --}}
-                <a class="btn btn-primary col-3 ml-auto mr-4" href="{{ route('estudiantes.index') }}" role="button">Gestión de Estudiantes</a>
                 <a class="btn btn-success col-3" href="{{ route('constancias.indexGrupos', $constancia) }}" role="button">Agregar Estudiantes</a>
             {{-- @endcan --}}
         </div>
@@ -73,7 +72,7 @@
 
     <div class="card-body">
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover border-bottom" id="table_Constancia">
+            <table class="table table-striped table-hover border-bottom" id="table-jquery">
                 <caption>Estudiantes que participaron en el evento.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
@@ -122,16 +121,9 @@
 
 @section('script')
 <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
+<script src="{{ asset('js/table-script.js') }}"></script>
+
 <script>
-    $(document).ready(function() {
-        $('#table_Constancia').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-            }
-
-        });
-    });
-
 
     $(document).on('click', '.btn-constancia', function (e) {
         e.preventDefault();

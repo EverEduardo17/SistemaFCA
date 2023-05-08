@@ -1,27 +1,18 @@
-@extends('layouts.plantilla')
+@extends('layouts.app')
 
-@section('breadcrumb')
+@section('content')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-
         <li class="breadcrumb-item">
             <a href="{{ route('home') }}">Inicio</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{{ route('grupos.index') }}">Gestión de Grupos</a>
-        </li>
-        <li class="breadcrumb-item">
-            <a href=""> "" - </a>
-        </li>
-        <li class="breadcrumb-item">
-            <a href="">Estudiantes</a>
+            <a href="{{ route('estudiantes.index') }}">Gestión de Estudiantes</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">Agregar Estudiante</li>
     </ol>
 </nav>
-@endsection
 
-@section('content')
 <div class="card">
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
@@ -30,7 +21,7 @@
                 <strong>Agregar estudiante</strong>
             </h5>
 
-            <a class="btn btn-outline-info col-4" href="javascript:history.back()" role="button">
+            <a class="btn btn-outline-info col-4" href="{{ route('estudiantes.index') }}" role="button">
                 Ver Estudiantes
             </a>
         </div>

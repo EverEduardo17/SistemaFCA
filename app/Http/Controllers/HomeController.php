@@ -103,7 +103,7 @@ class HomeController extends Controller
 
             [
                 "titulo" => "Grupos",
-                "background" => $colores[1],
+                "background" => $colores[0],
                 "enlace" => "grupos",
                 "operaciones" => [
                     ["titulo" => "Nuevo Grupo", "enlace" => "create"],
