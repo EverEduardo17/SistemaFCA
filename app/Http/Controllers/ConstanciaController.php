@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -32,6 +33,9 @@ class ConstanciaController extends Controller
      */
     public function create()
     {
+        Gate::authorize('havepermiso', 'documentos-crear');
+
+
         return view('constancias.create');
     }
 
@@ -51,7 +55,6 @@ class ConstanciaController extends Controller
             $vigenteHasta = formatearDate($input['VigenteHasta']);
         }
 
-        // TODO - agregar dueño de la plantilla
         try {
             DB::beginTransaction();
             
@@ -103,6 +106,8 @@ class ConstanciaController extends Controller
      */
     public function edit(Constancia $constancia)
     {
+        Gate::authorize('havepermiso', 'documentos-editar');
+
         return view('constancias.edit', compact('constancia'));
     }
 
@@ -115,6 +120,9 @@ class ConstanciaController extends Controller
      */
     public function update(Request $request, Constancia $constancia)
     {
+        $timestamp = Carbon::now()->toDateTimeString();
+        $vigenteHasta = null;
+
         $input = $request->validate([
             'NombreConstancia'        => 'required | string',
             'DescripcionConstancia'   => 'required | string',
@@ -128,9 +136,7 @@ class ConstanciaController extends Controller
                 $request->file('Plantilla')->storeAs('constancias' , $filename);
             }
 
-        $timestamp = Carbon::now()->toDateTimeString();
 
-        $vigenteHasta = null;
         if ($input['VigenteHasta'] !== null) {
             $vigenteHasta = formatearDate($input['VigenteHasta']);
         }
@@ -158,7 +164,7 @@ class ConstanciaController extends Controller
         }
         catch (\Throwable $throwable){
             DB::rollBack();
-            Session::flash('flash', [['type' => "danger", 'message' => $throwable->getMessage()]]);
+            Session::flash('flash', [['type' => "danger", 'message' => "Error, la constancia no pudo ser actualizada."]]);
             return redirect()->route('constancias.index');
         }
         Session::flash('flash', [['type' => "success", 'message' => "Constancia actualizada con éxito."]]);
@@ -173,6 +179,8 @@ class ConstanciaController extends Controller
      */
     public function destroy(Constancia $constancia)
     {
+        Gate::authorize('havepermiso', 'documentos-eliminar');
+
         try {
             $constancia->delete();
             Session::flash('flash', [['type' => "success", 'message' => "La constancia fue eliminada correctamente."]]);
@@ -290,7 +298,7 @@ class ConstanciaController extends Controller
             );
 
         $templateProcessor->setImageValue(
-            'codigo_qr', 
+            'codigo_qr',                    // busca la palabra codigo_qr en la plantilla
             [
                 'path' => $pathQr,
                 'width' => 200,
@@ -304,23 +312,13 @@ class ConstanciaController extends Controller
 
         $templateProcessor->saveAs($pathEstudiante);
 
+        // Libreoffice convertir a pdf
         exec('soffice --convert-to pdf '. $pathEstudiante .' --outdir ' . storage_path('app/constancias/'));
 
         // Eliminar archivos temporales
         unlink($pathEstudiante);
         unlink($pathQr);
         return response()->download($pathEstudiante . '.pdf')->deleteFileAfterSend(true);
-
-
-        // Convertir a PDF
-        // \PhpOffice\PhpWord\Settings::setPdfRendererPath(base_path('vendor/dompdf/dompdf/'));
-        // \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
-
-        // $pdf = \PhpOffice\PhpWord\IOFactory::load($pathEstudiante); 
-        // $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($pdf , 'PDF');
-        // $xmlWriter->save($pathEstudiante . "pdf");  
-
-        // Storage::delete($pathEstudiante);  // borrar archivo de word
-        // return response()->download($pathEstudiante . "pdf")->deleteFileAfterSend(true);
     }
+    
 }

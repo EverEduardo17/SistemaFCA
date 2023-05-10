@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 
 // DB::listen(function($query){
 //     var_dump($query->sql);
@@ -11,6 +10,11 @@ use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 Auth::loginUsingId(1001);
 
 Auth::routes();
+
+
+Route::get('/', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
+
 
 Route::resource('academias', 'AcademiaController');
 Route::resource('academiaacademico', 'AcademiaAcademicoController');
@@ -47,59 +51,11 @@ Route::resource('tipoorganizador', 'TipoOrganizadorController')->except('show', 
 Route::resource('organizador', 'OrganizadorController');
 Route::put('/fechaEvento/put', 'FechaEventoController@update')->name("fechaEventos.update");
 
-Route::get('/', 'HomeController@index')->name('home');
-Route::get('/home', 'HomeController@index')->name('home');
-
 //<---- Elimina los ids de las rutas ---->
 Route::get('/empresas/{nombreEmpresa}', 'EmpresaController@show')->name('empresas.show');
 Route::get('/empresas/{nombreEmpresa}/edit', 'EmpresaController@edit')->name('empresas.edit');
 
 Route::get('/programaEducativo/{acronimoPrograma}/edit', 'ProgramaEducativoController@edit')->name('programaEducativo.edit');
-//TODO: Preguntar de la ruta de los grupos
-//Propuesta .../{cohorte}/{ProgramaEducativo}/{nombreGrupo}
-
-//<---- Detalles de los Cohortes ---->
-Route::get('/cohortes', 'CohorteController@mostrarCohorte')->name('cohortes.mostrarCohorte');
-Route::get('/cohortes/{nombreCohorte}/resumen', 'CohorteController@mostrarResumen')->name('cohortes.mostrarResumen');
-Route::get('/cohortes/{nombreCohorte}/resumen/imprimir', 'CohorteController@imprimirResumen')->name('cohortes.imprimirResumenCohorte');
-Route::get('/cohortes/{nombreCohorte}/estado', 'CohorteController@mostrarEstado')->name('cohortes.mostrarEstadoCohorte');
-Route::get('/cohortes/{nombreCohorte}/estado/imprimir', 'CohorteController@imprimirEstado')->name('cohortes.imprimirEstadoCohorte');
-Route::get('/cohortes/{nombreCohorte}/egresados', 'CohorteController@mostrarEgresados')->name('cohortes.mostrarEgresadosCohorte');
-Route::get('/cohortes/{nombreCohorte}/egresados/imprimir', 'CohorteController@imprimirEgresados')->name('cohortes.imprimirEgresadosCohorte');
-Route::get('/cohortes/{nombreCohorte}/traslados', 'CohorteController@mostrarTraslados')->name('cohortes.mostrarTrasladosCohorte');
-Route::get('/cohortes/{nombreCohorte}/traslados/imprimir', 'CohorteController@imprimirTraslados')->name('cohortes.imprimirTrasladosCohorte');
-Route::get('/cohortes/{nombreCohorte}/reprobados', 'CohorteController@mostrarReprobados')->name('cohortes.mostrarReprobadosCohorte');
-Route::get('/cohortes/{nombreCohorte}/reprobados/imprimir', 'CohorteController@imprimirReprobados')->name('cohortes.imprimirReprobadosCohorte');
-Route::get('/cohortes/{nombreCohorte}/bajas', 'CohorteController@mostrarBajas')->name('cohortes.mostrarBajasCohorte');
-
-//<---- Importar archivo de Excel ---->
-Route::post('/cohortes/importar', 'ImportarController@store')->name('cohortes.importarCohorte');
-//TODO: Preguntar de esto, cómo mandar los valores.
-Route::post('/cohortes/importar/finalizar', 'ImportarController@save')->name('cohortes.guardarImporte');
-Route::get('/cohortes/importar/{nombreArchivo}/cancelar', 'ImportarController@cancel')->name('cohortes.cancelarImporte');
-
-//<---- Detalles de los Grupos ---->
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/agregar', 'CohorteController@agregarEstudiante')->name('cohortes.agregarEstudiante');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}', 'GrupoController@mostrarGrupo')->name('cohortes.mostrarGrupo');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/imprimir', 'GrupoController@imprimirGrupo')->name('cohortes.imprimirGrupo');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/estado', 'GrupoController@mostrarEstado')->name('cohortes.mostrarEstado');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/estado/imprimir', 'GrupoController@imprimirEstado')->name('cohortes.imprimirEstado');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/egresados', 'GrupoController@mostrarEgresados')->name('cohortes.mostrarEgresados');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/egresados/imprimir', 'GrupoController@imprimirEgresados')->name('cohortes.imprimirEgresados');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/egresados/{nombrePeriodo}', 'GrupoController@mostrarEgresadosPeriodo')->name('cohortes.mostrarEgresados.periodo');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/traslados', 'GrupoController@mostrarTraslados')->name('cohortes.mostrarTraslados');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/traslados/imprimir', 'GrupoController@imprimirTraslados')->name('cohortes.imprimirTraslados');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/reprobados', 'GrupoController@mostrarReprobados')->name('cohortes.mostrarReprobados');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/reprobados/imprimir', 'GrupoController@imprimirReprobados')->name('cohortes.imprimirReprobados');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/reprobados/{nombrePeriodo}', 'GrupoController@mostrarReprobadosPeriodo')->name('cohortes.mostrarReprobados.periodo');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/bajas', 'GrupoController@mostrarBajas')->name('cohortes.mostrarBajas');
-Route::get('/cohortes/{nombreCohorte}/{nombreGrupo}/bajas/imprimir', 'GrupoController@imprimirBajas')->name('cohortes.imprimirBajas');
-
-//<---- Grupos ---->
-Route::get('grupos/{idGrupo}/estudiantes', 'GrupoController@indexEstudiantes')->name('grupos.estudiantes');
-Route::get('grupos/{idGrupo}/estudiantes/agregar', 'EstudianteController@agregarEstudiante')->name('grupos.agregarEstudiante');
-Route::get('grupos/{idGrupo}/estudiantes/{matriculaEstudiante}', 'GrupoController@showEstudiante')->name('grupos.showEstudiante');
-Route::get('grupos/{idGrupo}/estudiantes/{idEstudiante}/editar', 'GrupoController@editarEstudiante')->name('grupos.editarEstudiante');
 
 Route::get('/eventos/{year}/{month}/{day}', 'EventoController@indexWithDate')->name("eventosWithDate");
 

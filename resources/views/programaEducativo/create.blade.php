@@ -2,6 +2,7 @@
 
 
 @section('content')
+
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
@@ -43,12 +44,5 @@
 
   </div>
 </div>
-@endsection
-
-@section('head')
-
-@endsection
-
-@section('script')
 
 @endsection

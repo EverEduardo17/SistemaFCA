@@ -28,8 +28,8 @@
 <body class="d-flex flex-column">
     @include('layouts.header')
 
-    <main role="main" class="flex-shrink-0 py-1">
-        <div class="container">
+    <main role="main" class="flex-shrink-0 py-1" style="margin: 60px 10vw 40px 10vw;">
+        <div>
             @include('layouts.messages')
             @yield('content')
         </div>

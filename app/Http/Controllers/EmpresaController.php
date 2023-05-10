@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Facultad;
-use App\Http\Requests\ProgramaEducativoRequest;
 use App\Models\Empresa;
 use App\Http\Requests\EmpresaRequest;
 use App\Models\Practicas_Estudiante;
 use App\Models\Servicio_Social_Estudiante;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class EmpresaController extends Controller
@@ -17,6 +13,8 @@ class EmpresaController extends Controller
 
     public function index()
     {
+        \Gate::authorize('havepermiso', 'empresa-listar');
+
         $empresas       = Empresa::get();
         $nombreEmpresas = [];
         $contador       = 0;

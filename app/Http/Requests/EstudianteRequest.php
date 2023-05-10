@@ -18,9 +18,6 @@ class EstudianteRequest extends FormRequest
         $estudiante = $this->route('estudiante');
         $IdEstudiante = $estudiante ? $estudiante->IdEstudiante : null;
 
-        // $IdEstudiante = $this->route('estudiante')->IdEstudiante; // obtenemos el ID del estudiante actual
-
-
         return [
             'NombreDatosPersonales'             => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
             'ApellidoPaternoDatosPersonales'    => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],

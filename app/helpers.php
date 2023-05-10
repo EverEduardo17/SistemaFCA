@@ -1,9 +1,10 @@
 <?php
     use App\Models\Evento_Fecha_Sede;
     use App\Models\FechaEvento;
+    use Carbon\Carbon;
     use Illuminate\Support\Collection;
 
-    function formatearDateTime($date, $time){
+    function formatearDateTime($date, $time) {
         $fecha = explode( '/', $date );
         $hora  = explode( ' ', $time );
         $PM          = strcmp ( 'PM', mb_strtoupper( $hora[1] ) ) == 0;
@@ -16,7 +17,7 @@
         return $fecha;
     }
 
-    function formatearDate($date){
+    function formatearDate($date) {
         $fecha = explode( '/', $date );
         $fecha = sprintf("%d-%d-%d", $fecha[2], $fecha[1], $fecha[0]);
         
@@ -51,6 +52,22 @@
         }
 
         return $hora;
+    }
+
+    function validarFecha($fechaActual, $vigencia) {
+        $fechaActualCarbon = Carbon::parse($fechaActual);
+
+        if ($vigencia === null) {
+            return "Esta constancia es vigente";
+        }
+
+        $vigenciaCarbon = Carbon::parse($vigencia);
+
+        if ($fechaActualCarbon <= $vigenciaCarbon) {
+            return "Esta constancia es vigente hasta el: " . printDate($vigencia);
+        } else {
+            return "Esta constancia expiró el: " . printDate($vigencia);
+        }
     }
 
     function conflicto($fecha_evento) {

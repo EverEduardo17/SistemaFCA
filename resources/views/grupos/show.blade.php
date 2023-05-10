@@ -1,6 +1,6 @@
-@extends('layouts.plantilla')
+@extends('layouts.app')
 
-@section('breadcrumb')
+@section('content')
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
@@ -8,9 +8,7 @@
     <li class="breadcrumb-item active" aria-current="page">{{$grupo->NombreGrupo}} - {{$grupo->cohorte->NombreCohorte}}</a></li>
   </ol>
 </nav>
-@endsection
 
-@section('content')
 <div class="card">
   <div class="card-header">
     <div class="d-flex justify-content-between align-items-center">

@@ -23,7 +23,7 @@
                     <th>No. Personal</th>
                     <th>Nombre Completo</th>
                     <th>Correo electrónico</th>
-                    <th>Acciones</th>
+                    <th class="actions-col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,12 +36,12 @@
                         {{$academico->usuario->datosPersonales->NombreDatosPersonales ?? ""}}
                     </td>
                     <td>{{$academico->usuario->email ?? ""}}</td>
-                    <td>
-                        @can('havepermiso', 'academicos-leer')
-                            <a class="btn btn-outline-primary btn-sm" href="{{ route('academicos.show', $academico) }}">Detalles</a>
+                    <td class="btn-group">
+                        @can('havepermiso', 'academicos-editar')
+                            <a class="btn btn-outline-primary btn-sm mr-1" href="{{ route('academicos.show', $academico) }}">Detalles</a>
                         @endcan
                         @can('havepermiso', 'academicos-editar')
-                            <a class="btn btn-primary btn-sm" href="{{ route('academicos.edit', $academico) }}">Editar</a>
+                            <a class="btn btn-primary btn-sm mr-1" href="{{ route('academicos.edit', $academico) }}">Editar</a>
                         @endcan
                         @can('havepermiso', 'academicos-eliminar')
                                 <a class="btn btn-danger btn-sm" href="#"

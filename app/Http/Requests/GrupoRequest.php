@@ -13,10 +13,11 @@ class GrupoRequest extends FormRequest
 
     public function rules()
     {
+        $grupo = $this->route('grupo');
+        $IdGrupo = $grupo ? $grupo->IdGrupo : null;
+
         return [
-            'NombreGrupo'           => ['required', 'String', 'unique:Grupo'],  //regex:/^([A-Za-z]{2,3})+(\s{1}[1-9]{1}[0][1-3]{1})$/
-            'DescripcionGrupo'      => '',
-            'IdGrupo'               => '',
+            'NombreGrupo'           => ['required', 'String', 'unique:Grupo,NombreGrupo,'. $IdGrupo . ',IdGrupo'],  //regex:/^([A-Za-z]{2,3})+(\s{1}[1-9]{1}[0][1-3]{1})$/
             'IdProgramaEducativo'   => 'required',
             'IdCohorte'             => 'required',
             'IdPeriodoInicio'       => 'required',

@@ -25,7 +25,6 @@
                         <th scope="col" class="border">Nombre</th>
                         <th scope="col" class="border">Programa Educativo</th>
                         <th scope="col" class="border">Cohorte de pertenencia</th>
-                        <th scope="col" class="border">Estudiantes activos</th>
                         <th scope="col" class="border">Total de estudiantes</th>
                         <th scope="col" class="border">Último periodo activo</th>
                         <th scope="col" class="border">Acciones</th>
@@ -34,12 +33,13 @@
                 <tbody>
                     @foreach ($grupos as $grupo)
                     <tr>
-                        <th scope="row" class="border-right border-left">{{ $grupo->NombreGrupo }}</th>
+                        <th scope="row" class="border-right border-left">
+                            <a href="{{ route('grupos.show', $grupo) }}">{{ $grupo->NombreGrupo }}</a>
+                        </th>
                         <td class="border-right">{{ $grupo->programaEducativo->AcronimoProgramaEducativo }}</td>
                         <td class="border-right">{{ $grupo->cohorte->NombreCohorte }}</td>
                         @inject('estudiantes', 'App\Http\Controllers\GrupoController')
-                            <td class="border-right">{{$estudiantes->contarEstudiantes($grupo->IdGrupo)[0]}}</td>
-                            <td class="border-right"><strong>{{$estudiantes->contarEstudiantes($grupo->IdGrupo)[0] + $estudiantes->contarEstudiantes($grupo->IdGrupo)[1]}}</strong></td>
+                            <td class="border-right">{{$estudiantes->contarEstudiantes($grupo->IdGrupo)}}</td>
                         <td class="border-right">{{ $grupo->periodoActivo->NombrePeriodo }}</td>
                         <td class="btn-group btn-group-sm border-right">
                             <a class="btn btn-sm btn-outline-primary" href="{{ route('grupos.show', $grupo) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles" ><em class="fas fa-eye"></em></a>

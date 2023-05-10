@@ -15,6 +15,7 @@ use App\Models\ProgramaEducativo;
 use App\Models\Trayectoria;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class EstudianteController extends Controller
@@ -22,6 +23,8 @@ class EstudianteController extends Controller
 
     public function index() 
     {
+        // Gate::authorize('havepermiso', 'estudiante-listar');   // en un futuro si se hacen los nuevos permisos
+
         $estudiantes = Estudiante::all();
 
         return view('estudiantes.index')->with('estudiantes', $estudiantes);
@@ -29,6 +32,8 @@ class EstudianteController extends Controller
 
     public function create() 
     {
+        Gate::authorize('havepermiso', 'estudiante-crear');
+
         $cohortes = Cohorte::orderBy('NombreCohorte', 'desc')->get();
         $grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
         $modalidades = Modalidad::orderBy('NombreModalidad', 'asc')->get();
@@ -40,39 +45,21 @@ class EstudianteController extends Controller
 
     public function show(Estudiante $estudiante)
     {
+        Gate::authorize('havepermiso', 'estudiante-ver-propio');
+
         return view('estudiantes.show', compact('estudiante'));   
     }
 
     public function edit(Estudiante $estudiante) 
     {
+        Gate::authorize('havepermiso', 'estudiante-editar-propio');
+
         $cohortes = Cohorte::orderBy('NombreCohorte', 'desc')->get();
         $programasEducativos = ProgramaEducativo::orderBy('NombreProgramaEducativo', 'asc')->get();
         $modalidades = Modalidad::orderBy('NombreModalidad', 'asc')->get();
         $grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
 
         return view('estudiantes.edit', compact('estudiante', 'cohortes', 'programasEducativos', 'modalidades', 'grupos'));
-    }
-
-
-    public function agregarEstudiante($idGrupo)
-    {
-        $grupo              = Grupo::where('IdGrupo', $idGrupo)->get()->last();
-        $cohorte            = Cohorte::where('IdCohorte', $grupo->IdCohorte)->get()->last();
-        $idFCA              = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
-        $programaEducativo  = ProgramaEducativo::where('IdProgramaEducativo', $grupo->IdProgramaEducativo)->get()->last();
-        return view('grupos.estudiantes.create', [
-            'grupo'             => $grupo,
-            'cohorte'           => $cohorte,
-            'cohortes'          => Cohorte::orderBy('IdCohorte', 'desc')->get(),
-            'programas'         => ProgramaEducativo::where('IdFacultad', $idFCA)->get(),
-            'grupos'            => Grupo::where("IdFacultad", "=", $idFCA)->get(),
-            'modalidades'       => Modalidad::where("TipoModalidad", "=", "Entrada")->get(),
-            'programaEducativo' => $programaEducativo,
-            'periodos'          => DB::table('Periodo')
-                ->orderBy('IdPeriodo', 'desc')
-                ->get(),
-            'motivos'           => Motivo::get()
-        ]);
     }
 
     public function store(EstudianteRequest $request)
@@ -153,51 +140,51 @@ class EstudianteController extends Controller
 
             //<---- Verifica si es un traslado y guarda el registro ---->
             if ($tipoEntrada == 4) {
-                $idGrupoEstudiante = DB::table('Grupo_Estudiante')->insertGetId([
-                    'Estado'        => 'Activo',
-                    'TipoTraslado'  => 'Entrante',
-                    'IdGrupo'       => $input['IdGrupo'],
-                    'IdTrayectoria' => $idTrayectoria
-                ]);
+                // $idGrupoEstudiante = DB::table('Grupo_Estudiante')->insertGetId([
+                //     'Estado'        => 'Activo',
+                //     'TipoTraslado'  => 'Entrante',
+                //     'IdGrupo'       => $input['IdGrupo'],
+                //     'IdTrayectoria' => $idTrayectoria
+                // ]);
                 //<---- Obtine el último periodo activo del Grupo ---->
-                $traslado = $request->validate([
-                    'NombreFacultad'   => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
-                    'NombreCampus'     => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/']
-                ]);
-                $periodoActivo = Grupo::where('IdGrupo', '=', $input['IdGrupo'])->value('IdPeriodoActivo');
-                $idTraslado = DB::table('Traslado')->insertGetId([
-                    'FacultadDestino'   => $traslado['NombreFacultad'],
-                    'CampusDestino'     => $traslado['NombreCampus'],
-                    'IdGrupo'           => $input['IdGrupo'],
-                    'IdTrayectoria'     => $idTrayectoria,
-                    'IdPeriodo'         => $periodoActivo
-                ]);
+                // $traslado = $request->validate([
+                //     'NombreFacultad'   => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
+                //     'NombreCampus'     => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/']
+                // ]);
+                // $periodoActivo = Grupo::where('IdGrupo', '=', $input['IdGrupo'])->value('IdPeriodoActivo');
+                // $idTraslado = DB::table('Traslado')->insertGetId([
+                //     'FacultadDestino'   => $traslado['NombreFacultad'],
+                //     'CampusDestino'     => $traslado['NombreCampus'],
+                //     'IdGrupo'           => $input['IdGrupo'],
+                //     'IdTrayectoria'     => $idTrayectoria,
+                //     'IdPeriodo'         => $periodoActivo
+                // ]);
 
-                if (
-                    $idEstudianteDB == null || $idEstudianteDB == 0 || $idDatosPersonales == null || $idDatosPersonales == 0
-                    || $idTrayectoria == null || $idTrayectoria == 0 || $idGrupoEstudiante == null || $idGrupoEstudiante == 0
-                    || $idTraslado == null || $idTraslado == 0
-                ) {
-                    DB::rollBack();
-                    Session::flash('flash', [['type' => "danger", 'message' => "El estudiante NO pudo ser registrado."]]);
-                    return redirect()->route('estudiantes.show', $idGrupo);
-                }
+                // if (
+                //     $idEstudianteDB == null || $idEstudianteDB == 0 || $idDatosPersonales == null || $idDatosPersonales == 0
+                //     || $idTrayectoria == null || $idTrayectoria == 0 || $idGrupoEstudiante == null || $idGrupoEstudiante == 0
+                //     || $idTraslado == null || $idTraslado == 0
+                // ) {
+                //     DB::rollBack();
+                //     Session::flash('flash', [['type' => "danger", 'message' => "El estudiante NO pudo ser registrado."]]);
+                //     return redirect()->route('estudiantes.show', $idGrupo);
+                // }
                 DB::commit();
             } else {
-                $idGrupoEstudiante = DB::table('Grupo_Estudiante')->insertGetId([
-                    'IdGrupo'       => $input['IdGrupo'],
-                    'Estado'        => 'Activo',
-                    'IdTrayectoria' => $idTrayectoria
-                ]);
+                // $idGrupoEstudiante = DB::table('Grupo_Estudiante')->insertGetId([
+                //     'IdGrupo'       => $input['IdGrupo'],
+                //     'Estado'        => 'Activo',
+                //     'IdTrayectoria' => $idTrayectoria
+                // ]);
 
-                if (
-                    $idEstudianteDB == null || $idEstudianteDB == 0 || $idDatosPersonales == null || $idDatosPersonales == 0
-                    || $idTrayectoria == null || $idTrayectoria == 0 || $idGrupoEstudiante == null || $idGrupoEstudiante == 0
-                ) {
-                    DB::rollBack();
-                    Session::flash('flash', [['type' => "danger", 'message' => "El estudiante NO pudo ser registrado."]]);
-                    return redirect()->route('estudiantes.show', $idGrupo);
-                }
+                // if (
+                //     $idEstudianteDB == null || $idEstudianteDB == 0 || $idDatosPersonales == null || $idDatosPersonales == 0
+                //     || $idTrayectoria == null || $idTrayectoria == 0 || $idGrupoEstudiante == null || $idGrupoEstudiante == 0
+                // ) {
+                //     DB::rollBack();
+                //     Session::flash('flash', [['type' => "danger", 'message' => "El estudiante NO pudo ser registrado."]]);
+                //     return redirect()->route('estudiantes.show', $idGrupo);
+                // }
                 DB::commit();
             }
         } catch (\Throwable $th) {

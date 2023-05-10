@@ -22,16 +22,16 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Descripción</th>
-                    <th>Acciones</th>
+                    <th class="actions-col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($sedes as $item)
                 <tr>
-                    <th>{{ $item->NombreSedeEvento }}</th>
+                    <th class="border-left">{{ $item->NombreSedeEvento }}</th>
                     <td>{{ $item->DescripcionSedeEvento }}</td>
-                    <td>
-                        @can('havepermiso', 'sedes-crear')
+                    <td class="d-flex justify-content-center mr-4 ml-4">
+                        @can('havepermiso', 'sedes-editar')
                             <a class="btn btn-primary btn-sm" href="{{ route('sedeEventos.edit', $item) }}">Editar</a>
                         @endcan
                     </td>

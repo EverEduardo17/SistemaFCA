@@ -12,7 +12,9 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8"><strong> Gestión de Programas Educativos</strong></h5>
-            <a class="btn btn-success col-4" href="{{ route('programaEducativo.create') }}" role="button">Agregar Programa Educativo</a>
+            @can('havepermiso', 'programaEducativo-crear')
+                <a class="btn btn-success col-4" href="{{ route('programaEducativo.create') }}" role="button">Agregar Programa Educativo</a>
+            @endcan
         </div>
     </div>
     <div class="card-body">
@@ -33,9 +35,16 @@
                         <th scope="row" class="border-right border-left">{{ $programa->NombreProgramaEducativo }}</th>
                         <td class="border-right">{{ $programa->AcronimoProgramaEducativo }}</td>
                         <td class="border-right">{{ $programa->facultad->NombreFacultad }}</td>
-                        <td class="py-2 border-right">
-                            <a class="btn btn-sm btn-outline-primary mx-2" href="{{ route('programaEducativo.edit', $programa->AcronimoProgramaEducativo) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><em class="fas fa-pencil-alt"></em></a>
-                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $programa->IdProgramaEducativo }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar"><em class="fas fa-trash-alt"></em></a>
+
+                        <td class="py-2 border-right d-flex justify-content-center">
+
+                            @can('havepermiso', 'programaEducativo-editar')
+                                <a class="btn btn-sm btn-outline-primary mx-2" href="{{ route('programaEducativo.edit', $programa->AcronimoProgramaEducativo) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><em class="fas fa-pencil-alt"></em></a>
+                            @endcan
+
+                            @can('havepermiso', 'programaEducativo-eliminar')
+                                <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $programa->IdProgramaEducativo }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar"><em class="fas fa-trash-alt"></em></a>
+                            @endcan
                         </td>
                     </tr>
                     @endforeach

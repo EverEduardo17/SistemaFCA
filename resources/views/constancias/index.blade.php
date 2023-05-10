@@ -18,8 +18,10 @@
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title"><strong> Gestión de Constancias</strong></h5>
-            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
-            <a class="btn btn-success col-4" href="{{ route('constancias.create') }}" role="button">Agregar Constancia</a>
+            @can('havepermiso', 'documentos-crear')
+                <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
+                <a class="btn btn-success col-4" href="{{ route('constancias.create') }}" role="button">Agregar Constancia</a>
+            @endcan
         </div>
     </div>
     
@@ -33,7 +35,10 @@
                         <th scope="col" class="border">Descripción</th>
                         <th scope="col" class="border">Autor</th>
                         <th scope="col" class="border">Valido Hasta</th>
-                        <th scope="col" class="border actions-col">Acciones</th>
+                        
+                        @can('havepermiso', 'documentos-editar')
+                            <th scope="col" class="border actions-col">Acciones</th>
+                        @endcan
                     </tr>
                 </thead>
                 <tbody>
@@ -55,17 +60,19 @@
 
                         <td class="border-right">{{ printDate(($constancia->VigenteHasta)) }}</td>
 
-                        <td class="btn-group py-2 border-right">
-                            <a class="btn btn-sm btn-outline-success mx-1" href="{{ route('constancias.show', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
-                                <em class="fas fa-eye"></em>
-                            </a>
-                            <a class="btn btn-sm btn-outline-primary" href="{{ route('constancias.edit', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Editar">
-                                <em class="fas fa-pencil-alt"></em>
-                            </a>
-                            <a class="btn btn-sm btn-outline-danger mx-1" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $constancia->IdConstancia }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar">
-                                <em class="fas fa-trash-alt"></em>
-                            </a>
-                        </td>
+                        @can('havepermiso', 'documentos-crear')
+                            <td class="btn-group py-2 border-right">
+                                <a class="btn btn-sm btn-outline-success mx-1" href="{{ route('constancias.show', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
+                                    <em class="fas fa-eye"></em>
+                                </a>
+                                <a class="btn btn-sm btn-outline-primary" href="{{ route('constancias.edit', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Editar">
+                                    <em class="fas fa-pencil-alt"></em>
+                                </a>
+                                <a class="btn btn-sm btn-outline-danger mx-1" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $constancia->IdConstancia }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar">
+                                    <em class="fas fa-trash-alt"></em>
+                                </a>
+                            </td>
+                        @endcan
                     </tr>
                     @endforeach
                 </tbody>

@@ -1,14 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Constancias</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('constancias.show', $constancia->IdConstancia) }}">{{ $constancia->NombreConstancia }}</a></li>
-        <li class="breadcrumb-item active" aria-current="page"> {{ $estudiante->MatriculaEstudiante }} </li>
-    </ol>
-</nav>
+
+@can('havepermiso', 'evento-crear')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Constancias</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('constancias.show', $constancia->IdConstancia) }}">{{ $constancia->NombreConstancia }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> {{ $estudiante->MatriculaEstudiante }} </li>
+        </ol>
+    </nav>
+@endcan
+
 <div class="card">
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
@@ -45,7 +49,14 @@
         
         <br>
         <p>
-            {{ ($constancia->VigenteHasta === null)? " " : "Está constancia es valida hasta el: " .  printDate($constancia->VigenteHasta)}}
+            @php
+                use Carbon\Carbon;
+
+                $fechaActual = Carbon::now();
+                $resultado = validarFecha($fechaActual, $constancia->VigenteHasta);
+            @endphp
+        
+            {{ $resultado }}        
         </p>
 
         <p>

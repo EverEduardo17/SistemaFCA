@@ -6,13 +6,15 @@ use App\Models\Facultad;
 use App\Models\Grupo;
 use App\Models\ProgramaEducativo;
 use App\Http\Requests\ProgramaEducativoRequest;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class ProgramaEducativoController extends Controller
 {
     public function index()
     {
+        // Gate::authorize('havepermiso', 'programaEducativo-listar');    // en un futuro si se hacen los permisos nuevos
+
         $idFCA = Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->value("IdFacultad");
         return view('programaEducativo.index', [
             'programas' => ProgramaEducativo::where("IdFacultad", "=", $idFCA)->get(),
@@ -28,6 +30,8 @@ class ProgramaEducativoController extends Controller
 
     public function create()
     {
+        Gate::authorize('havepermiso', 'programaEducativo-crear');
+
         return view('programaEducativo.create', [
             'programas' => new ProgramaEducativo(),
             'facultad'  => Facultad::where("NombreFacultad", "=", "Facultad de Contaduría y Administración")->get()
@@ -53,6 +57,8 @@ class ProgramaEducativoController extends Controller
 
     public function edit($acronimoPrograma)
     {
+        Gate::authorize('havepermiso', 'programaEducativo-editar');
+        
         $programaEducativo = ProgramaEducativo::where('AcronimoProgramaEducativo', '=', $acronimoPrograma)->get()->last();
         return view('programaEducativo.edit', [
             'programas' => $programaEducativo,
@@ -79,6 +85,8 @@ class ProgramaEducativoController extends Controller
 
     public function destroy(ProgramaEducativo $programaEducativo)
     {
+        Gate::authorize('havepermiso', 'programaEducativo-eliminar');
+
         try {
             $ocupado = Grupo::where('IdProgramaEducativo', $programaEducativo->IdProgramaEducativo)->count();
             if ($ocupado > 0) {
