@@ -8,14 +8,11 @@ use App\Models\Cohorte;
 use App\Models\Estudiante;
 use App\Models\Facultad;
 use App\Models\Grupo;
-use App\Models\Grupo_Estudiante;
 use App\Models\Modalidad;
 use App\Models\Motivo;
 use App\Models\Periodo;
-use App\Models\Practicas_Estudiante;
 use App\Models\ProgramaEducativo;
 use App\Models\Reprobado;
-use App\Models\Servicio_Social_Estudiante;
 use App\Models\Titulacion;
 use App\Models\Traslado;
 use App\Models\Trayectoria;
@@ -98,13 +95,7 @@ class GrupoController extends Controller
 
     public function show(Grupo $grupo)
     {
-        $activos    = Grupo_Estudiante::where("Estado", "=",  "Activo")->where("IdGrupo", "=", $grupo->IdGrupo)->count();
-        $inactivos  = Grupo_Estudiante::where("Estado", "<>", "Activo")->where("IdGrupo", "=", $grupo->IdGrupo)->count();
-        return view('grupos.show', [
-            'grupo'    => $grupo,
-            'activos'   => $activos,
-            'inactivos' => $inactivos,
-        ]);
+        return view('grupos.show', compact('grupo'));
     }
 
 

@@ -46,20 +46,6 @@
     <div class="form-group">
       <div class="form-row">
         <div class="col">
-          <label name="EstudiantesActivos">Estudiantes activos del último periodo registrado:</label>
-          <input name="EstudiantesActivos" type="text" class="form-control @error('EstudiantesActivos') is-invalid @enderror" @if($activos==0) value="Ninguno" @else value="{{old('EstudiantesActivos',$activos)}}" @endif disabled>
-        </div>
-
-        <div class="col">
-          <label name="EstudiantesInactivos">Estudiantes inactivos del último periodo registrado:</label>
-          <input name="EstudiantesInactivos" type="text" class="form-control @error('EstudiantesInactivos') is-invalid @enderror" @if($inactivos==0) value="Ninguno" @else value="{{old('EstudiantesInactivos',$inactivos)}}" @endif disabled>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="form-row">
-        <div class="col">
           <label name="IdPeriodoInicio">Periodo de inicio del grupo:</label>
           <input name="IdPeriodoInicio" type="text" class="form-control @error('IdPeriodoInicio') is-invalid @enderror" value="{{$grupo->periodoInicio->NombrePeriodo}}" disabled>
         </div>
