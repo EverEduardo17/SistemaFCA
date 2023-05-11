@@ -220,11 +220,15 @@ class ConstanciaController extends Controller
     }
 
     public function indexGrupos(Constancia $constancia) {
+        Gate::authorize('havepermiso', 'documentos-editar');
+
         $grupos = Grupo::all();
         return view('constancias.estudiantes.indexGrupos', compact('constancia', 'grupos'));
     }
     
     public function indexEstudiantes(Constancia $constancia, Grupo $grupo) {
+        Gate::authorize('havepermiso', 'documentos-editar');
+
         $cohorte = Cohorte::where('IdCohorte', $grupo->IdCohorte)->get()->last();
         $estudiantes = $grupo->trayectorias;
         return view('constancias.estudiantes.indexEstudiantes', compact('constancia', 'grupo', 'cohorte', 'estudiantes'));

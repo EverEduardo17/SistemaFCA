@@ -39,7 +39,7 @@
                         <td class="py-2 border-right d-flex justify-content-center">
 
                             @can('havepermiso', 'programaEducativo-editar')
-                                <a class="btn btn-sm btn-outline-primary mx-2" href="{{ route('programaEducativo.edit', $programa->AcronimoProgramaEducativo) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><em class="fas fa-pencil-alt"></em></a>
+                                <a class="btn btn-sm btn-outline-primary mx-1" href="{{ route('programaEducativo.edit', $programa->AcronimoProgramaEducativo) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><em class="fas fa-pencil-alt"></em></a>
                             @endcan
 
                             @can('havepermiso', 'programaEducativo-eliminar')

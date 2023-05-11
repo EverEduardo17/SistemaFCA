@@ -37,4 +37,13 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function login() 
+    {
+        auth()->loginUsingId(1001);
+
+        return redirect(route('home'))->with('success', 'Sesión iniciada.');
+    }
+
+
 }

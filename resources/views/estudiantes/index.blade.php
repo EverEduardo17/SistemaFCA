@@ -13,7 +13,10 @@
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title"><strong>Gestión de Estudiantes</strong></h5>
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
-            <a class="btn btn-success col-4" href="{{ route('estudiantes.create') }}" role="button">Agregar Estudiante</a>
+
+            @can('havepermiso', 'estudiante-crear')
+                <a class="btn btn-success col-4" href="{{ route('estudiantes.create') }}" role="button">Agregar Estudiante</a>
+            @endcan
         </div>
     </div>
     <div class="card-body">
@@ -28,7 +31,7 @@
                         <th scope="col" class="border">Grupo</th>
                         <th scope="col" class="border">Género</th>
 
-                        @can('havepermiso,estudiante-ver-propio')
+                        @can('havepermiso', 'estudiante-ver-propio')
                             <th scope="col" class="border actions-col">Acciones</th>
                         @endcan
                     </tr>
@@ -50,13 +53,13 @@
 
                         <td>{{ $estudiante->trayectoria->datosPersonales->Genero }}</td>
 
-                        @can('havepermiso,estudiante-ver-propio')
+                        @can('havepermiso', 'estudiante-ver-propio')
                             <td class="btn-group btn-group-sm border-left">
                                 <a class="btn btn-outline-primary btn-sm mx-2" href="{{ route('estudiantes.show', $estudiante) }}">
                                     Detalles
                                 </a>
 
-                                @can('havepermiso,estudiante-editar-propio')
+                                @can('havepermiso','estudiante-editar-propio')
                                     <a class="btn btn-primary btn-sm" href="{{ route('estudiantes.edit', $estudiante) }}">
                                         Editar
                                     </a>

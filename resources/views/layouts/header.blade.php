@@ -10,9 +10,32 @@
         </button>
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
-            <span class="navbar-text text-white">
-                {{Auth::user()->name ?? "Invitado"}}
-            </span>
+
+            @guest
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('login') }}">{{ __('Iniciar Sesión') }}</a>
+                    </li>
+                </ul>
+
+            @else
+            <div class="position-relative text-right">
+                <a class="text-white dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ Auth::user()->name }}
+                </a>
+                
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-bottom" aria-labelledby="userDropdown">
+                    {{-- <a class="dropdown-item" href="#">Opción 1</a>
+                    <a class="dropdown-item" href="#">Opción 2</a>
+                    <div class="dropdown-divider"></div> --}}
+                    <form action="{{ route('logout') }}" method="post">
+                        @csrf
+                        <button class="dropdown-item" type="submit">Cerrar Sesión</button>
+                    </form>
+                </div>
+            </div>
+            @endguest
+
         </div>
     </nav>
 </header>

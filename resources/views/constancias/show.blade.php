@@ -68,7 +68,7 @@
 
 <br> <br>
 
-@can('havepermiso', 'docmentos-editar')
+@can('havepermiso', 'documentos-editar')
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
