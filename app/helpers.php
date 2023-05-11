@@ -96,3 +96,7 @@
         return $confictos;
     }
 
+    function getYear() {
+        return Carbon::now()->year;
+    }
+

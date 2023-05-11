@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Session;
 
 class AcademicoController extends Controller {
     public function index() {
-        //Gate::authorize('havepermiso', 'tipoorganizador-listar');
+        Gate::authorize('havepermiso', 'academicos-listar');
 
         $academicos = Academico::with('usuario.datosPersonales')->get();
 
@@ -25,13 +25,13 @@ class AcademicoController extends Controller {
     }
 
     public function create() {
-        //Gate::authorize('havepermiso', 'tipoorganizador-crear');
+        Gate::authorize('havepermiso', 'academicos-crear');
 
         return view('academicos.create');
     }
 
     public function store(AcademicoRequest $request) {
-        //Gate::authorize('havepermiso', 'tipoorganizador-crear');
+        Gate::authorize('havepermiso', 'academicos-crear');
 
         $input = $request->validated();
         try{
@@ -40,7 +40,7 @@ class AcademicoController extends Controller {
                 $idUsuarioDB = DB::table('Usuario')->insertGetId([
                     'name'              => $input['name'],
                     'email'             => $input['email'],
-                    'password'          => Crypt::encryptString($input['password'])
+                    'password'          => bcrypt($input['password'])
                     // 'CreatedBy'         => $this->idUsuario,
                     // 'UpdatedBy'         => $this->idUsuario
                 ]);
@@ -76,7 +76,7 @@ class AcademicoController extends Controller {
     }
 
     public function show($idAcademico) {
-        //Gate::authorize('havepermiso', 'tipoorganizador-leer');
+        Gate::authorize('havepermiso', 'academicos-listar');
 
         $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
 
@@ -86,7 +86,7 @@ class AcademicoController extends Controller {
     }
 
     public function edit($idAcademico) {
-        //Gate::authorize('havepermiso', 'tipoorganizador-editar');
+        Gate::authorize('havepermiso', 'academicos-editar');
 
         $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
 
@@ -96,7 +96,7 @@ class AcademicoController extends Controller {
     }
 
     public function update(Request $request, $idAcademico) {
-        Gate::authorize('havepermiso', 'tipoorganizador-editar');
+        Gate::authorize('havepermiso', 'academicos-editar');
 
         $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
 
@@ -136,7 +136,7 @@ class AcademicoController extends Controller {
     }
 
     public function destroy($idAcademico) {
-        //Gate::authorize('havepermiso', 'tipoorganizador-eliminar');
+        Gate::authorize('havepermiso', 'academicos-eliminar');
 
         $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
 

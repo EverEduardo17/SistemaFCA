@@ -6,7 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'SistemaFCA') }}</title>
+    <title>{{ __('Iniciar Sesión') }} - SistemaFCA</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -23,7 +23,6 @@
     @yield('head')
 </head>
 <body class="d-flex flex-column h-100">
-    
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6" id="colImg">
@@ -34,64 +33,71 @@
                 </div>
             </div>
             <div id="divIzq" class="col-sm-12 col-md-6">
-                <div class="row float-right">
-                    <div class="pleca">
-                        Universidad Veracruzana
-                    </div>
+                <div class="row float-right pleca">
+                    Universidad Veracruzana
                 </div>
                 
                 <div style="width: 100%; height: 70%; display: table;">
                     <div style="display: table-cell; vertical-align: middle;">
-                        <div class="row" style="margin-top: 3em;">
-                            <div id="miuv">
+                        
+                        <div class="row" style="margin-top: 4em;">
+                            <div id="sistema-fca">
                                 <b>SistemaFCA</b>
                             </div>
+
                             <div id="inisesion">
                                 <b>Inicio de sesión</b>
                             </div>
+                            
                             <div id="inisesionMsj">
                                 <div id="estado" class="errorMsj"></div>
                             </div>
                         </div>
+                        
                         <div class="row" style="margin-top: 1em;">
                             <div id="divMsjError">
                                 <span id="msjError"></span>
                             </div>
                         </div>
-                        <div class="row" style="margin-top: 3em;">
-                            <div id="divUsrInt">
-                                <input name="txtUser" type="text" id="txtUser" class="txt-login" placeholder="Usuario"
-                                    autocomplete="off" onKeyPress="return isOk(event);" />
-                                <span id="rfv1" style="visibility:hidden;"></span>
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
+
+                            <div class="text-center form-group" style="margin-top: 3em; margin-bottom: 2em;">
+                                <input name="name" id="name" type="text" style="width: 350px;"
+                                    class="txt-login @error('name') is-invalid @enderror"
+                                    value="{{old('name')}}" placeholder="Usuario" autofocus
+                                >
+                                @error('name')
+                                    <br> <p class="text-danger small">{{ $message }}</p>
+                                @enderror
                             </div>
-                        </div>
-                        <div class="row" id="divPsw">
-                            <div id="divPswInt">
-                                <input name="txtPassword" type="password" id="txtPassword" class="txt-login"
-                                    placeholder="Contraseña" />
-                                <span id="rfv2" style="visibility:hidden;"></span>
+                        
+                            <div class="text-center form-group" style="margin-bottom: 3em;">
+                                <input name="password" id="password" type="password" style="width: 350px;"
+                                    class="txt-login"
+                                    value="{{old('password')}}" placeholder="Contraseña" autofocus
+                                >
+                                @error('password')
+                                    <br> <p class="text-danger small"> {{ $message }}</p>
+                                @enderror
                             </div>
-                        </div>
-                        <div class="row" style="margin-top: 2em;">
-                            <input type="submit" name="btnValidacion" value="Iniciar sesión"
-                                onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;btnValidacion&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))"
-                                id="btnValidacion" />
-                        </div>
-                        <br />
-                        <div class="row" id="divCambPsw">
-                            <div class="div-linkLogin" id="divLinkCambPsw">
-                                <a href="#" id="a-cambioPass" class="a-linkLogin a-linkLogin2"
-                                    title="¿Quieres cambiar o recuperar tu contrase&ntilde;a?">¿Quieres cambiar o recuperar
-                                    tu contrase&ntilde;a?</a>
+                        
+                            <div class="row justify-content-center form-group">
+                                <button type="submit" class="btn btn-success" style="width: 352px;">
+                                    Iniciar Sesión
+                                </button>
                             </div>
+                        </form>
+                        
+                        <div class="row justify-content-center">
+                            <a href="#" id="" class="">
+                                ¿Quiere cambiar o recuperar su contrase&ntilde;a?
+                            </a>
                         </div>
                     </div>
                 </div>
-                <br />
-                <div id="footer">
-                    <div class="divDerechosReser">
-                        © 2020 Universidad Veracruzana. Todos los derechos reservados
-                    </div>
+                <div class="divDerechosReser position-fixed bottom-0 end-0 text-right">
+                    © {{ getYear() }} Universidad Veracruzana. Todos los derechos reservados
                 </div>
             </div>
         </div>

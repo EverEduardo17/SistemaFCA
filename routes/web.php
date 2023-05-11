@@ -16,8 +16,9 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::get('/login','auth\LoginController@login')->name('login');
-Route::get('/logout','auth\LoginController@logout')->name('logout');
+// Route::get('/login','auth\LoginController@login')->name('login');
+Route::post('/login','auth\LoginController@success')->name('login');
+Route::post('/logout','auth\LoginController@logout')->name('logout')->middleware('auth');
 
 
 Route::resource('academias', 'AcademiaController');

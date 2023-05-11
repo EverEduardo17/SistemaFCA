@@ -19,6 +19,7 @@
                 </ul>
 
             @else
+
             <div class="position-relative text-right">
                 <a class="text-white dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{ Auth::user()->name }}
@@ -34,6 +35,7 @@
                     </form>
                 </div>
             </div>
+            
             @endguest
 
         </div>

@@ -18,7 +18,7 @@
     <div class="card-body">
 
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover border-bottom" id="table-jquery">
+            <table class="table table-striped table-hover border-bottom border-right" id="table-jquery">
                 <caption>Grupos registrados en el sistema.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
@@ -27,7 +27,7 @@
                         <th scope="col" class="border">Cohorte de pertenencia</th>
                         <th scope="col" class="border">Total de estudiantes</th>
                         <th scope="col" class="border">Último periodo activo</th>
-                        <th scope="col" class="border">Acciones</th>
+                        <th scope="col" class="border actions-col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,7 +41,7 @@
                         @inject('estudiantes', 'App\Http\Controllers\GrupoController')
                             <td class="border-right">{{$estudiantes->contarEstudiantes($grupo->IdGrupo)}}</td>
                         <td class="border-right">{{ $grupo->periodoActivo->NombrePeriodo }}</td>
-                        <td class="btn-group btn-group-sm border-right">
+                        <td class="btn-group btn-group-sm">
                             <a class="btn btn-sm btn-outline-primary" href="{{ route('grupos.show', $grupo) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles" ><em class="fas fa-eye"></em></a>
                             <a class="btn btn-sm btn-outline-info mx-2" href="{{ route('grupos.edit',$grupo) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><em class="fas fa-pen"></em></a>
                             <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-id="{{ $grupo->IdGrupo }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar"><em class="fas fa-trash-alt"></em></a>

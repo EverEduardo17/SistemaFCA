@@ -34,7 +34,7 @@
     <div class="card-body">
 
         <div class="table-responsive-">
-            <table class="table table-striped table-hover border-bottom" id="table-jquery">
+            <table class="table table-striped table-hover border-bottom border-right" id="table-jquery">
                 <caption>Grupos registrados en el sistema.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
@@ -43,7 +43,7 @@
                         <th scope="col" class="border">Cohorte de pertenencia</th>
                         <th scope="col" class="border">Total de estudiantes</th>
                         <th scope="col" class="border">Último periodo activo</th>
-                        <th scope="col" class="border">Acciones</th>
+                        <th scope="col" class="border actions-col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>

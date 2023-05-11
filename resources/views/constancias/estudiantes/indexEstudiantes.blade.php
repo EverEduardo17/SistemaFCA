@@ -38,23 +38,23 @@
 
         <div class="table-responsive-xl">
 
-        <table class="table table-striped table-hover" id="table-jquery">
+        <table class="table table-striped table-hover border-bottom border-right" id="table-jquery">
             <caption>Estudiantes registrados en el sistema para el grupo {{$grupo->NombreGrupo}} del cohorte {{$cohorte->NombreCohorte}}.</caption>
 
             <thead class="bg-table">
             <tr class="text-white">
-                <th scope="col" class="border-right">Matrícula</th>
-                <th scope="col" class="border-right">Nombre</th>
-                <th scope="col" class="border-right">Género</th>
-                <th scope="col" class="border-right">Modalidad de entrada</th>
-                <th scope="col" class="border-right">Acciones</th>
+                <th scope="col" class="border">Matrícula</th>
+                <th scope="col" class="border">Nombre</th>
+                <th scope="col" class="border">Género</th>
+                <th scope="col" class="border">Modalidad de entrada</th>
+                <th scope="col" class="border actions-col">Acciones</th>
             </tr>
             </thead>
 
             <tbody>
             @foreach ($estudiantes as $estudiante)
                 <tr>
-                    <th scope="row" class="border-right">{{$estudiante->estudiante->MatriculaEstudiante}}</th>
+                    <th scope="row" class="border-right border-left">{{$estudiante->estudiante->MatriculaEstudiante}}</th>
                     <td class="border-right">
                         {{ $estudiante->datosPersonales->ApellidoPaternoDatosPersonales }}
                         {{ $estudiante->datosPersonales->ApellidoMaternoDatosPersonales }}

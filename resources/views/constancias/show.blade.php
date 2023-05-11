@@ -115,7 +115,7 @@
                                     <a class="btn btn-sm btn-outline-primary mr-1" href="{{ route('constancias.generar', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Descargar PDF">
                                         <em class="fas fa-file-pdf"></em>
                                     </a>
-                                    <a class="btn btn-sm btn-outline-danger btn-constancia" href="#" data-url="{{ route('constancias.destroyEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-method="delete" title="Quitar">
+                                    <a class="btn btn-sm btn-outline-danger btn-estudiante" href="#" data-toggle="modal" data-target="#delete" data-estudiante="{{ $estudiante->IdEstudiante }}" title="Quitar">
                                         <em class="fas fa-trash-alt"></em>
                                     </a>
                                 </td>
@@ -126,6 +126,7 @@
                 </div>
             </div>
     </div>
+    @include('constancias.modals.deleteEstudiante')
 @endcan
 
 @endsection
@@ -160,5 +161,23 @@
         });
     });
 
-</script>    
+    /*Eliminar Estudiante*/
+    $(document).on('click', '.btn-estudiante', function (e) {
+        var idEstudiante = $(this).data('estudiante');
+        console.log(idEstudiante);
+
+        var btnConstancia = $(".btn-constancia");
+        console.log(btnConstancia);
+
+        btnConstancia.data('estudiante', idEstudiante);
+
+        var url = "{{ route('constancias.destroyEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => "/"]) }}"
+
+        url = url + '/' + idEstudiante;
+        console.log(url);
+        
+        btnConstancia.data('url', url);
+    })
+</script>
+
 @endsection
