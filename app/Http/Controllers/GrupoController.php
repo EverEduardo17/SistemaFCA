@@ -25,6 +25,8 @@ class GrupoController extends Controller
 {
     public function index()
     {
+        \Gate::authorize('havepermiso', 'estudiante-ver-todos-propio');
+
         $idFCA = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
         return view('grupos.index', [
             'grupos'    => Grupo::where('IdFacultad', '=', $idFCA)->get()
@@ -33,6 +35,8 @@ class GrupoController extends Controller
 
     public function create()
     {
+        \Gate::authorize('havepermiso', 'estudiante-crear');
+
         $idFCA = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
         return view('grupos.create', [
             'grupos'        => new Grupo(),
@@ -95,12 +99,16 @@ class GrupoController extends Controller
 
     public function show(Grupo $grupo)
     {
+        \Gate::authorize('havepermiso', 'estudiante-ver-propio');
+
         return view('grupos.show', compact('grupo'));
     }
 
 
     public function edit(Grupo $grupo)
     {
+        \Gate::authorize('havepermiso', 'estudiante-editar-propio');
+
         $idFCA = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
         return view('grupos.edit', [
             'grupos'        => $grupo,
@@ -128,13 +136,13 @@ class GrupoController extends Controller
 
     public function destroy(Grupo $grupo)
     {
-        $ocupado = Grupo_Estudiante::where('IdGrupo', $grupo->IdGrupo)->count();
+        $ocupado = $this->contarEstudiantes($grupo->IdGrupo);
         if ($ocupado > 0) {
             Session::flash('flash', [['type' => "danger", 'message' => "El grupo '" . $grupo->NombreGrupo . "' ya está ocupado, no puede ser eliminado."]]);
             return redirect()->route('grupos.index');
         } else {
             try {
-                $grupo->forceDelete();
+                $grupo->delete();
                 Session::flash('flash', [['type' => "success", 'message' => "El grupo '" . $grupo->NombreGrupo . "' fue eliminado correctamente."]]);
                 return redirect()->route('grupos.index');
             } catch (\Throwable $throwable) {
@@ -340,12 +348,12 @@ class GrupoController extends Controller
 
  //<---- Funciones para visualizar las tablas resumen de los grupos ---->
 
- public function mostrarGrupo($nombreCohorte, $nombreGrupo)
- {
-     return view('grupos.index', [
-         'grupos'            => Grupo::all()
-     ]);
- }
+    public function mostrarGrupo($nombreCohorte, $nombreGrupo)
+    {
+        return view('grupos.index', [
+            'grupos'            => Grupo::all()
+        ]);
+    }
 
     //<---- Métodos de apoyo para obtener los datos---->
 
@@ -466,90 +474,4 @@ class GrupoController extends Controller
         ];
     }
 
-    private function getDatosEgresados($idGrupo)
-    {
-        $estudiantes        = Grupo_Estudiante::where('Estado', '=', 'Egresado')->where('IdGrupo', '=', $idGrupo)->get();
-        $resultados         = $this->getCantidadesGenero($estudiantes);
-        $activoHombre       = $resultados[0];
-        $activoMujer        = $resultados[1];
-        $totalActivos       = $activoHombre + $activoMujer;
-        $cantidadesPeriodos = $this->getEstudiantesPorPeriodo($estudiantes, $idGrupo);
-        $estudiantes        = Grupo_Estudiante::where('Estado', '=', 'Egresado')->where('IdGrupo', '=', $idGrupo)->get();
-        $cantidadesModalidad = $this->getEstudiantesPorModalidad($estudiantes);
-        return [
-            'activoHombre'          => $activoHombre,
-            'activoMujer'           => $activoMujer,
-            'totalActivos'          => $totalActivos,
-            'cantidadesPeriodos'    => $cantidadesPeriodos,
-            'cantidadesModalidad'   => $cantidadesModalidad,
-        ];
-    }
-
-    private function getDatosTraslados($idGrupo)
-    {
-        $alumnos            = Grupo_Estudiante::where('TipoTraslado', '<>', 'null')->where('IdGrupo', '=', $idGrupo)->get();
-        $estudiantesSalientes        = [];
-        $estudiantesEntrantes        = [];
-        foreach ($alumnos as $alumno) {
-            $traslado     = Traslado::where('IdTrayectoria', '=', $alumno->IdTrayectoria)->get()->last();
-            if ($alumno->TipoTraslado == 'Entrante') {
-                $estudiantesEntrantes[] = $traslado;
-            } elseif ($alumno->TipoTraslado == 'Saliente') {
-                $estudiantesSalientes[] = $traslado;
-            }
-        }
-        return ['estudiantesEntrantes' => $estudiantesEntrantes, 'estudiantesSalientes' => $estudiantesSalientes];
-    }
-
-    private function getDatosReprobados($idGrupo)
-    {
-        $estudiantes        = Grupo_Estudiante::where('IdGrupo', '=', $idGrupo)->get();
-        foreach ($estudiantes as $clave => $estudiante) {
-            $reprobado = Reprobado::where('IdTrayectoria', '=', $estudiante->IdTrayectoria)->get()->last();
-            if ($reprobado == null) {
-                unset($estudiantes[$clave]);
-            }
-        }
-        $resultados         = $this->getCantidadesGenero($estudiantes);
-        $hombre             = $resultados[0];
-        $mujer              = $resultados[1];
-        $totalReprobados    = $hombre + $mujer;
-        $cantidadesPeriodos = $this->getReprobadosPorPeriodo($estudiantes, $idGrupo);
-        return [
-            'hombre'            => $hombre,
-            'mujer'             => $mujer,
-            'totalReprobados'   => $totalReprobados,
-            'cantidadesPeriodos'    => $cantidadesPeriodos,
-        ];
-    }
-
-    private function getDatosBajas($idGrupo)
-    {
-        $estudiantes            = Grupo_Estudiante::where('Estado', '=', 'Baja')->where('IdGrupo', '=', $idGrupo)->get();
-        $bajasTemporales        = [];
-        $bajasDefinitivas       = [];
-        foreach ($estudiantes as $estudiante) {
-            $baja = Baja::where('IdTrayectoria', '=', $estudiante->IdTrayectoria)->get()->last();
-            if ($baja->TipoBaja == "Temporal") {
-                $bajasTemporales[] = $estudiante;
-            } else {
-                $bajasDefinitivas[] = $estudiante;
-            }
-        }
-        $resultadosTemporal     = $this->getCantidadesGenero($bajasTemporales);
-        $hombreTemporal         = $resultadosTemporal[0];
-        $mujerTemporal          = $resultadosTemporal[1];
-        $resultadosDefinitivo   = $this->getCantidadesGenero($bajasDefinitivas);
-        $hombreDefinitivo       = $resultadosDefinitivo[0];
-        $mujerDefinitivo        = $resultadosDefinitivo[1];
-        $bajasMotivos           = $this->getEstudiantesPorMotivo($estudiantes);
-
-        return [
-            'hombreTemporal'    => $hombreTemporal,
-            'mujerTemporal'     => $mujerTemporal,
-            'hombreDefinitivo'  => $hombreDefinitivo,
-            'mujerDefinitivo'   => $mujerDefinitivo,
-            'bajasMotivos'      => $bajasMotivos,
-        ];
-    }
 }

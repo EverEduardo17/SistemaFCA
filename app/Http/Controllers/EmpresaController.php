@@ -13,7 +13,7 @@ class EmpresaController extends Controller
 
     public function index()
     {
-        \Gate::authorize('havepermiso', 'empresa-listar');
+        \Gate::authorize('havepermiso', 'empresas-listar');
 
         $empresas       = Empresa::get();
         $nombreEmpresas = [];
@@ -30,6 +30,8 @@ class EmpresaController extends Controller
 
     public function create()
     {
+        \Gate::authorize('havepermiso', 'empresas-crear');
+
         return view('empresa.create', [
             'empresa'   => new Empresa()
         ]);
@@ -70,6 +72,8 @@ class EmpresaController extends Controller
 
     public function show($nombreEmpresa)
     {
+        \Gate::authorize('havepermiso', 'empresas-ver-propio');
+
         $nombreLimpio = str_replace("-", " ", $nombreEmpresa);
         $empresa = Empresa::where('NombreEmpresa', '=', $nombreLimpio)->get()->last();
         return view('empresa.show', [
@@ -80,6 +84,8 @@ class EmpresaController extends Controller
 
     public function edit($nombreEmpresa)
     {
+        \Gate::authorize('havepermiso', 'empresas-editar-propio');
+
         $nombreLimpio = str_replace("-", " ", $nombreEmpresa);
         $empresa = Empresa::where('NombreEmpresa', '=', $nombreLimpio)->get()->last();
         return view('empresa.edit', [
@@ -122,6 +128,8 @@ class EmpresaController extends Controller
 
     public function destroy(Empresa $empresa)
     {
+        \Gate::authorize('havepermiso', 'empresas-eliminar-propio');
+
         try {
             $ocupadoPracticas   = Practicas_Estudiante::where('IdEmpresa', $empresa->IdEmpresa)->count();
             $ocupadoServicio    = Servicio_Social_Estudiante::where('IdEmpresa', $empresa->IdEmpresa)->count();

@@ -2,7 +2,7 @@
 
 @section('content')
 
-@can('havepermiso', 'evento-crear')
+@can('havepermiso', 'documentos-leer')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
@@ -21,9 +21,9 @@
                 {{ $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales }}
                 {{ $estudiante->Usuario->DatosPersonales->NombreDatosPersonales }}
             </h5>
-            {{-- @can('havepermiso', 'academicos-listar') --}}
+            @can('havepermiso', 'documentos-leer')
                 <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
-            {{-- @endcan --}}
+            @endcan
             <a class="btn btn-primary col-4" href="{{ route('constancias.generar', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" role="button">
                 Descargar Constancia
             </a>

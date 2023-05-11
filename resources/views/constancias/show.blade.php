@@ -11,7 +11,7 @@
             <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Constancias</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ $constancia->NombreConstancia }}</li>
             
-            @can('havepermiso', 'evento-crear')
+            @can('havepermiso', 'documentos-editar')
                 <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica', $constancia->IdConstancia) }}"> Descargar Plantilla Generica </a></li>
             @endcan
         </ol>
@@ -22,7 +22,7 @@
         <div class="row">
             <h5 class="card-title col-8">Detalles de la Constancia</h5>
 
-            @can('havepermiso', 'evento-crear')
+            @can('havepermiso', 'documentos-leer')
                 <a class="btn btn-primary col-4" href="{{ route('constancias.index') }}" role="button">Ver Constancias</a>
             @endcan
         </div>
@@ -47,7 +47,7 @@
                 <input name="VigenteHasta" type="text" class="form-control @error('VigenteHasta') is-invalid @enderror" value="{{ old('VigenteHasta', printDate($constancia->VigenteHasta)) }}" disabled>
             </div>
 
-            @can('havepermiso', 'evento-crear')
+            @can('havepermiso', 'documentos-editar')
 
                 <a class="mi-plantilla" 
                     href="{{ route('constancias.download', [
@@ -68,7 +68,7 @@
 
 <br> <br>
 
-@can('havepermiso', 'evento-crear')
+@can('havepermiso', 'docmentos-editar')
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">

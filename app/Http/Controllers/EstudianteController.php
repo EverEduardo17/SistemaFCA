@@ -23,7 +23,7 @@ class EstudianteController extends Controller
 
     public function index() 
     {
-        // Gate::authorize('havepermiso', 'estudiante-listar');   // en un futuro si se hacen los nuevos permisos
+        \Gate::authorize('havepermiso', 'estudiante-ver-todos-propio');
 
         $estudiantes = Estudiante::all();
 
@@ -137,62 +137,16 @@ class EstudianteController extends Controller
                 'IdCohorte'             => $input['IdCohorte'],
                 'IdDatosPersonales'     => $idDatosPersonales
             ]);
+            DB::commit();
 
-            //<---- Verifica si es un traslado y guarda el registro ---->
-            if ($tipoEntrada == 4) {
-                // $idGrupoEstudiante = DB::table('Grupo_Estudiante')->insertGetId([
-                //     'Estado'        => 'Activo',
-                //     'TipoTraslado'  => 'Entrante',
-                //     'IdGrupo'       => $input['IdGrupo'],
-                //     'IdTrayectoria' => $idTrayectoria
-                // ]);
-                //<---- Obtine el último periodo activo del Grupo ---->
-                // $traslado = $request->validate([
-                //     'NombreFacultad'   => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
-                //     'NombreCampus'     => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/']
-                // ]);
-                // $periodoActivo = Grupo::where('IdGrupo', '=', $input['IdGrupo'])->value('IdPeriodoActivo');
-                // $idTraslado = DB::table('Traslado')->insertGetId([
-                //     'FacultadDestino'   => $traslado['NombreFacultad'],
-                //     'CampusDestino'     => $traslado['NombreCampus'],
-                //     'IdGrupo'           => $input['IdGrupo'],
-                //     'IdTrayectoria'     => $idTrayectoria,
-                //     'IdPeriodo'         => $periodoActivo
-                // ]);
-
-                // if (
-                //     $idEstudianteDB == null || $idEstudianteDB == 0 || $idDatosPersonales == null || $idDatosPersonales == 0
-                //     || $idTrayectoria == null || $idTrayectoria == 0 || $idGrupoEstudiante == null || $idGrupoEstudiante == 0
-                //     || $idTraslado == null || $idTraslado == 0
-                // ) {
-                //     DB::rollBack();
-                //     Session::flash('flash', [['type' => "danger", 'message' => "El estudiante NO pudo ser registrado."]]);
-                //     return redirect()->route('estudiantes.show', $idGrupo);
-                // }
-                DB::commit();
-            } else {
-                // $idGrupoEstudiante = DB::table('Grupo_Estudiante')->insertGetId([
-                //     'IdGrupo'       => $input['IdGrupo'],
-                //     'Estado'        => 'Activo',
-                //     'IdTrayectoria' => $idTrayectoria
-                // ]);
-
-                // if (
-                //     $idEstudianteDB == null || $idEstudianteDB == 0 || $idDatosPersonales == null || $idDatosPersonales == 0
-                //     || $idTrayectoria == null || $idTrayectoria == 0 || $idGrupoEstudiante == null || $idGrupoEstudiante == 0
-                // ) {
-                //     DB::rollBack();
-                //     Session::flash('flash', [['type' => "danger", 'message' => "El estudiante NO pudo ser registrado."]]);
-                //     return redirect()->route('estudiantes.show', $idGrupo);
-                // }
-                DB::commit();
-            }
         } catch (\Throwable $th) {
+
             DB::rollBack();
             dd($th);
             Session::flash('flash', [['type' => "danger", 'message' => "El estudiante NO pudo ser registrado."]]);
             return redirect()->route('estudiantes.index');
         }
+
         Session::flash('flash', [['type' => "success", 'message' => "Estudiante registrado correctamente."]]);
         return redirect()->route('estudiantes.index');
     }
@@ -213,6 +167,8 @@ class EstudianteController extends Controller
 
     public function destroy(Estudiante $estudiante)
     {
+        Gate::authorize('havepermiso', 'estudiante-eliminar-propio');
+
         //
     }
 

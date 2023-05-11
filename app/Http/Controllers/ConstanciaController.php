@@ -24,6 +24,8 @@ class ConstanciaController extends Controller
      */
     public function index()
     {
+        Gate::authorize('havepermiso', 'documentos-leer');
+
         $constancias = Constancia::with('usuario.datosPersonales')->get();
         return view('constancias.index', compact('constancias'));
     }
@@ -94,6 +96,8 @@ class ConstanciaController extends Controller
      */
     public function show(Constancia $constancia)
     {
+        Gate::authorize('havepermiso', 'documentos-leer');
+   
         $estudiantes = $constancia->estudiantes;
 
         return view('constancias.show', compact('constancia', 'estudiantes'));

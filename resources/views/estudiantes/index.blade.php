@@ -19,7 +19,7 @@
     <div class="card-body">
 
         <div class="table-responsive-xl">
-            <table class="table table-striped table-hover border-bottom" id="table-jquery">
+            <table class="table table-striped table-hover border-bottom border-right" id="table-jquery">
                 <caption>Estudiantes registrados en el sistema.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
@@ -27,7 +27,10 @@
                         <th scope="col" class="border">Nombre</th>
                         <th scope="col" class="border">Grupo</th>
                         <th scope="col" class="border">Género</th>
-                        <th scope="col" class="border actions-col">Acciones</th>
+
+                        @can('havepermiso,estudiante-ver-propio')
+                            <th scope="col" class="border actions-col">Acciones</th>
+                        @endcan
                     </tr>
                 </thead>
                 <tbody>
@@ -45,16 +48,21 @@
 
                         <td class="border-right">{{ $estudiante->trayectoria->grupo->NombreGrupo }}</td>
 
-                        <td class="border-right">{{ $estudiante->trayectoria->datosPersonales->Genero }}</td>
+                        <td>{{ $estudiante->trayectoria->datosPersonales->Genero }}</td>
 
-                        <td class="btn-group btn-group-sm border-right">
-                            <a class="btn btn-outline-primary btn-sm mx-2" href="{{ route('estudiantes.show', $estudiante) }}">
-                                Detalles
-                            </a>
-                            <a class="btn btn-primary btn-sm" href="{{ route('estudiantes.edit', $estudiante) }}">
-                                Editar
-                            </a>
-                        </td>
+                        @can('havepermiso,estudiante-ver-propio')
+                            <td class="btn-group btn-group-sm border-left">
+                                <a class="btn btn-outline-primary btn-sm mx-2" href="{{ route('estudiantes.show', $estudiante) }}">
+                                    Detalles
+                                </a>
+
+                                @can('havepermiso,estudiante-editar-propio')
+                                    <a class="btn btn-primary btn-sm" href="{{ route('estudiantes.edit', $estudiante) }}">
+                                        Editar
+                                    </a>
+                                @endcan
+                            </td>
+                        @endcan
                     </tr>
                     @endforeach
                 </tbody>
