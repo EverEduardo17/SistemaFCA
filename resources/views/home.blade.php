@@ -11,7 +11,7 @@
                     <div class="card-header card text-center border-light  text-white" style="background: {{$item['background']}}">{{$item['titulo']}}</div>
                     <ul class="list-group list-group-flush">
                         @foreach ( $item['operaciones'] as $operacion)
-                            <li class="list-group-item"><a href="{{ url($item['enlace'].'/'.$operacion['enlace'])}}">{{$operacion['titulo']}}</a></li>
+                            <li class="list-group-item shadow-sm"><a href="{{ url($item['enlace'].'/'.$operacion['enlace'])}}">{{$operacion['titulo']}}</a></li>
                         @endforeach
                     </ul>
                 </div>

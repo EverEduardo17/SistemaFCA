@@ -16,7 +16,7 @@
     </ol>
 </nav>
 
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
 
@@ -90,7 +90,7 @@
 
 {{-- botones reactivos en Acciones --}}
 <script>
-    $(document).ready(function() {
+    $(function() {
         $('.btn-constancia').on('click', function(e) {
             e.preventDefault();
             var idEstudiante = $(this).data('estudiante');

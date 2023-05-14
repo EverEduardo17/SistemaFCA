@@ -13,7 +13,7 @@
     </nav>
 @endcan
 
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title">

@@ -1,5 +1,6 @@
-@extends('layouts.plantilla')
-@section('breadcrumb')
+@extends('layouts.app')
+
+@section('content')
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
@@ -9,9 +10,8 @@
     <li class="breadcrumb-item active" aria-current="page">Editar Empresa</li>
   </ol>
 </nav>
-@endsection
-@section('content')
-<div class="card">
+
+<div class="card shadow-sm">
   <div class="card-header">
     <div class="row">
       <h5 class="card-title col-8"><strong>Editar Empresa</strong></h5>

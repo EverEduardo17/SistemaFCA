@@ -22,7 +22,7 @@
                     data-dismiss="modal"
                     data-url="" 
                 >
-                    Eliminar
+                    Quitar
                 
                 </a>
                 

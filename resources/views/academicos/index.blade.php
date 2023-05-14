@@ -7,17 +7,21 @@
         <li class="breadcrumb-item active" aria-current="page">Académicos</li>
     </ol>
 </nav>
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-header">
-        <div class="row">
-            <h5 class="card-title col-8">Académicos</h5>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Académicos</h5>
+
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
+
             @can('havepermiso', 'academicos-crear')
                 <a class="btn btn-success col-4" href="{{ route('academicos.create') }}" role="button">Agregar Académico</a>
             @endcan
+
         </div>
     </div>
     <div class="card-body">
-        <table class="table table-striped" id="table-jquery">
+        <table class="table table-striped border-bottom" id="table-jquery">
             <thead>
                 <tr>
                     <th>No. Personal</th>

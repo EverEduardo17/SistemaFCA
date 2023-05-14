@@ -8,7 +8,7 @@
         <li class="breadcrumb-item active" aria-current="page">Agregar académico</li>
     </ol>
 </nav>
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Agregar Académico</h5>
@@ -53,7 +53,7 @@
             </div>
             <div class="form-group">
                 <label name="password">Contraseña:</label>
-                <input name="password" type="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" minlength="8" placeholder="Ej. Contraseña123">
+                <input id="password-input" name="password" type="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" minlength="8" placeholder="Ej. Contraseña123">
             </div>
             <button type="submit" class="btn btn-primary btn-block">Guardar</button>
             @can('havepermiso', 'academicos-listar')
@@ -64,10 +64,6 @@
 </div>
 @endsection
 
-@section('head')
-
-@endsection
-
 @section('script')
-
+<script src="{{ asset('js/password-popup.js') }}"></script>
 @endsection

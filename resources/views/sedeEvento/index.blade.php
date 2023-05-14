@@ -7,17 +7,20 @@
         <li class="breadcrumb-item active" aria-current="page">Sedes</li>
     </ol>
 </nav>
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-header">
-        <div class="row">
-            <h5 class="card-title col-8">Sedes</h5>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Sedes</h5>
+
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
+            
             @can('havepermiso', 'sedes-crear')
                 <a class="btn btn-success col-4" href="{{ route('sedeEventos.create') }}" role="button">Agregar Sede</a>
             @endcan
         </div>
     </div>
     <div class="card-body">
-        <table class="table table-striped" id="table_sede">
+        <table class="table table-striped" id="table-jquery">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -49,13 +52,5 @@
 
 @section('script')
     <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
-    <script>
-        $(document).ready(function() {
-            $('#table_sede').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
-            }
-        });
-    });
-    </script>
+    <script src="{{ asset('js/table-script.js') }}"></script>
 @endsection

@@ -11,7 +11,7 @@
   </ol>
 </nav>
 
-<div class="card">
+<div class="card shadow-sm">
   <div class="card-header">
     <div class="row">
       <h5 class="card-title col-8"><strong>Agregar Programa Educativo</strong></h5>

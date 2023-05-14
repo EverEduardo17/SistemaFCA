@@ -8,7 +8,7 @@
         <li class="breadcrumb-item active" aria-current="page">Agregar Facultad</li>
     </ol>
 </nav>
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Agregar Facultad</h5>

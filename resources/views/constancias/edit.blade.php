@@ -17,7 +17,7 @@
         <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica', $constancia->IdConstancia) }}"> Descargar Plantilla Generica </a></li>
     </ol>
 </nav>
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Editar Constancia</h5>

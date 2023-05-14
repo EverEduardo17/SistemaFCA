@@ -9,7 +9,8 @@
         <li class="breadcrumb-item active" aria-current="page">Editar académico</li>
     </ol>
 </nav>
-<div class="card">
+
+<div class="card shadow-sm">
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Editar Académico</h5>
@@ -64,8 +65,9 @@
             </div>
 
             <div class="form-group">
-                <label name="password">Contraseña:</label>
-                <input name="password" type="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" minlength="8" placeholder="Ej. Contraseña123">
+                <label name="password">Contraseña:</label> 
+                <a href="#" id="toggleLink" class="btn btn-light ml-2 shadow-sm" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color:blue;">¿Cambiar Contraseña?</a>
+                <input id="password-input" name="password" type="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" minlength="8" placeholder="Ej. Contraseña123" disabled>
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
@@ -78,10 +80,19 @@
 </div>
 @endsection
 
-@section('head')
-
-@endsection
-
 @section('script')
+<script src="{{ asset('js/password-popup.js') }}"></script>
 
+    <script>
+        $(document).ready(function() {
+            $('#toggleLink').click(function(e) {
+                e.preventDefault();
+                var passwordInput = $('#password-input');
+                if (passwordInput.val() === '') {
+                passwordInput.prop('disabled', !passwordInput.prop('disabled'));
+                passwordInput.focus();
+                }
+            });
+        });
+    </script>
 @endsection

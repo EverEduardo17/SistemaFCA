@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="card">
+    <div class="card shadow-sm">
         <div class="card-header">
             <div class="row d-flex align-items-center mr-2">
                 <h4 class="mr-auto p-3">Evento</h4>

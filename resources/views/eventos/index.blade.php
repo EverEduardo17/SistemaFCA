@@ -23,7 +23,7 @@
             @endcan
         </div>
         <div class="col-lg-9 col-md-8">
-            <table id="table-jquery" class="display">
+            <table id="table-jquery" class="display border-bottom">
                 <thead>
                     <tr>
                         <th>Fecha</th>

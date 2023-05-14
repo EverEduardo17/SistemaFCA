@@ -7,7 +7,7 @@
         <li class="breadcrumb-item active" aria-current="page">Facultades</li>
     </ol>
 </nav>
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Facultades</h5>

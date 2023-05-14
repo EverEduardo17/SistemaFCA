@@ -8,7 +8,7 @@
         <li class="breadcrumb-item active" aria-current="page">Agregar Tipo de Organizador</li>
     </ol>
 </nav>
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Agregar Tipo de Organizador</h5>
@@ -36,12 +36,4 @@
         </form>
     </div>
 </div>
-@endsection
-
-@section('head')
-
-@endsection
-
-@section('script')
-
 @endsection

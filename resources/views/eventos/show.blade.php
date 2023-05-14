@@ -8,7 +8,7 @@
         <li class="breadcrumb-item active" aria-current="page">{{$evento->NombreEvento ?? ""}}</li>
     </ol>
 </nav>
-<div class="card">
+<div class="card shadow-sm">
         <div class="card-header">
             <div class="row d-flex align-items-center mr-2">
                 <h4 class="mr-auto p-3">{{$evento->NombreEvento ?? ""}}</h4>
@@ -73,7 +73,7 @@
         </div>
     </div>
     <br>
-    <div class="card">
+    <div class="card shadow-sm">
         <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs" id="evento-list" role="tablist">
                 <li class="nav-item">
@@ -108,7 +108,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <table id="table_eventos" class="display">
+                            <table id="table_eventos" class="display border-bottom">
                                 <thead>
                                     <tr>
                                         <th>Conflicto</th>
@@ -176,7 +176,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <table id="table_responsable" class="display">
+                            <table id="table_responsable" class="display border-bottom">
                                 <thead>
                                 <tr>
                                     <th>Responsable</th>
@@ -219,7 +219,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <table id="table_participante" class="display">
+                            <table id="table_participante" class="display border-bottom">
                                 <thead>
                                     <tr>
                                         <th>No. de Personal</th>
@@ -262,7 +262,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <table id="table_documentos" class="display">
+                            <table id="table_documentos" class="display border-bottom">
                                 <thead>
                                     <tr>
                                         <th>Nombre del Documento</th>
@@ -337,7 +337,7 @@
             });
         });
 
-        $(document).ready( function () {
+        $(function () {
             $('#table_eventos').DataTable();
             $('#table_documentos').DataTable();
             $('#table_responsable').DataTable();
