@@ -13,7 +13,7 @@
                 <small class="text-danger"><-- Esta acción no se puede deshacer --></small>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-danger" form="form-eliminar">Eliminar</button>
             </div>
         </div>
