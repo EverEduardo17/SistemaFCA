@@ -23,8 +23,7 @@ class EstudianteRequest extends FormRequest
             'ApellidoPaternoDatosPersonales'    => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
             'ApellidoMaternoDatosPersonales'    => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
             'IdCohorte'                         => 'required | numeric',
-            // El formato para las matrículas está diseñado para aceptar únicamente S0.., S1.. y S2..
-            'MatriculaEstudiante'               => ['required', 'String', 'max:9', 'regex:/^S[012][\d]{1}[0]{1}\d{5}$/', 'unique:Estudiante,MatriculaEstudiante,' . $IdEstudiante . ',IdEstudiante'],
+            'MatriculaEstudiante'               => ['required', 'String', 'max:9', 'regex:/^S\d{1,8}$/i', 'unique:Estudiante,MatriculaEstudiante,' . $IdEstudiante . ',IdEstudiante'],
             'IdProgramaEducativo'               => 'required | numeric',
             'IdGrupo'                           => 'required | numeric',
             'IdModalidad'                       => 'required | numeric',

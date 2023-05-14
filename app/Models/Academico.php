@@ -19,7 +19,7 @@ class Academico extends Model
 
     //Relacion Uno a Uno
     public function usuario(){
-        return $this->hasOne(User::class, 'IdUsuario', 'IdUsuario');
+        return $this->belongsTo(User::class, 'IdUsuario', 'IdUsuario');
     }
 
     //Relacion Muchos a Uno

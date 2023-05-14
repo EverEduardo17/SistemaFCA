@@ -53,12 +53,7 @@ class LoginController extends Controller
     {
         // Intentar iniciar sesion
         $datosUsuario = $request->validated();
-
-        // if (auth()->attempt($datosUsuario)) {
-        //     session()->regenerate();
-            
-        //     return redirect(route('home'))->with('success', 'Sesión iniciada.');
-        // }
+        
 
         if (Auth::attempt($datosUsuario)) {
             $request->session()->regenerate();

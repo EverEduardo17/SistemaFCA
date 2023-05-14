@@ -20,9 +20,7 @@
 
                 <a  href="#" class="btn btn-constancia btn-danger" 
                     data-dismiss="modal"
-                    data-method="delete" 
                     data-url="" 
-                    data-estudiante=""
                 >
                     Eliminar
                 

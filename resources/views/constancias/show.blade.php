@@ -8,7 +8,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Constancias</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Gestion de Constancias</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ $constancia->NombreConstancia }}</li>
             
             @can('havepermiso', 'documentos-editar')
@@ -132,52 +132,52 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
-<script src="{{ asset('js/table-script.js') }}"></script>
+    <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
+    <script src="{{ asset('js/table-script.js') }}"></script>
 
-<script>
+    <script>
 
-    $(document).on('click', '.btn-constancia', function (e) {
-        e.preventDefault();
+        // Eliminar Estudiante de manera reactiva
+        $(document).on('click', '.btn-constancia', function (e) {
+            e.preventDefault();
 
-        var url = $(this).data('url');
-        var token = $('meta[name="csrf-token"]').attr('content');
-        var idEstudiante = url.split('/').pop();
+            var url = $(this).data('url');
+            var token = $('meta[name="csrf-token"]').attr('content');
+            var idEstudiante = url.split('/').pop();
 
-        $.ajax({
-            url: url,
-            type: 'DELETE',
-            data: {
-                '_token': token
-            },
-            success: function (data) {
-                console.log('Eliminado exitosamente');
-                var filaEstudiante = $('#fila-' + idEstudiante);
-                filaEstudiante.closest('tr').remove();
-            },
-            error: function (data) {
-                console.log('Ocurrió un error al eliminar');
-            }
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data: {
+                    '_token': token
+                },
+                success: function (data) {
+                    console.log('Eliminado exitosamente');
+                    var filaEstudiante = $('#fila-' + idEstudiante);
+                    filaEstudiante.closest('tr').remove();
+                },
+                error: function (data) {
+                    console.log('Ocurrió un error al eliminar');
+                }
+            });
         });
-    });
 
-    /*Eliminar Estudiante*/
-    $(document).on('click', '.btn-estudiante', function (e) {
-        var idEstudiante = $(this).data('estudiante');
-        console.log(idEstudiante);
+        // Abrir modal y mandarle que Estudiante borrar
+        $(document).on('click', '.btn-estudiante', function (e) {
+            var idEstudiante = $(this).data('estudiante');
+            console.log(idEstudiante);
 
-        var btnConstancia = $(".btn-constancia");
-        console.log(btnConstancia);
+            var btnConstancia = $(".btn-constancia");
+            console.log(btnConstancia);
 
-        btnConstancia.data('estudiante', idEstudiante);
+            btnConstancia.data('estudiante', idEstudiante);
 
-        var url = "{{ route('constancias.destroyEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => "/"]) }}"
+            var url = "{{ route('constancias.destroyEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => "/"]) }}"
 
-        url = url + '/' + idEstudiante;
-        console.log(url);
-        
-        btnConstancia.data('url', url);
-    })
-</script>
-
+            url += '/' + idEstudiante;
+            console.log(url);
+            
+            btnConstancia.data('url', url);
+        })
+    </script>
 @endsection

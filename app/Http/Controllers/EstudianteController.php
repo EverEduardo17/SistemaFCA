@@ -102,7 +102,7 @@ class EstudianteController extends Controller
             $idGrupo = $input['IdGrupo'];
             $timestamp = Carbon::now()->toDateTimeString();
 
-            $matricula = $input['MatriculaEstudiante'];
+            $matricula = strtoupper($input['MatriculaEstudiante']);
 
             DB::beginTransaction();
 
@@ -156,7 +156,11 @@ class EstudianteController extends Controller
     {
         $request->validated();
 
-        $estudiante->update($request->all());
+        $estudiante->update([
+            'MatriculaEstudiante' => strtoupper($request->MatriculaEstudiante),
+        ]);
+
+        $estudiante->update($request->except('MatriculaEstudiante'));
         $estudiante->trayectoria->datosPersonales->update($request->all());
         
         $estudiante->trayectoria->update($request->all());

@@ -37,7 +37,7 @@
                     </td>
                     <td>{{$academico->usuario->email ?? ""}}</td>
                     <td class="btn-group">
-                        @can('havepermiso', 'academicos-editar')
+                        @can('havepermiso', 'academico-ver-propio')
                             <a class="btn btn-outline-primary btn-sm mr-1" href="{{ route('academicos.show', $academico) }}">Detalles</a>
                         @endcan
                         @can('havepermiso', 'academicos-editar')
