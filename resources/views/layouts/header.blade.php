@@ -26,9 +26,9 @@
                 </a>
                 
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-bottom" aria-labelledby="userDropdown">
-                    {{-- <a class="dropdown-item" href="#">Opción 1</a>
-                    <a class="dropdown-item" href="#">Opción 2</a>
-                    <div class="dropdown-divider"></div> --}}
+                    <a class="dropdown-item" href="{{ route('academicos.show', Auth::user()->IdUsuario) }}">Ver Perfil</a>
+                    {{-- <a class="dropdown-item" href="#">Opción 2</a> --}}
+                    <div class="dropdown-divider"></div>
                     <form action="{{ route('logout') }}" method="post">
                         @csrf
                         <button class="dropdown-item" type="submit">Cerrar Sesión</button>

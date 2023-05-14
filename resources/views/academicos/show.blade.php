@@ -10,8 +10,11 @@
 </nav>
 <div class="card shadow-sm">
     <div class="card-header">
-        <div class="row">
-            <h5 class="card-title col-8">Detalles Académico</h5>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Detalles Académico</h5>
+
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
+
             @can('havepermiso', 'academicos-listar')
                 <a class="btn btn-primary col-4" href="{{ route('academicos.index') }}" role="button">Ver Académicos</a>
             @endcan
