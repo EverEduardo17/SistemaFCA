@@ -24,7 +24,7 @@
             @can('havepermiso', 'documentos-leer')
                 <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
             @endcan
-            <a class="btn btn-primary col-4" href="{{ route('constancias.generar', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" role="button">
+            <a class="btn btn-primary col-4" href="{{ route('constancias.download', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" role="button">
                 Descargar Constancia
             </a>
         </div>

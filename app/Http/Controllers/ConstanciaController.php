@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\TemplateProcessor;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -99,6 +98,9 @@ class ConstanciaController extends Controller
         Gate::authorize('havepermiso', 'documentos-leer');
    
         $estudiantes = $constancia->estudiantes;
+
+        // Guardar los estudiantes en la sesión para downloadAll()
+        session()->put('estudiantes', $estudiantes);
 
         return view('constancias.show', compact('constancia', 'estudiantes'));
     }
@@ -195,7 +197,15 @@ class ConstanciaController extends Controller
         }
     }
 
-    public function downloadConstancia($id, $nombreConstancia)
+
+    /**
+     * Descarga una sola plantilla del estudiante dado.
+     *
+     * @param  int $id
+     * @param  string  $nombreConstancia
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function downloadMiPlantilla($id, $nombreConstancia)
     {
         $filename = 'c_' . str_pad($id, 5, '0', STR_PAD_LEFT) . '.docx';
 
@@ -264,8 +274,51 @@ class ConstanciaController extends Controller
         }
     }
 
-    public function generarConstancia(Constancia $constancia, Estudiante $estudiante) 
+    public function downloadConstancia(Constancia $constancia, Estudiante $estudiante) 
     {
+        $pathConstancia = $this->generarConstacia($constancia, $estudiante);
+
+        return response()->download($pathConstancia)->deleteFileAfterSend(true);
+    }
+
+    public function downloadAllConstancias(Request $request, Constancia $constancia) 
+    {
+        $estudiantes = $request->session()->get('estudiantes');
+
+        $allPaths = [];
+        foreach ($estudiantes as $estudiante) {
+            $allPaths[] = $this->generarConstacia($constancia, $estudiante);
+        }
+
+        $zip = new \ZipArchive();
+        $zipFileName = 'Constancias de '. $constancia->NombreConstancia . '.zip';
+
+        if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+            // Agregar cada archivo al ZIP
+            foreach ($allPaths as $path) {
+                $zip->addFile($path, basename($path));
+            }
+
+            // Cerrar y guardar el ZIP
+            $zip->close();
+
+            // Eliminar los archivos temporales
+            foreach ($allPaths as $path) {
+                unlink($path);
+            }
+            
+            $request->session()->forget('estudiantes');
+
+            // Descargar el archivo ZIP
+            return response()->download($zipFileName)->deleteFileAfterSend(true);
+        }
+    }
+
+
+
+    // Metodos auxiliares
+    
+    public function generarConstacia(Constancia $constancia, Estudiante $estudiante) {
         $filename = 'c_' . str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT);
         $pathPlantilla = storage_path('app/constancias/' . $filename . '.docx');
 
@@ -326,7 +379,7 @@ class ConstanciaController extends Controller
         // Eliminar archivos temporales
         unlink($pathEstudiante);
         unlink($pathQr);
-        return response()->download($pathEstudiante . '.pdf')->deleteFileAfterSend(true);
+
+        return $pathEstudiante . '.pdf';
     }
-    
 }

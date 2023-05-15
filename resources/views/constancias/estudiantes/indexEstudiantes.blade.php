@@ -53,6 +53,7 @@
 
             <tbody>
             @foreach ($estudiantes as $estudiante)
+
                 <tr>
                     <th scope="row" class="border-right border-left">{{$estudiante->estudiante->MatriculaEstudiante}}</th>
                     <td class="border-right">

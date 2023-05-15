@@ -183,7 +183,6 @@ class AcademicoController extends Controller
         try {
             $academico->delete();
             $academico->usuario->delete();
-            $academico->usuario->datosPersonales->delete();
 
             Session::flash('flash', [ ['type' => "success", 'message' => "Académico eliminado correctamente."] ]);
             return redirect()->route('academicos.index');

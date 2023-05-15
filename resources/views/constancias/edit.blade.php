@@ -55,7 +55,7 @@
                 <input name="Plantilla" type="file" class="@error('Plantilla') form-control is-invalid @enderror"> <br>
                 
                 <a class="mi-plantilla"
-                        href="{{ route('constancias.download', [
+                        href="{{ route('constancias.downloadMiPlantilla', [
                         'IdConstancia' => $constancia->IdConstancia, 
                         'NombreConstancia' => $constancia->NombreConstancia
                         ]) }}">

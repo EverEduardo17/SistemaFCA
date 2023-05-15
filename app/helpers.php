@@ -65,9 +65,9 @@
 
         if ($fechaActualCarbon <= $vigenciaCarbon) {
             return "Esta constancia es vigente hasta el: " . printDate($vigencia);
-        } else {
-            return "Esta constancia expiró el: " . printDate($vigencia);
         }
+        
+        return "Esta constancia expiró el: " . printDate($vigencia);
     }
 
     function conflicto($fecha_evento) {

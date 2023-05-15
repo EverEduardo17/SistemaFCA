@@ -42,9 +42,15 @@
                             <td class="border-right">{{$estudiantes->contarEstudiantes($grupo->IdGrupo)}}</td>
                         <td class="border-right">{{ $grupo->periodoActivo->NombrePeriodo }}</td>
                         <td class="btn-group btn-group-sm">
-                            <a class="btn btn-sm btn-outline-primary" href="{{ route('grupos.show', $grupo) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles" ><em class="fas fa-eye"></em></a>
-                            <a class="btn btn-sm btn-outline-info mx-2" href="{{ route('grupos.edit',$grupo) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><em class="fas fa-pen"></em></a>
-                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-id="{{ $grupo->IdGrupo }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar"><em class="fas fa-trash-alt"></em></a>
+                            <a class="btn btn-sm btn-outline-success" href="{{ route('grupos.show', $grupo) }}" title="Detalles" >
+                                <em class="fas fa-list"></em>
+                            </a>
+                            <a class="btn btn-sm btn-outline-info mx-2" href="{{ route('grupos.edit',$grupo) }}" title="Editar">
+                                <em class="fas fa-pen"></em>
+                            </a>
+                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-id="{{ $grupo->IdGrupo }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar">
+                                <em class="fas fa-trash-alt"></em>
+                            </a>
                         </td>
                     </tr>
                     @endforeach

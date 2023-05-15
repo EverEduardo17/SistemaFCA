@@ -57,12 +57,11 @@ class LoginController extends Controller
 
         if (Auth::attempt($datosUsuario)) {
             $request->session()->regenerate();
-            // dd($request->session()->all());
             return redirect(route('home'))->with('success', 'Sesión iniciada.');
         }
 
         throw ValidationException::withMessages([
-                    'name' => ['El usuario o la contraseña son incorrectos.']
+                    'loginError' => ['El usuario o la contraseña son incorrectos.']
                 ]);    }
 
     public function register() 

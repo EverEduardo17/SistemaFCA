@@ -63,7 +63,7 @@
                         @can('havepermiso', 'documentos-crear')
                             <td class="btn-group py-2 border-right">
                                 <a class="btn btn-sm btn-outline-success mx-1" href="{{ route('constancias.show', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
-                                    <em class="fas fa-eye"></em>
+                                    <em class="fas fa-list"></em>
                                 </a>
                                 <a class="btn btn-sm btn-outline-primary" href="{{ route('constancias.edit', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Editar">
                                     <em class="fas fa-pencil-alt"></em>

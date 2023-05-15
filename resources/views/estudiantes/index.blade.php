@@ -55,13 +55,19 @@
 
                         @can('havepermiso', 'estudiante-ver-propio')
                             <td class="btn-group btn-group-sm border-left">
-                                <a class="btn btn-outline-primary btn-sm mx-2" href="{{ route('estudiantes.show', $estudiante) }}">
-                                    Detalles
+                                <a class="btn btn-outline-success btn-sm" href="{{ route('estudiantes.show', $estudiante) }}" title="Detalles">
+                                    <em class="fas fa-list"></em>
                                 </a>
 
                                 @can('havepermiso','estudiante-editar-propio')
-                                    <a class="btn btn-primary btn-sm" href="{{ route('estudiantes.edit', $estudiante) }}">
-                                        Editar
+                                    <a class="btn btn-outline-primary btn-sm mr-1 ml-1" href="{{ route('estudiantes.edit', $estudiante) }}" title="Editar">
+                                        <em class="fas fa-pen"></em>
+                                    </a>
+                                @endcan
+
+                                @can('havepermiso','estudiante-eliminar-propio')
+                                    <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-id="{{ $estudiante->IdEstudiante }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar">
+                                        <em class="fas fa-trash-alt"></em>
                                     </a>
                                 @endcan
                             </td>
@@ -73,7 +79,7 @@
         </div>
     </div>
 </div>
-@include('grupos.modals.delete')
+@include('estudiantes.modals.delete')
 
 @endsection
 
@@ -90,7 +96,7 @@
         var button = $(event.relatedTarget);
         var id = button.data('id');
         var modal = $(this);
-        var action = $("#form-eliminar-grupo").attr('action') + '/' + id;
+        var action = $("#form-eliminar").attr('action') + '/' + id;
         modal.find('.modal-body form').attr('action', action);
     })
 </script>

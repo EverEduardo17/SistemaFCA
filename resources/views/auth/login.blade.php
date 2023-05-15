@@ -68,7 +68,10 @@
                                     value="{{old('name')}}" placeholder="Usuario" autofocus
                                 >
                                 @error('name')
-                                    <br> <p class="text-danger small">{{ $message }}</p>
+                                    <br> <p class="text-danger small">El campo usuario es obligatorio.</p>
+                                @enderror
+                                @error('loginError')
+                                    <br> <p class="text-danger small"> {{ $message }}</p>
                                 @enderror
                             </div>
                         

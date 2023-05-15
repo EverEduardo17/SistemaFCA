@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Cohorte;
 use App\Models\DatosPersonales;
 use App\Models\Estudiante;
-use App\Models\Facultad;
 use App\Models\Grupo;
 use App\Http\Requests\EstudianteRequest;
 use App\Models\Modalidad;
-use App\Models\Motivo;
 use App\Models\ProgramaEducativo;
 
 use App\Models\Trayectoria;
@@ -173,7 +171,18 @@ class EstudianteController extends Controller
     {
         Gate::authorize('havepermiso', 'estudiante-eliminar-propio');
 
-        //
+        try {
+            $estudiante->delete();
+            $estudiante->trayectoria->delete();
+            $estudiante->usuario->delete();
+
+            Session::flash('flash', [ ['type' => "success", 'message' => "Estudiante eliminado correctamente."] ]);
+            return redirect()->route('estudiantes.index');
+        } 
+        catch (\Throwable $th) {
+            Session::flash('flash', [['type' => "danger", 'message' => "El estudiante NO pudo ser eliminado."]]);
+            return redirect()->route('estudiantes.index');
+        }
     }
 
     

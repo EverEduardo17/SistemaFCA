@@ -50,7 +50,7 @@
             @can('havepermiso', 'documentos-editar')
 
                 <a class="mi-plantilla" 
-                    href="{{ route('constancias.download', [
+                    href="{{ route('constancias.downloadMiPlantilla', [
                         'IdConstancia' => $constancia->IdConstancia, 
                         'NombreConstancia' => $constancia->NombreConstancia
                         ]) }}">
@@ -69,11 +69,17 @@
 <br> <br>
 
 @can('havepermiso', 'documentos-editar')
+    <iframe id="download-frame" style="display: none;"></iframe>
+    <div id="loading-message" style="display: none;">Cargando...</div>
+
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Estudiantes</h5>
                 {{-- @can('havepermiso', 'estudiante-ver-cualquiera') --}}
+                <a href="{{ route('constancias.downloadAll', $constancia) }}" class="btn btn-info ml-auto mr-3 download-all"><i class="fas fa-file-archive"></i>
+                    Descargar Todo
+                </a>
                     <a class="btn btn-success col-3" href="{{ route('constancias.indexGrupos', $constancia) }}" role="button">Agregar Estudiantes</a>
                 {{-- @endcan --}}
             </div>
@@ -101,18 +107,18 @@
                                 </th>
 
                                 <td class="border-right">
-                                    {{ $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales }}
-                                    {{ $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales }}
-                                    {{ $estudiante->Usuario->DatosPersonales->NombreDatosPersonales }}
+                                    {{ $estudiante->Trayectoria->DatosPersonales->ApellidoPaternoDatosPersonales }}
+                                    {{ $estudiante->Trayectoria->DatosPersonales->ApellidoMaternoDatosPersonales }}
+                                    {{ $estudiante->Trayectoria->DatosPersonales->NombreDatosPersonales }}
                                 </td>
 
                                 <td class="border-right">{{ $estudiante->Trayectoria->Grupo->NombreGrupo }}</td>
 
                                 <td class="py-2 btn-group border-right">
                                     <a class="btn btn-sm btn-outline-success mr-1" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
-                                        <em class="fas fa-eye"></em>
+                                        <em class="fas fa-list"></em>
                                     </a>
-                                    <a class="btn btn-sm btn-outline-primary mr-1" href="{{ route('constancias.generar', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Descargar PDF">
+                                    <a class="btn btn-sm btn-outline-primary mr-1" href="{{ route('constancias.download', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Descargar PDF">
                                         <em class="fas fa-file-pdf"></em>
                                     </a>
                                     <a class="btn btn-sm btn-outline-danger btn-estudiante" href="#" data-toggle="modal" data-target="#delete" data-estudiante="{{ $estudiante->IdEstudiante }}" title="Quitar">
@@ -127,6 +133,7 @@
             </div>
     </div>
     @include('constancias.modals.deleteEstudiante')
+    @include('constancias.modals.loading')
 @endcan
 
 @endsection
@@ -179,5 +186,17 @@
             
             btnConstancia.data('url', url);
         })
+
+        $(document).on('click', '.download-all', function (e) {
+            
+            // Mostrar el modal de "Descargando Constancias"
+            $('#loading').modal('show');
+            
+            // Ocultar el modal después de un breve retraso (opcional)
+            setTimeout(function() {
+                $('#loading').modal('hide');
+            }, 200000); // Por ejemplo, ocultar después de 2 segundos (ajústalo según tus necesidades)
+        });
+
     </script>
 @endsection
