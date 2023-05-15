@@ -171,10 +171,10 @@ class ConstanciaController extends Controller
         catch (\Throwable $throwable){
             DB::rollBack();
             Session::flash('flash', [['type' => "danger", 'message' => "Error, la constancia no pudo ser actualizada."]]);
-            return redirect()->route('constancias.index');
+            return redirect()->route('constancias.show', $constancia);
         }
         Session::flash('flash', [['type' => "success", 'message' => "Constancia actualizada con éxito."]]);
-        return redirect()->route('constancias.index');
+        return redirect()->route('constancias.show', $constancia);
     }
 
     /**
@@ -291,7 +291,7 @@ class ConstanciaController extends Controller
         }
 
         $zip = new \ZipArchive();
-        $zipFileName = 'Constancias de '. $constancia->NombreConstancia . '.zip';
+        $zipFileName = $constancia->NombreConstancia . ' constancias.zip';
 
         if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
             // Agregar cada archivo al ZIP

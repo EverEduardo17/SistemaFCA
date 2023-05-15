@@ -74,7 +74,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Estudiantes</h5>
                 {{-- @can('havepermiso', 'estudiante-ver-cualquiera') --}}
-                <a href="{{ route('constancias.downloadAll', $constancia) }}" class="btn btn-info ml-auto mr-3 download-all"><i class="fas fa-file-archive"></i>
+                <a href="#download" data-file-name="{{ $constancia->NombreConstancia }}"data-href="{{ route('constancias.downloadAll', $constancia) }}" class="btn btn-info ml-auto mr-3 download-all"><i class="fas fa-file-archive"></i>
                     Descargar Todo
                 </a>
                     <a class="btn btn-success col-3" href="{{ route('constancias.indexGrupos', $constancia) }}" role="button">Agregar Estudiantes</a>
@@ -138,35 +138,10 @@
 @section('script')
     <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
     <script src="{{ asset('js/table-script.js') }}"></script>
-
+    <script src="{{ asset('js/constancias-scripts/delete-estudiante.js') }}"></script>
+    <script src="{{ asset('js/constancias-scripts/download-all.js') }}"></script>
     <script>
-
-        // Eliminar Estudiante de manera reactiva
-        $(document).on('click', '.btn-constancia', function (e) {
-            e.preventDefault();
-
-            var url = $(this).data('url');
-            var token = $('meta[name="csrf-token"]').attr('content');
-            var idEstudiante = url.split('/').pop();
-
-            $.ajax({
-                url: url,
-                type: 'DELETE',
-                data: {
-                    '_token': token
-                },
-                success: function (data) {
-                    console.log('Eliminado exitosamente');
-                    var filaEstudiante = $('#fila-' + idEstudiante);
-                    filaEstudiante.closest('tr').remove();
-                },
-                error: function (data) {
-                    console.log('Ocurrió un error al eliminar');
-                }
-            });
-        });
-
-        // Abrir modal y mandarle que Estudiante borrar
+        // Abrir modal y mandar que Estudiante borrar
         $(document).on('click', '.btn-estudiante', function (e) {
             var idEstudiante = $(this).data('estudiante');
             console.log(idEstudiante);
@@ -182,46 +157,7 @@
             console.log(url);
             
             btnConstancia.data('url', url);
-        })
-
-        $(document).on('click', '.download-all', function (e) {
-            
-            // Mostrar el modal de "Descargando Constancias"
-            $('#loading').modal('show');
-            
-            // Ocultar el modal después de un breve retraso (opcional)
-            setTimeout(function() {
-                $('#loading').modal('hide');
-            }, 200000); // Por ejemplo, ocultar después de 2 segundos (ajústalo según tus necesidades)
         });
-
-
-        /*   lo mismo pero con una ventana blank
-        $(document).on('click', '.download-all', function (e) {
-    e.preventDefault();
-    
-    // Mostrar el aviso de "Cargando"
-    $('#loading-message').show();
-    
-    var downloadUrl = $(this).attr('href');
-    
-    // Abrir una nueva ventana o pestaña para la descarga
-    var downloadWindow = window.open(downloadUrl, '_blank');
-    
-    // Verificar si la ventana se cerró cada cierto intervalo de tiempo
-    var checkWindowClosed = setInterval(function() {
-        if (downloadWindow.closed) {
-            // La ventana se cerró, ocultar el mensaje de "Cargando"
-            $('#loading-message').hide();
-            
-            // Detener la verificación del cierre de la ventana
-            clearInterval(checkWindowClosed);
-        }
-    }, 500);
-});
-        
-        */
-
     </script>
 
     
