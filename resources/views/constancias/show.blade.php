@@ -69,9 +69,6 @@
 <br> <br>
 
 @can('havepermiso', 'documentos-editar')
-    <iframe id="download-frame" style="display: none;"></iframe>
-    <div id="loading-message" style="display: none;">Cargando...</div>
-
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
@@ -198,5 +195,34 @@
             }, 200000); // Por ejemplo, ocultar después de 2 segundos (ajústalo según tus necesidades)
         });
 
+
+        /*   lo mismo pero con una ventana blank
+        $(document).on('click', '.download-all', function (e) {
+    e.preventDefault();
+    
+    // Mostrar el aviso de "Cargando"
+    $('#loading-message').show();
+    
+    var downloadUrl = $(this).attr('href');
+    
+    // Abrir una nueva ventana o pestaña para la descarga
+    var downloadWindow = window.open(downloadUrl, '_blank');
+    
+    // Verificar si la ventana se cerró cada cierto intervalo de tiempo
+    var checkWindowClosed = setInterval(function() {
+        if (downloadWindow.closed) {
+            // La ventana se cerró, ocultar el mensaje de "Cargando"
+            $('#loading-message').hide();
+            
+            // Detener la verificación del cierre de la ventana
+            clearInterval(checkWindowClosed);
+        }
+    }, 500);
+});
+        
+        */
+
     </script>
+
+    
 @endsection
