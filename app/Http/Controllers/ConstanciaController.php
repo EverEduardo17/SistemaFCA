@@ -79,8 +79,8 @@ class ConstanciaController extends Controller
         }
         catch (\Throwable $throwable){
             DB::rollBack();
-            // Session::flash('flash', [['type' => "danger", 'message' => $throwable->getMessage()]]);
-            Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar la constancia."]]);
+            Session::flash('flash', [['type' => "danger", 'message' => $throwable->getMessage()]]);
+           // Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar la constancia."]]);
             return redirect()->route('constancias.index');
         }
 

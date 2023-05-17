@@ -18,10 +18,17 @@ return new class extends Migration
 
             $table->string('NombreConstancia');
             $table->string('DescripcionConstancia');
-            $table->boolean('EstadoVigencia');
             $table->date('VigenteHasta');
 
-            $table->timestamps();
+            $table->timestamp('CreatedAt')->useCurrent();
+            $table->timestamp('UpdatedAt')->useCurrent();
+            $table->timestamp('DeletedAt')->nullable();
+
+            $table->unsignedBigInteger('CreatedBy')->nullable();
+            $table->unsignedBigInteger('UpdatedBy')->nullable();
+
+            $table->foreign('CreatedBy')->references('IdUsuario')->on('Usuario');
+            $table->foreign('UpdatedBy')->references('IdUsuario')->on('Usuario');
         });
     }
 
