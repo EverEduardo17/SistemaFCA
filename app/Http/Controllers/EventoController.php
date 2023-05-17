@@ -34,7 +34,7 @@ class EventoController extends Controller
 
     public function index()
     {
-        Gate::authorize('havepermiso', 'eventos-listar');
+        // Gate::authorize('havepermiso', 'eventos-listar');
         $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
             ->get()
