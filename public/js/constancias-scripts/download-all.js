@@ -10,16 +10,14 @@ $(document).on('click', '.download-all', function (e) {
         var progressBar = $('#loading .progress-bar');
         var valueMax = parseInt(progressBar.attr('aria-valuemax'));
 
-        var totalIncrements = 4 * parseInt(progressBar.data('increment'));
-
         var currentProgress = parseInt(progressBar.attr('aria-valuenow'));
-        var increment = parseInt(progressBar.data('increment'));
+        var increment = 100 / (parseInt(progressBar.data('increment')) + 1);
         console.log(currentProgress);
 
         if (currentProgress < valueMax) {
             var newProgress = currentProgress + increment;
             progressBar.attr('aria-valuenow', newProgress).css('width', newProgress + "%");
-            setTimeout(simulateDownloadProgress, totalIncrements * (progressBar.data('increment')*32)/3);
+            setTimeout(simulateDownloadProgress, 3000);
         }
     }
 

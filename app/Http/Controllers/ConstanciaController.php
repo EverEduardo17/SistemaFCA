@@ -362,8 +362,8 @@ class ConstanciaController extends Controller
             'codigo_qr',                    // busca la palabra codigo_qr en la plantilla
             [
                 'path' => $pathQr,
-                'width' => 200,
-                'height' => 200,
+                'width' => 100,
+                'height' => 100,
                 'ratio' => false,
             ]
         );
@@ -374,7 +374,8 @@ class ConstanciaController extends Controller
         $templateProcessor->saveAs($pathEstudiante);
 
         // Libreoffice convertir a pdf
-        exec('soffice --convert-to pdf '. $pathEstudiante .' --outdir ' . storage_path('app/constancias/'));
+        // exec('soffice --convert-to pdf '. $pathEstudiante .' --outdir ' . storage_path('app/constancias/'));
+        exec("docto -f $pathEstudiante -O ". storage_path('app/constancias/') . " -T wdFormatPDF");
 
         // Eliminar archivos temporales
         unlink($pathEstudiante);
