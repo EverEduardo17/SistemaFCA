@@ -19,7 +19,10 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class ConstanciaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra la lista de constancias.
+     *
+     * @return \Illuminate\Contracts\View\View La vista de la lista de constancias.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
      */
     public function index()
     {
@@ -30,24 +33,28 @@ class ConstanciaController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Muestra el formulario para crear una nueva constancia.
+     *
+     * @return \Illuminate\Contracts\View\View La vista del formulario de creación de constancias.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
      */
     public function create()
     {
         Gate::authorize('havepermiso', 'documentos-crear');
 
-
         return view('constancias.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
+   /**
+     * Almacena una nueva constancia en el sistema.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\ConstanciaRequest $request El objeto Request que contiene los datos de la constancia a almacenar.
+     * @return \Illuminate\Http\RedirectResponse Una redirección a la página de índice de constancias.
      */
     public function store(ConstanciaRequest $request)
     {
+        Gate::authorize('havepermiso', 'documentos-crear');
+
         $input = $request->validated();
         $timestamp = Carbon::now()->toDateTimeString();
 
@@ -89,9 +96,10 @@ class ConstanciaController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Muestra los detalles de una constancia específica.
      *
-     * @param  \App\Models\Constancia  $constancia
+     * @param \App\Models\Constancia $constancia La instancia del modelo Constancia a mostrar.
+     * @return \Illuminate\Contracts\View\View La vista de detalles de constancias.
      */
     public function show(Constancia $constancia)
     {
@@ -106,9 +114,10 @@ class ConstanciaController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Muestra el formulario de edición para una constancia específica.
      *
-     * @param  \App\Models\Constancia  $constancia
+     * @param \App\Models\Constancia $constancia La instancia del modelo Constancia a editar.
+     * @return \Illuminate\Contracts\View\View La vista de edición de constancias.
      */
     public function edit(Constancia $constancia)
     {
@@ -118,14 +127,16 @@ class ConstanciaController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza los datos de una constancia.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Constancia  $constancia
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Constancia $constancia La instancia del modelo Constancia a actualizar.
+     * @return \Illuminate\Http\RedirectResponse La ruta Constancias.show una vez terminado el proceso.
      */
     public function update(Request $request, Constancia $constancia)
     {
+        Gate::authorize('havepermiso', 'documentos-editar');
+
         $timestamp = Carbon::now()->toDateTimeString();
         $vigenteHasta = null;
 
@@ -178,10 +189,10 @@ class ConstanciaController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Elimina al estudiante del sistema.
      *
-     * @param  \App\Models\Constancia  $constancia
-     * @return \Illuminate\Http\Response
+     * @param  \App\Models\Constancia  $constancia La instancia del modelo Constancia a eliminar.
+     * @return \Illuminate\Http\RedirectResponse La ruta Constancias.index una vez terminado el proceso.
      */
     public function destroy(Constancia $constancia)
     {
@@ -199,11 +210,12 @@ class ConstanciaController extends Controller
 
 
     /**
-     * Descarga una sola plantilla del estudiante dado.
+     * Descarga la plantilla asociada a una constancia.
+     * Se requiere el ID y el nombre de la constancia como parámetros.
      *
-     * @param  int $id
-     * @param  string  $nombreConstancia
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @param int $id El ID de la constancia.
+     * @param string $nombreConstancia El nombre de la constancia.
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse La respuesta de archivo binario que permite descargar la plantilla de la constancia.
      */
     public function downloadMiPlantilla($id, $nombreConstancia)
     {
@@ -216,6 +228,11 @@ class ConstanciaController extends Controller
         return response()->download($pathToFile, ($nombreConstancia . '.docx'), $headers);
     }
 
+    /**
+     * Descargar una constancia génerica, que sirve de ejemplo de como usar este modulo.
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function downloadConstanciaGenerica()
     {
         $pathToFile = public_path('constancias plantilla/Plantilla.docx');
@@ -225,10 +242,25 @@ class ConstanciaController extends Controller
         return response()->download($pathToFile, 'Plantilla.docx', $headers);
     }
 
+    /**
+     * Muestra la vista que contiene los datos de una constancia y del estudiante relacionado. 
+     * Esta es la vista a la que se redirige cuando se escanea el código QR de la constancia.
+     *
+     * @param \App\Models\Constancia $constancia La instancia del modelo de Constancia.
+     * @param \App\Models\Estudiante $estudiante La instancia del modelo de Estudiante.
+     * @return \Illuminate\Contracts\View\View La vista que muestra los datos de la constancia y el estudiante.
+     */
     public function showEstudiante(Constancia $constancia, Estudiante $estudiante) {
         return view('constancias.estudiantes.showEstudiante', compact('constancia', 'estudiante'));
     }
 
+    /**
+     * Muestra la lista de grupos al agregar un estudiante a una constancia.
+     *
+     * @param \App\Models\Constancia $constancia La instancia del modelo de Constancia.
+     * @return \Illuminate\Contracts\View\View La vista que muestra la lista de grupos.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene los permisos necesarios.
+     */
     public function indexGrupos(Constancia $constancia) {
         Gate::authorize('havepermiso', 'documentos-editar');
 
@@ -236,6 +268,14 @@ class ConstanciaController extends Controller
         return view('constancias.estudiantes.indexGrupos', compact('constancia', 'grupos'));
     }
     
+    /**
+     * Muestra la lista de estudiantes para un grupo específico dentro de una constancia.
+     *
+     * @param \App\Models\Constancia $constancia El objeto de la constancia relacionada.
+     * @param \App\Models\Grupo $grupo El objeto del grupo del cual se mostrará la lista de estudiantes.
+     * @return \Illuminate\Contracts\View\View La vista que muestra la lista de estudiantes.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene los permisos necesarios.
+     */
     public function indexEstudiantes(Constancia $constancia, Grupo $grupo) {
         Gate::authorize('havepermiso', 'documentos-editar');
 
@@ -244,6 +284,13 @@ class ConstanciaController extends Controller
         return view('constancias.estudiantes.indexEstudiantes', compact('constancia', 'grupo', 'cohorte', 'estudiantes'));
     }
 
+    /**
+    * Agrega o elimina un estudiante de una constancia.
+    * Si el estudiante ya está en la constancia, lo elimina. Este metodo es usado en indexEstudiantes.
+    *
+    * @param \Illuminate\Http\Request $request
+    * @return \Illuminate\Http\JsonResponse La respuesta JSON indica el resultado para poder hacer el cambio de manera reactiva con Javascript.
+    */
     public function addEstudianteConstancia(Request $request)
     {
         $idEstudiante = $request->input('idEstudiante');
@@ -260,6 +307,14 @@ class ConstanciaController extends Controller
         return response()->json(['success' => $success]);
     }
 
+    /**
+     * Elimina la vinculación entre un estudiante y una constancia.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int $idConstancia
+     * @param  int $idEstudiante
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
     public function destroyEstudianteConstancia(Request $request, $idConstancia, $idEstudiante)
     {
         if($request->ajax()){
@@ -274,6 +329,13 @@ class ConstanciaController extends Controller
         }
     }
 
+    /**
+     * Descarga la constancia generada para un estudiante en particular.
+     *
+     * @param  \App\Models\Constancia  $constancia
+     * @param  \App\Models\Estudiante  $estudiante
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function downloadConstancia(Constancia $constancia, Estudiante $estudiante) 
     {
         $pathConstancia = $this->generarConstacia($constancia, $estudiante);
@@ -281,6 +343,13 @@ class ConstanciaController extends Controller
         return response()->download($pathConstancia)->deleteFileAfterSend(true);
     }
 
+    /**
+     * Descarga todas las constancias generadas para un tipo de constancia específico.
+     *
+     * @param  \Illuminate\Http\Request  $request  La instancia del objeto Request.
+     * @param  \App\Models\Constancia  $constancia  La constancia para la cual se generarán los archivos.
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\RedirectResponse La respuesta de descarga del archivo ZIP o la redirección a la página anterior en caso de error.
+     */
     public function downloadAllConstancias(Request $request, Constancia $constancia) 
     {
         $estudiantes = $request->session()->get('estudiantes');
@@ -312,12 +381,21 @@ class ConstanciaController extends Controller
             // Descargar el archivo ZIP
             return response()->download($zipFileName)->deleteFileAfterSend(true);
         }
+        Session::flash('flash', [['type' => "danger", 'message' => "Error al generar el archivo ZIP."]]);
+        return redirect()->back();
     }
 
 
 
     // Metodos auxiliares
     
+    /**
+    * Generar la constancia con PHPWord de un estudiante específico.
+    *
+    * @param Constancia $constancia La constancia para la cual se generará el archivo.
+    * @param Estudiante $estudiante El estudiante para el cual se generará la constancia.
+    * @return string La ruta del archivo PDF generado.
+    */
     public function generarConstacia(Constancia $constancia, Estudiante $estudiante) {
         $filename = 'c_' . str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT);
         $pathPlantilla = storage_path('app/constancias/' . $filename . '.docx');

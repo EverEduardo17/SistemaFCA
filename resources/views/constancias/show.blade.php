@@ -2,6 +2,7 @@
 
 @section('head')
 <link rel="stylesheet" type="text/css" href="{{asset('lib/datatables/css/jquery.dataTables.min.css')}}" />
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 @endsection
 
 @section('content')
@@ -12,7 +13,7 @@
             <li class="breadcrumb-item active" aria-current="page">{{ $constancia->NombreConstancia }}</li>
             
             @can('havepermiso', 'documentos-editar')
-                <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica') }}"> Descargar Plantilla Generica </a></li>
+                <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica') }}"> Descargar Plantilla Génerica </a></li>
             @endcan
         </ol>
     </nav>
@@ -68,7 +69,6 @@
 </div> 
 
 <br> <br>
-
 @can('havepermiso', 'documentos-editar')
     <div class="card">
         <div class="card-header">
@@ -130,6 +130,8 @@
                 </div>
             </div>
     </div>
+
+    @include('layouts.messages')
     @include('constancias.modals.deleteEstudiante')
     @include('constancias.modals.loading')
     @include('constancias.modals.help')

@@ -43,7 +43,7 @@
                 </div>
 
                 <p>Una vez personalizada la plantilla, los datos de los estudiantes se generaran de manera automatica en sus respectivas constancias.</p>
-                <p>Puede facilitar este proceso utilizando la <a href="{{ route('constancias.downloadGenerica') }}">plantilla generica</a> ofrecida.</p>
+                <p>Puede facilitar este proceso utilizando la <a href="{{ route('constancias.downloadGenerica') }}">plantilla génerica</a> ofrecida.</p>
 
             </div>
 
