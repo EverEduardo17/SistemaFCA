@@ -86,7 +86,7 @@
             <div class="card-body">
                 <div class="table-responsive-xl">
                     <table class="table table-striped table-hover border-bottom" id="table-jquery">
-                        <caption>Estudiantes que participaron en el evento.</caption>
+                        <caption>Estudiantes que agregados a la constancia {{ $constancia->NombreConstancia }}.</caption>
                         <thead class="bg-table">
                             <tr class="text-white">
                                 <th scope="col" class="border">Matrícula</th>
