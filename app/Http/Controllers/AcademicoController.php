@@ -50,7 +50,7 @@ class AcademicoController extends Controller
                     'UpdatedBy'         => Auth::user()->IdUsuario
                 ]);
 
-                $idAcademico = DB::table('Academico')->insertGetId([
+                DB::table('Academico')->insert([
                     'idAcademico'           => $idUsuarioDB,
                     'NoPersonalAcademico'   => $input['NoPersonalAcademico'],
                     'RfcAcademico'          => $input['RfcAcademico'],
@@ -59,7 +59,7 @@ class AcademicoController extends Controller
                     'UpdatedBy'             => Auth::user()->IdUsuario
                 ]);
 
-                $idDatosPersonales = DB::table('DatosPersonales')->insertGetId([
+                DB::table('DatosPersonales')->insert([
                     'idDatosPersonales'                 => $idUsuarioDB,
                     'NombreDatosPersonales'             => $input['NombreDatosPersonales'],
                     'ApellidoPaternoDatosPersonales'    => $input['ApellidoPaternoDatosPersonales'],
@@ -68,6 +68,14 @@ class AcademicoController extends Controller
                     'CreatedBy'                         => Auth::user()->IdUsuario,
                     'UpdatedBy'                         => Auth::user()->IdUsuario
                 ]);
+
+                DB::table('Role_Usuario')->insert([
+                    'IdUsuario'     => $idUsuarioDB,
+                    'IdRole'        => 2,
+                    'CreatedBy'     => Auth::user()->IdUsuario,
+                    'UpdatedBy'     => Auth::user()->IdUsuario
+                ]);
+
             DB::commit();
 
         }catch (\Throwable $throwable){

@@ -34,7 +34,7 @@
                         <th scope="col" class="border">Nombre</th>
                         <th scope="col" class="border">Descripción</th>
                         <th scope="col" class="border">Autor</th>
-                        <th scope="col" class="border">Valido Hasta</th>
+                        <th scope="col" class="border">Vigente Hasta</th>
                         
                         @can('havepermiso', 'documentos-editar')
                             <th scope="col" class="border actions-col">Acciones</th>

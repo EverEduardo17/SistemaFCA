@@ -1,4 +1,3 @@
-// Eliminar Estudiante de manera reactiva
 $(document).on('click', '.btn-constancia', function (e) {
     e.preventDefault();
 

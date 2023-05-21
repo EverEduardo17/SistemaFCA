@@ -324,17 +324,25 @@ class ConstanciaController extends Controller
 
         $templateProcessor = new TemplateProcessor($pathPlantilla);
         
+        $sexo = $estudiante->trayectoria->datosPersonales->SexoDatosPersonales;
+
+        $pronombre = ($sexo === 'Mujer') ? 'la' : 'el';
+        $o_a = ($sexo === 'Mujer') ? 'a' : 'o';
 
         $templateProcessor->setValues([
-            'nombre_estudiante'    => $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales . ' ' . 
-                                      $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales . ' ' . 
-                                      $estudiante->Usuario->DatosPersonales->NombreDatosPersonales,
+            'nombre_estudiante'     => $estudiante->trayectoria->DatosPersonales->ApellidoPaternoDatosPersonales . ' ' . 
+                                       $estudiante->trayectoria->DatosPersonales->ApellidoMaternoDatosPersonales . ' ' . 
+                                       $estudiante->trayectoria->DatosPersonales->NombreDatosPersonales,
 
-            'matricula'            => $estudiante->MatriculaEstudiante,
+            'matricula'             => $estudiante->MatriculaEstudiante,
 
-            'programa_educativo'   => $estudiante->Trayectoria->ProgramaEducativo->NombreProgramaEducativo,
+            'programa_educativo'    => $estudiante->Trayectoria->ProgramaEducativo->NombreProgramaEducativo,
 
-            'nombre_constancia'    => $constancia->NombreConstancia,
+            'nombre_constancia'     => $constancia->NombreConstancia,
+
+            'el/la'                 => $pronombre,
+
+            'o/a'                   => $o_a,
 
         ]);
 

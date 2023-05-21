@@ -12,18 +12,19 @@
             <li class="breadcrumb-item active" aria-current="page">{{ $constancia->NombreConstancia }}</li>
             
             @can('havepermiso', 'documentos-editar')
-                <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica', $constancia->IdConstancia) }}"> Descargar Plantilla Generica </a></li>
+                <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica') }}"> Descargar Plantilla Generica </a></li>
             @endcan
         </ol>
     </nav>
 
 <div class="card shadow-sm">
     <div class="card-header">
-        <div class="row">
-            <h5 class="card-title col-8">Detalles de la Constancia</h5>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Detalles de la Constancia</h5>
 
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('constancias.index') }}" role="button">Regresar</a>
             @can('havepermiso', 'documentos-leer')
-                <a class="btn btn-primary col-4" href="{{ route('constancias.index') }}" role="button">Ver Constancias</a>
+                <a class="btn btn-info col-3" href="#" data-toggle="modal" data-target="#help" role="button">Ayuda</a>
             @endcan
         </div>
     </div>
@@ -131,6 +132,7 @@
     </div>
     @include('constancias.modals.deleteEstudiante')
     @include('constancias.modals.loading')
+    @include('constancias.modals.help')
 @endcan
 
 @endsection
@@ -140,21 +142,18 @@
     <script src="{{ asset('js/table-script.js') }}"></script>
     <script src="{{ asset('js/constancias-scripts/delete-estudiante.js') }}"></script>
     <script src="{{ asset('js/constancias-scripts/download-all.js') }}"></script>
+    
     <script>
-        // Abrir modal y mandar que Estudiante borrar
+        // Actualizar el modal, a que estudiante borrar
         $(document).on('click', '.btn-estudiante', function (e) {
             var idEstudiante = $(this).data('estudiante');
-            console.log(idEstudiante);
-
             var btnConstancia = $(".btn-constancia");
-            console.log(btnConstancia);
 
             btnConstancia.data('estudiante', idEstudiante);
 
             var url = "{{ route('constancias.destroyEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => "/"]) }}"
 
             url += '/' + idEstudiante;
-            console.log(url);
             
             btnConstancia.data('url', url);
         });

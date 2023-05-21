@@ -71,7 +71,7 @@ Route::delete('/fechaEvento/delete', 'FechaEventoController@destroy')->name('fec
 
 //<---- Constancias ---->
 Route::get('constancias/{IdConstancia}/download/{NombreConstancia}', 'ConstanciaController@downloadMiPlantilla')->name('constancias.downloadMiPlantilla');
-Route::get('constancias/{IdConstancia}/downloadConstanciaGenerica', 'ConstanciaController@downloadConstanciaGenerica')->name('constancias.downloadGenerica');
+Route::get('constancias/0/downloadConstanciaGenerica', 'ConstanciaController@downloadConstanciaGenerica')->name('constancias.downloadGenerica');
 Route::get('constancias/{constancia}/download/', 'ConstanciaController@downloadAllConstancias')->name('constancias.downloadAll');
 Route::get('constancias/{constancia}/grupos', 'ConstanciaController@indexGrupos')->name('constancias.indexGrupos');
 Route::get('constancias/{constancia}/grupos/{grupo}', 'ConstanciaController@indexEstudiantes')->name('constancias.indexEstudiantes');

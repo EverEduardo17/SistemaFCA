@@ -12,7 +12,7 @@
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Constancias</a></li>
         <li class="breadcrumb-item active" aria-current="page">Agregar Constancia</li>
-        <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica', 0) }}"> Descargar Plantilla Generica </a></li>
+        <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica') }}"> Descargar Plantilla Generica </a></li>
     </ol>
 </nav>
 <div class="card shadow-sm">

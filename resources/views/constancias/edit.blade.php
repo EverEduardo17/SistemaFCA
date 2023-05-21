@@ -14,7 +14,7 @@
         <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Constancias</a></li>
         <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">{{ $constancia->NombreConstancia }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">Editar Constancia</li>
-        <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica', $constancia->IdConstancia) }}"> Descargar Plantilla Generica </a></li>
+        <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica') }}"> Descargar Plantilla Generica </a></li>
     </ol>
 </nav>
 <div class="card shadow-sm">
