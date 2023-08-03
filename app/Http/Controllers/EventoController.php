@@ -34,7 +34,7 @@ class EventoController extends Controller
 
     public function index()
     {
-        // Gate::authorize('havepermiso', 'eventos-listar');
+        Gate::authorize('havepermiso', 'eventos-listar');
         $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
             ->get()
@@ -86,8 +86,10 @@ class EventoController extends Controller
             Session::flash('flash', [['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."]]);
 
             return redirect()->route('eventos.create')
-                ->withInput();
+                             ->withInput();
         }
+
+        // dd(Auth::user()->Academico->IdAcademico);
 
         //TODO: Validar que las fechas no chocan con otro evento
         $comprobarFecha = $this->comprobarFecha($fechaInicio, $fechaFin, intval($input['sede']));
@@ -97,37 +99,38 @@ class EventoController extends Controller
                 $idEvento = DB::table('Evento')->insertGetId([
                     'NombreEvento'      => $input['nombre'],
                     'DescripcionEvento' => $input['descripcion'],
-                    'EstadoEvento'       => 'POR APROBAR',
-                    'CreatedBy'         => $this->idUsuario,
-                    'UpdatedBy'         => $this->idUsuario,
+                    'EstadoEvento'      => 'POR APROBAR',
+                    'CreatedBy'         => Auth::user()->IdUsuario,
+                    'UpdatedBy'         => Auth::user()->IdUsuario
                 ]);
 
                 DB::table('Organizador')->insert([
                     'IdEvento'           => $idEvento,
-                    'IdAcademico'        => $this->user->academico->IdAcademico,
+                    'IdAcademico'        => Auth::user()->Academico->IdAcademico,
                     'IdTipoOrganizador'  => 1,
-                    'CreatedBy'          => $this->idUsuario,
-                    'UpdatedBy'          => $this->idUsuario,
+                    'CreatedBy'          => Auth::user()->IdUsuario,
+                    'UpdatedBy'          => Auth::user()->IdUsuario
                 ]);
 
                 $idFechaEvento = DB::table('FechaEvento')->insertGetId([
                     'InicioFechaEvento' => $fechaInicio,
                     'FinFechaEvento'    => $fechaFin,
-                    'CreatedBy'         => $this->idUsuario,
-                    'UpdatedBy'         => $this->idUsuario,
+                    'CreatedBy'         => Auth::user()->IdUsuario,
+                    'UpdatedBy'         => Auth::user()->IdUsuario
                 ]);
 
                 DB::table('Evento_Fecha_Sede')->insert([
                     'IdEvento'      => $idEvento,
                     'IdFechaEvento' => $idFechaEvento,
                     'IdSedeEvento'  => intval($input['sede']),
-                    'CreatedBy'     => $this->idUsuario,
-                    'UpdatedBy'     => $this->idUsuario,
+                    'CreatedBy'     => Auth::user()->IdUsuario,
+                    'UpdatedBy'     => Auth::user()->IdUsuario
                 ]);
                 DB::commit();
             } catch (\Throwable $e) {
                 DB::rollBack();
-                Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar el evento."]]);
+                // Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar el evento."]]);
+                Session::flash('flash', [['type' => "danger", 'message' => $e->getMessage()]]);
                 return redirect()->route('eventos.index');
             }
 
