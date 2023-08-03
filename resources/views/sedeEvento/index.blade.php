@@ -14,7 +14,7 @@
 
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
             
-            @can('havepermiso', 'sedes-crear')
+            @can('havepermiso', 'sedes-listar')
                 <a class="btn btn-success col-4" href="{{ route('sedeEventos.create') }}" role="button">Agregar Sede</a>
             @endcan
         </div>

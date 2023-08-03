@@ -14,7 +14,7 @@
 
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
 
-            @can('havepermiso', 'academicos-crear')
+            @can('havepermiso', 'academicos-listar')
                 <a class="btn btn-success col-4" href="{{ route('academicos.create') }}" role="button">Agregar Académico</a>
             @endcan
 
@@ -44,14 +44,14 @@
                         @can('havepermiso', 'academico-ver-propio')
                             <a class="btn btn-outline-primary btn-sm mr-1" href="{{ route('academicos.show', $academico) }}">Detalles</a>
                         @endcan
-                        @can('havepermiso', 'academicos-editar')
+                        @can('havepermiso', 'academico-ver-propio')
                             <a class="btn btn-primary btn-sm mr-1" href="{{ route('academicos.edit', $academico) }}">Editar</a>
                         @endcan
-                        @can('havepermiso', 'academicos-eliminar')
+                        {{-- @can('havepermiso', 'academicos-eliminar') --}}
                                 <a class="btn btn-danger btn-sm" href="#"
                                    data-toggle="modal" data-target="#deleteAcademico"
                                    data-academico="{{ $academico->IdAcademico }}">Eliminar</a>
-                        @endcan
+                        {{-- @endcan --}}
                     </td>
                 </tr>
                 @endforeach
@@ -59,6 +59,7 @@
         </table>
     </div>
 </div>
+
 <div class="modal fade" id="deleteAcademico" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -80,7 +81,9 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-danger" form="form-eliminar-academico">Eliminar</button>
+                @can('havepermiso', 'academicos-eliminar')
+                    <button type="submit" class="btn btn-danger" form="form-eliminar-academico">Eliminar</button>
+                @endcan
             </div>
         </div>
     </div>

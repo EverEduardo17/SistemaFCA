@@ -88,7 +88,9 @@
       </div>
 
       <br>
-      <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+      @can('havepermiso', 'estudiante-editar-propio')
+        <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+      @endcan
       
     </form>
     <a href="javascript:history.back()" class="btn btn-secondary btn-block mt-2">Cancelar</a>

@@ -19,7 +19,7 @@ class SedeEventoController extends Controller {
     }
 
     public function create() {
-        Gate::authorize('havepermiso', 'sedes-crear');
+        Gate::authorize('havepermiso', 'sedes-listar');
 
         return view('sedeEvento.create', [
             'sedes' => new SedeEvento()
@@ -45,7 +45,7 @@ class SedeEventoController extends Controller {
     }
 
     public function edit(SedeEvento $sedeEvento) {
-        Gate::authorize('havepermiso', 'sedes-editar');
+        Gate::authorize('havepermiso', 'sedes-listar');
 
         return view('sedeEvento.edit', [
             'sede' => $sedeEvento

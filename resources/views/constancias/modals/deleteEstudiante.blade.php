@@ -18,6 +18,7 @@
 
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
 
+                @can('havepermiso', 'documentos-eliminar')
                 <a  href="#" class="btn btn-constancia btn-danger" 
                     data-dismiss="modal"
                     data-url="" 
@@ -25,7 +26,7 @@
                     Quitar
                 
                 </a>
-                
+                @endcan
             </div>
         </div>
     </div>

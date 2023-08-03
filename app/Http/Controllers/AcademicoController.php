@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Academico;
 use App\Models\DatosPersonales;
+use App\Models\Role;
 use App\Models\Usuario;
 use App\Http\Requests\AcademicoRequest;
 use Illuminate\Http\Request;
@@ -27,9 +28,11 @@ class AcademicoController extends Controller
     }
 
     public function create() {
-        Gate::authorize('havepermiso', 'academicos-crear');
+        Gate::authorize('havepermiso', 'academico-ver-propio');
 
-        return view('academicos.create');
+        $roles = Role::all();
+
+        return view('academicos.create')->with('roles', $roles);
     }
 
     public function store(AcademicoRequest $request) 
@@ -71,7 +74,7 @@ class AcademicoController extends Controller
 
                 DB::table('Role_Usuario')->insert([
                     'IdUsuario'     => $idUsuarioDB,
-                    'IdRole'        => 2,
+                    'IdRole'        => $input['IdRole'],
                     'CreatedBy'     => Auth::user()->IdUsuario,
                     'UpdatedBy'     => Auth::user()->IdUsuario
                 ]);
@@ -91,23 +94,26 @@ class AcademicoController extends Controller
 
     public function show($idAcademico) 
     {
-        Gate::authorize('havepermiso', 'academicos-listar');
+        Gate::authorize('havepermiso', 'academico-ver-propio');
 
         $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
 
         return view('academicos.show', [
-            "academico" => $academico
+            "academico" => $academico,
         ]);
     }
 
     public function edit($idAcademico) 
     {
-        Gate::authorize('havepermiso', 'academicos-editar');
+        Gate::authorize('havepermiso', 'academico-ver-propio');
+
+        $roles = Role::all();
 
         $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
 
         return view('academicos.edit', [
-            "academico" => $academico
+            "academico" => $academico,
+            "roles" => $roles
         ]);
     }
 
@@ -126,6 +132,7 @@ class AcademicoController extends Controller
         $academico->update($request->all());
         $academico->usuario->update($request->except('password'));
         $academico->usuario->datosPersonales->update($request->all());
+        $academico->usuario->roles()->sync($request->IdRole);
     
 
         Session::flash('flash', [['type' => "success", 'message' => "Académico actualizado con éxito."]]);

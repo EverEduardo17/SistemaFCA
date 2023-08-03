@@ -60,6 +60,18 @@
             </div>
 
             <div class="form-group">
+                <label for="IdRole">Rol:</label>
+                <select name="IdRole" id="IdRole" class="form-control @error('IdRole') is-invalid @enderror">
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->IdRole  }}" @if($academico->usuario->roles[0]->IdRole === $role->IdRole) selected @endif>
+                            {{ $role->ClaveRole }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+
+            <div class="form-group">
                 <label name="email">Correo electrónico:</label>
                 <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $academico->usuario->email) }}" placeholder="Ej. correo@correo.com">
             </div>
@@ -70,8 +82,9 @@
                 <input id="password-input" name="password" type="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" minlength="8" placeholder="Ej. Contraseña123" disabled>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
-            
+            @can('havepermiso', 'academicos-editar')
+                <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
+            @endcan
             @can('havepermiso', 'academicos-listar')
                 <a href="{{ route('academicos.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
             @endcan

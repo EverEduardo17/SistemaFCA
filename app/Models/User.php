@@ -52,4 +52,9 @@ class User extends Authenticatable
     public function datosPersonales(){
         return $this->belongsTo(DatosPersonales::class, 'IdUsuario', 'IdUsuario');
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'Role_Usuario', 'IdUsuario', 'IdRole');
+    }
 }

@@ -30,7 +30,7 @@ class EstudianteController extends Controller
 
     public function create() 
     {
-        Gate::authorize('havepermiso', 'estudiante-crear');
+        Gate::authorize('havepermiso', 'estudiante-ver-propio');
 
         $cohortes = Cohorte::orderBy('NombreCohorte', 'desc')->get();
         $grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
@@ -50,7 +50,7 @@ class EstudianteController extends Controller
 
     public function edit(Estudiante $estudiante) 
     {
-        Gate::authorize('havepermiso', 'estudiante-editar-propio');
+        Gate::authorize('havepermiso', 'estudiante-ver-propio');
 
         $cohortes = Cohorte::orderBy('NombreCohorte', 'desc')->get();
         $programasEducativos = ProgramaEducativo::orderBy('NombreProgramaEducativo', 'asc')->get();
@@ -62,6 +62,8 @@ class EstudianteController extends Controller
 
     public function store(EstudianteRequest $request)
     {
+        Gate::authorize('havepermiso', 'estudiante-crear');
+
         $existe = DatosPersonales::where([
             ['NombreDatosPersonales', '=', $request->NombreDatosPersonales],
             ['ApellidoPaternoDatosPersonales', '=', $request->ApellidoPaternoDatosPersonales],
@@ -152,6 +154,8 @@ class EstudianteController extends Controller
 
     public function update(EstudianteRequest $request, Estudiante $estudiante)
     {
+        Gate::authorize('havepermiso', 'estudiante-editar-propio');
+
         $request->validated();
 
         $estudiante->update([

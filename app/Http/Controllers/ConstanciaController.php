@@ -40,7 +40,7 @@ class ConstanciaController extends Controller
      */
     public function create()
     {
-        Gate::authorize('havepermiso', 'documentos-crear');
+        Gate::authorize('havepermiso', 'documentos-leer');
 
         return view('constancias.create');
     }
@@ -121,7 +121,7 @@ class ConstanciaController extends Controller
      */
     public function edit(Constancia $constancia)
     {
-        Gate::authorize('havepermiso', 'documentos-editar');
+        Gate::authorize('havepermiso', 'documentos-leer');
 
         return view('constancias.edit', compact('constancia'));
     }
@@ -262,7 +262,7 @@ class ConstanciaController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene los permisos necesarios.
      */
     public function indexGrupos(Constancia $constancia) {
-        Gate::authorize('havepermiso', 'documentos-editar');
+        Gate::authorize('havepermiso', 'documentos-leer');
 
         $grupos = Grupo::all();
         return view('constancias.estudiantes.indexGrupos', compact('constancia', 'grupos'));
@@ -293,6 +293,8 @@ class ConstanciaController extends Controller
     */
     public function addEstudianteConstancia(Request $request)
     {
+        Gate::authorize('havepermiso', 'documentos-editar');
+
         $idEstudiante = $request->input('idEstudiante');
         $idConstancia = $request->input('idConstancia');
         $estudiante = Estudiante::findOrFail($idEstudiante);
@@ -317,6 +319,8 @@ class ConstanciaController extends Controller
      */
     public function destroyEstudianteConstancia(Request $request, $idConstancia, $idEstudiante)
     {
+        Gate::authorize('havepermiso', 'documentos-eliminar');
+
         if($request->ajax()){
             $estudiante = Estudiante::findOrFail($idEstudiante);
             $constancia = Constancia::findOrFail($idConstancia);

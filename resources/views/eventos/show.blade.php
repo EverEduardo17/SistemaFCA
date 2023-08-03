@@ -14,9 +14,9 @@
                 <h4 class="mr-auto p-3">{{$evento->NombreEvento ?? ""}}</h4>
 
                 <div>
-                    @can('havepermiso', 'eventos-editar')
+                    {{-- @can('havepermiso', 'eventos-editar') --}}
                         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#editEvento">Editar</a>
-                    @endcan
+                    {{-- @endcan --}}
                     @if($evento->EstadoEvento == "APROBADO")
                         @can('havepermiso', 'eventoestado-aprobar')
                             <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#cancelarEvento">Cancelar Evento</a>

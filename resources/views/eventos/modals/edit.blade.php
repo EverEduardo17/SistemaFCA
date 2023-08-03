@@ -25,7 +25,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary" form="form-editar-evento">Actualizar</button>
+                @can('havepermiso', 'eventos-editar')
+                    <button type="submit" class="btn btn-primary" form="form-editar-evento">Actualizar</button>
+                @endcan
             </div>
         </div>
     </div>

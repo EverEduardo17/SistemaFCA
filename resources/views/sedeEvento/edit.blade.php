@@ -29,7 +29,10 @@
                 <label name="DescripcionSedeEvento">Clave de la Facultad:</label>
                 <input name="DescripcionSedeEvento" class="form-control @error('DescripcionSedeEvento') is-invalid @enderror" value="{{ old('DescripcionSedeEvento', $sede->DescripcionSedeEvento) }}" placeholder="Ej. Centro de cómputo de LIS">
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+
+            @can('havepermiso', 'sedes-editar')
+                <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+            @endcan
             @can('havepermiso', 'sedes-listar')
                 <a href="{{ route('sedeEventos.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
             @endcan

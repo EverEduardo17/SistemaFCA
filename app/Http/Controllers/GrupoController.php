@@ -35,7 +35,7 @@ class GrupoController extends Controller
 
     public function create()
     {
-        \Gate::authorize('havepermiso', 'estudiante-crear');
+        \Gate::authorize('havepermiso', 'estudiante-ver-todos-propio');
 
         $idFCA = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
         return view('grupos.create', [
@@ -55,6 +55,8 @@ class GrupoController extends Controller
 
     public function store(GrupoRequest $request)
     {
+        \Gate::authorize('havepermiso', 'estudiante-crear');
+
         //<--- Comprueba si existe algún grupo registrado en el cohorte y PE ingresado con el mismo nombre --->
         $existe      = DB::table('Grupo')->where([
             ['NombreGrupo',         '=', $request->NombreGrupo],
@@ -107,7 +109,7 @@ class GrupoController extends Controller
 
     public function edit(Grupo $grupo)
     {
-        \Gate::authorize('havepermiso', 'estudiante-editar-propio');
+        \Gate::authorize('havepermiso', 'estudiante-ver-propio');
 
         $idFCA = Facultad::where('NombreFacultad', 'Facultad de Contaduría y Administración')->value('IdFacultad');
         return view('grupos.edit', [
@@ -127,6 +129,8 @@ class GrupoController extends Controller
 
     public function update(GrupoRequest $request, Grupo $grupo) 
     {
+        \Gate::authorize('havepermiso', 'estudiante-editar-propio');
+
         $request->validated();
 
         $grupo->update($request->all());
@@ -136,6 +140,8 @@ class GrupoController extends Controller
 
     public function destroy(Grupo $grupo)
     {
+        \Gate::authorize('havepermiso', 'estudiante-eliminar-propio');
+
         $ocupado = $this->contarEstudiantes($grupo->IdGrupo);
         if ($ocupado > 0) {
             Session::flash('flash', [['type' => "danger", 'message' => "El grupo '" . $grupo->NombreGrupo . "' ya está ocupado, no puede ser eliminado."]]);

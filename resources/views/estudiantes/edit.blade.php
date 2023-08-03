@@ -149,12 +149,13 @@
                         </div>
                         
                         <hr class="my-4">
-
+  
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary btn-block">
-                                Actualizar Información
-                            </button>
-                            
+                            @can('havepermiso', 'estudiante-editar-propio')
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    Actualizar Información
+                                </button>
+                            @endcan
                             <a href="javascript:history.back()" class="btn btn-secondary btn-block ">
                                 Cancelar
                             </a>

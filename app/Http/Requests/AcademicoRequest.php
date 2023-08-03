@@ -35,13 +35,13 @@ class AcademicoRequest extends FormRequest
         $password = $idAcademico ? 'nullable|min:8|max:255' : 'required|min:8|max:255';
 
 
-
         return [
             'NombreDatosPersonales'             => 'required | max:255',
             'ApellidoPaternoDatosPersonales'    => 'required | max:255',
             'ApellidoMaternoDatosPersonales'    => 'required | max:255',
             'NoPersonalAcademico'               => $noPersonalAcademico,
             'RfcAcademico'                      => $rfcAcademico,
+            'IdRole'                            => 'required',
             'name'                              => $name,
             'email'                             => $email,
             'password'                          => $password, //confirmed

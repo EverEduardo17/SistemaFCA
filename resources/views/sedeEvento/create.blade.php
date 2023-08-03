@@ -29,7 +29,9 @@
                     <label name="DescripcionSedeEvento">Descripción de la sede:</label>
                     <input name="DescripcionSedeEvento" class="form-control @error('DescripcionSedeEvento') is-invalid @enderror" value="{{ old('DescripcionSedeEvento') }}" placeholder="Ej. Centro de cómputo de LIS">
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                @can('havepermiso', 'sedes-crear')
+                    <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                @endcan
                 @can('havepermiso', 'sedes-listar')
                     <a href="{{ route('sedeEventos.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
                 @endcan

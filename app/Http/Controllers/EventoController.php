@@ -66,7 +66,7 @@ class EventoController extends Controller
 
     public function create()
     {
-        Gate::authorize('havepermiso', 'eventos-crear');
+        Gate::authorize('havepermiso', 'eventos-listar');
 
         return view('eventos.create', [
             "sedes" => SedeEvento::all()
@@ -129,8 +129,8 @@ class EventoController extends Controller
                 DB::commit();
             } catch (\Throwable $e) {
                 DB::rollBack();
-                // Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar el evento."]]);
-                Session::flash('flash', [['type' => "danger", 'message' => $e->getMessage()]]);
+                Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar el evento."]]);
+                // Session::flash('flash', [['type' => "danger", 'message' => $e->getMessage()]]);
                 return redirect()->route('eventos.index');
             }
 

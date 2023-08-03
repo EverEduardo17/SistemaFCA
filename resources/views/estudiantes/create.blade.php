@@ -141,7 +141,9 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block">Agregar Estudiante</button>
+            @can('havepermiso', 'estudiante-crear')
+                <button type="submit" class="btn btn-primary btn-block">Agregar Estudiante</button>
+            @endcan
             <a href="javascript:history.back()" class="btn btn-secondary btn-block ">Cancelar</a>
 
         </form>

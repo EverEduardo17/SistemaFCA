@@ -54,16 +54,10 @@
                 <label name="email">Correo electrónico:</label>
                 <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $academico->usuario->email) }}" disabled>
             </div>
-            <a href="{{ route('academicos.edit', $academico) }}" class="btn btn-primary btn-block">Editar Académico</a>
+            @can('havepermiso', 'academicos-editar')    
+                <a href="{{ route('academicos.edit', $academico) }}" class="btn btn-primary btn-block">Editar Académico</a>            
+            @endcan
         </form>
     </div>
 </div>
-@endsection
-
-@section('head')
-
-@endsection
-
-@section('script')
-
 @endsection

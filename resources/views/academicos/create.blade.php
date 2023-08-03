@@ -21,6 +21,7 @@
         <form method="POST" action="{{ route('academicos.store') }}" autocomplete="off">
             @csrf
             @include('layouts.validaciones')
+
             <div class="form-group">
                 <label name="NombreDatosPersonales">Nombre del Académico:</label>
                 <input name="NombreDatosPersonales" value="{{ old('NombreDatosPersonales') }}" type="text" class="form-control @error('NombreDatosPersonales') is-invalid @enderror" placeholder="Ej. Javier">
@@ -38,11 +39,24 @@
                 <label name="NoPersonalAcademico">Número de Personal:</label>
                 <input name="NoPersonalAcademico" value="{{ old('NoPersonalAcademico') }}" type="text" class="form-control @error('NoPersonalAcademico') is-invalid @enderror" maxlength="10" placeholder="Ej. 0000000000">
             </div>
+
             <div class="form-group">
                 <label name="RfcAcademico">RFC:</label>
                 <input name="RfcAcademico" value="{{ old('RfcAcademico') }}" class="form-control @error('RfcAcademico') is-invalid @enderror" maxlength="13" placeholder="Ej. 0000000000000">
             </div>
             <hr>
+
+            <div class="form-group">
+                <label for="IdRole">Rol:</label>
+                <select name="IdRole" id="IdRole" class="form-control @error('IdRole') is-invalid @enderror">
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->IdRole }}" @if($role->IdRole === 2) selected @endif>
+                            {{ $role->ClaveRole }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="form-group">
                 <label name="name">Nombre de Usuario:</label>
                 <input name="name" type="text" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" placeholder="Ej. Javier Pino">
@@ -55,7 +69,9 @@
                 <label name="password">Contraseña:</label>
                 <input id="password-input" name="password" type="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" minlength="8" placeholder="Ej. Contraseña123">
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+            @can('havepermiso', 'academicos-crear')
+                <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+            @endcan
             @can('havepermiso', 'academicos-listar')
                 <a href="{{ route('academicos.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
             @endcan
