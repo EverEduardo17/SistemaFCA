@@ -36,9 +36,9 @@
                         <th scope="col" class="border">Autor</th>
                         <th scope="col" class="border">Vigente Hasta</th>
                         
-                        @can('havepermiso', 'documentos-editar')
+                        {{-- @can('havepermiso', 'documentos-editar') --}}
                             <th scope="col" class="border actions-col">Acciones</th>
-                        @endcan
+                        {{-- @endcan --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -60,7 +60,7 @@
 
                         <td class="border-right">{{ printDate(($constancia->VigenteHasta)) }}</td>
 
-                        @can('havepermiso', 'documentos-crear')
+                        {{-- @can('havepermiso', 'documentos-crear') --}}
                             <td class="btn-group py-2 border-right">
                                 <a class="btn btn-sm btn-outline-success mx-1" href="{{ route('constancias.show', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
                                     <em class="fas fa-list"></em>
@@ -72,7 +72,7 @@
                                     <em class="fas fa-trash-alt"></em>
                                 </a>
                             </td>
-                        @endcan
+                        {{-- @endcan --}}
                     </tr>
                     @endforeach
                 </tbody>

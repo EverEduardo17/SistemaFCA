@@ -64,12 +64,13 @@
             </div>
 
             <hr>
-            <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
-            
+            @can('havepermiso', 'documentos-editar')
+                <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
+            @endcan
         </form>
-        {{-- @can('havepermiso', 'academicos-listar') --}}
+        @can('havepermiso', 'documentos-leer')
         <a href="javascript:history.back()" class="btn btn-secondary btn-block mt-2">Cancelar</a>
-        {{-- @endcan --}}
+        @endcan
     </div>
 </div>
 @endsection
