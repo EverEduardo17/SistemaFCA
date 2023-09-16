@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 @if($evento->EstadoEvento === 'APROBADO')
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert alert-warning" role="alert">
                         Este evento tendrá que ser aprobado de nuevo.
                     </div>
                 @endif

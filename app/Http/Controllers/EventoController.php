@@ -46,6 +46,13 @@ class EventoController extends Controller
          * se decide que hacer con ella. Full Calendar debe recibir un array de los eventos en json
          * con los siguientes atributos.
          */
+
+         $color = [
+            "APROBADO" => "green",
+            "NO APROBADO" => "red",
+            "POR APROBAR" => "yellow"
+        ];
+
         $calendar_events = [];
         foreach ($evento_fecha_sede_s as $efs) {
             $calendar_events[] = [
@@ -54,7 +61,7 @@ class EventoController extends Controller
                 "start" => $efs->fechaEvento->InicioFechaEvento,
                 "end" => $efs->fechaEvento->FinFechaEvento,
                 "url" => route('eventos.show', [$efs->evento->IdEvento]),
-                "backgroundColor" => ($efs->evento->EstadoEvento !== "APROBADO") ? "red" : null
+                "backgroundColor" => $color[$efs->evento->EstadoEvento],
             ];
         }
 
@@ -81,6 +88,12 @@ class EventoController extends Controller
          * Si se mantiene esta funcionalidad, habra que valorar pasar la fecha como una
          * variable para que el calendario se abra en la fecha elegida al iniciar.
          */
+        $color = [
+            "APROBADO" => "green",
+            "NO APROBADO" => "red",
+            "POR APROBAR" => "yellow"
+        ];
+
         $calendar_events = [];
         foreach ($evento_fecha_sede_s as $efs) {
             $calendar_events[] = [
@@ -89,7 +102,7 @@ class EventoController extends Controller
                 "start" => $efs->fechaEvento->InicioFechaEvento,
                 "end" => $efs->fechaEvento->FinFechaEvento,
                 "url" => route('eventos.show', [$efs->evento->IdEvento]),
-                "backgroundColor" => ($efs->evento->EstadoEvento !== "APROBADO") ? "red" : null
+                "backgroundColor" => $color[$efs->evento->EstadoEvento],
             ];
         }
 
@@ -265,4 +278,5 @@ class EventoController extends Controller
             return false;
         }
     }
+
 }

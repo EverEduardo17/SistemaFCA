@@ -53,6 +53,8 @@
     </div>
     <div id="calendar"></div>
 </div>
+{{-- {{ dd($calendar_events) }} --}}
+
 @endsection
 
 @section('head')
