@@ -41,8 +41,26 @@ class EventoController extends Controller
             // ->where('fechaEvento.InicioFechaEvento','>=', (new \DateTime())->format("Y-m-d") )
             ->sortBy('fechaEvento.InicioFechaEvento');
 
+        /**
+         * Es una variable distinta, para no afectar el funcionamiento de la vista original mientras
+         * se decide que hacer con ella. Full Calendar debe recibir un array de los eventos en json
+         * con los siguientes atributos.
+         */
+        $calendar_events = [];
+        foreach ($evento_fecha_sede_s as $efs) {
+            $calendar_events[] = [
+                "id" => $efs->evento->IdEvento,
+                "title" => $efs->evento->NombreEvento . " - " . $efs->sedeEvento->NombreSedeEvento,
+                "start" => $efs->fechaEvento->InicioFechaEvento,
+                "end" => $efs->fechaEvento->FinFechaEvento,
+                "url" => route('eventos.show', [$efs->evento->IdEvento]),
+                "backgroundColor" => ($efs->evento->EstadoEvento !== "APROBADO") ? "red" : null
+            ];
+        }
+
         return view('eventos.index', [
-            "evento_fecha_sede_s" => $evento_fecha_sede_s
+            "evento_fecha_sede_s" => $evento_fecha_sede_s,
+            "calendar_events" => $calendar_events
         ]);
     }
 
@@ -59,8 +77,25 @@ class EventoController extends Controller
             ->where('fechaEvento.InicioFechaEvento', '<', $to)
             ->sortBy('fechaEvento.InicioFechaEvento',  false);
 
+        /**
+         * Si se mantiene esta funcionalidad, habra que valorar pasar la fecha como una
+         * variable para que el calendario se abra en la fecha elegida al iniciar.
+         */
+        $calendar_events = [];
+        foreach ($evento_fecha_sede_s as $efs) {
+            $calendar_events[] = [
+                "id" => $efs->evento->IdEvento,
+                "title" => $efs->evento->NombreEvento . " - " . $efs->sedeEvento->NombreSedeEvento,
+                "start" => $efs->fechaEvento->InicioFechaEvento,
+                "end" => $efs->fechaEvento->FinFechaEvento,
+                "url" => route('eventos.show', [$efs->evento->IdEvento]),
+                "backgroundColor" => ($efs->evento->EstadoEvento !== "APROBADO") ? "red" : null
+            ];
+        }
+
         return view('eventos.index', [
-            "evento_fecha_sede_s" => $evento_fecha_sede_s
+            "evento_fecha_sede_s" => $evento_fecha_sede_s,
+            "calendar_events" => $calendar_events
         ]);
     }
 
