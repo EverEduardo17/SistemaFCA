@@ -23,7 +23,22 @@
             @endcan
         </div>
         <div class="col-lg-9 col-md-8">
-            <table id="table-jquery" class="display border-bottom">
+        <!--<button class="btn btn-secondary mb-2" id="filterButton">Filtrar eventos</button>-->
+        
+        <form action="{{ route('eventos.index') }}" method="GET">
+            <div class="form-group">
+                <label for="lista-filtrar">Filtrar por estado:</label>
+                <select name="estado" id="lista-filtrar" class="form-control">
+                    <option value="">Todos</option>
+                    <option value="APROBADO">Aprobado</option>
+                    <option value="NO APROBADO">No aprobado</option>
+                    <option value="POR APROBAR">Pendiente</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="display: inline-block; margin-left: 670px; margin-bottom: 10px;">Filtrar</button>
+        </form> 
+
+            <table id="table-jquery" class="display border-bottom" style="">
                 <thead>
                     <tr>
                         <th>Fecha</th>

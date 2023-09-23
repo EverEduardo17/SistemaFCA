@@ -32,14 +32,24 @@ class EventoController extends Controller
         $this->idUsuario = Auth::id();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        Gate::authorize('havepermiso', 'eventos-listar');
-        $evento_fecha_sede_s = Evento_Fecha_Sede
+        $estado = $request->input('estado');
+        //Gate::authorize('havepermiso', 'eventos-listar');
+        if($estado != null){
+            $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
             ->get()
-            // ->where('fechaEvento.InicioFechaEvento','>=', (new \DateTime())->format("Y-m-d") )
+            ->where('evento.EstadoEvento','==', $estado)
             ->sortBy('fechaEvento.InicioFechaEvento');
+        }else{
+            $evento_fecha_sede_s = Evento_Fecha_Sede
+            ::with(['evento', 'fechaEvento', 'sedeEvento'])
+            ->get()
+            //->where('evento.EstadoEvento','==', $estado)
+            ->sortBy('fechaEvento.InicioFechaEvento');
+        }
+        
 
         /**
          * Es una variable distinta, para no afectar el funcionamiento de la vista original mientras
@@ -52,6 +62,8 @@ class EventoController extends Controller
             "NO APROBADO" => "red",
             "POR APROBAR" => "yellow"
         ];
+
+
 
         $calendar_events = [];
         foreach ($evento_fecha_sede_s as $efs) {
@@ -278,5 +290,4 @@ class EventoController extends Controller
             return false;
         }
     }
-
 }
