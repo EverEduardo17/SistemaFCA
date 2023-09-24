@@ -16,9 +16,10 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-// Route::get('/login','auth\LoginController@login')->name('login');
-Route::post('/login','auth\LoginController@success')->name('login');
-Route::post('/logout','auth\LoginController@logout')->name('logout')->middleware('auth');
+Route::get('/login','auth\LoginController@login')->name('login');
+// Route::post('/login','auth\LoginController@login')->name('login');
+Route::get('/logout','auth\LoginController@logout')->name('logout')->middleware('auth');
+Route::get('/callback', 'auth\LoginController@callback');
 
 
 Route::resource('academias', 'AcademiaController');
@@ -44,6 +45,7 @@ Route::resource('programaEducativo', 'ProgramaEducativoController')->except('sho
 Route::resource('reprobado', 'ReprobadoController');
 Route::resource('sedeEventos', 'SedeEventoController');
 Route::resource('servicio', 'ServicioSocialEstudianteController');
+Route::resource('tipoorganizador', 'TipoOrganizadorController')->except('show', 'edit');
 Route::resource('titulo', 'TitulacionController');
 Route::resource('traslado', 'TrasladoController');
 Route::resource('sedeEventos', 'SedeEventoController');

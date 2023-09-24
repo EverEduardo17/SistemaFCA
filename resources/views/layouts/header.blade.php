@@ -1,8 +1,8 @@
 <header>
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-light fixed-top bg-color">
-        <a href="{{ url('/home') }}"><img class="logo" src="{{ asset('img/logo-blanco.png') }}"></a>
-        <a class="navbar-brand text-white" href="{{ url('/home') }}" >Universidad Veracruzana</a>
+        <a href="{{ route('home') }}"><img class="logo" src="{{ asset('img/logo-blanco.png') }}"></a>
+        <a class="navbar-brand text-white" href="{{ route('home') }}" >Universidad Veracruzana</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">

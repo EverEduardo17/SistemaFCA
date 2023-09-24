@@ -4,11 +4,20 @@
     use Carbon\Carbon;
     use Illuminate\Support\Collection;
 
-    function formatearDateTime($date, $time) {
+    /**
+     * Recibe una fecha y una hora para adaptarla a la sintaxis MySQL datetime
+     * 
+     * @param string $date fecha formato DD/MM/YYYY
+     * @param string $time hora formato H:MM AM/PM
+     * @return string fecha formato YYYY-MM-DD HH:MI
+     */
+    function formatearDateTime($date, $time) 
+    {
         $fecha = explode( '/', $date );
         $hora  = explode( ' ', $time );
         $PM          = strcmp ( 'PM', mb_strtoupper( $hora[1] ) ) == 0;
         $hora  = explode( ':', $hora[0] );
+
         if( $PM && $hora[0] != 12){
             $hora[0] += 12;
         }
@@ -17,14 +26,29 @@
         return $fecha;
     }
 
-    function formatearDate($date) {
+    /**
+     * Recibe una fecha en formato DD/MM/YYYY y la adapta al formato que SQL usa
+     * 
+     * @param string $date
+     * @return string fecha formato YYYY-MM-DD
+     */
+    function formatearDate($date) 
+    {
         $fecha = explode( '/', $date );
         $fecha = sprintf("%d-%d-%d", $fecha[2], $fecha[1], $fecha[0]);
         
         return $fecha;
     }
 
-    function printDate($date) {
+    /**
+     * Recibe una fecha en formato YYYY-MM-DD y la retorna en DD/MM/YYYY
+     * Si la fecha dada es nula, retorna null
+     * 
+     * @param string $date
+     * @return string|null fecha en formato DD/MM/YYYY
+     */
+    function printDate($date) 
+    {
         if ($date === null) {
             return null;
         }
@@ -37,10 +61,18 @@
         return "$dia/$mes/$anio";
     }
 
-    function formatearTime($time){
+    /**
+     * Recibe una hora en formato AM/PM y la vuelve a formato 24H
+     * 
+     * @param string $time
+     * @return string hora en formato H:MI
+     */
+    function formatearTime($time) 
+    {
         $hora  = explode( ' ', $time );
         $PM          = strcmp ( 'PM', mb_strtoupper( $hora[1] ) ) == 0;
         $hora  = explode( ':', $hora[0] );
+
         if( $PM && $hora[0] != 12){
             $hora[0] += 12;
         }
@@ -54,7 +86,16 @@
         return $hora;
     }
 
-    function validarFecha($fechaActual, $vigencia) {
+    /**
+     * Valida que una constancia siga siendo vigente
+     * Este metodo se usa para imprimir un mensaje en la vista de la constancia
+     * 
+     * @param mixed $fechaActual
+     * @param mixed $vigencia fecha en la que vence la constancia
+     * @return string
+     */
+    function validarFecha($fechaActual, $vigencia) 
+    {
         $fechaActualCarbon = Carbon::parse($fechaActual);
 
         if ($vigencia === null) {
@@ -70,7 +111,20 @@
         return "Esta constancia expiró el: " . printDate($vigencia);
     }
 
-    function conflicto($fecha_evento) {
+    /**
+     * Este método maneja conflictos de fechas en eventos.
+     * 
+     * Primero, intenta encontrar un evento con el ID proporcionado. Si el evento no se encuentra, se lanza una excepción.
+     * Luego, comprueba si el estado del evento es "APROBADO". Si es así, devuelve la cadena "APROBADO".
+     * Si el estado del evento no es "APROBADO", busca otras fechas de eventos que puedan tener conflictos con la fecha del evento actual.
+     * Finalmente, devuelve una colección de eventos conflictivos. Cada evento conflictivo en la colección tiene un `id` y un `evento`.
+     *
+     * @param mixed $fecha_evento El ID del evento a comprobar.
+     * @return Collection|string Una colección de eventos conflictivos o la cadena "APROBADO" si el estado del evento es "APROBADO".
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Si no se puede encontrar un evento con el ID proporcionado.
+     */
+    function conflicto($fecha_evento) 
+    {
         $fecha_evento = Evento_Fecha_Sede::with('evento', 'fechaEvento')->findOrFail($fecha_evento);
         if($fecha_evento->evento->EstadoEvento == "APROBADO"){
             return "APROBADO";
@@ -82,6 +136,7 @@
                 ->orWhereBetween('FinFechaEvento', [$fecha->InicioFechaEvento, $fecha->FinFechaEvento]);
             })->get();
         $confictos =  new Collection();
+
         foreach ($fechas as $fecha) {
             if($fecha->evento_fecha_sede->IdSedeEvento == $fecha_evento->IdSedeEvento){
                 $confictos->push(
@@ -96,7 +151,24 @@
         return $confictos;
     }
 
-    function getYear() {
+    /**
+     * Envoltorio para obtener el año actual
+     * 
+     * @return int El año actual
+     */
+    function getYear() 
+    {
         return Carbon::now()->year;
+    }
+
+    /**
+     * Capitaliza la primera letra de cada palabra en un string.
+     *
+     * @param string $string El string a capitalizar.
+     * @return string El string capitalizado.
+     */
+    function capitalizeFirst(string $string) 
+    {
+        return ucwords(strtolower($string));
     }
 

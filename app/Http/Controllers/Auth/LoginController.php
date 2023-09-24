@@ -7,9 +7,15 @@ use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+// use \App\Ldap\User as UserLdap;
+// use \LdapRecord\Container;
+// use LdapRecord\Auth\BindException;
+// use LdapRecord\Models\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
+use Microsoft\Graph\Graph;
+
 
 class LoginController extends Controller
 {
@@ -34,7 +40,7 @@ class LoginController extends Controller
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
-     * Create a new controller instance.
+     * Nueva instancia de controller.
      *
      * @return void
      */
@@ -43,32 +49,299 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function login() 
-    {
-        return view("auth.login");
-
-    }
-
-    public function success(LoginRequest $request) 
-    {
-        // Intentar iniciar sesion
-        $datosUsuario = $request->validated();
-        
-
-        if (Auth::attempt($datosUsuario)) {
-            $request->session()->regenerate();
-            return redirect(route('home'))->with('success', 'Sesión iniciada.');
-        }
-
-        throw ValidationException::withMessages([
-                    'loginError' => ['El usuario o la contraseña son incorrectos.']
-                ]);    }
-
     public function register() 
     {
         return view("auth.register");
     }
+
+    public function logout() 
+    {
+        Auth::logout();
+
+
+        return redirect('/');
+    }
+
+
+
+    // Dudas preguntas, gran parte del código del login con Graph fue adaptado de este repositorio de Microsoft
+    // https://github.com/microsoftgraph/msgraph-sample-phpapp/tree/main/graph-tutorial
     
+    /**
+     * Redireccionar a la pagina de login de Microsoft con los parametros necesarios
+     * 
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function login() 
+    {
+        $oauthClient = new \League\OAuth2\Client\Provider\GenericProvider([
+            'clientId'                => config('azure.appId'),
+            'clientSecret'            => config('azure.appSecret'),
+            'redirectUri'             => config('azure.redirectUri'),
+            'urlAuthorize'            => config('azure.authority').config('azure.authorizeEndpoint'),
+            'urlAccessToken'          => config('azure.authority').config('azure.tokenEndpoint'),
+            'urlResourceOwnerDetails' => '',
+            'scopes'                  => config('azure.scopes'),
+        ]);
+
+        $authUrl = $oauthClient->getAuthorizationUrl([
+            'prompt' => 'login',
+            'login_hint' => '@uv.mx'
+        ]);
+
+        // Salvar el estado para validar en callback
+        session(['oauthState' => $oauthClient->getState()]);
+
+        // Redireccionar a la pagina de login de Microsoft
+        return redirect()->away($authUrl);
+    } 
 
 
+    /**
+     * Una vez se hace el login en la pagina de Microsoft, se redirige a esta ruta
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function callback(Request $request)
+    {
+        // Validate state
+        $expectedState = session('oauthState');
+        $request->session()->forget('oauthState');
+        $providedState = $request->query('state');
+  
+        if (!isset($expectedState)) {
+            return redirect('/');
+        }
+  
+        if (!isset($providedState) || $expectedState != $providedState) {
+            return redirect('/')
+                ->with('error', 'Estado de autenticación inválido')
+                ->with('errorDetail', 'El estado de autenticación proporcionado no coincide con el valor esperado');
+        }
+    
+        // El codigo de Autorizacion deberia estar en el parametro "code" de query
+        $authCode = $request->query('code');
+
+        if (isset($authCode)) {
+        // Inicializar el cliente OAuth
+            $oauthClient = new \League\OAuth2\Client\Provider\GenericProvider([
+                'clientId'                => config('azure.appId'),
+                'clientSecret'            => config('azure.appSecret'),
+                'redirectUri'             => config('azure.redirectUri'),
+                'urlAuthorize'            => config('azure.authority').config('azure.authorizeEndpoint'),
+                'urlAccessToken'          => config('azure.authority').config('azure.tokenEndpoint'),
+                'urlResourceOwnerDetails' => '',
+                'scopes'                  => config('azure.scopes'),
+            ]);
+
+        try {
+            // Token request
+            $accessToken = $oauthClient->getAccessToken('authorization_code', [
+            'code' => $authCode
+            ]);
+
+            $graph = new Graph();
+            $graph->setAccessToken($accessToken->getToken());
+
+            // Queries de MS Graph, puedes ver que atributos existen con MS Graph Explorer
+            $userGraph = $graph->createRequest('GET', '/me?$select=givenName,surname,mail,mailboxSettings,userPrincipalName,officeLocation,jobTitle')
+            ->setReturnType(\ArrayObject::class)
+            ->execute();
+
+            // dd($userGraph);
+
+
+            $user = User::where('name', $this->getUserName($userGraph['mail']))->first();
+
+            if (!$user) {
+                $user = $this->createUser($userGraph);
+            } 
+
+            Auth::login($user);
+
+            return redirect('/');
+        }
+        catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
+            return redirect('/')
+                ->with('error', 'Error requesting access token')
+                ->with('errorDetail', json_encode($e->getResponseBody()));
+        }
+    }
+  
+        return redirect('/')    
+            ->with('error', $request->query('error'))
+            ->with('errorDetail', $request->query('error_description'));
+    }
+
+
+
+    /**
+     * Eliminar el dominio del correo electronico para dejar solamente el nombre de usuario
+     * 
+     * @param string $email correo del usuario
+     * @return bool|string
+     */
+    private function getUserName(string $email) {
+        return strstr($email, '@', true);
+    }
+
+    /**
+     * Crear un nuevo usuario.
+     * Según si es acádemico o estudiante.
+     *
+     * @param  array  $user
+     * 
+     */
+    private function createUser($user)
+    {
+        $matricula = $this->getUserName($user['mail']);
+
+        try{
+            DB::beginTransaction();
+
+            $idUsuarioDB = DB::table('Usuario')->insertGetId([
+                'name'              => $this->getUserName($user['mail']),
+                'email'             => $user['mail'],
+                'password'          => capitalizeFirst($user['officeLocation']), // poner la carrera en campo contraseña como solucion temporal a lo de Trayectoria,
+                'CreatedBy'         => 1,
+                'UpdatedBy'         => 1
+            ]);
+
+            DB::table('DatosPersonales')->insert([
+                'idDatosPersonales'                 => $idUsuarioDB,
+                'NombreDatosPersonales'             => $user['givenName'],
+                'ApellidoPaternoDatosPersonales'    => $user['surname'],
+                'ApellidoMaternoDatosPersonales'    => '',
+                'IdUsuario'                         => $idUsuarioDB,
+                'CreatedBy'                         => 1,
+                'UpdatedBy'                         => 1
+            ]);
+
+            if (strpos($user['mail'], '@estudiantes.uv.mx') !== false || strpos($user['mail'], '@egresados.uv.mx') !== false) {
+
+                DB::table('Role_Usuario')->insert([
+                    'IdUsuario'     => $idUsuarioDB,
+                    'IdRole'        => 5,
+                    'CreatedBy'     => 1,
+                    'UpdatedBy'     => 1
+                ]);
+                
+            }
+            
+            if (strpos($user['mail'], '@estudiantes.uv.mx') !== false ) {
+                // estudiante, quitar la letra z de la matricula
+                DB::table('Estudiante')->insert([
+                    'matriculaEstudiante'   => substr($matricula, 1),
+                    'IdUsuario'             => $idUsuarioDB,
+                ]);
+            }
+            elseif (strpos($user['mail'], '@egresados.uv.mx') !== false ) {
+                // egresado, evitar matricula repetida manteniendo la letra g
+                DB::table('Estudiante')->insert([
+                    'matriculaEstudiante'   => $matricula,
+                    'IdUsuario'             => $idUsuarioDB,
+                ]);
+            }
+            else {
+                DB::table('Academico')->insert([
+                    'idAcademico'           => $idUsuarioDB,
+                    'NoPersonalAcademico'   => $idUsuarioDB,
+                    'RfcAcademico'          => $user['surname'][0] . $user['surname'][1] . $user['givenName'][0] . random_int(1000, 9999),
+                    'IdUsuario'             => $idUsuarioDB,
+                    'CreatedBy'             => 1,
+                    'UpdatedBy'             => 1
+                ]);
+    
+                DB::table('Role_Usuario')->insert([
+                    'IdUsuario'     => $idUsuarioDB,
+                    'IdRole'        => 2,
+                    'CreatedBy'     => 1,
+                    'UpdatedBy'     => 1
+                ]);
+            }
+
+
+            DB::commit();
+
+            return User::find($idUsuarioDB);
+        }
+        catch (\Throwable $throwable){
+            DB::rollBack();
+        }        
+    }
+
+
+
+
+
+     /* 
+    // Login antiguo con LdapRecord si no quieren usar la API de MS Graph
+    // buena suerte consiguiendo los datos de los usuarios
+    public function attempt(LoginRequest $request) 
+    {
+        $credentials = $request->validated();
+
+        // Intentar iniciar sesion en BD local
+        if (Auth::guard('web')->attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect(route('home'))->with('success', 'Sesión iniciada.');
+        } 
+
+        // Si falla, intentar con LDAP
+        try {
+            $email = "";
+
+            if (strpos($credentials['name'], '@') !== false) {
+                $email = $credentials['name'];
+
+                // quitar todo lo que sigue del @
+                $credentials['name'] = strstr($credentials['name'], '@', true);
+            }
+            else {
+                $email = $this->getEmail($credentials['name']);
+            }
+            
+            Container::getDefaultConnection()->auth()->bind($email, $credentials['password']);
+            // dd(Container::getDefaultConnection()->auth());
+
+            // Validar si existe usuario en local
+            $user = User::where('name', $credentials['name'])->first();
+            
+            if ($user) {
+                // si existe actualizar contraseña
+                $user->password = bcrypt($credentials['password']);
+                $user->save();
+            } 
+            // Si no nuevo usuario
+            else {
+                $user = User::create([
+                    'name' => $credentials['name'],
+                    'email' => $email,
+                    'password' => bcrypt($credentials['password']),
+                ]);
+            }
+
+            Auth::guard('web')->login($user);
+            return redirect(route('home'))->with('success', 'Sesión iniciada.');
+        }
+        catch(BindException|ModelNotFoundException) {
+            throw ValidationException::withMessages([
+                'loginError' => ['El usuario o la contraseña son incorrectos.']
+            ]);  
+        }
+    }
+    
+    private function getEmail($name) : string 
+    {
+        if (preg_match('/^zs\d+$/', $name)) {
+            return $name . "@estudiantes.uv.mx";
+        } 
+        elseif (preg_match('/^gs\d+$/', $name)) {
+            return $name . "@egresados.uv.mx";
+        }
+
+        return $name . "@uv.mx";
+    }  
+    */
 }

@@ -19,6 +19,7 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Agregar Constancia</h5>
+            
             {{-- @can('havepermiso', 'academicos-listar') --}}
                 <a class="btn btn-primary col-4" href="{{ route('constancias.index') }}" role="button">Ver Constancias</a>
             {{-- @endcan --}}

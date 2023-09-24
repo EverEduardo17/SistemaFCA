@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Academico;
-use App\Models\DatosPersonales;
-use App\Models\Role;
-use App\Models\Usuario;
 use App\Http\Requests\AcademicoRequest;
-use Illuminate\Http\Request;
+use App\Models\Academico;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
@@ -38,6 +34,8 @@ class AcademicoController extends Controller
     public function store(AcademicoRequest $request) 
     {
         Gate::authorize('havepermiso', 'academicos-crear');
+
+        dd($request);
 
         $request->validated();
 

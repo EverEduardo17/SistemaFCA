@@ -8,7 +8,6 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $nombreCohorte = DB::table('Cohorte')->orderBy('IdCohorte', 'desc')->value('NombreCohorte');
         $colores = ["#00A639", "#0D47A1"];
         $opciones = [
             [
@@ -17,7 +16,7 @@ class HomeController extends Controller
                 "enlace" => "eventos",
                 "operaciones" => [
                     ["titulo" => "Nuevo Evento", "enlace" => "create"],
-                    ["titulo" => "Ver Eventos", "enlace" => ""],
+                    ["titulo" => "Ver Eventos", "enlace" => "index"],
                 ]
             ],
 
@@ -27,7 +26,7 @@ class HomeController extends Controller
                 "enlace" => "academicos",
                 "operaciones" => [
                     ["titulo" => "Nuevo Académico", "enlace" => "create"],
-                    ["titulo" => "Ver Académicos", "enlace" => ""],
+                    ["titulo" => "Ver Académicos", "enlace" => "index"],
                 ]
             ],
 
@@ -37,7 +36,7 @@ class HomeController extends Controller
                 "enlace" => "sedeEventos",
                 "operaciones" => [
                     ["titulo" => "Nueva Sede de Evento", "enlace" => "create"],
-                    ["titulo" => "Ver Sedes de Eventos", "enlace" => ""],
+                    ["titulo" => "Ver Sedes de Eventos", "enlace" => "index"],
                 ]
             ],
 
@@ -47,7 +46,7 @@ class HomeController extends Controller
                 "enlace" => "tipoorganizador",
                 "operaciones" => [
                     ["titulo" => "Nuevo Tipo de Organizador", "enlace" => "create"],
-                    ["titulo" => "Ver Tipos de Organizadores", "enlace" => ""],
+                    ["titulo" => "Ver Tipos de Organizadores", "enlace" => "index"],
                 ]
             ],
 
@@ -57,7 +56,7 @@ class HomeController extends Controller
                 "enlace" => "facultades",
                 "operaciones" => [
                     ["titulo" => "Nueva Facultad", "enlace" => "create"],
-                    ["titulo" => "Ver Facultades", "enlace" => ""],
+                    ["titulo" => "Ver Facultades", "enlace" => "index"],
                 ]
             ],
 
@@ -67,7 +66,7 @@ class HomeController extends Controller
                 "enlace" => "academias",
                 "operaciones" => [
                     ["titulo" => "Nueva Academia", "enlace" => "create"],
-                    ["titulo" => "Ver Academia", "enlace" => ""],
+                    ["titulo" => "Ver Academia", "enlace" => "index"],
                 ]
             ],
 
@@ -77,7 +76,7 @@ class HomeController extends Controller
                 "enlace" => "empresas",
                 "operaciones" => [
                     ["titulo" => "Nueva Empresa", "enlace" => "create"],
-                    ["titulo" => "Gestión de Empresas", "enlace" => ""],
+                    ["titulo" => "Gestión de Empresas", "enlace" => "index"],
                 ]
             ],
 
@@ -87,7 +86,7 @@ class HomeController extends Controller
                 "enlace" => "programaEducativo",
                 "operaciones" => [
                     ["titulo" => "Nuevo Programa Educativo", "enlace" => "create"],
-                    ["titulo" => "Gestión de Programas Educativos", "enlace" => ""],
+                    ["titulo" => "Gestión de Programas Educativos", "enlace" => "index"],
                 ]
             ],
 
@@ -97,8 +96,9 @@ class HomeController extends Controller
                 "enlace" => "constancias",
                 "operaciones" => [
                     ["titulo" => "Nueva Constancia", "enlace" => "create"],
-                    ["titulo" => "Gestión de Constancias", "enlace" => ""],
-                ]
+                    ["titulo" => "Gestión de Constancias", "enlace" => "index"],
+                ],
+                // "permiso" => "constancias-listar"
             ],
             //Se oculto la tarjeta de grupos
             /*
@@ -108,7 +108,7 @@ class HomeController extends Controller
                 "enlace" => "grupos",
                 "operaciones" => [
                     ["titulo" => "Nuevo Grupo", "enlace" => "create"],
-                    ["titulo" => "Gestión de Grupos", "enlace" => ""],
+                    ["titulo" => "Gestión de Grupos", "enlace" => "index"],
                 ]
             ],
             **/
@@ -119,7 +119,7 @@ class HomeController extends Controller
                 "enlace" => "estudiantes",
                 "operaciones" => [
                     ["titulo" => "Nuevo Estudiante", "enlace" => "create"],
-                    ["titulo" => "Gestión de Estudiantes", "enlace" => ""],
+                    ["titulo" => "Gestión de Estudiantes", "enlace" => "index"],
                 ]
             ],
 
