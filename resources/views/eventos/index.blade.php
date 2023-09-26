@@ -25,18 +25,19 @@
         <div class="col-lg-9 col-md-8">
         <!--<button class="btn btn-secondary mb-2" id="filterButton">Filtrar eventos</button>-->
 
-            <form action="{{ route('eventos.index') }}" method="GET" style="display: flex">
-                <div class="form-group" style="display: flex; align-items: center; gap: 1rem">
-                    <label for="lista-filtrar" style="white-space: nowrap; margin: 0%">Filtrar por estado:</label>
-                    <select name="estado" id="lista-filtrar" class="form-control">
-                        <option value="">Todos</option>
-                        <option value="APROBADO">Aprobado</option>
-                        <option value="NO APROBADO">No aprobado</option>
-                        <option value="POR APROBAR">Pendiente</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary" style="display: inline-block; margin-left: 2rem; margin-bottom: 10px; height: fit-content">Filtrar</button>
-            </form>
+        <form action="{{ route('eventos.index') }}" method="GET" style="display: flex">
+        <div class="form-group" style="display: flex; align-items: center; gap: 1rem">
+            <label for="lista-filtrar" style="white-space: nowrap; margin: 0%">Filtrar por estado:</label>
+            <select name="estado" id="lista-filtrar" class="form-control">
+                <option value="" @if($estado === '') selected @endif>Todos</option>
+                <option value="APROBADO" @if($estado === 'APROBADO') selected @endif>Aprobado</option>
+                <option value="NO APROBADO" @if($estado === 'NO APROBADO') selected @endif>No aprobado</option>
+                <option value="POR APROBAR" @if($estado === 'POR APROBAR') selected @endif>Pendiente</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="display: inline-block; margin-left: 2rem; margin-bottom: 10px; height: fit-content">Filtrar</button>
+    </form>
+
             <div class="nav nav-tabs" style="margin-bottom: 1rem">
                 <button id="tab-calendario" value="calendario" class="nav-link nav-link-focused">Calendario</button>
                 <button id="tab-tabla" value="tabla" class="nav-link">Tabla</button>

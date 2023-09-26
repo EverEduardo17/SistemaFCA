@@ -32,10 +32,10 @@ class EventoController extends Controller
         $this->idUsuario = Auth::id();
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $estado = $request->input('estado');
-        //Gate::authorize('havepermiso', 'eventos-listar');
+        $estado = request('estado');
+        Gate::authorize('havepermiso', 'eventos-listar');
         if($estado != null){
             $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
@@ -79,13 +79,17 @@ class EventoController extends Controller
 
         return view('eventos.index', [
             "evento_fecha_sede_s" => $evento_fecha_sede_s,
-            "calendar_events" => $calendar_events
+            "calendar_events" => $calendar_events,
+            "estado" => $estado
         ]);
     }
 
     public function indexWithDate($year, $month, $day)
     {
         Gate::authorize('havepermiso', 'eventos-listar');
+
+        $estado = request('estado');
+
         $date = sprintf("%d-%02d-%02d", $year, $month, $day);
         $from = date("Y-m-d", strtotime($date));
         $to = date("Y-m-d", strtotime($date . " +1 days"));
@@ -120,7 +124,8 @@ class EventoController extends Controller
 
         return view('eventos.index', [
             "evento_fecha_sede_s" => $evento_fecha_sede_s,
-            "calendar_events" => $calendar_events
+            "calendar_events" => $calendar_events,
+            "estado" => $estado
         ]);
     }
 
