@@ -35,7 +35,9 @@
         </div>
     </main>
 
-    {{-- @include('layouts.footer') --}}
+    <br>
+
+    @include('layouts.footer')
 
     {{-- Extras --}}
     <script type="text/javascript" src="{{asset('js/jquery-3.5.1.min.js')}}"></script>

@@ -85,11 +85,11 @@ body {
 
 .footer {
     background: #0d47a1 !important;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
     white-space: nowrap;
-    line-height: 60px; /* Vertically center the text there */
+    line-height: 26px; /* Vertically center the text there */
 }
 main > .container {
     padding: 60px 15px 0;
