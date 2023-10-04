@@ -44,6 +44,7 @@
             </div>
             <div>
                 <div id="calendario">
+                    <input id="buscadorCalendario" placeholder="Buscar evento..."></input>
                     <div id="calendar"></div>
                 </div>
                 <div id="tabla" style="display: none">
@@ -98,6 +99,12 @@
         background: #007bff;
         color: aliceblue;
     }
+
+    #buscadorCalendario {
+        width: 95%;
+        margin: 1rem;
+        padding-left: 0.5rem;
+    }
 </style>
 @endsection
 
@@ -145,6 +152,17 @@
 <!-- Full Calendar -->
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 <script>
+    const searchBar = document.getElementById("buscadorCalendario")
+    let calendar;
+
+    function showBar() {
+        searchBar.style = "display: inline"
+    }
+    function hiddeBar() {
+        searchBar.style = "display: none"
+    }
+    hiddeBar()
+
     document.addEventListener('DOMContentLoaded', function() {
         let calendarEl = document.getElementById('calendar');
         const toolbar = {
@@ -152,7 +170,7 @@
             center: "title",
             right: "dayGridMonth,timeGridWeek,listYear"
         }
-        let calendar = new FullCalendar.Calendar(calendarEl, {
+        calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             locale: "es",
             headerToolbar: toolbar,
@@ -164,9 +182,38 @@
                 day: 'Dia',
                 list: 'Lista'
             },
-            events: @json($calendar_events)
+            dateClick: function(info) {
+                let day = 0
+                let month = 0
+                let year = 0
+                const partes = info.dateStr.split("-")
+                day = partes[2]
+                month = partes[1]
+                year = partes[0]
+                window.location.href = "{{ route('eventos.create') }}?day=" + day + "&month=" + month + "&year=" + year;
+            },
+            viewDidMount: function(info) {
+                if (info.view.type.match("list")) {
+                    showBar()
+                }
+            },
+            viewWillUnmount: function(info) {
+                hiddeBar()
+            },
+            events: function (fetchInfo, successCallback, failureCallback) {
+                let eventos = @json($calendar_events);
+                let filtrados = eventos.filter(ev => 
+                    ev.title.toLowerCase().normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g,"")
+                    .match(searchBar.value));
+                successCallback(filtrados);
+            }
         });
         calendar.render();
     });
+
+    searchBar.addEventListener("input", () => {
+        calendar.refetchEvents()
+    })
 </script>
 @endsection

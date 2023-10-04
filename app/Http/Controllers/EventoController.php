@@ -133,8 +133,19 @@ class EventoController extends Controller
     {
         Gate::authorize('havepermiso', 'eventos-listar');
 
+        $date = null;
+
+        if (request()->has("day") && request()->has("month") && request()->has("year")) {
+            $day = request("day");
+            $month = request("month");
+            $year = request("year");
+
+            $date = "$day/$month/$year";
+        }
+
         return view('eventos.create', [
-            "sedes" => SedeEvento::all()
+            "sedes" => SedeEvento::all(),
+            "date" => $date
         ]);
     }
 

@@ -33,7 +33,7 @@
             <hr>
             <div class="form-group">
                 <label for="fechaInicio">Fecha del Evento:</label>
-                <input id="fechaInicio" type="text" class="form-control @error('fechaInicio') is-invalid @enderror" name="fechaInicio" value="{{ old('fechaInicio') }}" placeholder="Día/Mes/Año">
+                <input id="fechaInicio" type="text" class="form-control @error('fechaInicio') is-invalid @enderror" name="fechaInicio" value="{{ $date ? $date : old('fechaInicio') }}" placeholder="Día/Mes/Año">
             </div>
 
             <div class="form-group">
