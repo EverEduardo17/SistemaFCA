@@ -33,9 +33,11 @@
                 <option value="APROBADO" @if($estado === 'APROBADO') selected @endif>Aprobado</option>
                 <option value="NO APROBADO" @if($estado === 'NO APROBADO') selected @endif>No aprobado</option>
                 <option value="POR APROBAR" @if($estado === 'POR APROBAR') selected @endif>Pendiente</option>
-                <option value="PASADOS" @if($estado === 'PASADOS') selected @endif>Pasados</option>
-                <option value="FUTUROS" @if($estado === 'FUTUROS') selected @endif>Futuros</option>
             </select>
+            <input type="radio" name="filtro_fecha" value="ANTERIORES" @if($filtro_fecha === 'ANTERIORES') checked @endif><label>Anteriores</label>
+            <input type="radio" name="filtro_fecha" value="PROXIMOS" @if($filtro_fecha === 'PROXIMOS'|| $filtro_fecha === null) checked @endif><label>Proximos</label>
+            <input type="radio" name="filtro_fecha" value="TODOS" @if($filtro_fecha === 'TODOS') checked @endif><label>Todos</label>
+            <button class="btn btn-secondary mb-2" id="filterButton">Filtrar</button>
         </div>
     </form>
 

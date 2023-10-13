@@ -34,36 +34,40 @@ class EventoController extends Controller
 
     public function index()
     {
-        //Comprueba si el estado del evento es Aprobado, no aprobado, etc...
+        //Comprueba si el estado del evento es Aprobado, no aprobado, futuro, pasado, etc...
         $estado = request('estado');
 
-        Gate::authorize('havepermiso', 'eventos-listar');
-        
-        
-        if($estado != null && ($estado != 'PASADOS' && $estado != 'FUTUROS')){
+        $filtro_fecha = request('filtro_fecha');
+
+        Gate::authorize('havepermiso', 'eventos-listar');       
+        if($filtro_fecha == 'PROXIMOS' || $filtro_fecha== null){
             $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
-            ->get()
-            ->where('evento.EstadoEvento','==', $estado)
+            ->get();
+            if($estado!=null){
+                $evento_fecha_sede_s = $evento_fecha_sede_s->where('evento.EstadoEvento','==', $estado);
+            }
+            $evento_fecha_sede_s = $evento_fecha_sede_s->where('fechaEvento.InicioFechaEvento', '>', now())
             ->sortBy('fechaEvento.InicioFechaEvento');
-        }else if($estado == 'PASADOS'){
+        }else if($filtro_fecha == 'ANTERIORES'){
             $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
-            ->get() 
-            ->where('fechaEvento.InicioFechaEvento', '<', 'CURDATE()')
-            ->sortBy('fechaEvento.InicioFechaEvento');
-        }else if($estado == 'FUTUROS'){
-            $evento_fecha_sede_s = Evento_Fecha_Sede
-            ::with(['evento', 'fechaEvento', 'sedeEvento'])
-            ->get()
-            ->where('fechaEvento.InicioFechaEvento', '>=', 'CURDATE()')
+            ->get();
+            if($estado!=null){
+                $evento_fecha_sede_s = $evento_fecha_sede_s->where('evento.EstadoEvento','==', $estado);
+            }
+            $evento_fecha_sede_s = $evento_fecha_sede_s->where('fechaEvento.InicioFechaEvento', '<', now())
             ->sortBy('fechaEvento.InicioFechaEvento');
         }else{
             $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
-            ->get()
-            ->sortBy('fechaEvento.InicioFechaEvento');
-        }          
+            ->get();
+            if($estado!=null){
+                $evento_fecha_sede_s = $evento_fecha_sede_s->where('evento.EstadoEvento','==', $estado);
+            }
+            $evento_fecha_sede_s = $evento_fecha_sede_s->sortBy('fechaEvento.InicioFechaEvento');
+        }
+    
 
         /**
          * Es una variable distinta, para no afectar el funcionamiento de la vista original mientras
@@ -94,7 +98,8 @@ class EventoController extends Controller
         return view('eventos.index', [
             "evento_fecha_sede_s" => $evento_fecha_sede_s,
             "calendar_events" => $calendar_events,
-            "estado" => $estado
+            "estado" => $estado,
+            "filtro_fecha" => $filtro_fecha
         ]);
     }
 
@@ -103,6 +108,7 @@ class EventoController extends Controller
         Gate::authorize('havepermiso', 'eventos-listar');
 
         $estado = request('estado');
+        $filtro_fecha = request('filtro_fecha');
 
         $date = sprintf("%d-%02d-%02d", $year, $month, $day);
         $from = date("Y-m-d", strtotime($date));
@@ -140,7 +146,7 @@ class EventoController extends Controller
             "evento_fecha_sede_s" => $evento_fecha_sede_s,
             "calendar_events" => $calendar_events,
             "estado" => $estado,
-           
+            "filtro_fecha" => $filtro_fecha
         ]);
     }
 
