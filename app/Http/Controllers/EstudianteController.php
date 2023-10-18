@@ -33,12 +33,13 @@ class EstudianteController extends Controller
         Gate::authorize('havepermiso', 'estudiante-ver-propio');
 
         $cohortes = Cohorte::orderBy('NombreCohorte', 'desc')->get();
-        $grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
+        //$grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
         $modalidades = Modalidad::orderBy('NombreModalidad', 'asc')->get();
         $programasEducativos = ProgramaEducativo::orderBy('NombreProgramaEducativo', 'asc')->get();
-        $grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
+        //$grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
 
-        return view('estudiantes.create', compact('cohortes', 'grupos', 'modalidades', 'programasEducativos'));
+        //return view('estudiantes.create', compact('cohortes', 'grupos', 'modalidades', 'programasEducativos'));
+        return view('estudiantes.create', compact('cohortes', 'modalidades', 'programasEducativos'));
     }
 
     public function show(Estudiante $estudiante)
@@ -99,7 +100,7 @@ class EstudianteController extends Controller
 
         try {
             $input = $request->validated();
-            $idGrupo = $input['IdGrupo'];
+            //$idGrupo = $input['IdGrupo'];
             $timestamp = Carbon::now()->toDateTimeString();
 
             $matricula = strtoupper($input['MatriculaEstudiante']);
@@ -130,7 +131,7 @@ class EstudianteController extends Controller
             $idTrayectoria = DB::table('Trayectoria')->insertGetId([
                 'EstudianteRegular'     => 1,
                 'TotalPeriodos'         => 1,
-                'IdGrupo'               => $input['IdGrupo'],
+                //'IdGrupo'               => $input['IdGrupo'],
                 'IdEstudiante'          => $idEstudianteDB,
                 'IdProgramaEducativo'   => $input['IdProgramaEducativo'],
                 'IdModalidad'           => $input['IdModalidad'],

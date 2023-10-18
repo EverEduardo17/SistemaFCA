@@ -25,7 +25,8 @@ class EstudianteRequest extends FormRequest
             'IdCohorte'                         => 'required | numeric',
             'MatriculaEstudiante'               => ['required', 'String', 'max:9', 'regex:/^S\d{1,8}$/i', 'unique:Estudiante,MatriculaEstudiante,' . $IdEstudiante . ',IdEstudiante'],
             'IdProgramaEducativo'               => 'required | numeric',
-            'IdGrupo'                           => 'required | numeric',
+            'IdGrupo'                           => 'numeric',
+            //'IdGrupo'                           => 'required | numeric',
             'IdModalidad'                       => 'required | numeric',
             'Genero'                            => 'required | String',
 

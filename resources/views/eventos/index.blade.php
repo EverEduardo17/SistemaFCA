@@ -23,23 +23,25 @@
             @endcan
         </div>
         <div class="col-lg-9 col-md-8">
-        <!--<button class="btn btn-secondary mb-2" id="filterButton">Filtrar eventos</button>-->
-
-        <form action="{{ route('eventos.index') }}" method="GET" style="display: flex">
-        <div class="form-group" style="display: flex; align-items: center; gap: 1rem">
-            <label for="lista-filtrar" style="white-space: nowrap; margin: 0%">Filtrar por estado:</label>
-            <select name="estado" id="lista-filtrar" class="form-control" onchange="this.form.submit()">
-                <option value="" @if($estado === '') selected @endif>Todos</option>
-                <option value="APROBADO" @if($estado === 'APROBADO') selected @endif>Aprobado</option>
-                <option value="NO APROBADO" @if($estado === 'NO APROBADO') selected @endif>No aprobado</option>
-                <option value="POR APROBAR" @if($estado === 'POR APROBAR') selected @endif>Pendiente</option>
-            </select>
-            <input type="radio" name="filtro_fecha" value="ANTERIORES" @if($filtro_fecha === 'ANTERIORES') checked @endif><label>Anteriores</label>
-            <input type="radio" name="filtro_fecha" value="PROXIMOS" @if($filtro_fecha === 'PROXIMOS'|| $filtro_fecha === null) checked @endif><label>Proximos</label>
-            <input type="radio" name="filtro_fecha" value="TODOS" @if($filtro_fecha === 'TODOS') checked @endif><label>Todos</label>
-            <button class="btn btn-secondary mb-2" id="filterButton">Filtrar</button>
-        </div>
-    </form>
+            <form action="{{ route('eventos.index') }}" method="GET" style="display: flex">
+                <div class="form-group" style="display: flex; align-items: center; gap: 1rem">
+                    <label for="lista-filtrar" style="white-space: nowrap; margin: 0%">Filtrar por estado:</label>
+                    <select name="estado" id="lista-filtrar" class="form-control" onchange="this.form.submit()">
+                        <option value="" @if($estado === '') selected @endif>Todos</option>
+                        <option value="APROBADO" @if($estado === 'APROBADO') selected @endif>Aprobado</option>
+                        <option value="NO APROBADO" @if($estado === 'NO APROBADO') selected @endif>No aprobado</option>
+                        <option value="POR APROBAR" @if($estado === 'POR APROBAR') selected @endif>Pendiente</option>
+                    </select>
+                    <input type="radio" name="filtro_fecha" value="ANTERIORES" @if($filtro_fecha === 'ANTERIORES') checked @endif onchange="this.form.submit()">
+                    <label>Anteriores</label>
+                    <input type="radio" name="filtro_fecha" value="PROXIMOS" 
+                    @if($filtro_fecha === 'PROXIMOS'|| $filtro_fecha === null) checked @endif onchange="this.form.submit()">
+                    <label>Proximos</label>
+                    <input type="radio" name="filtro_fecha" value="TODOS" @if($filtro_fecha === 'TODOS') checked @endif onchange="this.form.submit()">
+                    <label>Todos</label>
+                    <!-- <button class="btn btn-secondary mb-2" id="filterButton">Filtrar</button> -->
+                </div>
+            </form>
 
             <div class="nav nav-tabs" style="margin-bottom: 1rem">
                 <button id="tab-calendario" value="calendario" class="nav-link nav-link-focused">Calendario</button>

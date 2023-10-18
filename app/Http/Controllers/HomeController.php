@@ -100,7 +100,7 @@ class HomeController extends Controller
                     ["titulo" => "Gestión de Constancias", "enlace" => ""],
                 ]
             ],
-
+            /*
             [
                 "titulo" => "Grupos",
                 "background" => $colores[0],
@@ -110,6 +110,7 @@ class HomeController extends Controller
                     ["titulo" => "Gestión de Grupos", "enlace" => ""],
                 ]
             ],
+            **/
 
             [
                 "titulo" => "Estudiantes",

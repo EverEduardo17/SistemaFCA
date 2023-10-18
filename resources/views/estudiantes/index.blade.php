@@ -49,7 +49,7 @@
                             {{ $estudiante->trayectoria->datosPersonales->NombreDatosPersonales }}
                         </td>
 
-                        <td class="border-right">{{ $estudiante->trayectoria->grupo->NombreGrupo }}</td>
+                        {{-- <td class="border-right">{{ $estudiante->trayectoria->grupo->NombreGrupo }}</td> --}}
 
                         <td>{{ $estudiante->trayectoria->datosPersonales->Genero }}</td>
 

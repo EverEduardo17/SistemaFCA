@@ -72,6 +72,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="form-group">
                     <div class="form-row">
                         <div class="col">
@@ -83,17 +84,18 @@
                                     </option>
                                 @endforeach
                             </select>
+                
                         </div>
-                        <div class="col">
-                            <label name="IdGrupo">Grupo de pertenencia:</label>
-                            <select name="IdGrupo" id="IdGrupo" class="form-control @error('IdGrupo') is-invalid @enderror">
+                        {{--<div class="col">
+                                <label name="IdGrupo">Grupo de pertenencia:</label>
+                                <select name="IdGrupo" id="IdGrupo" class="form-control @error('IdGrupo') is-invalid @enderror">  
                                 @foreach ($grupos as $grupo)
-                                    <option value="{{ $grupo->IdGrupo }}"> 
-                                        {{ $grupo->NombreGrupo }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                                        <option value="{{ $grupo->IdGrupo }}"> 
+                                            {{ $grupo->NombreGrupo }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div> --}}
                     </div>
                 </div>
 

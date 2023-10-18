@@ -39,7 +39,8 @@ class EventoController extends Controller
 
         $filtro_fecha = request('filtro_fecha');
 
-        Gate::authorize('havepermiso', 'eventos-listar');       
+        Gate::authorize('havepermiso', 'eventos-listar');
+               
         if($filtro_fecha == 'PROXIMOS' || $filtro_fecha== null){
             $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])

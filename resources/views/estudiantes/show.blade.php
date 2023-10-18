@@ -84,16 +84,16 @@
                     </select>
 
                 </div>
-                
-                <div class="col">
+                <!-- Se comento parea 
+                <!-- <div class="col">
                     <label for="IdGrupo">Grupo de pertenencia:</label>
 
                     <select name="IdGrupo" id="IdGrupo" class="form-control" disabled>
                         <option> 
-                            {{ $estudiante->trayectoria->grupo->NombreGrupo }}
+                           {{-- {{ $estudiante->trayectoria->grupo->NombreGrupo }} --}}
                         </option>
                     </select>
-                </div>
+                </div> -->
 
             </div>
         </div>
