@@ -8,21 +8,14 @@
     </ol>
 </nav>
 <div class="container">
-    <div class="row">
-        <div class="col-lg-3 col-md-3 text-center">
-            <h4>Fechas de Eventos</h4>
-        </div>
-    </div>
     <div class="row justify-content-center">
-        <div class="col-lg-3 col-md-4 mb-3 text-center">
-            <hr>
-            <div id="dateStart" class="ui-datepicker-div"></div>
-            <hr>
-            @can('havepermiso', 'eventos-crear')
-                <a class="btn btn-primary btn-lg" href="{{route('eventos.create')}}">Registrar un evento</a>
-            @endcan
-        </div>
         <div class="col-lg-9 col-md-8">
+            <div style="display: inline-flex; width: 100%; justify-content: space-between; margin-bottom: 1rem;">
+                <h4>Fechas de Eventos</h4>
+                @can('havepermiso', 'eventos-crear')
+                    <a class="btn btn-primary btn-lg" href="{{route('eventos.create')}}">Registrar un evento</a>
+                @endcan
+            </div>
             <form action="{{ route('eventos.index') }}" method="GET" style="display: flex">
                 <div class="form-group" style="display: flex; align-items: center; gap: 1rem">
                     <label for="lista-filtrar" style="white-space: nowrap; margin: 0%">Filtrar por estado:</label>
@@ -42,43 +35,10 @@
                     <!-- <button class="btn btn-secondary mb-2" id="filterButton">Filtrar</button> -->
                 </div>
             </form>
-
-            <div class="nav nav-tabs" style="margin-bottom: 1rem">
-                <button id="tab-calendario" value="calendario" class="nav-link nav-link-focused">Calendario</button>
-                <button id="tab-tabla" value="tabla" class="nav-link">Tabla</button>
-            </div>
             <div>
                 <div id="calendario">
                     <input id="buscadorCalendario" placeholder="Buscar evento..."></input>
                     <div id="calendar"></div>
-                </div>
-                <div id="tabla" style="display: none">
-                    <table id="table-jquery" class="display border-bottom" style="">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Nombre</th>
-                                <th>Sede</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($evento_fecha_sede_s as $efs)
-                            <tr>
-                                <td>{{$efs->fechaEvento->InicioFechaEvento ?? ""}}</td>
-                                <td>{{$efs->evento->NombreEvento ?? ""}}</td>
-                                <td>{{$efs->sedeEvento->NombreSedeEvento ?? ""}}</td>
-                                <td>{{$efs->evento->EstadoEvento ?? ""}}</td>
-                                <td>
-                                    @can('havepermiso', 'eventos-leer')
-                                        <a class="btn btn-sm btn-outline-primary" href="{{ route('eventos.show', [$efs->IdEvento]) }}"> Detalles</a>
-                                    @endcan
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
@@ -100,14 +60,10 @@
         margin-right: auto;
     }
 
-    .nav-link-focused {
-        background: #007bff;
-        color: aliceblue;
-    }
-
     #buscadorCalendario {
         width: 95%;
         margin: 1rem;
+        margin-top: 0;
         padding-left: 0.5rem;
     }
 </style>
@@ -132,26 +88,6 @@
             "/" + e.date.getDate();
         //console.log(e.date.toISOString().slice(0,10) );
     });
-</script>
-
-<!-- Vistas -->
-<script defer>
-    const tabCalendario = document.getElementById("tab-calendario")
-    const tabTabla = document.getElementById("tab-tabla")
-    const calendario = document.getElementById("calendario")
-    const tabla = document.getElementById("tabla")
-
-    function changeTab(evt) {
-        tabCalendario.classList.remove("nav-link-focused")
-        tabTabla.classList.remove("nav-link-focused")
-        evt.target.classList.add("nav-link-focused")
-        calendario.style = "display: none"
-        tabla.style = "display: none"
-        document.getElementById(evt.target.value).style = "display: block"
-    }
-
-    tabCalendario.addEventListener("click", changeTab)
-    tabTabla.addEventListener("click", changeTab)
 </script>
 
 <!-- Full Calendar -->
@@ -179,7 +115,6 @@
             initialView: 'dayGridMonth',
             locale: "es",
             headerToolbar: toolbar,
-            footerToolbar: toolbar,
             buttonText: {
                 today: 'Hoy',
                 month: 'Mes',
