@@ -21,8 +21,22 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * Class GrupoController
+ *
+ * Controlador para gestionar grupos de estudiantes.
+ *
+ * Este controlador maneja las operaciones relacionadas con los grupos de estudiantes,
+ * incluyendo la creación, edición, eliminación y visualización de grupos.
+ */
 class GrupoController extends Controller
 {
+    /**
+     * Muestra la lista de grupos.
+     *
+     * @return \Illuminate\View\View Vista de la lista de los grupos registrados.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function index()
     {
         \Gate::authorize('havepermiso', 'estudiante-ver-todos-propio');
@@ -33,6 +47,12 @@ class GrupoController extends Controller
         ]);
     }
 
+    /**
+     * Muestra el formulario para crear un nuevo grupo.
+     *
+     * @return \Illuminate\View\View Vista del formulario de creación de grupos.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function create()
     {
         \Gate::authorize('havepermiso', 'estudiante-ver-todos-propio');
@@ -53,6 +73,13 @@ class GrupoController extends Controller
         ]);
     }
 
+    /**
+     * Almacena un nuevo grupo en la base de datos.
+     *
+     * @param GrupoRequest $request El objeto Request que contiene los datos del grupo a almacenar.
+     * @return \Illuminate\Http\RedirectResponse Una redirección a la página de índice de grupos.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function store(GrupoRequest $request)
     {
         \Gate::authorize('havepermiso', 'estudiante-crear');
@@ -90,6 +117,7 @@ class GrupoController extends Controller
             $input = $request->validated();
             $nombreGrupo            = strtoupper($input['NombreGrupo']);
             $input['NombreGrupo']   = $nombreGrupo;
+            // Almacena el nuevo grupo en la base de datos
             Grupo::create($input);
             Session::flash('flash', [['type' => "success", 'message' => "Grupo registrado correctamente."]]);
             return redirect()->route('grupos.index');
@@ -99,6 +127,13 @@ class GrupoController extends Controller
         }
     }
 
+     /**
+     * Muestra un grupo específico.
+     *
+     * @param Grupo $grupo El grupo a mostrar.
+     * @return \Illuminate\View\View Grupo a mostrar.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function show(Grupo $grupo)
     {
         \Gate::authorize('havepermiso', 'estudiante-ver-propio');
@@ -106,7 +141,13 @@ class GrupoController extends Controller
         return view('grupos.show', compact('grupo'));
     }
 
-
+    /**
+     * Muestra el formulario de edición para un grupo existente.
+     *
+     * @param Grupo $grupo El grupo a editar.
+     * @return \Illuminate\View\View Vista de edición de grupo.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function edit(Grupo $grupo)
     {
         \Gate::authorize('havepermiso', 'estudiante-ver-propio');
@@ -127,6 +168,14 @@ class GrupoController extends Controller
         ]);
     }
 
+    /**
+     * Actualiza los datos de un grupo.
+     *
+     * @param GrupoRequest $request El objeto Request que contiene los datos actualizados del grupo.
+     * @param Grupo $grupo El grupo a actualizar.
+     * @return \Illuminate\Http\RedirectResponse Una redirección a la página de índice de grupos.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function update(GrupoRequest $request, Grupo $grupo) 
     {
         \Gate::authorize('havepermiso', 'estudiante-editar-propio');
@@ -138,6 +187,13 @@ class GrupoController extends Controller
         return redirect()->route('grupos.index');
     }
 
+    /**
+     * Elimina un grupo si no está ocupado por estudiantes.
+     *
+     * @param Grupo $grupo El grupo a eliminar.
+     * @return \Illuminate\Http\RedirectResponse Una redirección a la página de índice de grupos.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function destroy(Grupo $grupo)
     {
         \Gate::authorize('havepermiso', 'estudiante-eliminar-propio');
@@ -161,12 +217,24 @@ class GrupoController extends Controller
 
     //<---- Métodos auxiliares ---->
 
+    /**
+     * Cuenta la cantidad de estudiantes en un grupo específico.
+     *
+     * @param int $idGrupo El ID del grupo del cual contar estudiantes.
+     * @return int La cantidad de estudiantes en el grupo.
+     */
     public function contarEstudiantes($idGrupo)
     {
         $cantidadEstudiantes = Trayectoria::where('IdGrupo', $idGrupo)->count();
         return $cantidadEstudiantes;
     }
 
+    /**
+     * Obtiene las cantidades de estudiantes por género en una colección de estudiantes.
+     *
+     * @param array $estudiantes La colección de estudiantes.
+     * @return array Un arreglo asociativo con las cantidades de hombres y mujeres.
+     */
     private function getCantidadesGenero($estudiantes)
     {
         $hombre = 0;
@@ -188,6 +256,13 @@ class GrupoController extends Controller
         return [$hombre, $mujer];
     }
 
+    /**
+     * Obtiene la cantidad de estudiantes por período en una colección de estudiantes.
+     *
+     * @param array $estudiantes La colección de estudiantes.
+     * @param int $idGrupo El ID del grupo al que pertenecen los estudiantes.
+     * @return array Un arreglo de cantidades de estudiantes por período.
+     */
     private function getEstudiantesPorPeriodo($estudiantes, $idGrupo)
     {
         $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get()->last();
@@ -223,6 +298,13 @@ class GrupoController extends Controller
         return $cantidades;
     }
 
+    /**
+     * Obtiene la cantidad de estudiantes reprobados por período en una colección de estudiantes.
+     *
+     * @param array $estudiantes La colección de estudiantes.
+     * @param int $idGrupo El ID del grupo al que pertenecen los estudiantes.
+     * @return array Un arreglo de cantidades de estudiantes reprobados por período.
+     */
     private function getReprobadosPorPeriodo($estudiantes, $idGrupo)
     {
         $grupo              = Grupo::where('IdGrupo', '=', $idGrupo)->get()->last();
@@ -258,6 +340,12 @@ class GrupoController extends Controller
         return $cantidades;
     }
 
+    /**
+     * Obtiene la cantidad de estudiantes por modalidad de titulación en una colección de estudiantes.
+     *
+     * @param array $estudiantes La colección de estudiantes.
+     * @return array Un arreglo de cantidades de estudiantes por modalidad de titulación.
+     */
     private function getEstudiantesPorModalidad($estudiantes)
     {
         $modalidades        = Modalidad::where('TipoModalidad', '=', 'Titulación')->get();
@@ -291,6 +379,12 @@ class GrupoController extends Controller
         return $cantidades;
     }
 
+    /**
+     * Obtiene la cantidad de estudiantes por motivo de baja en una colección de estudiantes.
+     *
+     * @param array $estudiantes La colección de estudiantes.
+     * @return array Un arreglo de cantidades de estudiantes por motivo de baja.
+     */
     private function getEstudiantesPorMotivo($estudiantes)
     {
         $motivos            = Motivo::get();
@@ -324,22 +418,47 @@ class GrupoController extends Controller
         return $cantidades;
     }
 
+    /**
+     * Limpia el nombre de un grupo reemplazando guiones con espacios.
+     *
+     * @param string $nombreGrupo El nombre del grupo a limpiar.
+     * @return string El nombre del grupo limpio.
+     */
     private function getNombreGrupoLimpio($nombreGrupo)
     {
         return str_replace("-", " ", $nombreGrupo);
     }
 
+    /**
+     * Limpia el nombre de un período reemplazando guiones bajos con espacios.
+     *
+     * @param string $nombrePeriodo El nombre del período a limpiar.
+     * @return string El nombre del período limpio.
+     */
     private function getNombrePeriodoLimpio($nombrePeriodo)
     {
         return str_replace("_", " ", $nombrePeriodo);
     }
 
+    /**
+     * Obtiene el ID de un grupo en base a su nombre de cohorte y nombre de grupo real.
+     *
+     * @param string $nombreCohorte El nombre del cohorte.
+     * @param string $nombreGrupoReal El nombre real del grupo.
+     * @return int|false El ID del grupo si se encuentra, o falso si no se encuentra.
+     */
     private function getIdGrupo($nombreCohorte, $nombreGrupoReal)
     {
         $idCohorte      = Cohorte::where('NombreCohorte', '=', $nombreCohorte)->value('IdCohorte');
         return Grupo::where('NombreGrupo', '=', $nombreGrupoReal)->where('IdCohorte', '=', $idCohorte)->value('IdGrupo');
     }
 
+    /**
+     * Obtiene las modalidades de titulación para un programa educativo.
+     *
+     * @param int $idProgramaEducativo El ID del programa educativo.
+     * @return \Illuminate\Support\Collection Una colección de modalidades de titulación disponibles.
+     */
     private function getModalidades($idProgramaEducativo)
     {
         $idLIS              = ProgramaEducativo::where('AcronimoProgramaEducativo', '=', 'LIS')->value('IdProgramaEducativo');
@@ -354,6 +473,13 @@ class GrupoController extends Controller
 
  //<---- Funciones para visualizar las tablas resumen de los grupos ---->
 
+    /**
+     * Muestra la información resumen de un grupo específico.
+     *
+     * @param string $nombreCohorte El nombre del cohorte del grupo.
+     * @param string $nombreGrupo El nombre del grupo.
+     * @return \Illuminate\View\View La vista que muestra la información del grupo.
+     */
     public function mostrarGrupo($nombreCohorte, $nombreGrupo)
     {
         return view('grupos.index', [
@@ -363,6 +489,12 @@ class GrupoController extends Controller
 
     //<---- Métodos de apoyo para obtener los datos---->
 
+    /**
+     * Obtiene los datos resumen de un grupo en base a su ID.
+     *
+     * @param int $idGrupo El ID del grupo.
+     * @return array Un arreglo con los datos del grupo.
+     */
     private function getDatosResumen($idGrupo)
     {
         $estudiantes    = DB::table('Grupo_Estudiante')
@@ -436,6 +568,12 @@ class GrupoController extends Controller
         ];
     }
 
+    /**
+     * Obtiene los datos del estado (activo, egresado, baja) de un grupo en base a su ID.
+     *
+     * @param int $idGrupo El ID del grupo.
+     * @return array Un arreglo con los datos de estado del grupo.
+     */
     private function getDatosEstado($idGrupo)
     {
         $estudiantes = DB::table('Grupo_Estudiante')
@@ -479,5 +617,4 @@ class GrupoController extends Controller
             'totalBajas'        => $totalBajas,
         ];
     }
-
 }

@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class SedeEventoController extends Controller {
+    /**
+     * Muestra la lista de sedes de eventos.
+     *
+     * @return \Illuminate\View\View La vista de la lista de sedes de eventos
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function index() {
         Gate::authorize('havepermiso', 'sedes-listar');
 
@@ -18,6 +24,12 @@ class SedeEventoController extends Controller {
         ]);
     }
 
+    /**
+     * Muestra el formulario para crear una nueva sede de evento.
+     *
+     * @return \Illuminate\View\View Vista del formulario de creación de sede.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function create() {
         Gate::authorize('havepermiso', 'sedes-listar');
 
@@ -26,6 +38,13 @@ class SedeEventoController extends Controller {
         ]);
     }
 
+    /**
+     * Almacena una nueva sede de evento en la base de datos.
+     *
+     * @param SedeEventoRequest $request El objeto Request que contiene los datos de la sede de evento a almacenar.
+     * @return \Illuminate\Http\RedirectResponse Una redirección a la página de índice de sedes de eventos.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function store(SedeEventoRequest $request) {
         Gate::authorize('havepermiso', 'sedes-crear');
 
@@ -39,11 +58,24 @@ class SedeEventoController extends Controller {
             return redirect()->route('sedeEventos.index');
         }
     }
-
+    
+    /**
+     * Muestra una sede de evento específica.
+     *
+     * @param SedeEvento $sedeEvento La sede de evento a mostrar.
+     * @return void
+     */
     public function show(SedeEvento $sedeEvento) {
-        //
+        //No se implementa en esta función.
     }
 
+    /**
+     * Muestra el formulario de edición para una sede de evento existente.
+     *
+     * @param SedeEvento $sedeEvento La sede de evento a editar.
+     * @return \Illuminate\View\View Vista de edición de sede.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function edit(SedeEvento $sedeEvento) {
         Gate::authorize('havepermiso', 'sedes-listar');
 
@@ -52,6 +84,14 @@ class SedeEventoController extends Controller {
         ]);
     }
 
+    /**
+     * Actualiza los datos de una sede de evento existente.
+     *
+     * @param SedeEventoRequest $request El objeto Request que contiene los datos actualizados de la sede de evento.
+     * @param SedeEvento $sedeEvento La sede de evento a actualizar.
+     * @return \Illuminate\Http\RedirectResponse Una redirección a la página de índice de sedes de eventos.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function update(SedeEventoRequest $request, SedeEvento $sedeEvento) {
         Gate::authorize('havepermiso', 'sedes-editar');
 
@@ -66,6 +106,13 @@ class SedeEventoController extends Controller {
 
     }
 
+    /**
+     * Elimina una sede de evento del sistema, si no está asignada a ningún evento.
+     *
+     * @param SedeEvento $sedeEvento La sede de evento a eliminar.
+     * @return \Illuminate\Http\RedirectResponse Una redirección a la página de índice de sedes de eventos.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function destroy(SedeEvento $sedeEvento) {
         Gate::authorize('havepermiso', 'sedes-eliminar');
 
