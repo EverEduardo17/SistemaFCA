@@ -7,9 +7,9 @@
         <li class="breadcrumb-item active" aria-current="page">Eventos</li>
     </ol>
 </nav>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-9 col-md-8">
+<div class="container" style="max-width: 100%">
+    <div class="row justify-content-center" style="margin: 0; max-width: 100%">
+        <div style="width: 100%">
             <div style="display: inline-flex; width: 100%; justify-content: space-between; margin-bottom: 1rem;">
                 <h4>Fechas de Eventos</h4>
                 @can('havepermiso', 'eventos-crear')
