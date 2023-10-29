@@ -37,7 +37,7 @@
             </form>
             <div>
                 <div id="calendario">
-                    <input id="buscadorCalendario" placeholder="Buscar evento..."></input>
+                    <input id="buscadorCalendario" placeholder="Buscar evento..." style="display: none"></input>
                     <div id="calendar"></div>
                 </div>
             </div>
@@ -92,6 +92,8 @@
 
 <!-- Full Calendar -->
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
 <script>
     const searchBar = document.getElementById("buscadorCalendario")
     let calendar;
@@ -102,17 +104,16 @@
     function hiddeBar() {
         searchBar.style = "display: none"
     }
-    hiddeBar()
 
     document.addEventListener('DOMContentLoaded', function() {
         let calendarEl = document.getElementById('calendar');
         const toolbar = {
             left: "prev,next today",
             center: "title",
-            right: "dayGridMonth,timeGridWeek,listYear"
+            right: "listYear,dayGridMonth,timeGridWeek"
         }
         calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
+            initialView: 'listYear',
             locale: "es",
             headerToolbar: toolbar,
             buttonText: {
@@ -122,6 +123,7 @@
                 day: 'Dia',
                 list: 'Lista'
             },
+            noEventsContent: "No se encontraron eventos",
             dateClick: function(info) {
                 let day = 0
                 let month = 0
@@ -140,16 +142,26 @@
             viewWillUnmount: function(info) {
                 hiddeBar()
             },
+            eventDidMount: function(info) {
+                tippy(info.el, {
+                    content: info.event.title,
+                })
+            },
             events: function (fetchInfo, successCallback, failureCallback) {
                 let eventos = @json($calendar_events);
-                let filtrados = eventos.filter(ev => 
-                    ev.title.toLowerCase().normalize('NFD')
-                    .replace(/[\u0300-\u036f]/g,"")
-                    .match(searchBar.value));
+                let filtro = searchBar.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f-]/g,"")
+                const keys = filtro.split(/ {1,}/g)
+                let filtrados = eventos.filter(ev => {
+                    return keys.every(key => {
+                        return ev.title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f-]/g,"").includes(key)
+                    })
+                })
                 successCallback(filtrados);
             }
         });
         calendar.render();
+        const headerToolbar = document.querySelector('.fc-header-toolbar.fc-toolbar.fc-toolbar-ltr')
+        headerToolbar.parentNode.insertBefore(searchBar, headerToolbar.nextSibling)
     });
 
     searchBar.addEventListener("input", () => {
