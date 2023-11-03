@@ -16,9 +16,17 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * Controlador para la gestión de estudiantes.
+ */
 class EstudianteController extends Controller
 {
-
+    /**
+     * Muestra la lista de todos los estudiantes.
+     *
+     * @return \Illuminate\View\View La vista que muestra la lista de estudiantes.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function index() 
     {
         \Gate::authorize('havepermiso', 'estudiante-ver-todos-propio');
@@ -28,6 +36,12 @@ class EstudianteController extends Controller
         return view('estudiantes.index')->with('estudiantes', $estudiantes);
     }
 
+    /**
+     * Muestra el formulario para crear un nuevo estudiante.
+     *
+     * @return \Illuminate\View\View La vista del formulario de creación de estudiantes.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function create() 
     {
         Gate::authorize('havepermiso', 'estudiante-ver-propio');
@@ -41,6 +55,12 @@ class EstudianteController extends Controller
         return view('estudiantes.create', compact('cohortes', 'grupos', 'modalidades', 'programasEducativos'));
     }
 
+    /**
+     * Muestra los detalles de un estudiante específico.
+     *
+     * @param Estudiante $estudiante El estudiante a mostrar.
+     * @return \Illuminate\View\View La vista que muestra los detalles del estudiante.
+     */
     public function show(Estudiante $estudiante)
     {
         Gate::authorize('havepermiso', 'estudiante-ver-propio');
@@ -48,6 +68,13 @@ class EstudianteController extends Controller
         return view('estudiantes.show', compact('estudiante'));   
     }
 
+    /**
+     * Muestra el formulario de edición para un estudiante específico.
+     *
+     * @param Estudiante $estudiante El estudiante a editar.
+     * @return \Illuminate\View\View La vista de edición de estudiantes.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function edit(Estudiante $estudiante) 
     {
         Gate::authorize('havepermiso', 'estudiante-ver-propio');
@@ -60,6 +87,12 @@ class EstudianteController extends Controller
         return view('estudiantes.edit', compact('estudiante', 'cohortes', 'programasEducativos', 'modalidades', 'grupos'));
     }
 
+    /**
+     * Almacena un nuevo estudiante en el sistema.
+     *
+     * @param EstudianteRequest $request El objeto Request que contiene los datos del estudiante a almacenar.
+     * @return \Illuminate\Http\RedirectResponse Una redirección a la página de índice de estudiantes.
+     */
     public function store(EstudianteRequest $request)
     {
         Gate::authorize('havepermiso', 'estudiante-crear');
@@ -151,7 +184,13 @@ class EstudianteController extends Controller
         return redirect()->route('estudiantes.index');
     }
 
-
+    /**
+     * Actualiza los datos de un estudiante específico.
+     *
+     * @param EstudianteRequest $request El objeto Request que contiene los datos actualizados del estudiante.
+     * @param Estudiante $estudiante El estudiante a actualizar.
+     * @return \Illuminate\Http\RedirectResponse Una redirección a la página de índice de estudiantes.
+     */
     public function update(EstudianteRequest $request, Estudiante $estudiante)
     {
         Gate::authorize('havepermiso', 'estudiante-editar-propio');
@@ -171,6 +210,13 @@ class EstudianteController extends Controller
         return redirect()->route('estudiantes.index');
     }
 
+    /**
+     * Elimina un estudiante del sistema.
+     *
+     * @param Estudiante $estudiante El estudiante a eliminar.
+     * @return \Illuminate\Http\RedirectResponse Una redirección a la página de índice de estudiantes.
+     * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
+     */
     public function destroy(Estudiante $estudiante)
     {
         Gate::authorize('havepermiso', 'estudiante-eliminar-propio');
@@ -188,6 +234,4 @@ class EstudianteController extends Controller
             return redirect()->route('estudiantes.index');
         }
     }
-
-    
 }
