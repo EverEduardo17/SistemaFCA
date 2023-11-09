@@ -100,6 +100,7 @@ class HomeController extends Controller
                     ["titulo" => "Gestión de Constancias", "enlace" => ""],
                 ]
             ],
+            //Se oculto la tarjeta de grupos
             /*
             [
                 "titulo" => "Grupos",

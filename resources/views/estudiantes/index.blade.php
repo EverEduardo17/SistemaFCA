@@ -44,14 +44,14 @@
                         </th>
 
                         <td class="border-right">
-                            {{ $estudiante->trayectoria->datosPersonales->ApellidoPaternoDatosPersonales }}
-                            {{ $estudiante->trayectoria->datosPersonales->ApellidoMaternoDatosPersonales }}
-                            {{ $estudiante->trayectoria->datosPersonales->NombreDatosPersonales }}
+                            {{ $estudiante->usuario->datosPersonales->ApellidoPaternoDatosPersonales }}
+                            {{ $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales }}
+                            {{ $estudiante->usuario->datosPersonales->NombreDatosPersonales }}
                         </td>
 
                         {{-- <td class="border-right">{{ $estudiante->trayectoria->grupo->NombreGrupo }}</td> --}}
 
-                        <td>{{ $estudiante->trayectoria->datosPersonales->Genero }}</td>
+                        <td>{{ $estudiante->usuario->datosPersonales->Genero }}</td>
 
                         @can('havepermiso', 'estudiante-ver-propio')
                             <td class="btn-group btn-group-sm border-left">

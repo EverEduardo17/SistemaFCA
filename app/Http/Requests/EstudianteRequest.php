@@ -22,12 +22,12 @@ class EstudianteRequest extends FormRequest
             'NombreDatosPersonales'             => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
             'ApellidoPaternoDatosPersonales'    => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
             'ApellidoMaternoDatosPersonales'    => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
-            'IdCohorte'                         => 'required | numeric',
+            // 'IdCohorte'                         => 'required | numeric',
             'MatriculaEstudiante'               => ['required', 'String', 'max:9', 'regex:/^S\d{1,8}$/i', 'unique:Estudiante,MatriculaEstudiante,' . $IdEstudiante . ',IdEstudiante'],
-            'IdProgramaEducativo'               => 'required | numeric',
-            'IdGrupo'                           => 'numeric',
+            // 'IdProgramaEducativo'               => 'required | numeric',
+            //'IdGrupo'                           => 'numeric',
             //'IdGrupo'                           => 'required | numeric',
-            'IdModalidad'                       => 'required | numeric',
+            // 'IdModalidad'                       => 'required | numeric',
             'Genero'                            => 'required | String',
 
         ];

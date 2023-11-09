@@ -5,7 +5,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('estudiantes.index') }}">Gestión de Estudiantes</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{$estudiante->trayectoria->estudiante->MatriculaEstudiante}}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{$estudiante->MatriculaEstudiante}}</li>
     </ol>
 </nav>
 
@@ -15,7 +15,7 @@
             <h5 class="card-title">
                 <strong>
                     Editar información del Estudiante: 
-                    "{{$estudiante->trayectoria->estudiante->MatriculaEstudiante}}"
+                    "{{$estudiante->MatriculaEstudiante}}"
                 </strong>
             </h5>
 
@@ -41,27 +41,28 @@
                             <label for="NombreDatosPersonales">Nombre(s):</label>
                             <input name="NombreDatosPersonales" type="text"
                                 class="form-control @error('NombreDatosPersonales') is-invalid @enderror"
-                                value="{{old('NombreDatosPersonales', $estudiante->trayectoria->datosPersonales->NombreDatosPersonales ) }}"
+                                value="{{old('NombreDatosPersonales', $estudiante->usuario->datosPersonales->NombreDatosPersonales ) }}"
                                 placeholder="Ej. Javier" id="NombreDatosPersonales">
                         </div>
                         <div class="form-group">
                             <label for="ApellidoPaternoDatosPersonales">Apellido Paterno:</label>
                             <input name="ApellidoPaternoDatosPersonales" type="text"
                                 class="form-control @error('ApellidoPaternoDatosPersonales') is-invalid @enderror"
-                                value="{{old('ApellidoPaternoDatosPersonales', $estudiante->trayectoria->datosPersonales->ApellidoPaternoDatosPersonales)}}"
+                                value="{{old('ApellidoPaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoPaternoDatosPersonales)}}"
                                 placeholder="Ej. Pino" id="ApellidoPaternoDatosPersonales">
                         </div>
                         <div class="form-group">
                             <label for="ApellidoMaternoDatosPersonales">Apellido Materno:</label>
                             <input name="ApellidoMaternoDatosPersonales" type="text"
                                 class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror"
-                                value="{{old('ApellidoMaternoDatosPersonales', $estudiante->trayectoria->datosPersonales->ApellidoMaternoDatosPersonales)}}"
+                                value="{{old('ApellidoMaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales)}}"
                                 placeholder="Ej. Herrera" id="ApellidoMaternoDatosPersonales">
                         </div>
                         <div class="form-group">
                             <div class="form-row">
 
-                                <div class="col">
+                            <!-- {{--    
+                            <div class="col">
                                     <label for="IdCohorte">Cohorte de pertenencia:</label>
 
                                     <select name="IdCohorte" id="IdCohorte" class="form-control @error('IdCohorte') is-invalid @enderror">
@@ -71,21 +72,22 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                </div>
+                                </div>--}} -->
 
                                 <div class="col">
                                     <label for="MatriculaEstudiante">Matrícula:</label>
                                     <input name="MatriculaEstudiante" type="text"
                                         class="form-control @error('MatriculaEstudiante') is-invalid @enderror"
-                                        value="{{old('MatriculaEstudiante', $estudiante->trayectoria->estudiante->MatriculaEstudiante)}}"
+                                        value="{{old('MatriculaEstudiante', $estudiante->MatriculaEstudiante)}}"
+                                        {{--value="{{old('MatriculaEstudiante', $estudiante->estudiante->MatriculaEstudiante)}}"--}}
                                         placeholder="Ej. S17000000" id="MatriculaEstudiante">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
 
-                            <div class="form-row">
+                           {{-- <div class="form-row">
                                 <div class="col">
                                     <label for="IdProgramaEducativo">Programa Educativo de pertenencia:</label>
                                     
@@ -97,9 +99,9 @@
                                         @endforeach
                                     </select>
 
-                                </div>
+                                </div>--}}
                                 
-                                <div class="col">
+                                 <div class="col">
                                     <label for="IdGrupo">Grupo de pertenencia:</label>
 
                                     <select name="IdGrupo" id="IdGrupo" class="form-control @error('IdGrupo') is-invalid @enderror">
@@ -109,14 +111,14 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                </div>
+                                </div> 
 
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <div class="form-row">
 
-                                <div class="col">
+                              <!-- {{--  <div class="col">
                                     <label for="modalidad">Modalidad de entrada:</label>
 
                                     <select name="IdModalidad" class="form-control @error('IdModalidad') is-invalid @enderror" id="IdModalidad">
@@ -131,16 +133,16 @@
                                         @endforeach
                                     </select>
 
-                                </div>
+                                </div>--}} -->
 
                                 <div class="col">
                                     <label for="Genero">Género:</label>
 
                                     <select name="Genero" id="Genero" class="form-control @error('Genero') is-invalid @enderror">
-                                        <option value="Mujer" @if($estudiante->trayectoria->datosPersonales->Genero === "Mujer") selected @endif >
+                                        <option value="Mujer" @if($estudiante->usuario->datosPersonales->Genero === "Mujer") selected @endif >
                                             Mujer
                                         </option>
-                                        <option value="Hombre" @if($estudiante->trayectoria->datosPersonales->Genero === "Hombre") selected @endif >
+                                        <option value="Hombre" @if($estudiante->usuario->datosPersonales->Genero === "Hombre") selected @endif >
                                             Hombre
                                         </option>
                                     </select>

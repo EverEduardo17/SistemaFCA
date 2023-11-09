@@ -82,12 +82,12 @@ class EstudianteController extends Controller
                 return redirect()->route('estudiantes.show', $request->IdGrupo);
             }
         }
-        $matricula = $request->MatriculaEstudiante;
-        $cohorte = Cohorte::where('IdCohorte', '=', $request->IdCohorte)->value('NombreCohorte');
-        if (strpos($matricula, $cohorte) !== 0) {
-            Session::flash('flash', [['type' => "danger", 'message' => "La matrícula ingresada no corresponde al cohorte seleccionado."]]);
-            return redirect()->route('estudiantes.create');
-        }
+        // $matricula = $request->MatriculaEstudiante;
+        // $cohorte = Cohorte::where('IdCohorte', '=', $request->IdCohorte)->value('NombreCohorte');
+        // if (strpos($matricula, $cohorte) !== 0) {
+        //     Session::flash('flash', [['type' => "danger", 'message' => "La matrícula ingresada no corresponde al cohorte seleccionado."]]);
+        //     return redirect()->route('estudiantes.create');
+        // }
 
         //<---- Verifica si es un traslado  ---->
         $tipoEntrada = $request->IdModalidad;
@@ -127,18 +127,20 @@ class EstudianteController extends Controller
                 'Genero'                              => $input['Genero'],
                 'IdUsuario'   => $idUsuarioDB,
             ]);
-
-            $idTrayectoria = DB::table('Trayectoria')->insertGetId([
-                'EstudianteRegular'     => 1,
-                'TotalPeriodos'         => 1,
-                //'IdGrupo'               => $input['IdGrupo'],
-                'IdEstudiante'          => $idEstudianteDB,
-                'IdProgramaEducativo'   => $input['IdProgramaEducativo'],
-                'IdModalidad'           => $input['IdModalidad'],
-                'IdCohorte'             => $input['IdCohorte'],
-                'IdDatosPersonales'     => $idDatosPersonales
-            ]);
+            
+            // $idTrayectoria = DB::table('Trayectoria')->insertGetId([
+            //     'EstudianteRegular'     => 1,
+            //     'TotalPeriodos'         => 1,
+            //     //'IdGrupo'               => $input['IdGrupo'],
+            //     'IdEstudiante'          => $idEstudianteDB,
+            //     'IdProgramaEducativo'   => $input['IdProgramaEducativo'],
+            //     'IdModalidad'           => $input['IdModalidad'],
+            //     'IdCohorte'             => $input['IdCohorte'],
+            //     'IdDatosPersonales'     => $idDatosPersonales
+            // ]);
+             
             DB::commit();
+           
 
         } catch (\Throwable $th) {
 
@@ -164,9 +166,9 @@ class EstudianteController extends Controller
         ]);
 
         $estudiante->update($request->except('MatriculaEstudiante'));
-        $estudiante->trayectoria->datosPersonales->update($request->all());
+        $estudiante->usuario->datosPersonales->update($request->all());
         
-        $estudiante->trayectoria->update($request->all());
+       // $estudiante->trayectoria->update($request->all());
         
 
         return redirect()->route('estudiantes.index');
@@ -178,7 +180,7 @@ class EstudianteController extends Controller
 
         try {
             $estudiante->delete();
-            $estudiante->trayectoria->delete();
+            // $estudiante->trayectoria->delete();
             $estudiante->usuario->delete();
 
             Session::flash('flash', [ ['type' => "success", 'message' => "Estudiante eliminado correctamente."] ]);

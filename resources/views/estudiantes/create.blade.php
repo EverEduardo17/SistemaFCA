@@ -52,7 +52,7 @@
                 </div>
                 <div class="form-group">
                     <div class="form-row">
-                        <div class="col">
+                      {{--  <div class="col">
                             <label name="IdCohorte">Cohorte de pertenencia:</label>
 
                             <select name="IdCohorte" id="IdCohorte" class="form-control @error('IdCohorte') is-invalid @enderror">
@@ -63,7 +63,7 @@
                                 @endforeach
                             </select>
 
-                        </div>
+                        </div>--}}
                         <div class="col">
                             <label name="MatriculaEstudiante">Matricula:</label>
                             <input name="MatriculaEstudiante" type="text"
@@ -74,7 +74,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <div class="form-row">
+                    {{--<div class="form-row">
                         <div class="col">
                             <label name="IdProgramaEducativo">Programa Educativo:</label>
                             <select name="IdProgramaEducativo" id="IdProgramaEducativo" class="form-control @error('IdProgramaEducativo') is-invalid @enderror">
@@ -85,7 +85,8 @@
                                 @endforeach
                             </select>
                 
-                        </div>
+                        </div>--}}
+                        <!-- se comento para ocultar los grupos-->
                         {{--<div class="col">
                                 <label name="IdGrupo">Grupo de pertenencia:</label>
                                 <select name="IdGrupo" id="IdGrupo" class="form-control @error('IdGrupo') is-invalid @enderror">  
@@ -99,7 +100,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                {{--<div class="form-group">
                     <div class="form-row">
                         <div class="col">
                             <label name="IdModalidad">Modalidad de entrada:</label>
@@ -114,7 +115,7 @@
                                                                            
                                 @endforeach
                             </select>
-                        </div>
+                        </div>--}}
 
                         <div class="col">
                             <label name="Genero">Género:</label>

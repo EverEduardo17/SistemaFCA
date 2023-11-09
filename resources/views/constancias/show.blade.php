@@ -105,12 +105,12 @@
                                 </th>
 
                                 <td class="border-right">
-                                    {{ $estudiante->Trayectoria->DatosPersonales->ApellidoPaternoDatosPersonales }}
-                                    {{ $estudiante->Trayectoria->DatosPersonales->ApellidoMaternoDatosPersonales }}
-                                    {{ $estudiante->Trayectoria->DatosPersonales->NombreDatosPersonales }}
+                                    {{ $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales }}
+                                    {{ $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales }}
+                                    {{ $estudiante->Usuario->DatosPersonales->NombreDatosPersonales }}
                                 </td>
 
-                                <td class="border-right">{{ $estudiante->Trayectoria->Grupo->NombreGrupo }}</td>
+                                <td class="border-right">{{ $estudiante->Usuario->Grupo->NombreGrupo }}</td>
 
                                 <td class="py-2 btn-group border-right">
                                     <a class="btn btn-sm btn-outline-success mr-1" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
