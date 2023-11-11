@@ -49,17 +49,6 @@
                 disabled>
         </div>
         <div class="form-group">
-            <!-- {{--<div class="form-row">
-
-                <div class="col">
-                    <label for="IdCohorte">Cohorte de pertenencia:</label>
-
-                    <select name="IdCohorte" id="IdCohorte" class="form-control" disabled>
-                            <option> 
-                                {{ $estudiante->trayectoria->cohorte->NombreCohorte }}
-                            </option>
-                    </select>
-                </div>--}} -->
 
                 <div class="form-group">
                     <label for="MatriculaEstudiante">Matrícula:</label>
@@ -71,45 +60,8 @@
             </div>
         </div>
 
-        <!-- <div class="form-group">
-
-            <div class="form-row">
-                {{--<div class="col">
-                    <label for="IdProgramaEducativo">Programa Educativo de pertenencia:</label>
-                    
-                    <select name="IdProgramaEducativo" id="IdProgramaEducativo" class="form-control" disabled>
-                            <option> 
-                                {{ $estudiante->trayectoria->programaEducativo->NombreProgramaEducativo }}
-                            </option>
-                    </select>
-
-                </div>--}}
-                 Se comento para ocultar los datos del grupo
-                 <div class="col">
-                    <label for="IdGrupo">Grupo de pertenencia:</label>
-
-                    <select name="IdGrupo" id="IdGrupo" class="form-control" disabled>
-                        <option> 
-                           {{-- {{ $estudiante->trayectoria->grupo->NombreGrupo }} --}}
-                        </option>
-                    </select>
-                </div> 
-
-            </div>
-        </div> -->
         <div class="form-group">
             <div class="form-group">
-
-                <!-- {{--<div class="col">
-                    <label>Modalidad de entrada:</label>
-
-                    <select name="IdModalidad" class="form-control" disabled>
-                            <option> 
-                                {{ $estudiante->trayectoria->modalidad->NombreModalidad }}
-                            </option>                                            
-                    </select>
-                </div>--}} -->
-
                 <div class="col">
                     <label for="Genero">Género:</label>
 

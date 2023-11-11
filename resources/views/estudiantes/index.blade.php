@@ -28,7 +28,6 @@
                     <tr class="text-white">
                         <th scope="col" class="border">Matrícula</th>
                         <th scope="col" class="border">Nombre</th>
-                        <th scope="col" class="border">Grupo</th>
                         <th scope="col" class="border">Género</th>
 
                         @can('havepermiso', 'estudiante-ver-propio')

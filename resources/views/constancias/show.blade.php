@@ -78,7 +78,7 @@
                 <a href="#download" data-file-name="{{ $constancia->NombreConstancia }}"data-href="{{ route('constancias.downloadAll', $constancia) }}" class="btn btn-info ml-auto mr-3 download-all"><i class="fas fa-file-archive"></i>
                     Descargar Todo
                 </a>
-                    <a class="btn btn-success col-3" href="{{ route('constancias.indexGrupos', $constancia) }}" role="button">Agregar Estudiantes</a>
+                    <a class="btn btn-success col-3" href="{{ route('constancias.indexEstudiantes', $constancia) }}" role="button">Agregar Estudiantes</a>
                 {{-- @endcan --}}
             </div>
         </div>
@@ -91,7 +91,7 @@
                             <tr class="text-white">
                                 <th scope="col" class="border">Matrícula</th>
                                 <th scope="col" class="border">Nombre</th>
-                                <th scope="col" class="border">Grupo</th>
+                                <th scope="col" class="border">Genero</th>
                                 <th scope="col" class="border actions-col">Acciones</th>
                             </tr>
                         </thead>
@@ -110,7 +110,7 @@
                                     {{ $estudiante->Usuario->DatosPersonales->NombreDatosPersonales }}
                                 </td>
 
-                                <td class="border-right">{{ $estudiante->Usuario->Grupo->NombreGrupo }}</td>
+                                <td class="border-right">{{ $estudiante->Usuario->datosPersonales->Genero }}</td>
 
                                 <td class="py-2 btn-group border-right">
                                     <a class="btn btn-sm btn-outline-success mr-1" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">

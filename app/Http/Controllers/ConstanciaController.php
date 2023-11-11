@@ -276,12 +276,15 @@ class ConstanciaController extends Controller
      * @return \Illuminate\Contracts\View\View La vista que muestra la lista de estudiantes.
      * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene los permisos necesarios.
      */
-    public function indexEstudiantes(Constancia $constancia, Grupo $grupo) {
+    public function indexEstudiantes(Constancia $constancia) {
         Gate::authorize('havepermiso', 'documentos-editar');
 
-        $cohorte = Cohorte::where('IdCohorte', $grupo->IdCohorte)->get()->last();
-        $estudiantes = $grupo->trayectorias;
-        return view('constancias.estudiantes.indexEstudiantes', compact('constancia', 'grupo', 'cohorte', 'estudiantes'));
+        // $cohorte = Cohorte::where('IdCohorte', $grupo->IdCohorte)->get()->last();
+        // $estudiantes = $grupo->trayectorias;
+
+        $estudiantes = Estudiante::all();
+
+        return view('constancias.estudiantes.indexEstudiantes', compact('constancia', 'estudiantes'));
     }
 
     /**
@@ -406,7 +409,7 @@ class ConstanciaController extends Controller
 
         $templateProcessor = new TemplateProcessor($pathPlantilla);
         
-        $sexo = $estudiante->usuario->datosPersonales->SexoDatosPersonales;
+        $sexo = $estudiante->usuario->datosPersonales->Genero;
 
         $pronombre = ($sexo === 'Mujer') ? 'la' : 'el';
         $o_a = ($sexo === 'Mujer') ? 'a' : 'o';
@@ -418,7 +421,7 @@ class ConstanciaController extends Controller
 
             'matricula'             => $estudiante->MatriculaEstudiante,
 
-            // 'programa_educativo'    => $estudiante->Trayectoria->ProgramaEducativo->NombreProgramaEducativo,
+            'programa_educativo'    => $estudiante->Trayectoria->ProgramaEducativo->NombreProgramaEducativo ?? $estudiante->usuario->password,
 
             'nombre_constancia'     => $constancia->NombreConstancia,
 

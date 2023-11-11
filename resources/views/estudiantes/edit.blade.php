@@ -48,93 +48,45 @@
                             <label for="ApellidoPaternoDatosPersonales">Apellido Paterno:</label>
                             <input name="ApellidoPaternoDatosPersonales" type="text"
                                 class="form-control @error('ApellidoPaternoDatosPersonales') is-invalid @enderror"
-                                value="{{old('ApellidoPaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoPaternoDatosPersonales)}}"
+                                value="{{ old('ApellidoPaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoPaternoDatosPersonales) }}"
                                 placeholder="Ej. Pino" id="ApellidoPaternoDatosPersonales">
                         </div>
                         <div class="form-group">
                             <label for="ApellidoMaternoDatosPersonales">Apellido Materno:</label>
                             <input name="ApellidoMaternoDatosPersonales" type="text"
                                 class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror"
-                                value="{{old('ApellidoMaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales)}}"
+                                value="{{ old('ApellidoMaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales) }}"
                                 placeholder="Ej. Herrera" id="ApellidoMaternoDatosPersonales">
                         </div>
                         <div class="form-group">
                             <div class="form-row">
-
-                            <!-- {{--    
-                            <div class="col">
-                                    <label for="IdCohorte">Cohorte de pertenencia:</label>
-
-                                    <select name="IdCohorte" id="IdCohorte" class="form-control @error('IdCohorte') is-invalid @enderror">
-                                        @foreach ($cohortes as $cohorte)
-                                            <option value="{{ $cohorte->IdCohorte }}" @if($estudiante->trayectoria->IdCohorte === $cohorte->IdCohorte) selected @endif > 
-                                                {{ $cohorte->NombreCohorte }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>--}} -->
 
                                 <div class="col">
                                     <label for="MatriculaEstudiante">Matrícula:</label>
                                     <input name="MatriculaEstudiante" type="text"
                                         class="form-control @error('MatriculaEstudiante') is-invalid @enderror"
                                         value="{{old('MatriculaEstudiante', $estudiante->MatriculaEstudiante)}}"
-                                        {{--value="{{old('MatriculaEstudiante', $estudiante->estudiante->MatriculaEstudiante)}}"--}}
                                         placeholder="Ej. S17000000" id="MatriculaEstudiante">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- <div class="form-group">
-
-                           {{-- <div class="form-row">
+                        <div class="form-group">
+                           <div class="form-row">
                                 <div class="col">
-                                    <label for="IdProgramaEducativo">Programa Educativo de pertenencia:</label>
-                                    
-                                    <select name="IdProgramaEducativo" id="IdProgramaEducativo" class="form-control @error('IdProgramaEducativo') is-invalid @enderror">
-                                        @foreach ($programasEducativos as $programaEducativo)
-                                            <option value="{{ $programaEducativo->IdProgramaEducativo }}" @if($estudiante->trayectoria->IdProgramaEducativo === $programaEducativo->IdProgramaEducativo) selected @endif > 
-                                                {{ $programaEducativo->NombreProgramaEducativo }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <label for="ProgramaEducativo">Programa Educativo de pertenencia:</label>
+                                    {{-- De manera temporal, el programa educativo se guardara en texto plano en el campo Contraseña para los nuevos estudiantes --}}
+                                    <input name="password" type="text" 
+                                        class="form-control @error('password') is-invalid @enderror" 
+                                        value="{{ old('password', $estudiante->usuario->password) }}"
+                                        placeholder="Ej. Ingeniería De Software" id="password" >
 
-                                </div>--}}
-                                
-                                 <div class="col">
-                                    <label for="IdGrupo">Grupo de pertenencia:</label>
-
-                                    <select name="IdGrupo" id="IdGrupo" class="form-control @error('IdGrupo') is-invalid @enderror">
-                                        @foreach ($grupos as $grupo)
-                                            <option value="{{ $grupo->IdGrupo }}" @if($estudiante->trayectoria->IdGrupo === $grupo->IdGrupo) selected @endif > 
-                                                {{ $grupo->NombreGrupo }}
-                                            </option>
-                                        @endforeach
-                                    </select>
                                 </div> 
-
                             </div>
-                        </div> -->
+                        </div>  
+
                         <div class="form-group">
                             <div class="form-row">
-
-                              <!-- {{--  <div class="col">
-                                    <label for="modalidad">Modalidad de entrada:</label>
-
-                                    <select name="IdModalidad" class="form-control @error('IdModalidad') is-invalid @enderror" id="IdModalidad">
-                                        @foreach ($modalidades as $modalidad)
-
-                                            @if ($modalidad->TipoModalidad == "Entrada") 
-                                                <option value="{{ $modalidad->IdModalidad }}" @if($estudiante->trayectoria->IdModalidad === $modalidad->IdModalidad) selected @endif > 
-                                                    {{ $modalidad->NombreModalidad }}
-                                                </option>
-                                            @endif     
-                                                                                   
-                                        @endforeach
-                                    </select>
-
-                                </div>--}} -->
-
                                 <div class="col">
                                     <label for="Genero">Género:</label>
 

@@ -6,13 +6,14 @@
 
 
 @section('content')
+{{-- {{ dd($estudiantes) }} --}}
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Constancias</a></li>
         <li class="breadcrumb-item"><a href="{{ route('constancias.show', $constancia->IdConstancia) }}">{{ $constancia->NombreConstancia }}</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('constancias.indexGrupos', $constancia) }}">Elegir Grupo</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ $grupo->NombreGrupo }} - {{ $cohorte->NombreCohorte }}</li>
+        <li class="breadcrumb-item active" aria-current="page">Estudiantes</li>
     </ol>
 </nav>
 
@@ -21,7 +22,7 @@
         <div class="d-flex justify-content-between align-items-center">
 
             <h5 class="card-title">
-                <strong> Estudiantes del grupo "{{$grupo->NombreGrupo}}" del cohorte "{{$cohorte->NombreCohorte}}"</strong>
+                <strong> Estudiantes</strong>
             </h5>
 
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
@@ -39,14 +40,13 @@
         <div class="table-responsive-xl">
 
         <table class="table table-striped table-hover border-bottom border-right" id="table-jquery">
-            <caption>Estudiantes registrados en el sistema para el grupo {{$grupo->NombreGrupo}} del cohorte {{$cohorte->NombreCohorte}}.</caption>
+            <caption>Estudiantes registrados en el sistema.</caption>
 
             <thead class="bg-table">
             <tr class="text-white">
                 <th scope="col" class="border">Matrícula</th>
                 <th scope="col" class="border">Nombre</th>
                 <th scope="col" class="border">Género</th>
-                <th scope="col" class="border">Modalidad de entrada</th>
                 <th scope="col" class="border actions-col">Acciones</th>
             </tr>
             </thead>
@@ -55,18 +55,17 @@
             @foreach ($estudiantes as $estudiante)
 
                 <tr>
-                    <th scope="row" class="border-right border-left">{{$estudiante->estudiante->MatriculaEstudiante}}</th>
+                    <th scope="row" class="border-right border-left">{{$estudiante->MatriculaEstudiante}}</th>
                     <td class="border-right">
-                        {{ $estudiante->datosPersonales->ApellidoPaternoDatosPersonales }}
-                        {{ $estudiante->datosPersonales->ApellidoMaternoDatosPersonales }}
-                        {{ $estudiante->datosPersonales->NombreDatosPersonales }} 
+                        {{ $estudiante->usuario->datosPersonales->ApellidoPaternoDatosPersonales }}
+                        {{ $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales }}
+                        {{ $estudiante->usuario->datosPersonales->NombreDatosPersonales }} 
                     </td>
-                    <td class="border-right">{{$estudiante->datosPersonales->Genero}}</td>
-                    <td class="border-right">{{$estudiante->modalidad->NombreModalidad}}</td>
+                    <td class="border-right">{{$estudiante->usuario->datosPersonales->Genero}}</td>
 
                     <td class="btn-group btn-group-sm">
                         <a href="#" data-estudiante="{{ $estudiante->IdEstudiante }}" class="btn btn-constancia
-                            @if (($estudiante->estudiante)->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists())
+                            @if ($estudiante->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists())
                                 btn-danger btn-sm">
                                     Eliminar
                             @else

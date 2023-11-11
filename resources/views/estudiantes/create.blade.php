@@ -52,18 +52,7 @@
                 </div>
                 <div class="form-group">
                     <div class="form-row">
-                      {{--  <div class="col">
-                            <label name="IdCohorte">Cohorte de pertenencia:</label>
 
-                            <select name="IdCohorte" id="IdCohorte" class="form-control @error('IdCohorte') is-invalid @enderror">
-                                @foreach ($cohortes as $cohorte)
-                                    <option value="{{ $cohorte->IdCohorte }}"> 
-                                        {{ $cohorte->NombreCohorte }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                        </div>--}}
                         <div class="col">
                             <label name="MatriculaEstudiante">Matricula:</label>
                             <input name="MatriculaEstudiante" type="text"
@@ -74,73 +63,21 @@
                 </div>
                 
                 <div class="form-group">
-                    {{--<div class="form-row">
-                        <div class="col">
-                            <label name="IdProgramaEducativo">Programa Educativo:</label>
-                            <select name="IdProgramaEducativo" id="IdProgramaEducativo" class="form-control @error('IdProgramaEducativo') is-invalid @enderror">
-                                @foreach ($programasEducativos as $programaEducativo)
-                                    <option value="{{ $programaEducativo->IdProgramaEducativo }}"> 
-                                        {{ $programaEducativo->NombreProgramaEducativo }}
-                                    </option>
-                                @endforeach
-                            </select>
-                
-                        </div>--}}
-                        <!-- se comento para ocultar los grupos-->
-                        {{--<div class="col">
-                                <label name="IdGrupo">Grupo de pertenencia:</label>
-                                <select name="IdGrupo" id="IdGrupo" class="form-control @error('IdGrupo') is-invalid @enderror">  
-                                @foreach ($grupos as $grupo)
-                                        <option value="{{ $grupo->IdGrupo }}"> 
-                                            {{ $grupo->NombreGrupo }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div> --}}
-                    </div>
-                </div>
-
-                {{--<div class="form-group">
                     <div class="form-row">
-                        <div class="col">
-                            <label name="IdModalidad">Modalidad de entrada:</label>
-                            <select name="IdModalidad" class="form-control @error('IdModalidad') is-invalid @enderror" id="IdModalidad">
-                                @foreach ($modalidades as $modalidad)
-
-                                    @if ($modalidad->TipoModalidad == "Entrada") 
-                                        <option value="{{ $modalidad->IdModalidad }}"> 
-                                            {{ $modalidad->NombreModalidad }}
-                                        </option>
-                                    @endif     
-                                                                           
-                                @endforeach
-                            </select>
-                        </div>--}}
-
-                        <div class="col">
-                            <label name="Genero">Género:</label>
-                            <select name="Genero" class="form-control @error('Genero') is-invalid @enderror">
-                                <option value="Mujer" @if(old('Genero')=="Mujer" )selected @endif>Mujer</option>
-                                <option value="Hombre" @if(old('Genero')=="Hombre" )selected @endif>Hombre</option>
-                            </select>
-                        </div>
+                        <label for="ProgramaEducativo">Programa Educativo de pertenencia:</label>
+                        {{-- De manera temporal, el programa educativo se guardara en texto plano en el campo Contraseña para los nuevos estudiantes --}}
+                        <input name="password" type="text" 
+                            class="form-control @error('password') is-invalid @enderror" 
+                            placeholder="Ej. Ingeniería De Software" id="password" >
                     </div>
-                </div>
+                </div>  
 
-                <div class="form-group" id="traslado" @if(old('IdModalidad') != 4 )style="display:none"@endif>
-                    <div class="form-row">
-                        <div class="col">
-                            <label name="Facultad">Facultad de procedencia:</label>
-                            <input name="NombreFacultad" type="text"
-                                class="form-control @error('NombreFacultad') is-invalid @enderror"
-                                value="{{old('NombreFacultad')}}" placeholder="Ej. FCA">
-                        </div>
-                        <div class="col">
-                            <label name="Campus">Campus de procedencia:</label>
-                            <input name="NombreCampus" type="text" class="form-control @error('NombreCampus') is-invalid @enderror"
-                                value="{{old('NombreCampus')}}" placeholder="Ej. Coatzacoalcos">
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label name="Genero">Género:</label>
+                    <select name="Genero" class="form-control @error('Genero') is-invalid @enderror">
+                        <option value="Mujer" @if(old('Genero')=="Mujer" )selected @endif>Mujer</option>
+                        <option value="Hombre" @if(old('Genero')=="Hombre" )selected @endif>Hombre</option>
+                    </select>
                 </div>
             </div>
 
