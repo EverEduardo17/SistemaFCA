@@ -100,7 +100,8 @@ class HomeController extends Controller
                     ["titulo" => "Gestión de Constancias", "enlace" => ""],
                 ]
             ],
-
+            //Se oculto la tarjeta de grupos
+            /*
             [
                 "titulo" => "Grupos",
                 "background" => $colores[0],
@@ -110,6 +111,7 @@ class HomeController extends Controller
                     ["titulo" => "Gestión de Grupos", "enlace" => ""],
                 ]
             ],
+            **/
 
             [
                 "titulo" => "Estudiantes",

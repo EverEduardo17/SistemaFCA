@@ -47,12 +47,13 @@ class EstudianteController extends Controller
         Gate::authorize('havepermiso', 'estudiante-ver-propio');
 
         $cohortes = Cohorte::orderBy('NombreCohorte', 'desc')->get();
-        $grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
+        //$grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
         $modalidades = Modalidad::orderBy('NombreModalidad', 'asc')->get();
         $programasEducativos = ProgramaEducativo::orderBy('NombreProgramaEducativo', 'asc')->get();
-        $grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
+        //$grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
 
-        return view('estudiantes.create', compact('cohortes', 'grupos', 'modalidades', 'programasEducativos'));
+        //return view('estudiantes.create', compact('cohortes', 'grupos', 'modalidades', 'programasEducativos'));
+        return view('estudiantes.create', compact('cohortes', 'modalidades', 'programasEducativos'));
     }
 
     /**
@@ -96,43 +97,10 @@ class EstudianteController extends Controller
     public function store(EstudianteRequest $request)
     {
         Gate::authorize('havepermiso', 'estudiante-crear');
-
-        $existe = DatosPersonales::where([
-            ['NombreDatosPersonales', '=', $request->NombreDatosPersonales],
-            ['ApellidoPaternoDatosPersonales', '=', $request->ApellidoPaternoDatosPersonales],
-            ['ApellidoMaternoDatosPersonales', '=', $request->ApellidoMaternoDatosPersonales],
-        ])->count();
-        if ($existe > 0) {
-            $idDatos = DatosPersonales::where([
-                ['NombreDatosPersonales', '=', $request->NombreDatosPersonales],
-                ['ApellidoPaternoDatosPersonales', '=', $request->ApellidoPaternoDatosPersonales],
-                ['ApellidoMaternoDatosPersonales', '=', $request->ApellidoMaternoDatosPersonales],
-            ])->value("IdDatosPersonales");
-            $existeTrayectoria = Trayectoria::where("IdDatosPersonales", "=", $idDatos)->get()->last();
-            if ($existeTrayectoria != null && $existeTrayectoria->IdGrupo == $request->IdGrupo) {
-                Session::flash('flash', [['type' => "danger", 'message' => "El estudiante ya se encuentra registrado en el grupo seleccionado."]]);
-                return redirect()->route('estudiantes.show', $request->IdGrupo);
-            }
-        }
-        $matricula = $request->MatriculaEstudiante;
-        $cohorte = Cohorte::where('IdCohorte', '=', $request->IdCohorte)->value('NombreCohorte');
-        if (strpos($matricula, $cohorte) !== 0) {
-            Session::flash('flash', [['type' => "danger", 'message' => "La matrícula ingresada no corresponde al cohorte seleccionado."]]);
-            return redirect()->route('estudiantes.create');
-        }
-
-        //<---- Verifica si es un traslado  ---->
-        $tipoEntrada = $request->IdModalidad;
-        if ($tipoEntrada == 4) {
-            $request->validate([
-                'NombreFacultad'   => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
-                'NombreCampus'     => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/']
-            ]);
-        }
-
+     
         try {
             $input = $request->validated();
-            $idGrupo = $input['IdGrupo'];
+            //$idGrupo = $input['IdGrupo'];
             $timestamp = Carbon::now()->toDateTimeString();
 
             $matricula = strtoupper($input['MatriculaEstudiante']);
@@ -142,17 +110,17 @@ class EstudianteController extends Controller
             $idUsuarioDB = DB::table('Usuario')->insertGetId([
                 'name'     => $matricula,
                 'email'   => 'z' . $matricula . '@estudiantes.uv.mx',
-                'password' => bcrypt($matricula),
+                'password' => $request->password,
                 'CreatedAt' => $timestamp,
                 'UpdatedAt' => $timestamp,
             ]);
 
-            $idEstudianteDB = DB::table('Estudiante')->insertGetId([
+            DB::table('Estudiante')->insert([
                 'matriculaEstudiante'   => $matricula,
                 'IdUsuario'   => $idUsuarioDB,
             ]);
 
-            $idDatosPersonales = DB::table('DatosPersonales')->insertGetId([
+            DB::table('DatosPersonales')->insert([
                 'NombreDatosPersonales'               => $input['NombreDatosPersonales'],
                 'ApellidoPaternoDatosPersonales'      => $input['ApellidoPaternoDatosPersonales'],
                 'ApellidoMaternoDatosPersonales'      => $input['ApellidoMaternoDatosPersonales'],
@@ -160,22 +128,10 @@ class EstudianteController extends Controller
                 'IdUsuario'   => $idUsuarioDB,
             ]);
 
-            $idTrayectoria = DB::table('Trayectoria')->insertGetId([
-                'EstudianteRegular'     => 1,
-                'TotalPeriodos'         => 1,
-                'IdGrupo'               => $input['IdGrupo'],
-                'IdEstudiante'          => $idEstudianteDB,
-                'IdProgramaEducativo'   => $input['IdProgramaEducativo'],
-                'IdModalidad'           => $input['IdModalidad'],
-                'IdCohorte'             => $input['IdCohorte'],
-                'IdDatosPersonales'     => $idDatosPersonales
-            ]);
             DB::commit();
-
-        } catch (\Throwable $th) {
-
+        } 
+        catch (\Throwable $th) {
             DB::rollBack();
-            dd($th);
             Session::flash('flash', [['type' => "danger", 'message' => "El estudiante NO pudo ser registrado."]]);
             return redirect()->route('estudiantes.index');
         }
@@ -202,9 +158,10 @@ class EstudianteController extends Controller
         ]);
 
         $estudiante->update($request->except('MatriculaEstudiante'));
-        $estudiante->trayectoria->datosPersonales->update($request->all());
+        $estudiante->usuario->datosPersonales->update($request->all());
+        $estudiante->usuario->update($request->all());
         
-        $estudiante->trayectoria->update($request->all());
+       // $estudiante->trayectoria->update($request->all());
         
 
         return redirect()->route('estudiantes.index');
@@ -223,7 +180,7 @@ class EstudianteController extends Controller
 
         try {
             $estudiante->delete();
-            $estudiante->trayectoria->delete();
+            // $estudiante->trayectoria->delete();
             $estudiante->usuario->delete();
 
             Session::flash('flash', [ ['type' => "success", 'message' => "Estudiante eliminado correctamente."] ]);

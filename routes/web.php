@@ -74,7 +74,7 @@ Route::get('constancias/{IdConstancia}/download/{NombreConstancia}', 'Constancia
 Route::get('constancias/0/downloadConstanciaGenerica', 'ConstanciaController@downloadConstanciaGenerica')->name('constancias.downloadGenerica');
 Route::get('constancias/{constancia}/download/', 'ConstanciaController@downloadAllConstancias')->name('constancias.downloadAll');
 Route::get('constancias/{constancia}/grupos', 'ConstanciaController@indexGrupos')->name('constancias.indexGrupos');
-Route::get('constancias/{constancia}/grupos/{grupo}', 'ConstanciaController@indexEstudiantes')->name('constancias.indexEstudiantes');
+Route::get('constancias/{constancia}/estudiantes/', 'ConstanciaController@indexEstudiantes')->name('constancias.indexEstudiantes');
 Route::get('constancias/{constancia}/{estudiante}', 'ConstanciaController@showEstudiante')->name('constancias.showEstudiante');
 Route::post('constancias/agregar-estudiante', 'ConstanciaController@addEstudianteConstancia')->name('constancias.addEstudiante');
 Route::delete('constancias/{constancia}/delete/{estudiante}', 'ConstanciaController@destroyEstudianteConstancia')->name('constancias.destroyEstudiante');

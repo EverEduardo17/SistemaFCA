@@ -20,7 +20,9 @@ class CreateTrayectoriasTable extends Migration
             $table->integer('TotalPeriodos')->nullable();
 
             /*Realaciones*/
-            $table->unsignedBigInteger('IdGrupo')->nullable(false);
+            //Se cambio de false a true para que no necesite almacenar IdGrupo
+            //$table->unsignedBigInteger('IdGrupo')->nullable(false);
+            $table->unsignedBigInteger('IdGrupo')->nullable(true);
             $table->foreign('IdGrupo')->references('IdGrupo')->on('Grupo');
 
             $table->unsignedBigInteger('IdEstudiante')->nullable(false);

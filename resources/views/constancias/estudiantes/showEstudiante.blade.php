@@ -40,7 +40,7 @@
             Matrícula: {{ $estudiante->MatriculaEstudiante }}
         </p>
             Programa Educativo: 
-                {{ $estudiante->Trayectoria->ProgramaEducativo->NombreProgramaEducativo }}
+                {{ $estudiante->Usuario->ProgramaEducativo->NombreProgramaEducativo ?? $estudiante->Usuario->password }}
         </p>
         <p>
             Constancia: 

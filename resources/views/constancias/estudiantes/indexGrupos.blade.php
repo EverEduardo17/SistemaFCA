@@ -65,7 +65,7 @@
                         <td class="border-right">{{ $grupo->periodoActivo->NombrePeriodo }}</td>
 
                         <td class="btn-group btn-group-sm d-flex justify-content-center">
-                            <a class="btn btn-sm btn-outline-info mx-4" href="{{ route('constancias.indexEstudiantes', ['constancia' => $constancia, 'grupo' => $grupo]) }}" data-toggle="tooltip" data-placement="bottom" title="Estudiantes"><em class="fas fa-user"></em></a>
+                            <a class="btn btn-sm btn-outline-info mx-4" href="{{ route('constancias.indexEstudiantes', ['constancia' => $constancia]) }}" data-toggle="tooltip" data-placement="bottom" title="Estudiantes"><em class="fas fa-user"></em></a>
                         </td>
                     </tr>
                     @endforeach

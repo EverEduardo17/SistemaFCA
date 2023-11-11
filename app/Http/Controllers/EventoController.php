@@ -34,21 +34,83 @@ class EventoController extends Controller
 
     public function index()
     {
+        //Comprueba si el estado del evento es Aprobado, no aprobado, futuro, pasado, etc...
+        $estado = request('estado');
+
+        $filtro_fecha = request('filtro_fecha');
+
         Gate::authorize('havepermiso', 'eventos-listar');
-        $evento_fecha_sede_s = Evento_Fecha_Sede
+               
+        if($filtro_fecha == 'PROXIMOS' || $filtro_fecha== null){
+            $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
-            ->get()
-            // ->where('fechaEvento.InicioFechaEvento','>=', (new \DateTime())->format("Y-m-d") )
+            ->get();
+            if($estado!=null){
+                $evento_fecha_sede_s = $evento_fecha_sede_s->where('evento.EstadoEvento','==', $estado);
+            }
+            $evento_fecha_sede_s = $evento_fecha_sede_s->where('fechaEvento.InicioFechaEvento', '>', now())
             ->sortBy('fechaEvento.InicioFechaEvento');
+        }else if($filtro_fecha == 'ANTERIORES'){
+            $evento_fecha_sede_s = Evento_Fecha_Sede
+            ::with(['evento', 'fechaEvento', 'sedeEvento'])
+            ->get();
+            if($estado!=null){
+                $evento_fecha_sede_s = $evento_fecha_sede_s->where('evento.EstadoEvento','==', $estado);
+            }
+            $evento_fecha_sede_s = $evento_fecha_sede_s->where('fechaEvento.InicioFechaEvento', '<', now())
+            ->sortBy('fechaEvento.InicioFechaEvento');
+        }else{
+            $evento_fecha_sede_s = Evento_Fecha_Sede
+            ::with(['evento', 'fechaEvento', 'sedeEvento'])
+            ->get();
+            if($estado!=null){
+                $evento_fecha_sede_s = $evento_fecha_sede_s->where('evento.EstadoEvento','==', $estado);
+            }
+            $evento_fecha_sede_s = $evento_fecha_sede_s->sortBy('fechaEvento.InicioFechaEvento');
+        }
+    
+
+        /**
+         * Es una variable distinta, para no afectar el funcionamiento de la vista original mientras
+         * se decide que hacer con ella. Full Calendar debe recibir un array de los eventos en json
+         * con los siguientes atributos.
+         */
+
+         $color = [
+            "APROBADO" => "green",
+            "NO APROBADO" => "red",
+            "POR APROBAR" => "yellow"
+        ];
+
+
+
+        $calendar_events = [];
+        foreach ($evento_fecha_sede_s as $efs) {
+            $calendar_events[] = [
+                "id" => $efs->evento->IdEvento,
+                "title" => $efs->evento->NombreEvento . " - " . $efs->sedeEvento->NombreSedeEvento,
+                "start" => $efs->fechaEvento->InicioFechaEvento,
+                "end" => $efs->fechaEvento->FinFechaEvento,
+                "url" => route('eventos.show', [$efs->evento->IdEvento]),
+                "backgroundColor" => $color[$efs->evento->EstadoEvento],
+            ];
+        }
 
         return view('eventos.index', [
-            "evento_fecha_sede_s" => $evento_fecha_sede_s
+            "evento_fecha_sede_s" => $evento_fecha_sede_s,
+            "calendar_events" => $calendar_events,
+            "estado" => $estado,
+            "filtro_fecha" => $filtro_fecha
         ]);
     }
 
     public function indexWithDate($year, $month, $day)
     {
         Gate::authorize('havepermiso', 'eventos-listar');
+
+        $estado = request('estado');
+        $filtro_fecha = request('filtro_fecha');
+
         $date = sprintf("%d-%02d-%02d", $year, $month, $day);
         $from = date("Y-m-d", strtotime($date));
         $to = date("Y-m-d", strtotime($date . " +1 days"));
@@ -59,8 +121,33 @@ class EventoController extends Controller
             ->where('fechaEvento.InicioFechaEvento', '<', $to)
             ->sortBy('fechaEvento.InicioFechaEvento',  false);
 
+        /**
+         * Si se mantiene esta funcionalidad, habra que valorar pasar la fecha como una
+         * variable para que el calendario se abra en la fecha elegida al iniciar.
+         */
+        $color = [
+            "APROBADO" => "green",
+            "NO APROBADO" => "red",
+            "POR APROBAR" => "yellow"
+        ];
+
+        $calendar_events = [];
+        foreach ($evento_fecha_sede_s as $efs) {
+            $calendar_events[] = [
+                "id" => $efs->evento->IdEvento,
+                "title" => $efs->evento->NombreEvento . " - " . $efs->sedeEvento->NombreSedeEvento,
+                "start" => $efs->fechaEvento->InicioFechaEvento,
+                "end" => $efs->fechaEvento->FinFechaEvento,
+                "url" => route('eventos.show', [$efs->evento->IdEvento]),
+                "backgroundColor" => $color[$efs->evento->EstadoEvento],
+            ];
+        }
+
         return view('eventos.index', [
-            "evento_fecha_sede_s" => $evento_fecha_sede_s
+            "evento_fecha_sede_s" => $evento_fecha_sede_s,
+            "calendar_events" => $calendar_events,
+            "estado" => $estado,
+            "filtro_fecha" => $filtro_fecha
         ]);
     }
 
@@ -68,8 +155,19 @@ class EventoController extends Controller
     {
         Gate::authorize('havepermiso', 'eventos-listar');
 
+        $date = null;
+
+        if (request()->has("day") && request()->has("month") && request()->has("year")) {
+            $day = request("day");
+            $month = request("month");
+            $year = request("year");
+
+            $date = "$day/$month/$year";
+        }
+
         return view('eventos.create', [
-            "sedes" => SedeEvento::all()
+            "sedes" => SedeEvento::all(),
+            "date" => $date
         ]);
     }
 
