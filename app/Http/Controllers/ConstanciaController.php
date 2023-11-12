@@ -70,6 +70,7 @@ class ConstanciaController extends Controller
                 'NombreConstancia' => $input['NombreConstancia'],
                 'DescripcionConstancia' => $input['DescripcionConstancia'],
                 'VigenteHasta' => $vigenteHasta,
+                'EstadoConstancia' => 'PENDIENTE',
                 'CreatedBy' => Auth::user()->IdUsuario,
                 'CreatedAt' => $timestamp,
                 'UpdatedAt' => $timestamp,
@@ -475,5 +476,73 @@ class ConstanciaController extends Controller
         unlink($pathQr);
 
         return $pathEstudiante . '.pdf';
+    }
+
+    /**
+     * Consulta las constancias que esperan aprobación y renderiza la vista 'aprobar'.
+     *
+     * @return \Illuminate\View\View La vista de la lista de constancias pendientes de aprobación.
+     */
+    public function indexAprobar() {
+        //TODO: Reemplazar con el permiso necesario correcto.
+        Gate::authorize('havepermiso', 'documentos-editar');
+
+        $constancias = Constancia::with('usuario.datosPersonales')->where('EstadoConstancia', 'Pendiente')->get();
+        
+        return view('constancias.aprobar', compact('constancias'));
+    }
+
+    /**
+     * Aprobar una Constancia.
+     *
+     * @param int $id El ID de la Constancia a aprobar.
+     * @throws \Throwable Si ocurre un error durante el proceso.
+     * @return \Illuminate\Http\RedirectResponse La respuesta de redirección a la página de aprobación de constancia.
+     */
+    public function aprobarConstancia($id) {
+        //TODO: Reemplazar con el permiso necesario correcto.
+        Gate::authorize('havepermiso', 'documentos-editar');
+
+        try {
+            $constancia = Constancia::find($id);
+            $constancia->EstadoConstancia = 'APROBADO';
+            $constancia->save();
+            Session::flash('flash', [['type' => "success", 'message' => "La constancia fue aprobada correctamente."]]);
+        } catch (\Throwable $th) {
+            Session::flash('flash', [['type' => "danger", 'message' => "La constancia NO pudo ser aprobada."]]);
+        }
+
+        return redirect()->route('constancias.aprobar');
+    }
+
+    /**
+     * Rechaza una constancia.
+     *
+     * @param int $id El ID de la constancia.
+     * @throws \Throwable Si ocurre un error durante el proceso.
+     * @return \Illuminate\Http\RedirectResponse La respuesta de redirección a la página de aprobación de constancias.
+     */
+    public function rechazarConstancia(Request $request, $id) {
+        //TODO: Reemplazar con el permiso necesario correcto.
+        Gate::authorize('havepermiso', 'documentos-editar');
+
+        $motivo = $request->get('Motivo');
+
+        if (empty($motivo) || strlen(trim($motivo)) > 255) {
+            Session::flash('flash', [['type' => "danger", 'message' => "El motivo es requerido."]]);
+            return redirect()->route('constancias.aprobar');
+        }
+
+        try {
+            $constancia = Constancia::find($id);
+            $constancia->EstadoConstancia = 'NO APROBADO';
+            $constancia->Motivo = $motivo;
+            $constancia->save();
+            Session::flash('flash', [['type' => "success", 'message' => "La constancia fue rechazada correctamente."]]);
+            return redirect()->route('constancias.aprobar');
+        } catch (\Throwable $th) {
+            Session::flash('flash', [['type' => "danger", 'message' => "La constancia NO pudo ser rechazada."]]);
+            return redirect()->route('constancias.aprobar');
+        }
     }
 }

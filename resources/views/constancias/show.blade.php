@@ -49,6 +49,18 @@
                 <input name="VigenteHasta" type="text" class="form-control @error('VigenteHasta') is-invalid @enderror" value="{{ old('VigenteHasta', printDate($constancia->VigenteHasta)) }}" disabled>
             </div>
 
+            <div class="form-group">
+                <label name="Estado">Estado de Aprobación:</label>
+                <input name="Estado" type="text" class="form-control @error('VigenteHasta') is-invalid @enderror" value="{{ old('Estado', $constancia->EstadoConstancia) }}" disabled>
+            </div>
+
+            @if ($constancia->EstadoConstancia == 'NO APROBADO')
+                <div class="form-group">
+                    <label name="MotivoRechazo">Motivo del Rechazo:</label>
+                    <input name="MotivoRechazo" type="text" class="form-control @error('MotivoRechazo') is-invalid @enderror" value="{{ old('MotivoRechazo', $constancia->Motivo) }}" disabled>
+                </div>
+            @endif
+
             @can('havepermiso', 'documentos-editar')
 
                 <a class="mi-plantilla" 

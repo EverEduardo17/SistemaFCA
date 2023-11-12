@@ -9,7 +9,8 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Gestión de Constancias</li>
+        <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Constancias</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Aprobando Constancias</li>
     </ol>
 </nav>
 
@@ -17,22 +18,15 @@
 <div class="card shadow-sm">
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title"><strong> Gestión de Constancias</strong></h5>
-            {{-- @can('havepermiso', 'documentos-crear') --}}
-                <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
-                {{-- TODO: Reemplazar con el permiso necesario correcto --}}
-                {{-- @can('havepermiso', 'documentos-crear') --}}
-                <a class="btn btn-outline-secondary col-2 mr-4 " href="{{ route('constancias.aprobar') }}" role="button">Aprobar Constancias</a>
-                {{-- @endcan --}}
-                <a class="btn btn-success col-4" href="{{ route('constancias.create') }}" role="button">Agregar Constancia</a>
-            {{-- @endcan --}}
+            <h5 class="card-title"><strong> Aprobando Constancias</strong></h5>
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('constancias.index') }}" role="button">Regresar</a>
         </div>
     </div>
     
     <div class="card-body">
         <div class="table-responsive-xl">
             <table class="table table-striped table-hover border-bottom" id="table-jquery">
-                <caption>Constancias registradas en el sistema.</caption>
+                <caption>Constancias esperando a ser aprobadas.</caption>
                 <thead class="bg-table">
                     <tr class="text-white">
                         <th scope="col" class="border">Nombre</th>
@@ -40,8 +34,8 @@
                         <th scope="col" class="border">Autor</th>
                         <th scope="col" class="border">Vigente Hasta</th>
                         <th scope="col" class="border">Estado de Aprobación</th>
-                        <th scope="col" class="border">Motivo de Rechazo</th>
                         
+                        {{-- TODO: Reemplazar con el permiso necesario correcto --}}
                         {{-- @can('havepermiso', 'documentos-editar') --}}
                             <th scope="col" class="border actions-col">Acciones</th>
                         {{-- @endcan --}}
@@ -68,18 +62,18 @@
 
                         <td class="border-right">{{ $constancia->EstadoConstancia }}</td>
 
-                        <td class="border-right">{{ $constancia->Motivo ?? 'Ninguno' }}</td>
-
+                        {{-- TODO: Reemplazar con el permiso necesario correcto --}}
                         {{-- @can('havepermiso', 'documentos-crear') --}}
                             <td class="btn-group py-2 border-right">
-                                <a class="btn btn-sm btn-outline-success mx-1" href="{{ route('constancias.show', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
-                                    <em class="fas fa-list"></em>
+                                <a class="btn btn-sm btn-outline-success mx-1" data-toggle="modal" data-target="#aprobarConstancia{{ $constancia->IdConstancia }}" href="#" data-placement="bottom" title="Aprobar">
+                                    <em><b>Aprobar</b></em>
                                 </a>
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('constancias.edit', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Editar">
-                                    <em class="fas fa-pencil-alt"></em>
-                                </a>
-                                <a class="btn btn-sm btn-outline-danger mx-1" href="#" data-toggle="modal" data-target="#delete" data-documento="{{ $constancia->IdConstancia }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar">
-                                    <em class="fas fa-trash-alt"></em>
+
+                                {{-- No mover el include de aqui --}}
+                                @include('constancias.modals.estadoconstancia', ['constancia' => $constancia])
+                                
+                                <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#rechazarConstancia{{ $constancia->IdConstancia }}" href="#" data-placement="bottom" title="Rechazar">
+                                    <em><b>Rechazar</b></em>
                                 </a>
                             </td>
                         {{-- @endcan --}}
@@ -109,4 +103,3 @@
     })
 </script>
 @endsection
-
