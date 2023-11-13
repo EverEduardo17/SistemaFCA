@@ -165,6 +165,8 @@ class ConstanciaController extends Controller
                 'NombreConstancia' => $input['NombreConstancia'],
                 'DescripcionConstancia' => $input['DescripcionConstancia'],
                 'VigenteHasta' => $vigenteHasta,
+                'EstadoConstancia' => 'PENDIENTE',
+                'Motivo' => null,
                 'UpdatedAt' => $timestamp,
             ];
             
@@ -512,7 +514,7 @@ class ConstanciaController extends Controller
             Session::flash('flash', [['type' => "danger", 'message' => "La constancia NO pudo ser aprobada."]]);
         }
 
-        return redirect()->route('constancias.aprobar');
+        return redirect()->back();
     }
 
     /**
@@ -530,7 +532,7 @@ class ConstanciaController extends Controller
 
         if (empty($motivo) || strlen(trim($motivo)) > 255) {
             Session::flash('flash', [['type' => "danger", 'message' => "El motivo es requerido."]]);
-            return redirect()->route('constancias.aprobar');
+            return redirect()->back();
         }
 
         try {
@@ -539,10 +541,10 @@ class ConstanciaController extends Controller
             $constancia->Motivo = $motivo;
             $constancia->save();
             Session::flash('flash', [['type' => "success", 'message' => "La constancia fue rechazada correctamente."]]);
-            return redirect()->route('constancias.aprobar');
         } catch (\Throwable $th) {
             Session::flash('flash', [['type' => "danger", 'message' => "La constancia NO pudo ser rechazada."]]);
-            return redirect()->route('constancias.aprobar');
         }
+
+        return redirect()->back();
     }
 }

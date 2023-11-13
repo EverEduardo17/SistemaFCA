@@ -11,13 +11,13 @@
             <div class="modal-body">
                 <p>Usted está por aprobar una constancia.</p>
                 <h5>¿Desea continuar?</h5>
-                <form id="form-estado-crear" method="GET" action="{{route('constancias.aprobar.aceptar', $constancia->IdConstancia)}}">
+                <form id="form{{ $constancia->IdConstancia }}" method="GET" action="{{route('constancias.aprobar.aceptar', $constancia->IdConstancia)}}">
                     @csrf
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-success" form="form-estado-crear">Aprobar</button>
+                <button type="submit" class="btn btn-success" form="form{{ $constancia->IdConstancia }}">Aprobar</button>
             </div>
         </div>
     </div>

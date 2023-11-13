@@ -51,7 +51,20 @@
 
             <div class="form-group">
                 <label name="Estado">Estado de Aprobación:</label>
-                <input name="Estado" type="text" class="form-control @error('VigenteHasta') is-invalid @enderror" value="{{ old('Estado', $constancia->EstadoConstancia) }}" disabled>
+                <div style="display: flex;">
+                    <input name="Estado" type="text" class="form-control @error('VigenteHasta') is-invalid @enderror" value="{{ old('Estado', $constancia->EstadoConstancia) }}" disabled>
+                    {{-- TODO: Reemplazar con permiso necesario correcto --}}
+                    @if ($constancia->EstadoConstancia == 'PENDIENTE')
+                        @can('havepermiso', 'documentos-editar')
+                            <a class="btn btn-sm btn-outline-success mx-1" data-toggle="modal" data-target="#aprobarConstancia{{ $constancia->IdConstancia }}" href="#" data-placement="bottom" title="Aprobar">
+                                <em><b>Aprobar</b></em>
+                            </a>
+                            <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#rechazarConstancia{{ $constancia->IdConstancia }}" href="#" data-placement="bottom" title="Rechazar">
+                                <em><b>Rechazar</b></em>
+                            </a>
+                        @endcan
+                    @endif
+                </div>
             </div>
 
             @if ($constancia->EstadoConstancia == 'NO APROBADO')
@@ -147,6 +160,7 @@
     @include('constancias.modals.deleteEstudiante')
     @include('constancias.modals.loading')
     @include('constancias.modals.help')
+    @include('constancias.modals.estadoconstancia')
 {{-- @endcan --}}
 
 @endsection
