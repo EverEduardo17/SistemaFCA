@@ -82,7 +82,11 @@ class EventoController extends Controller
             "POR APROBAR" => "yellow"
         ];
 
-
+        $textColor = [
+            "APROBADO" => "white",
+            "NO APROBADO" => "white",
+            "POR APROBAR" => "black"
+        ];
 
         $calendar_events = [];
         foreach ($evento_fecha_sede_s as $efs) {
@@ -93,6 +97,7 @@ class EventoController extends Controller
                 "end" => $efs->fechaEvento->FinFechaEvento,
                 "url" => route('eventos.show', [$efs->evento->IdEvento]),
                 "backgroundColor" => $color[$efs->evento->EstadoEvento],
+                "textColor" => $textColor[$efs->evento->EstadoEvento]
             ];
         }
 
