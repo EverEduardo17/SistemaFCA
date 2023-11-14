@@ -72,7 +72,7 @@ class EmpresaController extends Controller
 
     public function show($nombreEmpresa)
     {
-        \Gate::authorize('havepermiso', 'empresas-ver-propio');
+        \Gate::authorize('havepermiso', 'empresas-detalles');
 
         $nombreLimpio = str_replace("-", " ", $nombreEmpresa);
         $empresa = Empresa::where('NombreEmpresa', '=', $nombreLimpio)->get()->last();

@@ -59,7 +59,7 @@ class AcademiaController extends Controller
 
     public function show($idAcademia) 
     {
-        Gate::authorize('havepermiso', 'academias-leer');
+        Gate::authorize('havepermiso', 'academias-detalles');
 
         $academia = Academia::with('academico_academia', 'coordinador')->findOrFail($idAcademia);
 

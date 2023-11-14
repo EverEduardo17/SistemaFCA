@@ -43,10 +43,10 @@
 
 
                     <td class="btn-group">
-                        @can('havepermiso', 'academico-ver-propio')
+                        @can('havepermiso', 'academico-detalles')
                             <a class="btn btn-outline-primary btn-sm mr-1" href="{{ route('academicos.show', $academico) }}">Detalles</a>
                         @endcan
-                        @can('havepermiso', 'academico-ver-propio')
+                        @can('havepermiso', 'academico-detalles')
                             <a class="btn btn-primary btn-sm mr-1" href="{{ route('academicos.edit', $academico) }}">Editar</a>
                         @endcan
                         @can('havepermiso', 'academicos-eliminar')

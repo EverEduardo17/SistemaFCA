@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ConstanciaRequest;
 use App\Models\Constancia;
+use App\Models\ConstanciaEvento;
 use App\Models\Estudiante;
 use App\Models\Grupo;
 use Carbon\Carbon;
@@ -25,7 +26,7 @@ class ConstanciaController extends Controller
      */
     public function index()
     {
-        Gate::authorize('havepermiso', 'documentos-leer');
+        Gate::authorize('havepermiso', 'constacias-detalles');
 
         $constancias = Constancia::with('usuario.datosPersonales')->get();
         return view('constancias.index', compact('constancias'));
@@ -39,7 +40,7 @@ class ConstanciaController extends Controller
      */
     public function create()
     {
-        Gate::authorize('havepermiso', 'documentos-leer');
+        Gate::authorize('havepermiso', 'constacias-detalles');
 
         return view('constancias.create');
     }
@@ -52,7 +53,7 @@ class ConstanciaController extends Controller
      */
     public function store(ConstanciaRequest $request)
     {
-        Gate::authorize('havepermiso', 'documentos-crear');
+        Gate::authorize('havepermiso', 'constancias-crear');
 
         $input = $request->validated();
         $timestamp = Carbon::now()->toDateTimeString();
@@ -103,7 +104,7 @@ class ConstanciaController extends Controller
      */
     public function show(Constancia $constancia)
     {
-        Gate::authorize('havepermiso', 'documentos-leer');
+        Gate::authorize('havepermiso', 'constancias-detalles');
    
         $estudiantes = $constancia->estudiantes;
 
@@ -121,7 +122,7 @@ class ConstanciaController extends Controller
      */
     public function edit(Constancia $constancia)
     {
-        Gate::authorize('havepermiso', 'documentos-leer');
+        Gate::authorize('havepermiso', 'constancias-detalles');
 
         return view('constancias.edit', compact('constancia'));
     }
@@ -135,7 +136,7 @@ class ConstanciaController extends Controller
      */
     public function update(Request $request, Constancia $constancia)
     {
-        Gate::authorize('havepermiso', 'documentos-editar');
+        Gate::authorize('havepermiso', 'constacias-editar-propio');
 
         $timestamp = Carbon::now()->toDateTimeString();
         $vigenteHasta = null;
@@ -180,6 +181,11 @@ class ConstanciaController extends Controller
             DB::table('Constancia')->where('IdConstancia',$constancia->IdConstancia)->update($datos);
 
             DB::commit();
+
+            $constanciaEvento = ConstanciaEvento::find($constancia->IdConstancia);
+            if ($constanciaEvento) {
+                $constanciaEvento->delete();
+            }
         }
         catch (\Throwable $throwable){
             DB::rollBack();
@@ -198,7 +204,7 @@ class ConstanciaController extends Controller
      */
     public function destroy(Constancia $constancia)
     {
-        Gate::authorize('havepermiso', 'documentos-eliminar');
+        Gate::authorize('havepermiso', 'constancias-eliminar');
 
         try {
             $constancia->delete();
@@ -264,7 +270,7 @@ class ConstanciaController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene los permisos necesarios.
      */
     public function indexGrupos(Constancia $constancia) {
-        Gate::authorize('havepermiso', 'documentos-leer');
+        Gate::authorize('havepermiso', 'constancias-detalles');
 
         $grupos = Grupo::all();
         return view('constancias.estudiantes.indexGrupos', compact('constancia', 'grupos'));
@@ -279,7 +285,7 @@ class ConstanciaController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene los permisos necesarios.
      */
     public function indexEstudiantes(Constancia $constancia) {
-        Gate::authorize('havepermiso', 'documentos-editar');
+        Gate::authorize('havepermiso', 'constancias-editar-propio');
 
         $estudiantes = Estudiante::all();
 
@@ -321,7 +327,7 @@ class ConstanciaController extends Controller
      */
     public function destroyEstudianteConstancia(Request $request, $idConstancia, $idEstudiante)
     {
-        Gate::authorize('havepermiso', 'documentos-eliminar');
+        Gate::authorize('havepermiso', 'constancias-eliminar-propio');
 
         if($request->ajax()){
             $estudiante = Estudiante::findOrFail($idEstudiante);
@@ -391,79 +397,6 @@ class ConstanciaController extends Controller
         return redirect()->back();
     }
 
-        /**
-     * Aprobar una Constancia.
-     *
-     * @param int $id El ID de la Constancia a aprobar.
-     * @throws \Throwable Si ocurre un error durante el proceso.
-     * @return \Illuminate\Http\RedirectResponse La respuesta de redirección a la página de aprobación de constancia.
-     */
-    public function aprobarConstancia($id) {
-        //TODO: Reemplazar con el permiso necesario correcto.
-        Gate::authorize('havepermiso', 'documentos-editar');
-
-        try {
-            $constancia = Constancia::find($id);
-            $constancia->EstadoConstancia = 'APROBADO';
-            $constancia->save();
-            Session::flash('flash', [['type' => "success", 'message' => "La constancia fue aprobada correctamente."]]);
-        } catch (\Throwable $th) {
-            Session::flash('flash', [['type' => "danger", 'message' => "La constancia NO pudo ser aprobada."]]);
-        }
-
-        return redirect()->back();
-    }
-
-    /**
-     * Rechaza una constancia.
-     *
-     * @param int $id El ID de la constancia.
-     * @throws \Throwable Si ocurre un error durante el proceso.
-     * @return \Illuminate\Http\RedirectResponse La respuesta de redirección a la página de aprobación de constancias.
-     */
-    public function rechazarConstancia(Request $request, $id) {
-        //TODO: Reemplazar con el permiso necesario correcto.
-        Gate::authorize('havepermiso', 'documentos-editar');
-
-        $motivo = $request->get('Motivo');
-
-        if (empty($motivo) || strlen(trim($motivo)) > 255) {
-            Session::flash('flash', [['type' => "danger", 'message' => "El motivo es requerido."]]);
-            return redirect()->back();
-        }
-
-        try {
-            $constancia = Constancia::find($id);
-            $constancia->EstadoConstancia = 'NO APROBADO';
-            $constancia->Motivo = $motivo;
-            $constancia->save();
-            Session::flash('flash', [['type' => "success", 'message' => "La constancia fue rechazada correctamente."]]);
-        } catch (\Throwable $th) {
-            Session::flash('flash', [['type' => "danger", 'message' => "La constancia NO pudo ser rechazada."]]);
-        }
-
-        return redirect()->back();
-    }
-
-    /**
-     * Consulta las constancias que esperan aprobación y renderiza la vista 'aprobar'.
-     *
-     * @return \Illuminate\View\View La vista de la lista de constancias pendientes de aprobación.
-     */
-    public function indexAprobar() {
-        //TODO: Reemplazar con el permiso necesario correcto.
-        Gate::authorize('havepermiso', 'documentos-editar');
-
-        $constancias = Constancia::with('usuario.datosPersonales')->where('EstadoConstancia', 'Pendiente')->get();
-        
-        return view('constancias.aprobar', compact('constancias'));
-    }
-
-
-
-
-
-
     // Metodos auxiliares
     
     /**
@@ -473,7 +406,8 @@ class ConstanciaController extends Controller
     * @param Estudiante $estudiante El estudiante para el cual se generará la constancia.
     * @return string La ruta del archivo PDF generado.
     */
-    public function generarConstacia(Constancia $constancia, Estudiante $estudiante) {
+    public function generarConstacia(Constancia $constancia, Estudiante $estudiante) 
+    {
         $filename = 'c_' . str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT);
         $pathPlantilla = storage_path('app/constancias/' . $filename . '.docx');
 
@@ -553,4 +487,73 @@ class ConstanciaController extends Controller
         return $pathEstudiante . '.pdf';
     }
 
+    /**
+     * Consulta las constancias que esperan aprobación y renderiza la vista 'aprobar'.
+     *
+     * @return \Illuminate\View\View La vista de la lista de constancias pendientes de aprobación.
+     */
+    public function indexAprobar() 
+    {
+        //TODO: Reemplazar con el permiso necesario correcto.
+        Gate::authorize('havepermiso', 'constancias-editar-propio');
+
+        $constancias = Constancia::with('usuario.datosPersonales')->where('EstadoConstancia', 'Pendiente')->get();
+        
+        return view('constancias.aprobar', compact('constancias'));
+    }
+
+    /**
+     * Aprobar una Constancia.
+     *
+     * @param int $id El ID de la Constancia a aprobar.
+     * @throws \Throwable Si ocurre un error durante el proceso.
+     * @return \Illuminate\Http\RedirectResponse La respuesta de redirección a la página de aprobación de constancia.
+     */
+    public function aprobarConstancia($id) 
+    {
+        //TODO: Reemplazar con el permiso necesario correcto.
+        Gate::authorize('havepermiso', 'constancias-editar-propio');
+
+        try {
+            $constancia = Constancia::find($id);
+            $constancia->EstadoConstancia = 'APROBADO';
+            $constancia->save();
+            Session::flash('flash', [['type' => "success", 'message' => "La constancia fue aprobada correctamente."]]);
+        } catch (\Throwable $th) {
+            Session::flash('flash', [['type' => "danger", 'message' => "La constancia NO pudo ser aprobada."]]);
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Rechaza una constancia.
+     *
+     * @param int $id El ID de la constancia.
+     * @throws \Throwable Si ocurre un error durante el proceso.
+     * @return \Illuminate\Http\RedirectResponse La respuesta de redirección a la página de aprobación de constancias.
+     */
+    public function rechazarConstancia(Request $request, $id) {
+        //TODO: Reemplazar con el permiso necesario correcto.
+        Gate::authorize('havepermiso', 'constancias-editar-propio');
+
+        $motivo = $request->get('Motivo');
+
+        if (empty($motivo) || strlen(trim($motivo)) > 255) {
+            Session::flash('flash', [['type' => "danger", 'message' => "El motivo es requerido."]]);
+            return redirect()->back();
+        }
+
+        try {
+            $constancia = Constancia::find($id);
+            $constancia->EstadoConstancia = 'NO APROBADO';
+            $constancia->Motivo = $motivo;
+            $constancia->save();
+            Session::flash('flash', [['type' => "success", 'message' => "La constancia fue rechazada correctamente."]]);
+        } catch (\Throwable $th) {
+            Session::flash('flash', [['type' => "danger", 'message' => "La constancia NO pudo ser rechazada."]]);
+        }
+
+        return redirect()->back();
+    }
 }

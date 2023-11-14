@@ -23,7 +23,7 @@ class DocumentoController extends Controller
     }
 
     public function store(DocumentoRequest $request) {
-        Gate::authorize('havepermiso', 'documentos-crear');
+        Gate::authorize('havepermiso', 'constancias-crear');
         $request->validated();
         $evento = Evento::findOrFail($request->evento);
 
@@ -53,7 +53,7 @@ class DocumentoController extends Controller
     }
 
     public function show($id) {
-        Gate::authorize('havepermiso', 'documentos-leer');
+        Gate::authorize('havepermiso', 'constancias-detalles');
         $documento = Documento::findOrFail( $id );
         return Storage::disk('documento')->download( $documento->FormatoDocumento );
     }
@@ -63,7 +63,7 @@ class DocumentoController extends Controller
     }
 
     public function update(Request $request, $id) {
-        Gate::authorize('havepermiso', 'documentos-editar');
+        Gate::authorize('havepermiso', 'constancias-editar-propio');
         $documento = Documento::findOrFail( $id );
         $evento = Evento::findOrFail( $documento->IdEvento );
 
@@ -90,7 +90,7 @@ class DocumentoController extends Controller
     }
 
     public function destroy($id) {
-        Gate::authorize('havepermiso', 'documentos-eliminar');
+        Gate::authorize('havepermiso', 'constancias-eliminar-propio');
         $documento = Documento::findOrFail( $id );
         $documento->delete();
 

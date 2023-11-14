@@ -105,7 +105,7 @@
                         <hr class="my-4">
   
                         <div class="form-group">
-                            @can('havepermiso', 'estudiante-editar-propio')
+                            @can('havepermiso', 'estudiantes-editar')
                                 <button type="submit" class="btn btn-primary btn-block">
                                     Actualizar Información
                                 </button>

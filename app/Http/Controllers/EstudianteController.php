@@ -29,7 +29,7 @@ class EstudianteController extends Controller
      */
     public function index() 
     {
-        \Gate::authorize('havepermiso', 'estudiante-ver-todos-propio');
+        \Gate::authorize('havepermiso', 'estudiantes-detalles');
 
         $estudiantes = Estudiante::all();
 
@@ -44,7 +44,7 @@ class EstudianteController extends Controller
      */
     public function create() 
     {
-        Gate::authorize('havepermiso', 'estudiante-ver-propio');
+        Gate::authorize('havepermiso', 'estudiantes-detalles');
 
         $cohortes = Cohorte::orderBy('NombreCohorte', 'desc')->get();
         //$grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
@@ -67,10 +67,11 @@ class EstudianteController extends Controller
         // los estudiantes pueden ver sus propios datos
         $isEstudiante = \Auth::user()->estudiante->IdEstudiante ?? false;
         if ($isEstudiante) {
-            if (\Auth::user()->estudiante->IdEstudiante !== $estudiante->IdEstudiante) {
-                Gate::authorize('havepermiso', 'estudiante-ver-propio');
+            if (\Auth::user()->estudiante->IdEstudiante === $estudiante->IdEstudiante) {
+                return view('estudiantes.show', compact('estudiante'));   
             }
         }
+        Gate::authorize('havepermiso', 'estudiantes-detalles');
 
         return view('estudiantes.show', compact('estudiante'));   
     }
@@ -84,7 +85,7 @@ class EstudianteController extends Controller
      */
     public function edit(Estudiante $estudiante) 
     {
-        Gate::authorize('havepermiso', 'estudiante-ver-propio');
+        Gate::authorize('havepermiso', 'estudiantes-detalles');
 
         $cohortes = Cohorte::orderBy('NombreCohorte', 'desc')->get();
         $programasEducativos = ProgramaEducativo::orderBy('NombreProgramaEducativo', 'asc')->get();
@@ -102,7 +103,7 @@ class EstudianteController extends Controller
      */
     public function store(EstudianteRequest $request)
     {
-        Gate::authorize('havepermiso', 'estudiante-crear');
+        Gate::authorize('havepermiso', 'estudiantes-crear');
      
         try {
             $input = $request->validated();
@@ -162,7 +163,7 @@ class EstudianteController extends Controller
      */
     public function update(EstudianteRequest $request, Estudiante $estudiante)
     {
-        Gate::authorize('havepermiso', 'estudiante-editar-propio');
+        Gate::authorize('havepermiso', 'estudiantes-editar-propio');
 
         $request->validated();
 
@@ -189,7 +190,7 @@ class EstudianteController extends Controller
      */
     public function destroy(Estudiante $estudiante)
     {
-        Gate::authorize('havepermiso', 'estudiante-eliminar-propio');
+        Gate::authorize('havepermiso', 'estudiantes-eliminar-propio');
 
         try {
             $estudiante->delete();

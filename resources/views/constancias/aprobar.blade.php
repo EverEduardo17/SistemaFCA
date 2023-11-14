@@ -36,7 +36,7 @@
                         <th scope="col" class="border">Estado de Aprobación</th>
                         
                         {{-- TODO: Reemplazar con el permiso necesario correcto --}}
-                        {{-- @can('havepermiso', 'documentos-editar') --}}
+                        {{-- @can('havepermiso', 'constacias-editar-cualquiera') --}}
                             <th scope="col" class="border actions-col">Acciones</th>
                         {{-- @endcan --}}
                     </tr>
@@ -63,7 +63,7 @@
                         <td class="border-right">{{ $constancia->EstadoConstancia }}</td>
 
                         {{-- TODO: Reemplazar con el permiso necesario correcto --}}
-                        {{-- @can('havepermiso', 'documentos-crear') --}}
+                        {{-- @can('havepermiso', 'constancias-aprobar-rechazar') --}}
                             <td class="btn-group py-2 border-right">
                                 <a class="btn btn-sm btn-outline-success mx-1" data-toggle="modal" data-target="#aprobarConstancia{{ $constancia->IdConstancia }}" href="#" data-placement="bottom" title="Aprobar">
                                     <em><b>Aprobar</b></em>

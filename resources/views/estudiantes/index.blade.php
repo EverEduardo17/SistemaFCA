@@ -14,7 +14,7 @@
             <h5 class="card-title"><strong>Gestión de Estudiantes</strong></h5>
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
 
-            @can('havepermiso', 'estudiante-crear')
+            @can('havepermiso', 'estudiantes-crear')
                 <a class="btn btn-success col-4" href="{{ route('estudiantes.create') }}" role="button">Agregar Estudiante</a>
             @endcan
         </div>
@@ -30,7 +30,7 @@
                         <th scope="col" class="border">Nombre</th>
                         <th scope="col" class="border">Rol</th>
 
-                        @can('havepermiso', 'estudiante-ver-propio')
+                        @can('havepermiso', 'estudiantes-detalles')
                             <th scope="col" class="border actions-col">Acciones</th>
                         @endcan
                     </tr>
@@ -50,19 +50,19 @@
 
                         <td>{{ $estudiante->usuario->roles[0]->ClaveRole ?? "" }}</td>
                         
-                        @can('havepermiso', 'estudiante-ver-propio')
+                        @can('havepermiso', 'estudiantes-detalles')
                             <td class="btn-group btn-group-sm border-left">
                                 <a class="btn btn-outline-success btn-sm" href="{{ route('estudiantes.show', $estudiante) }}" title="Detalles">
                                     <em class="fas fa-list"></em>
                                 </a>
 
-                                @can('havepermiso','estudiante-editar-propio')
+                                @can('havepermiso','estudiantes-editar')
                                     <a class="btn btn-outline-primary btn-sm mr-1 ml-1" href="{{ route('estudiantes.edit', $estudiante) }}" title="Editar">
                                         <em class="fas fa-pen"></em>
                                     </a>
                                 @endcan
 
-                                @can('havepermiso','estudiante-eliminar-propio')
+                                @can('havepermiso','estudiantes-eliminar')
                                     <a class="btn btn-sm btn-outline-danger" href="#" data-toggle="modal" data-target="#delete" data-id="{{ $estudiante->IdEstudiante }}" data-toggle="tooltip" data-placement="bottom" title="Eliminar">
                                         <em class="fas fa-trash-alt"></em>
                                     </a>

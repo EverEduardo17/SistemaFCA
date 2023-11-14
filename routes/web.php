@@ -53,6 +53,8 @@ Route::resource('sedeEventos', 'SedeEventoController');
 Route::resource('eventos.estado', 'EventoEstadoController')->shallow();
 Route::post('eventos/{evento}/estado/rechado', 'EventoEstadoController@rechazo')->name('eventos.estado.rechazo');
 Route::post('eventos/{evento}/estado/cancelar', 'EventoEstadoController@cancelar')->name('eventos.estado.cancelar');
+Route::post('eventos/{evento}/constancias/añadir','ConstanciaEventoController@store')->name('eventos.constancias.añadir');
+Route::post('eventos/{evento}/constancias/eliminar','ConstanciaEventoController@destroy')->name('eventos.constancias.eliminar');
 
 Route::get('/estudiantes-filtrar-grupos', 'EstudianteController@filtrarGrupos')->name('estudiantes.filtrarGrupos');
 

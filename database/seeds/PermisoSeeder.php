@@ -11,257 +11,164 @@ class PermisoSeeder extends Seeder
      */
     public function run()
     {
-        $claves = [
-            "academia-crear",
-            "academia-editar",
-            "academia-eliminar",
+        
+        $permisos = [
+            [
+                "ClavePermiso" => "academicos-listar", 
+                "DescripcionPermiso" => "Listar academicos"
+            ],
+            [
+                "ClavePermiso" => "academicos-crear", 
+                "DescripcionPermiso" => "El academico puede crear dependiendo el modulo en el que se encuentre"
+            ],
+            [
+                "ClavePermiso" => "academicos-detalles", 
+                "DescripcionPermiso" => "Se puede ver los detalles de lo que se seleccione"
+            ],
+            [
+                "ClavePermiso" => "academicos-eliminar", 
+                "DescripcionPermiso" => "El academico puede eliminar"
+            ],
 
-            "academico-crear",
-            "academico-editar-cualquiera",
-            "academico-eliminar-cualquiera",
-            "academico-ver-cualquiera",
-            "academico-ver-todos-cualquiera",
-            "academico-editar-propio",
-            "academico-eliminar-propio",
-            "academico-ver-propio",
-            "academico-ver-todos-propio",
 
-            // NOTA: QUEDAN PENDIENTES LOS PERMISOS PARA LA TABLA ACADÉMICO-FECHA.
+            [
+                "ClavePermiso" => "constancias-listar", 
+                "DescripcionPermiso" => "Listar constancias"
+            ],
+            [
+                "ClavePermiso" => "constancias-crear", 
+                "DescripcionPermiso" => "Crear constancias"
+            ],
+            [
+                "ClavePermiso" => "constancias-detalles", 
+                "DescripcionPermiso" => "Ver informacion de las constancias"
+            ],
+            [
+                "ClavePermiso" => "constancias-editar-propio", 
+                "DescripcionPermiso" => "Editar las constancias que creaste constancias"
+            ],
+            [
+                "ClavePermiso" => "constancias-eliminar-propio", 
+                "DescripcionPermiso" => "Eliminar las constancias que creaste constancias"
+            ],
+            [
+                "ClavePermiso" => "constancias-editar-cualquiera", 
+                "DescripcionPermiso" => "Editar cualquier constancia sin importar el creador"
+            ],
+            [
+                "ClavePermiso" => "constancias-eliminar-cualquiera", 
+                "DescripcionPermiso" => "Eliminar cualquier constancia sin importar el creador"
+            ],
+            [
+                "ClavePermiso" => "constancias-aprobar-rechazar", 
+                "DescripcionPermiso" => "Poder aprobar o rechazar constancias"
+            ],
 
-            "evento-crear",
-            "evento-editar-cualquiera",
-            "evento-eliminar-cualquiera",
-            "evento-ver-cualquiera",
-            "evento-ver-todos-cualquiera",
-            "evento-editar-propio",
-            "evento-eliminar-propio",
-            "evento-ver-propio",
-            "evento-ver-todos-propio",
 
-            "eventos-crear",
-            "eventos-listar",
-            "eventos-leer",
-            "eventos-editar",
-            "eventos-elimiar",
+            [
+                "ClavePermiso" => "eventos-listar", 
+                "DescripcionPermiso" => "Listar eventos"
+            ],
+            [
+                "ClavePermiso" => "eventos-crear", 
+                "DescripcionPermiso" => "Crear un evento"
+            ],
+            [
+                "ClavePermiso" => "eventos-detalles", 
+                "DescripcionPermiso" => "Ver los detalles del evento"
+            ],
+            [
+                "ClavePermiso" => "eventos-registrar-participantes", 
+                "DescripcionPermiso" => "Se pueden registrar los participantes del evento"
+            ],
+            [
+                "ClavePermiso" => "eventos-editar-propio", 
+                "DescripcionPermiso" => "Se pueden editar los eventos propios del usuario"
+            ],
+            [
+                "ClavePermiso" => "eventos-eliminar-propio", 
+                "DescripcionPermiso" => "Se pueden eliminar los eventos propios del usuario"
+            ],
+            [
+                "ClavePermiso" => "eventos-vincular-constancias", 
+                "DescripcionPermiso" => "Se vinculan constancias a eventos que no sean propio del usuario"
+            ],
+            [
+                "ClavePermiso" => "eventos-vincular-constancias-propias", 
+                "DescripcionPermiso" => "Se vinculan constancias a eventos que son propio del usuario"
+            ],
+            [
+                "ClavePermiso" => "eventos-ver-participantes", 
+                "DescripcionPermiso" => "El usuario puede ver los participantes"
+            ],
+            [
+                "ClavePermiso" => "eventos-editar-cualquiera", 
+                "DescripcionPermiso" => "Se pueden editar cualquiera de los eventos que se encuentren"
+            ],
+            [
+                "ClavePermiso" => "eventos-eliminar-cualquiera", 
+                "DescripcionPermiso" => "Se pueden eliminar cualquiera de los eventos que se encuentren"
+            ],
+            [
+                "ClavePermiso" => "eventos-aprobar-rechazar", 
+                "DescripcionPermiso" => "Se pueden aprobar o rechazar los eventos"
+            ],
 
-            "eventoestado-aprobar",
-            "eventoestado-editar",
 
-            "fechaevento-crear",
-            "fechaevento-editar",
-            "fechaevento-eliminar",
+            [
+                "ClavePermiso" => "estudiantes-listar", 
+                "DescripcionPermiso" => "Listar estudiantes"
+            ],
+            [
+                "ClavePermiso" => "estudiantes-crear", 
+                "DescripcionPermiso" => "Crear estudiante"
+            ],
+            [
+                "ClavePermiso" => "estudiantes-detalles", 
+                "DescripcionPermiso" => "Detalles estudiante"
+            ],
+            [
+                "ClavePermiso" => "estudiantes-eliminar", 
+                "DescripcionPermiso" => "Eliminar estudiante"
+            ],
 
-            "responsable-crear",
-            "responsable-eliminar",
 
-            "participantes-crear",
-            "participantes-eliminar",
+            [
+                "ClavePermiso" => "roles-listar", 
+                "DescripcionPermiso" => "Rol listar"
+            ],
+            [
+                "ClavePermiso" => "roles-crear", 
+                "DescripcionPermiso" => "Rol crear"
+            ],
+            [
+                "ClavePermiso" => "roles-eliminar", 
+                "DescripcionPermiso" => "Rol eliminar"
+            ],
 
-            "documentos-crear",
-            "documentos-leer",
-            "documentos-editar",
-            "documentos-eliminar",
 
-            "estudiante-crear",
-            "estudiante-editar-cualquiera",
-            "estudiante-eliminar-cualquiera",
-            "estudiante-ver-cualquiera",
-            "estudiante-ver-todos-cualquiera",
-            "estudiante-editar-propio",
-            "estudiante-eliminar-propio",
-            "estudiante-ver-propio",
-            "estudiante-ver-todos-propio",
-
-            "experienciaEducativa-crear",
-            "experienciaEducativa-editar",
-            "experienciaEducativa-eliminar",
-
-            "facultad-crear",
-            "facultad-editar",
-            "facultad-eliminar",
-
-            "organizador-crear",
-            "organizador-editar",
-            "organizador-eliminar",
-
-            "permiso-crear",
-            "permiso-editar",
-            "permiso-eliminar",
-
-            "persona-crear",
-            "persona-editar-cualquiera",
-            "persona-eliminar-cualquiera",
-            "persona-ver-cualquiera",
-            "persona-ver-todos-cualquiera",
-            "persona-editar-propio",
-            "persona-eliminar-propio",
-            "persona-ver-propio",
-            "persona-ver-todos-propio",
-
-            "programaEducativo-crear",
-            "programaEducativo-editar",
-            "programaEducativo-eliminar",
-
-            "roles-crear",
-            "roles-editar",
-            "roles-eliminar",
-
-			"sedes-listar",
-			"sedes-crear",
-			"sedes-editar",
-			"sedes-eliminar",
-			
-            "sedeEventos-crear",
-            "sedeEventos-editar",
-            "sedeEventos-eliminar",
-
-            "tipoOrganizador-crear",
-            "tipoOrganizador-editar",
-            "tipoOrganizador-eliminar",
-
-            "usuario-crear",
-            "usuario-editar-cualquiera",
-            "usuario-eliminar-cualquiera",
-            "usuario-ver-cualquiera",
-            "usuario-ver-todos-cualquiera",
-            "usuario-editar-propio",
-            "usuario-eliminar-propio",
-            "usuario-ver-propio",
-            "usuario-ver-todos-propio",
-
-            
+            [
+                "ClavePermiso" => "sedes-listar", 
+                "DescripcionPermiso" => "Listar sedes"
+            ],
+            [
+                "ClavePermiso" => "sedes-crear", 
+                "DescripcionPermiso" => "Crear sedes"
+            ],
+            [
+                "ClavePermiso" => "sedes-detalles", 
+                "DescripcionPermiso" => "Ver detalles de los sedes"
+            ],
+            [
+                "ClavePermiso" => "sedes-editar", 
+                "DescripcionPermiso" => "Editar sedes"
+            ],
+            [
+                "ClavePermiso" => "sedes-eliminar", 
+                "DescripcionPermiso" => "Eliminar sedes"
+            ],
         ];
 
-        $descripciones = [
-            "Permiso para crear una academia.",
-            "Permiso para editar una academia.",
-            "Permiso para eliminar una academia.",
-
-            "Permiso para crear un académico.",
-            "Permiso para editar un académico creado por cualquier persona.",
-            "Permiso para eliminar un académico creado por cualquier persona.",
-            "Permiso para poder ver un académico creado por cualquier persona.",
-            "Permiso para poder ver todos los académicos creados por cualquier persona.",
-            "Permiso para editar un académico creado por mi usuario.",
-            "Permiso para eliminar un académico creado por mi usuario.",
-            "Permiso para poder ver un académico creado por mi usuario.",
-            "Permiso para poder ver todos los académicos creados por mi usuario.",
-
-            //!!200127-1501 NOTA: QUEDAN PENDIENTES LOS PERMISOS PARA LA TABLA ACADÉMICO-FECHA.
-
-            "Permiso para crear un evento.",
-            "Permiso para editar un evento creado por cualquier persona.",
-            "Permiso para eliminar un evento creado por cualquier persona.",
-            "Permiso para poder ver un evento creado por cualquier persona.",
-            "Permiso para poder ver todos los eventos creados por cualquier persona.",
-            "Permiso para editar un evento creado por mi usuario.",
-            "Permiso para eliminar un evento creado por mi usuario.",
-            "Permiso para poder ver un evento creado por mi usuario.",
-            "Permiso para poder ver todos los eventos creados por mi usuario.",
-
-            "Permiso para Crear eventos",
-            "Permiso para Listar eventos",
-            "Permiso para Leer eventos",
-            "Permiso para Editar eventos",
-            "Permiso para Eliminar eventos",
-
-            "eventoestado-aprobar",
-            "eventoestado-editar",
-
-            "fechaevento-crear",
-            "fechaevento-editar",
-            "fechaevento-eliminar",
-
-            "responsable-crear",
-            "responsable-eliminar",
-
-            "participantes-crear",
-            "participantes-eliminar",
-
-            "documentos-crear",
-            "documentos-leer",
-            "documentos-editar",
-            "documentos-eliminar",
-
-            "Permiso para crear un estudiante.",
-            "Permiso para editar un estudiante creado por cualquier persona.",
-            "Permiso para eliminar un estudiante creado por cualquier persona.",
-            "Permiso para poder ver un estudiante creado por cualquier persona.",
-            "Permiso para poder ver todos los estudiantes creados por cualquier persona.",
-            "Permiso para editar un estudiante creado por mi usuario.",
-            "Permiso para eliminar un estudiante creado por mi usuario.",
-            "Permiso para poder ver un estudiante creado por mi usuario.",
-            "Permiso para poder ver todos los estudiantes creados por mi usuario.",
-
-            "Permiso para crear una experiencia educativa.",
-            "Permiso para editar una experiencia educativa.",
-            "Permiso para eliminar una experiencia educativa.",
-
-            "Permiso para crear una facultad.",
-            "Permiso para editar una facultad.",
-            "Permiso para eliminar una facultad.",
-
-            "Permiso para crear un organizador.",
-            "Permiso para editar un organizador.",
-            "Permiso para eliminar un organizador.",
-
-            "Permiso para crear un permiso.",
-            "Permiso para editar un permiso.",
-            "Permiso para eliminar un permiso.",
-
-            "Permiso para crear datos personales",
-            "Permiso para editar los datos personales creado por cualquier persona.",
-            "Permiso para eliminar los datos personales creado por cualquier persona.",
-            "Permiso para poder ver los datos personales creado por cualquier persona.",
-            "Permiso para poder ver todos los datos personales creados por cualquier persona.",
-            "Permiso para editar los datos personales de mi usuario.",
-            "Permiso para eliminar los datos personales de mi usuario.",
-            "Permiso para poder ver los datos personales de mi usuario.",
-            "Permiso para poder ver todos los datos académicos creados por mi usuario.",
-
-            "Permiso para crear un programa educativo.",
-            "Permiso para editar un programa educativo.",
-            "Permiso para eliminar un programa educativo.",
-
-            "Permiso para crear roles.",
-            "Permiso para editar roles.",
-            "Permiso para eliminar roles.",
-			
-			"sedes-listar",
-			"sedes-crear",
-			"sedes-editar",
-			"sedes-eliminar",
-
-            "Permiso para crear una sede.",
-            "Permiso para editar una sede.",
-            "Permiso para eliminar una sede.",
-
-            "Permiso para crear un tipo de Organizador.",
-            "Permiso para editar un tipo de Organizador.",
-            "Permiso para eliminar un tipo de Organizador.",
-
-
-            "Permiso para crear usuarios",
-            "Permiso para editar los usuarios creado por cualquier persona.",
-            "Permiso para eliminar los usuarios creado por cualquier persona.",
-            "Permiso para poder ver los usuarios creado por cualquier persona.",
-            "Permiso para poder ver todos los usuarios creados por cualquier persona.",
-            "Permiso para editar los usuarios de mi usuario.",
-            "Permiso para eliminar los usuarios de mi usuario.",
-            "Permiso para poder ver los usuarios de mi usuario.",
-            "Permiso para poder ver todos los usuarios creados por mi usuario.",
-        ];
-
-        $registros = [];
-        for($i=0; $i<count($claves); $i++){
-            $registros[] = [
-                'ClavePermiso'         => $claves[$i],
-                'DescripcionPermiso'    => $descripciones[$i],
-                'CreatedBy' => 1,
-                'UpdatedBy' => 1,
-            ];
-        }
-
-        DB::table('Permiso')->insert($registros);
+        DB::table('Permiso')->insert($permisos);
     }
 }

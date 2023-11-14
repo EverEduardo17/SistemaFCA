@@ -6,9 +6,11 @@ use App\Http\Requests\EditarEventoRequest;
 use App\Models\Academico;
 use App\Models\AcademicoEvento;
 use App\Http\Requests\EventoRequest;
+use App\Models\Constancia;
 use App\Models\Evento;
 use App\Models\Evento_Fecha_Sede;
 use App\Mail\EventoRegistrado;
+use App\Models\ConstanciaEvento;
 use App\Models\FechaEvento;
 use App\Models\Role;
 use App\Models\SedeEvento;
@@ -253,7 +255,7 @@ class EventoController extends Controller
 
     public function show($idEvento)
     {
-        Gate::authorize('havepermiso', 'eventos-leer');
+        Gate::authorize('havepermiso', 'eventos-detalles');
 
         $evento = Evento::where('IdEvento', $idEvento)->with(['eventoFechaSede', 'organizador', 'documento', 'eventoFechaSede.fechaEvento', 'eventoFechaSede.sedeEvento'])->firstOrFail();
 
@@ -261,6 +263,8 @@ class EventoController extends Controller
         $acemicosNot = Academico::whereNotIn('IdAcademico', $data)->get();
         $data = AcademicoEvento::select('IdAcademico')->where('IdEvento', $evento->IdEvento)->get()->toArray();
         $participanteNot = Academico::whereNotIn('IdAcademico', $data)->get();
+        $data = ConstanciaEvento::select('IdConstancia')->get()->toArray();
+        $constanciasNot = Constancia::whereNotIn('IdConstancia', $data)->where('EstadoConstancia', 'APROBADO')->get();
 
         return view('eventos.show', [
             "evento"                => $evento,
@@ -268,13 +272,14 @@ class EventoController extends Controller
             "sedes"                 => SedeEvento::all(),
             "tipoorganizadores"     => TipoOrganizador::get(),
             "academicos"            => $acemicosNot,
-            'participantes'         => $participanteNot
+            'participantes'         => $participanteNot,
+            'constancias'            => $constanciasNot
         ]);
     }
 
     public function update(EditarEventoRequest $request, $evento)
     {
-        Gate::authorize('havepermiso', 'eventos-editar');
+        Gate::authorize('havepermiso', 'eventos-editar-propio');
 
         $evento = Evento::findOrFail($evento);
         $request->validated();
@@ -298,7 +303,7 @@ class EventoController extends Controller
 
     public function destroy(Evento $evento)
     {
-        Gate::authorize('havepermiso', 'eventos-eliminar');
+        Gate::authorize('havepermiso', 'eventos-eliminar-propio');
     }
 
 

@@ -24,7 +24,7 @@
                     <p class="card-text">{{ $academia->DescripcionAcademia }}</p>
                 </div>
                 <div class="col">
-                    @can('havepermiso', 'academia-academico-crear')
+                    @can('havepermiso', 'academicos-crear')
                         <a class="btn btn-success" href="#" data-toggle="modal" data-target="#addAcademicoAcademia" >Agregar integrate</a>
                     @endcan
                 </div>
@@ -47,7 +47,7 @@
                             <td>{{ $item->academico->usuario->name }}</td>
                             <td>{{ $item->academico->usuario->email }}</td>
                             <td>
-                                @can('havepermiso', 'academia-academico-eliminar')
+                                @can('havepermiso', 'academicos-eliminar')
                                     <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteAcademicoAcademia" data-academico="{{ $item->Id_Academico_Academia }}">Eliminar</a>
                                 @endcan
                             </td>

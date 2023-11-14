@@ -12,7 +12,7 @@
             <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Gestión de Constancias</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ $constancia->NombreConstancia }}</li>
             
-            @can('havepermiso', 'documentos-editar')
+            @can('havepermiso', 'constancias-editar-propio')
                 <li class="descargar-plantilla col-12"> <a href="{{ route('constancias.downloadGenerica') }}"> Descargar Plantilla Génerica </a></li>
             @endcan
         </ol>
@@ -24,7 +24,7 @@
             <h5 class="card-title">Detalles de la Constancia</h5>
 
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('constancias.index') }}" role="button">Regresar</a>
-            @can('havepermiso', 'documentos-leer')
+            @can('havepermiso', 'constancias-detalles')
                 <a class="btn btn-info col-3" href="#" data-toggle="modal" data-target="#help" role="button">Ayuda</a>
             @endcan
         </div>
@@ -55,7 +55,7 @@
                     <input name="Estado" type="text" class="form-control @error('VigenteHasta') is-invalid @enderror" value="{{ old('Estado', $constancia->EstadoConstancia) }}" disabled>
                     {{-- TODO: Reemplazar con permiso necesario correcto --}}
                     @if ($constancia->EstadoConstancia == 'PENDIENTE')
-                        @can('havepermiso', 'documentos-editar')
+                        @can('havepermiso', 'constacias-editar-propio')
                             <a class="btn btn-sm btn-outline-success mx-1" data-toggle="modal" data-target="#aprobarConstancia{{ $constancia->IdConstancia }}" href="#" data-placement="bottom" title="Aprobar">
                                 <em><b>Aprobar</b></em>
                             </a>
@@ -74,7 +74,7 @@
                 </div>
             @endif
 
-            @can('havepermiso', 'documentos-editar')
+            @can('havepermiso', 'constancias-editar-cualquiera')
 
                 <a class="mi-plantilla" 
                     href="{{ route('constancias.downloadMiPlantilla', [
@@ -94,12 +94,12 @@
 </div> 
 
 <br> <br>
-{{-- @can('havepermiso', 'documentos-editar') --}}
+{{-- @can('havepermiso', 'constancias-editar-propio') --}}
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Estudiantes</h5>
-                {{-- @can('havepermiso', 'estudiante-ver-cualquiera') --}}
+                {{-- @can('havepermiso', 'estudiantes-detalles') --}}
                 <a href="#download" data-file-name="{{ $constancia->NombreConstancia }}"data-href="{{ route('constancias.downloadAll', $constancia) }}" class="btn btn-info ml-auto mr-3 download-all"><i class="fas fa-file-archive"></i>
                     Descargar Todo
                 </a>
@@ -156,12 +156,11 @@
             </div>
     </div>
 
-    @include('layouts.messages')
     @include('constancias.modals.deleteEstudiante')
     @include('constancias.modals.loading')
     @include('constancias.modals.help')
     @include('constancias.modals.estadoconstancia')
-{{-- @endcan --}}
+{{-- @end   can --}}
 
 @endsection
 

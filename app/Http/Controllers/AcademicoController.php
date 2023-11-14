@@ -24,7 +24,7 @@ class AcademicoController extends Controller
     }
 
     public function create() {
-        Gate::authorize('havepermiso', 'academico-ver-propio');
+        Gate::authorize('havepermiso', 'academicos-detalles');
 
         $roles = Role::all();
 
@@ -90,7 +90,7 @@ class AcademicoController extends Controller
 
     public function show($idAcademico) 
     {
-        Gate::authorize('havepermiso', 'academico-ver-propio');
+        Gate::authorize('havepermiso', 'academicos-detalles');
 
         $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
 
@@ -101,7 +101,7 @@ class AcademicoController extends Controller
 
     public function edit($idAcademico) 
     {
-        Gate::authorize('havepermiso', 'academico-ver-propio');
+        Gate::authorize('havepermiso', 'academicos-detalles');
 
         $roles = Role::all();
 

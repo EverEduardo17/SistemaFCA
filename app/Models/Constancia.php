@@ -32,4 +32,8 @@ class Constancia extends Model
         return $this->belongsToMany(Estudiante::class, 'constancia_estudiante', 'IdConstancia', 'IdEstudiante')
                     ->withPivot('created_at', 'updated_at');
     }
+
+    public function evento() {
+        return $this->hasOne(ConstanciaEvento::class, 'IdConstancia', 'IdConstancia');
+    }
 }

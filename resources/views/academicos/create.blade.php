@@ -12,7 +12,7 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title col-8">Agregar Académico</h5>
-            @can('havepermiso', 'academicos-listar')
+            @can('havepermiso', 'academicos-de')
                 <a class="btn btn-primary col-4" href="{{ route('academicos.index') }}" role="button">Ver Académicos</a>
             @endcan
         </div>

@@ -33,7 +33,7 @@
                     <td>{{ $item->DescripcionAcademia }}</td>
                     <td>{{ $item->coordinador->usuario->name }}</td>
                     <td>
-                        @can('havepermiso', 'academias-leer')
+                        @can('havepermiso', 'academias-detalles')
                             <a class="btn btn-outline-primary btn-sm" href="{{ route('academias.show', $item) }}">Detalles</a>
                         @endcan
                         @can('havepermiso', 'academias-editar')
