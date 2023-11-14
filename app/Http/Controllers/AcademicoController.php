@@ -35,8 +35,6 @@ class AcademicoController extends Controller
     {
         Gate::authorize('havepermiso', 'academicos-crear');
 
-        dd($request);
-
         $request->validated();
 
         $input = $request->validated();

@@ -54,12 +54,41 @@ class LoginController extends Controller
         return view("auth.register");
     }
 
+    /**
+     * Cerrar sesion del usuario
+     * 
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function logout() 
     {
         Auth::logout();
 
 
-        return redirect('/');
+        return redirect('/')->with('success', 'Sesión cerrada.');
+    }
+
+    /**
+     * Retorna la pagina de login del Sistemafca
+     * 
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function login() 
+    {
+        return view("auth.login");
+    }
+
+    /**
+     * Validar el input del usuario e intentar iniciar sesion con Microsoft Graph
+     * 
+     * @param \App\Http\Requests\LoginRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function attempt(LoginRequest $request)
+    {
+        $request->validated();
+
+        session()->put('name', $request->name);
+        return $this->msGraph();
     }
 
 
@@ -72,7 +101,7 @@ class LoginController extends Controller
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function login() 
+    private function msGraph() 
     {
         $oauthClient = new \League\OAuth2\Client\Provider\GenericProvider([
             'clientId'                => config('azure.appId'),
@@ -84,9 +113,10 @@ class LoginController extends Controller
             'scopes'                  => config('azure.scopes'),
         ]);
 
+        // redireccionar directo a la pagina de login de la UV y saltarse la de microsoft
         $authUrl = $oauthClient->getAuthorizationUrl([
             'prompt' => 'login',
-            'login_hint' => '@uv.mx'
+            'login_hint' => $this->getEmail(session('name'))
         ]);
 
         // Salvar el estado para validar en callback
@@ -105,6 +135,8 @@ class LoginController extends Controller
      */
     public function callback(Request $request)
     {
+        $request->session()->forget('name');
+
         // Validate state
         $expectedState = session('oauthState');
         $request->session()->forget('oauthState');
@@ -156,11 +188,16 @@ class LoginController extends Controller
 
             if (!$user) {
                 $user = $this->createUser($userGraph);
-            } 
+            }
+
+            // si aun el usuario es nulo, es probable que alguien lo elimino del sistema
+            if (!$user) {
+                return redirect('/')->with('error', 'Usuario eliminado, contacte al administrador.');
+            }
 
             Auth::login($user);
 
-            return redirect('/');
+            return redirect('/')->with('success', 'Sesión iniciada.');
         }
         catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
             return redirect('/')
@@ -201,7 +238,7 @@ class LoginController extends Controller
             DB::beginTransaction();
 
             $idUsuarioDB = DB::table('Usuario')->insertGetId([
-                'name'              => $this->getUserName($user['mail']),
+                'name'              => $matricula,
                 'email'             => $user['mail'],
                 'password'          => capitalizeFirst($user['officeLocation']), // poner la carrera en campo contraseña como solucion temporal a lo de Trayectoria,
                 'CreatedBy'         => 1,
@@ -210,14 +247,15 @@ class LoginController extends Controller
 
             DB::table('DatosPersonales')->insert([
                 'idDatosPersonales'                 => $idUsuarioDB,
-                'NombreDatosPersonales'             => $user['givenName'],
-                'ApellidoPaternoDatosPersonales'    => $user['surname'],
+                'NombreDatosPersonales'             => capitalizeFirst($user['givenName']),
+                'ApellidoPaternoDatosPersonales'    => capitalizeFirst($user['surname']),
                 'ApellidoMaternoDatosPersonales'    => '',
                 'IdUsuario'                         => $idUsuarioDB,
                 'CreatedBy'                         => 1,
                 'UpdatedBy'                         => 1
             ]);
 
+            // si es estudiante o egresado dale el rol de estudiante
             if (strpos($user['mail'], '@estudiantes.uv.mx') !== false || strpos($user['mail'], '@egresados.uv.mx') !== false) {
 
                 DB::table('Role_Usuario')->insert([
@@ -253,6 +291,7 @@ class LoginController extends Controller
                     'UpdatedBy'             => 1
                 ]);
     
+                // control total, TODO: cambiar a academico, cuando se hayan corregido los permisos
                 DB::table('Role_Usuario')->insert([
                     'IdUsuario'     => $idUsuarioDB,
                     'IdRole'        => 2,
@@ -260,7 +299,6 @@ class LoginController extends Controller
                     'UpdatedBy'     => 1
                 ]);
             }
-
 
             DB::commit();
 
@@ -272,6 +310,28 @@ class LoginController extends Controller
     }
 
 
+
+    /**
+     * Obtener el email de un usuario segun si es academico, estudiante o egresado
+     * Si se introduce un email, entonces se retorna igual
+     * 
+     * @param string $name nombre de usuario
+     * @return string email del usuario
+     */
+    private function getEmail(string $name) : string 
+    {
+        if (strpos($name, '@') !== false) {
+            return $name;
+        }
+        elseif (preg_match('/^zs\d+$/', $name)) {
+            return $name . "@estudiantes.uv.mx";
+        } 
+        elseif (preg_match('/^gs\d+$/', $name)) {
+            return $name . "@egresados.uv.mx";
+        }
+
+        return $name . "@uv.mx";
+    }  
 
 
 
@@ -331,17 +391,5 @@ class LoginController extends Controller
             ]);  
         }
     }
-    
-    private function getEmail($name) : string 
-    {
-        if (preg_match('/^zs\d+$/', $name)) {
-            return $name . "@estudiantes.uv.mx";
-        } 
-        elseif (preg_match('/^gs\d+$/', $name)) {
-            return $name . "@egresados.uv.mx";
-        }
-
-        return $name . "@uv.mx";
-    }  
     */
 }

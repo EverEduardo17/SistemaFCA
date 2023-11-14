@@ -17,7 +17,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::get('/login','auth\LoginController@login')->name('login');
-// Route::post('/login','auth\LoginController@login')->name('login');
+Route::post('/login','auth\LoginController@attempt')->name('login');
+// Route::post('/microsoft','auth\LoginController@msGraph')->name('msGraph');
 Route::get('/logout','auth\LoginController@logout')->name('logout')->middleware('auth');
 Route::get('/callback', 'auth\LoginController@callback');
 

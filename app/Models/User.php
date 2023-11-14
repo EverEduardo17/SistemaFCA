@@ -45,12 +45,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function academico(){
+    public function academico()
+    {
         return $this->belongsTo(Academico::class, 'IdUsuario', 'IdUsuario');
     }
 
-    public function datosPersonales(){
+    public function datosPersonales()
+    {
         return $this->belongsTo(DatosPersonales::class, 'IdUsuario', 'IdUsuario');
+    }
+
+    public function estudiante()
+    {
+        return $this->belongsTo(Estudiante::class, 'IdUsuario', 'IdUsuario');
     }
 
     public function roles()

@@ -33,13 +33,10 @@
                 </div>
             </div>
             <div id="divIzq" class="col-sm-12 col-md-6">
-                <div class="row float-right pleca">
-                    Universidad Veracruzana
-                </div>
-                
                 <div style="width: 100%; height: 70%; display: table;">
                     <div style="display: table-cell; vertical-align: middle;">
-                        
+                        <br>
+                        <br>
                         <div class="row" style="margin-top: 4em;">
                             <div id="sistema-fca">
                                 <b>SistemaFCA</b>
@@ -48,34 +45,22 @@
                             <div id="inisesion">
                                 <b>Inicio de sesión</b>
                             </div>
-                            
-                            <div id="inisesionMsj">
-                                <div id="estado" class="errorMsj"></div>
-                            </div>
                         </div>
-                        
-                        <div class="row" style="margin-top: 1em;">
-                            <div id="divMsjError">
-                                <span id="msjError"></span>
-                            </div>
-                        </div>
+                    
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
 
                             <div class="text-center form-group" style="margin-top: 3em; margin-bottom: 2em;">
                                 <input name="name" id="name" type="text" style="width: 350px;"
-                                    class="txt-login @error('name') is-invalid @enderror"
+                                    class="txt-login @error('name') txt-login-error @enderror"
                                     value="{{old('name')}}" placeholder="Usuario" autofocus
                                 >
                                 @error('name')
                                     <br> <p class="text-danger small">El campo usuario es obligatorio.</p>
                                 @enderror
-                                @error('loginError')
-                                    <br> <p class="text-danger small"> {{ $message }}</p>
-                                @enderror
                             </div>
                         
-                            <div class="text-center form-group" style="margin-bottom: 3em;">
+                            {{-- <div class="text-center form-group" style="margin-bottom: 3em;">
                                 <input name="password" id="password" type="password" style="width: 350px;"
                                     class="txt-login"
                                     value="{{old('password')}}" placeholder="Contraseña" autofocus
@@ -83,22 +68,20 @@
                                 @error('password')
                                     <br> <p class="text-danger small"> {{ $message }}</p>
                                 @enderror
-                            </div>
+                            </div> --}}
                         
                             <div class="row justify-content-center form-group">
-                                <button type="submit" class="btn btn-success" style="width: 352px;">
+                                <button type="submit" class="btn btn-success shadow-sm" style="width: 352px;">
                                     Iniciar Sesión
                                 </button>
                             </div>
                         </form>
-                        
-                        <div class="row justify-content-center">
-                            <a href="#" id="" class="">
-                                ¿Quiere cambiar o recuperar su contrase&ntilde;a?
-                            </a>
-                        </div>
                     </div>
                 </div>
+                <div class="pleca">
+                    Universidad Veracruzana
+                </div>
+
                 <div class="divDerechosReser position-fixed bottom-0 end-0 text-right">
                     © {{ getYear() }} Universidad Veracruzana. Todos los derechos reservados
                 </div>

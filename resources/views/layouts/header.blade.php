@@ -20,21 +20,34 @@
 
             @else
 
-            <div class="position-relative text-right">
-                <a class="text-white dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ Auth::user()->name }}
-                </a>
-                
-                <div class="dropdown-menu dropdown-menu-right dropdown-menu-bottom" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="{{ route('academicos.show', Auth::user()->IdUsuario) }}">Ver Perfil</a>
-                    {{-- <a class="dropdown-item" href="#">Opción 2</a> --}}
-                    <div class="dropdown-divider"></div>
-                    <form action="{{ route('logout') }}" method="post">
-                        @csrf
-                        <button class="dropdown-item" type="submit">Cerrar Sesión</button>
-                    </form>
+                <div class="position-relative text-right">
+                    <a class="text-white dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ Auth::user()->name }}
+                    </a>
+                    
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-bottom" aria-labelledby="userDropdown">
+
+                        <a class="dropdown-item"
+                            @if (Auth::user()->estudiante)
+                                href="{{ route('estudiantes.show', Auth::user()->estudiante->IdEstudiante) }}"
+                            @else
+                                href="{{ route('academicos.show', Auth::user()->academico->IdAcademico) }}"
+                            @endif
+                        >
+                            Ver Perfil
+                        </a>
+
+                        {{-- <a class="dropdown-item" href="#">Opción 2</a> --}}
+
+                        <div class="dropdown-divider"></div>
+
+                        <form action="{{ route('logout') }}" method="post">
+                            @csrf
+                            <button class="dropdown-item" type="submit">Cerrar Sesión</button>
+                        </form>
+
+                    </div>
                 </div>
-            </div>
             
             @endguest
 

@@ -28,8 +28,8 @@
                 <strong> Estudiantes</strong>
             </h5>
 
-            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
-            <a class="btn btn-success col-4" href="{{ route('constancias.show', $constancia->IdConstancia) }}" role="button">Ver Constancia</a>
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('constancias.show', $constancia->IdConstancia) }}" role="button">Regresar</a>
+            {{-- <a class="btn btn-success col-4" href="{{ route('constancias.show', $constancia->IdConstancia) }}" role="button">Ver Constancia</a> --}}
 
         </div>
     </div>
