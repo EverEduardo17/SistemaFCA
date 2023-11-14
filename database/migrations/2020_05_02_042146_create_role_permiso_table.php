@@ -15,7 +15,7 @@ class CreateRolePermisoTable extends Migration
      */
     public function up()
     {
-        Schema::create('role_permiso', function (Blueprint $table) {
+        Schema::create('Role_Permiso', function (Blueprint $table) {
             $table->bigIncrements('Id_Role_Permiso');
 
             /*Realaciones*/
