@@ -6,9 +6,11 @@ use App\Http\Requests\EditarEventoRequest;
 use App\Models\Academico;
 use App\Models\AcademicoEvento;
 use App\Http\Requests\EventoRequest;
+use App\Models\Constancia;
 use App\Models\Evento;
 use App\Models\Evento_Fecha_Sede;
 use App\Mail\EventoRegistrado;
+use App\Models\ConstanciaEvento;
 use App\Models\FechaEvento;
 use App\Models\Role;
 use App\Models\SedeEvento;
@@ -261,6 +263,8 @@ class EventoController extends Controller
         $acemicosNot = Academico::whereNotIn('IdAcademico', $data)->get();
         $data = AcademicoEvento::select('IdAcademico')->where('IdEvento', $evento->IdEvento)->get()->toArray();
         $participanteNot = Academico::whereNotIn('IdAcademico', $data)->get();
+        $data = ConstanciaEvento::select('IdConstancia')->get()->toArray();
+        $constanciasNot = Constancia::whereNotIn('IdConstancia', $data)->get();
 
         return view('eventos.show', [
             "evento"                => $evento,
@@ -268,7 +272,8 @@ class EventoController extends Controller
             "sedes"                 => SedeEvento::all(),
             "tipoorganizadores"     => TipoOrganizador::get(),
             "academicos"            => $acemicosNot,
-            'participantes'         => $participanteNot
+            'participantes'         => $participanteNot,
+            'constancias'            => $constanciasNot
         ]);
     }
 
