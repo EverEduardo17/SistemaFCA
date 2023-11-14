@@ -65,7 +65,9 @@
 
             <hr>
             @can('havepermiso', 'documentos-editar')
-                <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
+                <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmarModificarModal">
+                    Actualizar
+                </button>
             @endcan
         </form>
         @can('havepermiso', 'documentos-leer')
@@ -73,16 +75,27 @@
         @endcan
     </div>
 </div>
+@include('constancias.modals.confirmarModificar', ['constancia' => $constancia])
 @endsection
 
 
 @section('script')
     <script type="text/javascript" src="{{asset('lib/moment/min/moment-with-locales.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('lib/datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script>
         $('#fecha').datetimepicker({
             locale: 'es',
             format: 'L'
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Escucha el clic en el botón de confirmar actualizar en el modal
+            $('#confirmarActualizar').on('click', function () {
+                // Envía el formulario al confirmar
+                $('form').submit();
+            });
         });
     </script>
 @endsection

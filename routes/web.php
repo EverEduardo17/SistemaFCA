@@ -28,6 +28,8 @@ Route::resource('academicos', 'AcademicoController');
 Route::resource('academicoEvento', 'AcademicoEventoController')->except('index', 'create', 'show', 'edit', 'update');
 Route::resource('bajas', 'BajaController')->except('show', 'create');
 Route::resource('cohortes', 'CohorteController');
+//No mover 'constancias/aprobar/' por debajo de Route::resource('constancias', 'ConstanciaController');
+Route::get('constancias/aprobar/', 'ConstanciaController@indexAprobar')->name('constancias.aprobar');
 Route::resource('constancias', 'ConstanciaController');
 Route::resource('documento', 'DocumentoController');
 Route::resource('estudiantes', 'EstudianteController');
@@ -79,3 +81,5 @@ Route::get('constancias/{constancia}/{estudiante}', 'ConstanciaController@showEs
 Route::post('constancias/agregar-estudiante', 'ConstanciaController@addEstudianteConstancia')->name('constancias.addEstudiante');
 Route::delete('constancias/{constancia}/delete/{estudiante}', 'ConstanciaController@destroyEstudianteConstancia')->name('constancias.destroyEstudiante');
 Route::get('constancias/{constancia}/{estudiante}/download/', 'ConstanciaController@downloadConstancia')->name('constancias.download');
+Route::get('constancias/aprobar/{id}/aprobar', 'ConstanciaController@aprobarConstancia')->name('constancias.aprobar.aceptar');
+Route::get('constancias/aprobar/{id}/rechazar', 'ConstanciaController@rechazarConstancia')->name('constancias.aprobar.rechazar');
