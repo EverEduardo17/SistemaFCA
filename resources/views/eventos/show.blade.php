@@ -88,6 +88,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#documentos" role="tab" aria-controls="documentos" aria-selected="false">Documentos</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#constancias" role="tab" aria-controls="constancias" aria-selected="false">Constancias</a>
+                </li>
             </ul>
         </div>
         <div class="card-body pt-0">
@@ -297,6 +300,55 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="tab-pane" id="constancias" role="tabpanel" aria-labelledby="constancias-tab">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-flex align-items-center">
+                                <h4 class="mr-auto pl-3">Constancias</h4>
+                                <div class="btn-group" role="group">
+                                    @can('havepermiso', 'documentos-crear')
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#addConstanciaEvento">Agregar Constancia</button>
+                                    @endcan
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="table_constancias" class="display border-bottom">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre de la Constancia</th>
+                                        <th>Descripción de la Constancia</th>
+                                        <th>Vigente Hasta</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($evento->constancias as $constancia)
+                                        <tr>
+                                            <td>{{ $constancia->constancia->NombreConstancia }}</td>
+                                            <td>{{ $constancia->constancia->DescripcionConstancia }}</td>
+                                            <th>{{ $constancia->constancia->VigenteHasta }}</th>
+                                            <td>
+                                                @can('havepermiso', 'documentos-leer')
+                                                    <a class="btn btn-sm btn-primary" href="{{ route('constancias.show', $constancia->IdConstancia) }}">Ver</a>
+                                                @endcan
+                                                @can('havepermiso', 'documentos-eliminar')
+                                                    <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteConstanciaEvento"
+                                                       data-constancia="{{ $constancia->IdConstancia }}">Eliminar</a>
+                                                @endcan
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -306,6 +358,7 @@
     @include('eventos.modals.tipoorganizador')
     @include('eventos.modals.participante')
     @include('eventos.modals.eventoestado')
+    @include('eventos.modals.constancia')
 @endsection
 
 @section('head')
@@ -342,7 +395,7 @@
             $('#table_documentos').DataTable();
             $('#table_responsable').DataTable();
             $('#table_participante').DataTable();
-
+            $('#table_constancias').DataTable();
         } );
 
 
@@ -472,6 +525,19 @@
             modal.find('.modal-body form').attr('action', action);
         })
 
+        /*Agregar constancia*/
+        $('#addConstancia').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+        })
+
+        /*Eliminar constancia*/
+        $('#deleteConstanciaEvento').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('constancia');
+            var modal = $(this);
+            modal.find('input[name=constancia]').val(id);
+        })
 
         /*Date Picker*/
         $('#fechaInicio').datetimepicker({

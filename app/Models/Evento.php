@@ -42,4 +42,8 @@ class Evento extends Model
         return $this->hasMany(Evento_Fecha_Sede::class, 'IdEvento', 'IdEvento');
     }
 
+    public function constancias(){
+        return $this->hasMany(ConstanciaEvento::class, 'IdEvento', 'IdEvento');
+    }
+
 }
