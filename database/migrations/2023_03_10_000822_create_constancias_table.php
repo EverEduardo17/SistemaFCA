@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('NombreConstancia');
             $table->string('DescripcionConstancia');
             $table->date('VigenteHasta');
-            $table->text('EstadoConstancia')->default('PENDIENTE');
+            $table->string('EstadoConstancia')->default('PENDIENTE');
             $table->string('Motivo', 255)->nullable();
 
             $table->timestamp('CreatedAt')->useCurrent();
