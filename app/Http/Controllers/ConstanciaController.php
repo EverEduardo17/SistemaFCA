@@ -468,8 +468,14 @@ class ConstanciaController extends Controller
 
         // Libreoffice convertir a pdf
         // exec('soffice --convert-to pdf '. $pathEstudiante .' --outdir ' . storage_path('app/constancias/'));
-        exec("docto -f $pathEstudiante -O ". storage_path('app/constancias/') . " -T wdFormatPDF");
+        // exec("docto -f $pathEstudiante -O ". storage_path('app/constancias/') . " -T wdFormatPDF");
 
+        //perfil de usuario temporal para soffice, por los permisos de /var/www/
+        $tempLibreOfficeProfile = sys_get_temp_dir() . "/LibreOfficeProfile" . rand(100000, 999999);
+        $cmd = 'soffice "-env:UserInstallation=file:///' . str_replace("\\", "/", $tempLibreOfficeProfile) . '" --convert-to pdf ' . $pathEstudiante . ' --outdir ' . storage_path('app/constancias/');
+        exec($cmd);
+
+        
         // Eliminar archivos temporales
         unlink($pathEstudiante);
         unlink($pathQr);
