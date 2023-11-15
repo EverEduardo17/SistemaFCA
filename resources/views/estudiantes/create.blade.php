@@ -36,19 +36,13 @@
                     <label name="NombreDatosPersonales">Nombre(s):</label>
                     <input name="NombreDatosPersonales" type="text"
                         class="form-control @error('NombreDatosPersonales') is-invalid @enderror"
-                        value="{{old('NombreDatosPersonales')}}" placeholder="Ej. Javier" autofocus>
+                        value="{{ old('NombreDatosPersonales') }}" placeholder="Ej. Javier" autofocus>
                 </div>
                 <div class="form-group">
-                    <label name="ApellidoPaternoDatosPersonales">Apellido Paterno:</label>
+                    <label name="ApellidoPaternoDatosPersonales">Apellidos:</label>
                     <input name="ApellidoPaternoDatosPersonales" type="text"
                         class="form-control @error('ApellidoPaternoDatosPersonales') is-invalid @enderror"
-                        value="{{old('ApellidoPaternoDatosPersonales')}}" placeholder="Ej. Pino">
-                </div>
-                <div class="form-group">
-                    <label name="ApellidoMaternoDatosPersonales">Apellido Materno:</label>
-                    <input name="ApellidoMaternoDatosPersonales" type="text"
-                        class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror"
-                        value="{{old('ApellidoMaternoDatosPersonales')}}" placeholder="Ej. Herrera">
+                        value="{{ old('ApellidoPaternoDatosPersonales') }}" placeholder="Ej. Pino Herrera">
                 </div>
                 <div class="form-group">
                     <div class="form-row">
@@ -57,7 +51,7 @@
                             <label name="MatriculaEstudiante">Matricula:</label>
                             <input name="MatriculaEstudiante" type="text"
                                 class="form-control @error('MatriculaEstudiante') is-invalid @enderror"
-                                value="{{old('MatriculaEstudiante')}}" placeholder="Ej. S17016281" maxlength="9">
+                                value="{{ old('MatriculaEstudiante') }}" placeholder="Ej. S17016281" maxlength="9">
                         </div>
                     </div>
                 </div>
@@ -66,9 +60,11 @@
                     <div class="form-row">
                         <label for="ProgramaEducativo">Programa Educativo de pertenencia:</label>
                         {{-- De manera temporal, el programa educativo se guardara en texto plano en el campo Contraseña para los nuevos estudiantes --}}
-                        <input name="password" type="text" 
-                            class="form-control @error('password') is-invalid @enderror" 
-                            placeholder="Ej. Ingeniería De Software" id="password" >
+                        <input name="ProgramaEducativo" type="text" 
+                            class="form-control @error('ProgramaEducativo') is-invalid @enderror" 
+                            placeholder="Ej. Ingeniería De Software" id="ProgramaEducativo" 
+                            value="{{ old('ProgramaEducativo') }}"
+                        >
                     </div>
                 </div>  
 

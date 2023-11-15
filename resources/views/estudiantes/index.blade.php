@@ -28,7 +28,7 @@
                     <tr class="text-white">
                         <th scope="col" class="border">Matrícula</th>
                         <th scope="col" class="border">Nombre</th>
-                        <th scope="col" class="border">Género</th>
+                        <th scope="col" class="border">Rol</th>
 
                         @can('havepermiso', 'estudiante-ver-propio')
                             <th scope="col" class="border actions-col">Acciones</th>
@@ -48,10 +48,8 @@
                             {{ $estudiante->usuario->datosPersonales->NombreDatosPersonales }}
                         </td>
 
-                        {{-- <td class="border-right">{{ $estudiante->trayectoria->grupo->NombreGrupo }}</td> --}}
-
-                        <td>{{ $estudiante->usuario->datosPersonales->Genero }}</td>
-
+                        <td>{{ $estudiante->usuario->roles[0]->ClaveRole ?? "" }}</td>
+                        
                         @can('havepermiso', 'estudiante-ver-propio')
                             <td class="btn-group btn-group-sm border-left">
                                 <a class="btn btn-outline-success btn-sm" href="{{ route('estudiantes.show', $estudiante) }}" title="Detalles">

@@ -17,7 +17,7 @@ class CreateEstudianteTable extends Migration
         Schema::create('Estudiante', function (Blueprint $table) {
             $table->bigIncrements('IdEstudiante');
 
-            $table->string('MatriculaEstudiante', 10)->nullable(false)->unique();
+            $table->string('MatriculaEstudiante', 10)->nullable(false);
 
             /*Realaciones*/
             $table->unsignedBigInteger('IdUsuario')->nullable()->unique();

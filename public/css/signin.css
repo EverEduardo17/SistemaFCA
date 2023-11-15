@@ -179,7 +179,7 @@ input.text {
 }
 
 .txt-login-error:hover  {
-  background-color: rgb(255, 242, 242) !important;
+  background-color: #333 !important;
 }
 
 .txt-login-error:focus  {

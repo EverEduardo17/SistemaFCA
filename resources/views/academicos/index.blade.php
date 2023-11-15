@@ -33,13 +33,15 @@
             <tbody>
                 @foreach($academicos as $academico)
                 <tr>
-                    <td>{{$academico->NoPersonalAcademico ?? ""}}</td>
+                    <td>{{ $academico->NoPersonalAcademico ?? "" }}</td>
                     <td>
-                        {{$academico->usuario->datosPersonales->ApellidoPaternoDatosPersonales ?? "-"}}
-                        {{$academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales ?? "-"}}
-                        {{$academico->usuario->datosPersonales->NombreDatosPersonales ?? ""}}
+                        {{ $academico->usuario->datosPersonales->ApellidoPaternoDatosPersonales ?? "-" }}
+                        {{ $academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales ?? "-" }}
+                        {{ $academico->usuario->datosPersonales->NombreDatosPersonales ?? "" }}
                     </td>
-                    <td>{{$academico->usuario->email ?? ""}}</td>
+                    <td>{{ $academico->usuario->email ?? "" }}</td>
+
+
                     <td class="btn-group">
                         @can('havepermiso', 'academico-ver-propio')
                             <a class="btn btn-outline-primary btn-sm mr-1" href="{{ route('academicos.show', $academico) }}">Detalles</a>
@@ -47,11 +49,14 @@
                         @can('havepermiso', 'academico-ver-propio')
                             <a class="btn btn-primary btn-sm mr-1" href="{{ route('academicos.edit', $academico) }}">Editar</a>
                         @endcan
-                        {{-- @can('havepermiso', 'academicos-eliminar') --}}
+                        @can('havepermiso', 'academicos-eliminar')
                                 <a class="btn btn-danger btn-sm" href="#"
                                    data-toggle="modal" data-target="#deleteAcademico"
-                                   data-academico="{{ $academico->IdAcademico }}">Eliminar</a>
-                        {{-- @endcan --}}
+                                   data-academico="{{ $academico->IdAcademico }}"
+                                >
+                                    Eliminar
+                                </a>
+                        @endcan
                     </td>
                 </tr>
                 @endforeach

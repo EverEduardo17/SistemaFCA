@@ -20,9 +20,12 @@
             </h5>
 
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
-            <a class="btn btn-secondary col-4" href="{{ route('estudiantes.index') }}" role="button">
-                Ver Estudiantes
-            </a>
+            @can('havepermiso', 'estudiante-ver-todos-propio')
+                <a class="btn btn-secondary col-4" href="{{ route('estudiantes.index') }}" role="button">
+                    Ver Estudiantes
+                </a>
+            @endcan
+            
         </div>
     </div>
 
@@ -35,49 +38,59 @@
                 disabled>
         </div>
         <div class="form-group">
-            <label for="ApellidoPaternoDatosPersonales">Apellido Paterno:</label>
+            <label for="ApellidoPaternoDatosPersonales">
+                {{ 
+                $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "" ? 
+                    "Apellidos" : "Apellido Paterno:" 
+                }}
+            </label>
             <input name="ApellidoPaternoDatosPersonales" type="text"
                 class="form-control"
                 value="{{old('ApellidoPaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoPaternoDatosPersonales)}}"
-                disabled>
+                disabled
+            >
         </div>
-        <div class="form-group">
-            <label for="ApellidoMaternoDatosPersonales">Apellido Materno:</label>
-            <input name="ApellidoMaternoDatosPersonales" type="text"
-                class="form-control"
-                value="{{old('ApellidoMaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales)}}"
-                disabled>
-        </div>
-        <div class="form-group">
 
-                <div class="form-group">
-                    <label for="MatriculaEstudiante">Matrícula:</label>
-                    <input name="MatriculaEstudiante" type="text"
-                        class="form-control"
-                        value="{{old('MatriculaEstudiante', $estudiante->MatriculaEstudiante)}}"
-                        placeholder="Ej. S17000000" id="MatriculaEstudiante" disabled>
-                </div>
+        @unless ($estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "")
+            <div class="form-group">
+                <label for="ApellidoMaternoDatosPersonales">Apellido Materno:</label>
+                <input name="ApellidoMaternoDatosPersonales" type="text"
+                    class="form-control"
+                    value="{{old('ApellidoMaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales)}}"
+                    disabled
+                >
             </div>
-        </div>
-
+        @endunless
+        
         <div class="form-group">
             <div class="form-group">
-                <div class="col">
-                    <label for="Genero">Género:</label>
-
-                    <select name="Genero" id="Genero" class="form-control" disabled>
-                        <option>
-                            {{ $estudiante->usuario->datosPersonales->Genero }}
-                        </option>
-                    </select>
-                </div>
+                <label for="MatriculaEstudiante">Matrícula:</label>
+                <input name="MatriculaEstudiante" type="text"
+                    class="form-control"
+                    value="{{old('MatriculaEstudiante', $estudiante->MatriculaEstudiante)}}"
+                    placeholder="Ej. S17000000" id="MatriculaEstudiante" disabled>
             </div>
         </div>
+        
+        @unless ($estudiante->usuario->datosPersonales->Genero === null)
+            <div class="form-group">
+                <div class="form-group">
+                    <label for="Genero">Género:</label>
+                    <input name="Genero" id="Genero" class="form-control" disabled
+                        value="{{ $estudiante->usuario->datosPersonales->Genero }}"
+                    >
+                </div>
+            </div>
+        @endunless
+        
         <hr class="my-4">
         
-        <a href="{{ route('estudiantes.edit', $estudiante) }}" class="btn btn-primary btn-block ">
-            Editar
-        </a>
+        @can('havepermiso', 'estudiante-editar-propio')
+            <a href="{{ route('estudiantes.edit', $estudiante) }}" class="btn btn-primary btn-block ">
+                Editar
+            </a>
+        @endcan
+        
     </div>
 </div>
 <br>

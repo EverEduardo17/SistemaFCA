@@ -64,7 +64,13 @@ class EstudianteController extends Controller
      */
     public function show(Estudiante $estudiante)
     {
-        Gate::authorize('havepermiso', 'estudiante-ver-propio');
+        // los estudiantes pueden ver sus propios datos
+        $isEstudiante = \Auth::user()->estudiante->IdEstudiante ?? false;
+        if ($isEstudiante) {
+            if (\Auth::user()->estudiante->IdEstudiante !== $estudiante->IdEstudiante) {
+                Gate::authorize('havepermiso', 'estudiante-ver-propio');
+            }
+        }
 
         return view('estudiantes.show', compact('estudiante'));   
     }
@@ -108,9 +114,9 @@ class EstudianteController extends Controller
             DB::beginTransaction();
 
             $idUsuarioDB = DB::table('Usuario')->insertGetId([
-                'name'     => $matricula,
+                'name'     => "z$matricula",
                 'email'   => 'z' . $matricula . '@estudiantes.uv.mx',
-                'password' => $request->password,
+                'password' => $request->ProgramaEducativo,
                 'CreatedAt' => $timestamp,
                 'UpdatedAt' => $timestamp,
             ]);
@@ -123,10 +129,17 @@ class EstudianteController extends Controller
             DB::table('DatosPersonales')->insert([
                 'NombreDatosPersonales'               => $input['NombreDatosPersonales'],
                 'ApellidoPaternoDatosPersonales'      => $input['ApellidoPaternoDatosPersonales'],
-                'ApellidoMaternoDatosPersonales'      => $input['ApellidoMaternoDatosPersonales'],
+                'ApellidoMaternoDatosPersonales'      => '',
                 'Genero'                              => $input['Genero'],
                 'IdUsuario'   => $idUsuarioDB,
             ]);
+
+            DB::table('Role_Usuario')->insert([
+                    'IdUsuario'     => $idUsuarioDB,
+                    'IdRole'        => 5,
+                    'CreatedBy'     => 1,
+                    'UpdatedBy'     => 1
+                ]);
 
             DB::commit();
         } 

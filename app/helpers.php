@@ -167,8 +167,12 @@
      * @param string $string El string a capitalizar.
      * @return string El string capitalizado.
      */
-    function capitalizeFirst(string $string) 
+    function capitalizeFirst(string|null $string) 
     {
+        if ($string === null) {
+            return '';
+        }
+
         return ucwords(strtolower($string));
     }
 

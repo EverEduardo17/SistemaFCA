@@ -76,11 +76,11 @@
                                 <div class="col">
                                     <label for="ProgramaEducativo">Programa Educativo de pertenencia:</label>
                                     {{-- De manera temporal, el programa educativo se guardara en texto plano en el campo Contraseña para los nuevos estudiantes --}}
-                                    <input name="password" type="text" 
-                                        class="form-control @error('password') is-invalid @enderror" 
-                                        value="{{ old('password', $estudiante->usuario->password) }}"
-                                        placeholder="Ej. Ingeniería De Software" id="password" >
-
+                                    <input name="ProgramaEducativo" type="text" 
+                                        class="form-control @error('ProgramaEducativo') is-invalid @enderror" 
+                                        value="{{ old('ProgramaEducativo', $estudiante->usuario->password) }}"
+                                        placeholder="Ej. Ingeniería De Software" id="ProgramaEducativo" 
+                                    >
                                 </div> 
                             </div>
                         </div>  

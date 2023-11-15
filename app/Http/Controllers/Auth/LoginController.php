@@ -177,22 +177,22 @@ class LoginController extends Controller
             $graph->setAccessToken($accessToken->getToken());
 
             // Queries de MS Graph, puedes ver que atributos existen con MS Graph Explorer
-            $userGraph = $graph->createRequest('GET', '/me?$select=givenName,surname,mail,mailboxSettings,userPrincipalName,officeLocation,jobTitle')
+            $userGraph = $graph->createRequest('GET', '/me?$select=givenName,surname,mail,userPrincipalName,officeLocation,jobTitle')
             ->setReturnType(\ArrayObject::class)
             ->execute();
 
             // dd($userGraph);
 
 
-            $user = User::where('name', $this->getUserName($userGraph['mail']))->first();
+            $user = User::where('email', $userGraph['mail'])->first();
 
-            if (!$user) {
+            if ($user === null) {
                 $user = $this->createUser($userGraph);
             }
 
             // si aun el usuario es nulo, es probable que alguien lo elimino del sistema
             if (!$user) {
-                return redirect('/')->with('error', 'Usuario eliminado, contacte al administrador.');
+                return redirect('/')->with('error', 'Usuario no encontrado, contacte al administrador.');
             }
 
             Auth::login($user);
@@ -264,22 +264,14 @@ class LoginController extends Controller
                     'CreatedBy'     => 1,
                     'UpdatedBy'     => 1
                 ]);
-                
-            }
-            
-            if (strpos($user['mail'], '@estudiantes.uv.mx') !== false ) {
-                // estudiante, quitar la letra z de la matricula
+
                 DB::table('Estudiante')->insert([
                     'matriculaEstudiante'   => substr($matricula, 1),
                     'IdUsuario'             => $idUsuarioDB,
+                    'CreatedBy'             => 1,
+                    'UpdatedBy'             => 1
                 ]);
-            }
-            elseif (strpos($user['mail'], '@egresados.uv.mx') !== false ) {
-                // egresado, evitar matricula repetida manteniendo la letra g
-                DB::table('Estudiante')->insert([
-                    'matriculaEstudiante'   => $matricula,
-                    'IdUsuario'             => $idUsuarioDB,
-                ]);
+                
             }
             else {
                 DB::table('Academico')->insert([

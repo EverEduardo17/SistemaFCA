@@ -29,7 +29,6 @@
             </h5>
 
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('constancias.show', $constancia->IdConstancia) }}" role="button">Regresar</a>
-            {{-- <a class="btn btn-success col-4" href="{{ route('constancias.show', $constancia->IdConstancia) }}" role="button">Ver Constancia</a> --}}
 
         </div>
     </div>
@@ -49,7 +48,7 @@
             <tr class="text-white">
                 <th scope="col" class="border">Matrícula</th>
                 <th scope="col" class="border">Nombre</th>
-                <th scope="col" class="border">Género</th>
+                <th scope="col" class="border">Rol</th>
                 <th scope="col" class="border actions-col">Acciones</th>
             </tr>
             </thead>
@@ -58,21 +57,21 @@
             @foreach ($estudiantes as $estudiante)
 
                 <tr>
-                    <th scope="row" class="border-right border-left">{{$estudiante->MatriculaEstudiante}}</th>
+                    <th scope="row" class="border-right border-left">{{ $estudiante->MatriculaEstudiante }}</th>
                     <td class="border-right">
                         {{ $estudiante->usuario->datosPersonales->ApellidoPaternoDatosPersonales }}
                         {{ $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales }}
                         {{ $estudiante->usuario->datosPersonales->NombreDatosPersonales }} 
                     </td>
-                    <td class="border-right">{{$estudiante->usuario->datosPersonales->Genero}}</td>
+                    <td class="border-right">{{ $estudiante->usuario->roles[0]->ClaveRole ?? "" }}</td>
 
                     <td class="btn-group btn-group-sm">
-                        <a href="#" data-estudiante="{{ $estudiante->IdEstudiante }}" class="btn btn-constancia
+                        <a href="#" data-estudiante="{{ $estudiante->IdEstudiante }}" class="btn btn-constancia btn-sm
                             @if ($estudiante->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists())
-                                btn-danger btn-sm">
+                                btn-danger">
                                     Eliminar
                             @else
-                                btn-success btn-sm">
+                                btn-success">
                                     Agregar
                             @endif
                         </a>
