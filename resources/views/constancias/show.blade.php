@@ -156,7 +156,6 @@
             </div>
     </div>
 
-    @include('layouts.messages')
     @include('constancias.modals.deleteEstudiante')
     @include('constancias.modals.loading')
     @include('constancias.modals.help')

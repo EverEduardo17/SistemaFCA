@@ -264,7 +264,7 @@ class EventoController extends Controller
         $data = AcademicoEvento::select('IdAcademico')->where('IdEvento', $evento->IdEvento)->get()->toArray();
         $participanteNot = Academico::whereNotIn('IdAcademico', $data)->get();
         $data = ConstanciaEvento::select('IdConstancia')->get()->toArray();
-        $constanciasNot = Constancia::whereNotIn('IdConstancia', $data)->get();
+        $constanciasNot = Constancia::whereNotIn('IdConstancia', $data)->where('EstadoConstancia', 'APROBADO')->get();
 
         return view('eventos.show', [
             "evento"                => $evento,
