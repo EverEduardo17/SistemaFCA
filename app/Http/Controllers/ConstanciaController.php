@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ConstanciaRequest;
 use App\Models\Cohorte;
 use App\Models\Constancia;
+use App\Models\ConstanciaEvento;
 use App\Models\Estudiante;
 use App\Models\Grupo;
 use Carbon\Carbon;
@@ -181,6 +182,11 @@ class ConstanciaController extends Controller
             DB::table('Constancia')->where('IdConstancia',$constancia->IdConstancia)->update($datos);
 
             DB::commit();
+
+            $constanciaEvento = ConstanciaEvento::find($constancia->IdConstancia);
+            if ($constanciaEvento) {
+                $constanciaEvento->delete();
+            }
         }
         catch (\Throwable $throwable){
             DB::rollBack();
