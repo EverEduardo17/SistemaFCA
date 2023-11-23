@@ -18,14 +18,13 @@
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title"><strong> Gestión de Constancias</strong></h5>
-            {{-- @can('havepermiso', 'constancias-crear') --}}
                 <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
-                {{-- TODO: Reemplazar con el permiso necesario correcto --}}
-                {{-- @can('havepermiso', 'constancias-crear') --}}
-                <a class="btn btn-outline-secondary col-2 mr-4 " href="{{ route('constancias.aprobar') }}" role="button">Aprobar Constancias</a>
-                {{-- @endcan --}}
-                <a class="btn btn-success col-4" href="{{ route('constancias.create') }}" role="button">Agregar Constancia</a>
-            {{-- @endcan --}}
+                @can('havepermiso', 'constancias-aprobar-rechazar')
+                    <a class="btn btn-outline-secondary col-2 mr-4 " href="{{ route('constancias.aprobar') }}" role="button">Aprobar Constancias</a>
+                @endcan
+                @can('havepermiso', 'constancias-crear')
+                    <a class="btn btn-success col-4" href="{{ route('constancias.create') }}" role="button">Agregar Constancia</a>
+                @endcan
         </div>
     </div>
     

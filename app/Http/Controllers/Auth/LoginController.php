@@ -255,12 +255,14 @@ class LoginController extends Controller
                 'UpdatedBy'                         => 1
             ]);
 
-            // si es estudiante o egresado dale el rol de estudiante
+            // si es estudiante o egresado
             if (strpos($user['mail'], '@estudiantes.uv.mx') !== false || strpos($user['mail'], '@egresados.uv.mx') !== false) {
+
+                $isEgresado = strpos($user['mail'], '@egresados.uv.mx') !== false;
 
                 DB::table('Role_Usuario')->insert([
                     'IdUsuario'     => $idUsuarioDB,
-                    'IdRole'        => 5,
+                    'IdRole'        => $isEgresado ? 4 : 3,
                     'CreatedBy'     => 1,
                     'UpdatedBy'     => 1
                 ]);
@@ -283,7 +285,6 @@ class LoginController extends Controller
                     'UpdatedBy'             => 1
                 ]);
     
-                // control total, TODO: cambiar a academico, cuando se hayan corregido los permisos
                 DB::table('Role_Usuario')->insert([
                     'IdUsuario'     => $idUsuarioDB,
                     'IdRole'        => 2,

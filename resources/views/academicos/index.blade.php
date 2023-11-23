@@ -14,7 +14,7 @@
 
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
 
-            @can('havepermiso', 'academicos-listar')
+            @can('havepermiso', 'academicos-crear')
                 <a class="btn btn-success col-4" href="{{ route('academicos.create') }}" role="button">Agregar Académico</a>
             @endcan
 
@@ -43,10 +43,10 @@
 
 
                     <td class="btn-group">
-                        @can('havepermiso', 'academico-detalles')
+                        @can('havepermiso', 'academicos-detalles')
                             <a class="btn btn-outline-primary btn-sm mr-1" href="{{ route('academicos.show', $academico) }}">Detalles</a>
                         @endcan
-                        @can('havepermiso', 'academico-detalles')
+                        @can('havepermiso', 'academicos-detalles')
                             <a class="btn btn-primary btn-sm mr-1" href="{{ route('academicos.edit', $academico) }}">Editar</a>
                         @endcan
                         @can('havepermiso', 'academicos-eliminar')

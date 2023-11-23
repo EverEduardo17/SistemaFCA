@@ -35,7 +35,7 @@ class ConstanciaEventoController extends Controller
 
     public function destroy(Request $request) 
     {
-        Gate::authorize('havepermiso', 'constancias-eliminar-propio');
+        Gate::authorize('havepermiso', 'eventos-vincular-constancias-propias');
 
         $request->validate([
             'evento' => 'required',

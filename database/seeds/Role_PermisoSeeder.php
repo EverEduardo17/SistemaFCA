@@ -164,7 +164,7 @@ class Role_PermisoSeeder extends Seeder
 
 
         // insertar todos los permisso a el rol control-general
-        for($i=1; $i<36; $i++) {
+        for($i=1; $i<37; $i++) {
             $registros[] = [
                 'IdRole'    => 1,
                 'IdPermiso' => $i,

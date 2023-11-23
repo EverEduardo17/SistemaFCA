@@ -17,7 +17,8 @@ class HomeController extends Controller
                 "operaciones" => [
                     ["titulo" => "Nuevo Evento", "enlace" => "create"],
                     ["titulo" => "Ver Eventos", "enlace" => "index"],
-                ]
+                ],
+                "permiso" => "eventos-listar"
             ],
 
             [
@@ -27,7 +28,8 @@ class HomeController extends Controller
                 "operaciones" => [
                     ["titulo" => "Nuevo Académico", "enlace" => "create"],
                     ["titulo" => "Ver Académicos", "enlace" => "index"],
-                ]
+                ],
+                "permiso" => "academicos-listar"
             ],
 
             [
@@ -37,7 +39,8 @@ class HomeController extends Controller
                 "operaciones" => [
                     ["titulo" => "Nueva Sede de Evento", "enlace" => "create"],
                     ["titulo" => "Ver Sedes de Eventos", "enlace" => "index"],
-                ]
+                ],
+                "permiso" => "sedes-listar"
             ],
 
             [
@@ -47,7 +50,8 @@ class HomeController extends Controller
                 "operaciones" => [
                     ["titulo" => "Nuevo Tipo de Organizador", "enlace" => "create"],
                     ["titulo" => "Ver Tipos de Organizadores", "enlace" => "index"],
-                ]
+                ],
+                "permiso" => "tipoorganizador-listar"
             ],
 
             [
@@ -57,7 +61,8 @@ class HomeController extends Controller
                 "operaciones" => [
                     ["titulo" => "Nueva Facultad", "enlace" => "create"],
                     ["titulo" => "Ver Facultades", "enlace" => "index"],
-                ]
+                ],
+                "permiso" => "facultades-listar"
             ],
 
             [
@@ -67,7 +72,8 @@ class HomeController extends Controller
                 "operaciones" => [
                     ["titulo" => "Nueva Academia", "enlace" => "create"],
                     ["titulo" => "Ver Academia", "enlace" => "index"],
-                ]
+                ],
+                "permiso" => "academias-listar"
             ],
 
             [
@@ -77,7 +83,8 @@ class HomeController extends Controller
                 "operaciones" => [
                     ["titulo" => "Nueva Empresa", "enlace" => "create"],
                     ["titulo" => "Gestión de Empresas", "enlace" => "index"],
-                ]
+                ],
+                "permiso" => "empresas-listar"
             ],
 
             [
@@ -87,7 +94,8 @@ class HomeController extends Controller
                 "operaciones" => [
                     ["titulo" => "Nuevo Programa Educativo", "enlace" => "create"],
                     ["titulo" => "Gestión de Programas Educativos", "enlace" => "index"],
-                ]
+                ],
+                "permiso" => "programas-listar"
             ],
 
             [
@@ -98,20 +106,8 @@ class HomeController extends Controller
                     ["titulo" => "Nueva Constancia", "enlace" => "create"],
                     ["titulo" => "Gestión de Constancias", "enlace" => "index"],
                 ],
-                // "permiso" => "constancias-listar"
+                "permiso" => "constancias-listar"
             ],
-            //Se oculto la tarjeta de grupos
-            /*
-            [
-                "titulo" => "Grupos",
-                "background" => $colores[0],
-                "enlace" => "grupos",
-                "operaciones" => [
-                    ["titulo" => "Nuevo Grupo", "enlace" => "create"],
-                    ["titulo" => "Gestión de Grupos", "enlace" => "index"],
-                ]
-            ],
-            **/
 
             [
                 "titulo" => "Estudiantes",
@@ -120,7 +116,8 @@ class HomeController extends Controller
                 "operaciones" => [
                     ["titulo" => "Nuevo Estudiante", "enlace" => "create"],
                     ["titulo" => "Gestión de Estudiantes", "enlace" => "index"],
-                ]
+                ],
+                "permiso" => "estudiantes-listar"
             ],
 
         ];

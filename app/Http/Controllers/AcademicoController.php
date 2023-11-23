@@ -24,7 +24,7 @@ class AcademicoController extends Controller
     }
 
     public function create() {
-        Gate::authorize('havepermiso', 'academicos-detalles');
+        Gate::authorize('havepermiso', 'academicos-crear');
 
         $roles = Role::all();
 
@@ -115,7 +115,7 @@ class AcademicoController extends Controller
 
     public function update(AcademicoRequest $request, Academico $academico) 
     {
-        Gate::authorize('havepermiso', 'academicos-editar');
+        Gate::authorize('havepermiso', 'academicos-detalles');
 
         $request->validated();
 
@@ -135,46 +135,6 @@ class AcademicoController extends Controller
 
         return redirect()->route('academicos.index');
     }
-
-    // public function update(Request $request, $idAcademico) {
-    //     Gate::authorize('havepermiso', 'academicos-editar');
-
-    //     $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
-
-    //     $request->validate([
-    //         'NombreDatosPersonales' => 'required',
-    //         'ApellidoPaternoDatosPersonales' => 'required',
-    //         'ApellidoMaternoDatosPersonales' => 'required',
-    //         'NoPersonalAcademico' => 'unique:Academico,NoPersonalAcademico,'.$academico->IdAcademico.',IdAcademico',
-    //         'RfcAcademico' => 'unique:Academico,RfcAcademico,'.$academico->IdAcademico.',IdAcademico',
-    //         'name' => 'unique:Usuario,name,'.$academico->usuario->IdUsuario.',IdUsuario',
-    //         'email' => 'unique:Usuario,email,'.$academico->usuario->IdUsuario.',IdUsuario'
-    //     ]);
-
-    //     try {
-    //         DB::beginTransaction();
-    //             DB::table('Usuario')->where('IdUsuario', $academico->IdUsuario)->update([
-    //                 'name'       => $request->name,
-    //                 'email'  => $request->email
-    //             ]);
-    //             DB::table('Academico')->where('IdUsuario', $academico->IdUsuario)->update([
-    //                 'NoPersonalAcademico' => $request->NoPersonalAcademico,
-    //                 'RfcAcademico'        => $request->RfcAcademico
-    //             ]);
-    //             DB::table('DatosPersonales')->where('IdUsuario', $academico->IdUsuario)->update([
-    //                 'NombreDatosPersonales'             => $request->NombreDatosPersonales,
-    //                 'ApellidoPaternoDatosPersonales'    => $request->ApellidoPaternoDatosPersonales,
-    //                 'ApellidoMaternoDatosPersonales'    => $request->ApellidoMaternoDatosPersonales,
-    //             ]);
-    //         DB::commit();
-    //     } catch (\Throwable $th) {
-    //         DB::rollBack();
-    //         Session::flash('flash', [['type' => "danger", 'message' => "Error al editar al Académico."]]);
-    //         return redirect()->route('academicos.index');
-    //     }
-    //     Session::flash('flash', [['type' => "success", 'message' => "Académico actualizado con éxito."]]);
-    //     return redirect()->route('academicos.index');
-    // }
 
     public function destroy($idAcademico) 
     {

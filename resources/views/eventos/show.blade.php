@@ -190,7 +190,7 @@
                                 <tbody>
                                 @foreach($evento->organizador as $responsable)
                                     <tr>
-                                        <td>{{ $responsable->academico->usuario->name }}</td>
+                                        <td>{{ $responsable->usuario->name }}</td>
                                         <td>{{ $responsable->tipo_organizador->NombreTipoOrganizador }}</td>
                                         <td>
                                             @can('havepermiso', 'responsable-eliminar')

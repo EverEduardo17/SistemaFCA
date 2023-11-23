@@ -26,7 +26,7 @@ class ConstanciaController extends Controller
      */
     public function index()
     {
-        Gate::authorize('havepermiso', 'constacias-detalles');
+        Gate::authorize('havepermiso', 'constancias-listar');
 
         $constancias = Constancia::with('usuario.datosPersonales')->get();
         return view('constancias.index', compact('constancias'));
@@ -40,7 +40,7 @@ class ConstanciaController extends Controller
      */
     public function create()
     {
-        Gate::authorize('havepermiso', 'constacias-detalles');
+        Gate::authorize('havepermiso', 'constancias-crear');
 
         return view('constancias.create');
     }
@@ -87,8 +87,8 @@ class ConstanciaController extends Controller
         }
         catch (\Throwable $throwable){
             DB::rollBack();
-            // Session::flash('flash', [['type' => "danger", 'message' => $throwable->getMessage()]]);
-            Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar la constancia."]]);
+            Session::flash('flash', [['type' => "danger", 'message' => $throwable->getMessage()]]);
+            // Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar la constancia."]]);
             return redirect()->route('constancias.index');
         }
 
@@ -122,7 +122,7 @@ class ConstanciaController extends Controller
      */
     public function edit(Constancia $constancia)
     {
-        Gate::authorize('havepermiso', 'constancias-detalles');
+        Gate::authorize('havepermiso', 'constancias-editar-propio');
 
         return view('constancias.edit', compact('constancia'));
     }
@@ -136,7 +136,7 @@ class ConstanciaController extends Controller
      */
     public function update(Request $request, Constancia $constancia)
     {
-        Gate::authorize('havepermiso', 'constacias-editar-propio');
+        Gate::authorize('havepermiso', 'constancias-editar-propio');
 
         $timestamp = Carbon::now()->toDateTimeString();
         $vigenteHasta = null;
@@ -204,7 +204,18 @@ class ConstanciaController extends Controller
      */
     public function destroy(Constancia $constancia)
     {
-        Gate::authorize('havepermiso', 'constancias-eliminar');
+        if (Auth::user()->IdUsuario === $constancia->CreatedBy) {
+            if (!Auth::user()->can('havepermiso', 'constancias-eliminar-propio')) {
+                Session::flash('flash', [['type' => "danger", 'message' => "No tiene autorización para eliminar sus constancias."]]);
+                return redirect()->back();
+            }
+        } 
+        else {
+            if (!Auth::user()->can('havepermiso', 'constancias-eliminar-cualquiera')) {
+                Session::flash('flash', [['type' => "danger", 'message' => "No tiene autorización para eliminar constancias de otros."]]);
+                return redirect()->back();
+            }
+        }
 
         try {
             $constancia->delete();
@@ -301,7 +312,7 @@ class ConstanciaController extends Controller
     */
     public function addEstudianteConstancia(Request $request)
     {
-        Gate::authorize('havepermiso', 'documentos-editar');
+        Gate::authorize('havepermiso', 'constancias-editar-propio');
 
         $idEstudiante = $request->input('idEstudiante');
         $idConstancia = $request->input('idConstancia');
@@ -350,7 +361,7 @@ class ConstanciaController extends Controller
      */
     public function downloadConstancia(Constancia $constancia, Estudiante $estudiante) 
     {
-        $pathConstancia = $this->generarConstacia($constancia, $estudiante);
+        $pathConstancia = $this->generarConstancia($constancia, $estudiante);
 
         return response()->download($pathConstancia)->deleteFileAfterSend(true);
     }
@@ -368,7 +379,7 @@ class ConstanciaController extends Controller
 
         $allPaths = [];
         foreach ($estudiantes as $estudiante) {
-            $allPaths[] = $this->generarConstacia($constancia, $estudiante);
+            $allPaths[] = $this->generarConstancia($constancia, $estudiante);
         }
 
         $zip = new \ZipArchive();
@@ -406,7 +417,7 @@ class ConstanciaController extends Controller
     * @param Estudiante $estudiante El estudiante para el cual se generará la constancia.
     * @return string La ruta del archivo PDF generado.
     */
-    public function generarConstacia(Constancia $constancia, Estudiante $estudiante) 
+    public function generarConstancia(Constancia $constancia, Estudiante $estudiante) 
     {
         $filename = 'c_' . str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT);
         $pathPlantilla = storage_path('app/constancias/' . $filename . '.docx');
@@ -494,8 +505,7 @@ class ConstanciaController extends Controller
      */
     public function indexAprobar() 
     {
-        //TODO: Reemplazar con el permiso necesario correcto.
-        Gate::authorize('havepermiso', 'constancias-editar-propio');
+        Gate::authorize('havepermiso', 'constancias-aprobar-rechazar');
 
         $constancias = Constancia::with('usuario.datosPersonales')->where('EstadoConstancia', 'Pendiente')->get();
         
@@ -511,8 +521,7 @@ class ConstanciaController extends Controller
      */
     public function aprobarConstancia($id) 
     {
-        //TODO: Reemplazar con el permiso necesario correcto.
-        Gate::authorize('havepermiso', 'constancias-editar-propio');
+        Gate::authorize('havepermiso', 'constancias-aprobar-rechazar');
 
         try {
             $constancia = Constancia::find($id);
@@ -534,8 +543,7 @@ class ConstanciaController extends Controller
      * @return \Illuminate\Http\RedirectResponse La respuesta de redirección a la página de aprobación de constancias.
      */
     public function rechazarConstancia(Request $request, $id) {
-        //TODO: Reemplazar con el permiso necesario correcto.
-        Gate::authorize('havepermiso', 'constancias-editar-propio');
+        Gate::authorize('havepermiso', 'constancias-aprobar-rechazar');
 
         $motivo = $request->get('Motivo');
 

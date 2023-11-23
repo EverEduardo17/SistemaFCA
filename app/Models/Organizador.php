@@ -22,8 +22,8 @@ class Organizador extends Model
     }
 
     //Relacion Uno a Mucho
-    public function academico(){
-        return $this->hasOne(Academico::class, 'IdAcademico', 'IdAcademico');
+    public function usuario(){
+        return $this->hasOne(Usuario::class, 'IdUsuario', 'IdAcademico');
     }
 
     //Relacion Uno a Mucho

@@ -163,7 +163,7 @@ class EstudianteController extends Controller
      */
     public function update(EstudianteRequest $request, Estudiante $estudiante)
     {
-        Gate::authorize('havepermiso', 'estudiantes-editar-propio');
+        Gate::authorize('havepermiso', 'estudiantes-detalles');
 
         $request->validated();
 

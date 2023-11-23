@@ -76,13 +76,13 @@
                 <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $academico->usuario->email) }}" placeholder="Ej. correo@correo.com">
             </div>
 
-            <div class="form-group">
+            {{-- <div class="form-group">
                 <label name="password">Contraseña:</label> 
                 <a href="#" id="toggleLink" class="btn btn-light ml-2 shadow-sm" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color:blue;">¿Cambiar Contraseña?</a>
                 <input id="password-input" name="password" type="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" minlength="8" placeholder="Ej. Contraseña123" disabled>
-            </div>
+            </div> --}}
 
-            @can('havepermiso', 'academicos-editar')
+            @can('havepermiso', 'academicos-detalles')
                 <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
             @endcan
             @can('havepermiso', 'academicos-listar')
@@ -93,7 +93,7 @@
 </div>
 @endsection
 
-@section('script')
+{{-- @section('script')
 <script src="{{ asset('js/password-popup.js') }}"></script>
 
     <script>
@@ -108,4 +108,4 @@
             });
         });
     </script>
-@endsection
+@endsection --}}

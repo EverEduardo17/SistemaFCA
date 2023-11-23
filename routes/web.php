@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 Auth::routes();
 
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
 Route::get('/home', 'HomeController@index')->name('home');
 
 
@@ -68,8 +68,6 @@ Route::get('/empresas/{nombreEmpresa}', 'EmpresaController@show')->name('empresa
 Route::get('/empresas/{nombreEmpresa}/edit', 'EmpresaController@edit')->name('empresas.edit');
 
 Route::get('/programaEducativo/{acronimoPrograma}/edit', 'ProgramaEducativoController@edit')->name('programaEducativo.edit');
-
-Route::get('/eventos/{year}/{month}/{day}', 'EventoController@indexWithDate')->name("eventosWithDate");
 
 // Route::post('/fechaEvento/store', 'FechaEventoController@store')->name("fechaEventos_store");
 

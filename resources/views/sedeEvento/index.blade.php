@@ -14,7 +14,7 @@
 
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
             
-            @can('havepermiso', 'sedes-listar')
+            @can('havepermiso', 'sedes-crear')
                 <a class="btn btn-success col-4" href="{{ route('sedeEventos.create') }}" role="button">Agregar Sede</a>
             @endcan
         </div>
@@ -25,7 +25,9 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Descripción</th>
-                    <th class="actions-col">Acciones</th>
+                    @can('havepermiso', 'sedes-editar')
+                        <th class="actions-col">Acciones</th>
+                    @endcan
                 </tr>
             </thead>
             <tbody>
@@ -33,11 +35,11 @@
                 <tr>
                     <th class="border-left">{{ $item->NombreSedeEvento }}</th>
                     <td>{{ $item->DescripcionSedeEvento }}</td>
-                    <td class="d-flex justify-content-center mr-4 ml-4">
-                        @can('havepermiso', 'sedes-editar')
+                    @can('havepermiso', 'sedes-editar')
+                        <td class="d-flex justify-content-center mr-4 ml-4">
                             <a class="btn btn-primary btn-sm" href="{{ route('sedeEventos.edit', $item) }}">Editar</a>
-                        @endcan
-                    </td>
+                        </td>
+                    @endcan
                 </tr>
                 @endforeach
             </tbody>

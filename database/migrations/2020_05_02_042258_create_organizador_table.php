@@ -20,7 +20,7 @@ class CreateOrganizadorTable extends Migration
 
             /*Realaciones*/
             $table->unsignedBigInteger('IdAcademico')->nullable(false);
-            $table->foreign('IdAcademico')->references('IdAcademico')->on('Academico');
+            $table->foreign('IdAcademico')->references('IdUsuario')->on('Usuario');
             $table->unsignedBigInteger('IdEvento')->nullable(false);
             $table->foreign('IdEvento')->references('IdEvento')->on('Evento');
             $table->unsignedBigInteger('IdTipoOrganizador')->nullable(false);

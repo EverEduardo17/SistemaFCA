@@ -4,17 +4,19 @@
 <div class="container">
     <div class="row justify-content-center">
         @foreach($opciones as $item)
-            <div class="col-sm-4">
-                <br />
-                <div class="card ">
-                    <div class="card-header card text-center border-light  text-white" style="background: {{ $item['background'] }}">{{ $item['titulo'] }}</div>
-                    <ul class="list-group list-group-flush">
-                        @foreach ( $item['operaciones'] as $operacion)
-                            <li class="list-group-item shadow-sm"><a href="{{ route($item['enlace']. '.' .$operacion['enlace']) }}">{{ $operacion['titulo'] }}</a></li>
-                        @endforeach
-                    </ul>
+            @can('havepermiso', $item['permiso'])
+                <div class="col-sm-4">
+                    <br />
+                    <div class="card ">
+                        <div class="card-header card text-center border-light  text-white" style="background: {{ $item['background'] }}">{{ $item['titulo'] }}</div>
+                        <ul class="list-group list-group-flush">
+                            @foreach ( $item['operaciones'] as $operacion)
+                                <li class="list-group-item shadow-sm"><a href="{{ route($item['enlace']. '.' .$operacion['enlace']) }}">{{ $operacion['titulo'] }}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            @endcan
         @endforeach
 
         @if (session('success'))

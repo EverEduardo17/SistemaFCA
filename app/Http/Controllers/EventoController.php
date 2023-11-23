@@ -111,56 +111,9 @@ class EventoController extends Controller
         ]);
     }
 
-    public function indexWithDate($year, $month, $day)
-    {
-        Gate::authorize('havepermiso', 'eventos-listar');
-
-        $estado = request('estado');
-        $filtro_fecha = request('filtro_fecha');
-
-        $date = sprintf("%d-%02d-%02d", $year, $month, $day);
-        $from = date("Y-m-d", strtotime($date));
-        $to = date("Y-m-d", strtotime($date . " +1 days"));
-
-        $evento_fecha_sede_s = Evento_Fecha_Sede::with(['evento', 'fechaEvento', 'sedeEvento'])
-            ->get()
-            ->where('fechaEvento.InicioFechaEvento', '>=', $from)
-            ->where('fechaEvento.InicioFechaEvento', '<', $to)
-            ->sortBy('fechaEvento.InicioFechaEvento',  false);
-
-        /**
-         * Si se mantiene esta funcionalidad, habra que valorar pasar la fecha como una
-         * variable para que el calendario se abra en la fecha elegida al iniciar.
-         */
-        $color = [
-            "APROBADO" => "green",
-            "NO APROBADO" => "red",
-            "POR APROBAR" => "yellow"
-        ];
-
-        $calendar_events = [];
-        foreach ($evento_fecha_sede_s as $efs) {
-            $calendar_events[] = [
-                "id" => $efs->evento->IdEvento,
-                "title" => $efs->evento->NombreEvento . " - " . $efs->sedeEvento->NombreSedeEvento,
-                "start" => $efs->fechaEvento->InicioFechaEvento,
-                "end" => $efs->fechaEvento->FinFechaEvento,
-                "url" => route('eventos.show', [$efs->evento->IdEvento]),
-                "backgroundColor" => $color[$efs->evento->EstadoEvento],
-            ];
-        }
-
-        return view('eventos.index', [
-            "evento_fecha_sede_s" => $evento_fecha_sede_s,
-            "calendar_events" => $calendar_events,
-            "estado" => $estado,
-            "filtro_fecha" => $filtro_fecha
-        ]);
-    }
-
     public function create()
     {
-        Gate::authorize('havepermiso', 'eventos-listar');
+        Gate::authorize('havepermiso', 'eventos-crear');
 
         $date = null;
 
@@ -211,7 +164,7 @@ class EventoController extends Controller
 
                 DB::table('Organizador')->insert([
                     'IdEvento'           => $idEvento,
-                    'IdAcademico'        => Auth::user()->Academico->IdAcademico,
+                    'IdAcademico'        => Auth::user()->IdUsuario,
                     'IdTipoOrganizador'  => 1,
                     'CreatedBy'          => Auth::user()->IdUsuario,
                     'UpdatedBy'          => Auth::user()->IdUsuario
@@ -234,8 +187,8 @@ class EventoController extends Controller
                 DB::commit();
             } catch (\Throwable $e) {
                 DB::rollBack();
-                Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar el evento."]]);
-                // Session::flash('flash', [['type' => "danger", 'message' => $e->getMessage()]]);
+                // Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar el evento."]]);
+                Session::flash('flash', [['type' => "danger", 'message' => $e->getMessage()]]);
                 return redirect()->route('eventos.index');
             }
 
