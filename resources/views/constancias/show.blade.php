@@ -74,7 +74,7 @@
                 </div>
             @endif
 
-            @can('havepermiso', 'constancias-editar-cualquiera')
+            @can('havepermiso', 'constancias-editar-propio')
 
                 <a class="mi-plantilla" 
                     href="{{ route('constancias.downloadMiPlantilla', [

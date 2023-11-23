@@ -10,8 +10,9 @@ use Illuminate\Support\Facades\Session;
 
 class ConstanciaEventoController extends Controller
 {
-    public function store(Request $request) {
-        Gate::authorize('havepermiso', 'constancias-crear');
+    public function store(Request $request) 
+    {
+        Gate::authorize('havepermiso', 'eventos-vincular-constancias-propias');
 
         $request->validate([
             'constancia' => 'required',
@@ -32,8 +33,9 @@ class ConstanciaEventoController extends Controller
         }
     }
 
-    public function destroy(Request $request) {
-        Gate::authorize('havepermiso', 'constancias-crear');
+    public function destroy(Request $request) 
+    {
+        Gate::authorize('havepermiso', 'constancias-eliminar-propio');
 
         $request->validate([
             'evento' => 'required',

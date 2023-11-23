@@ -64,7 +64,7 @@
             </div>
 
             <hr>
-            @can('havepermiso', 'constancias-editar-cualquiera')
+            @can('havepermiso', 'constancias-editar-propio')
                 <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmarModificarModal">
                     Actualizar
                 </button>

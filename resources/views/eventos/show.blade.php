@@ -14,9 +14,9 @@
                 <h4 class="mr-auto p-3">{{$evento->NombreEvento ?? ""}}</h4>
 
                 <div>
-                    {{-- @can('havepermiso', 'eventos-editar-cualquiera') --}}
+                    @can('havepermiso', 'eventos-editar-propio')
                         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#editEvento">Editar</a>
-                    {{-- @endcan --}}
+                    @endcan
                     @if($evento->EstadoEvento == "APROBADO")
                         @can('havepermiso', 'eventos-aprobar-rechazar')
                             <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#cancelarEvento">Cancelar Evento</a>
@@ -307,7 +307,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Constancias</h4>
                                 <div class="btn-group" role="group">
-                                    @can('havepermiso', 'eventos-constancias-propia')
+                                    @can('havepermiso', 'eventos-vincular-constancias-propias')
                                         <button class="btn btn-success" data-toggle="modal" data-target="#addConstanciaEvento">Agregar Constancia</button>
                                     @endcan
                                 </div>
