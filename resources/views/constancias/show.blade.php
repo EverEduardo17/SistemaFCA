@@ -94,7 +94,7 @@
 </div> 
 
 <br> <br>
-{{-- @can('havepermiso', 'constancias-editar-propio') --}}
+@can('havepermiso', 'constancias-editar-propio')
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
@@ -160,7 +160,7 @@
     @include('constancias.modals.loading')
     @include('constancias.modals.help')
     @include('constancias.modals.estadoconstancia')
-{{-- @end   can --}}
+@endcan
 
 @endsection
 

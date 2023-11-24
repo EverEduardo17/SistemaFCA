@@ -24,7 +24,7 @@ class EstudianteRequest extends FormRequest
             // 'ApellidoMaternoDatosPersonales'    => ['required', 'String', 'regex:/^[A-Za-zÁáéÉíÍóÓúÚüÜñÑ.]+(\s{1}[A-Za-záÁéÉíÍóÓúÚüÜñÑ.]+)*$/'],
             // 'IdCohorte'                         => 'required | numeric',
             'MatriculaEstudiante'               => ['required', 'String', 'max:9', 'regex:/^S\d{1,8}$/i', 'unique:Estudiante,MatriculaEstudiante,' . $IdEstudiante . ',IdEstudiante'],
-            'ProgramaEducativo'                 => 'required',
+            'ProgramaEducativo'                 => '',
             'Genero'                            => 'required | String',
 
         ];

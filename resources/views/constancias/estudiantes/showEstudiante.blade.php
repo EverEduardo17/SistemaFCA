@@ -31,19 +31,19 @@
     </div>
     <div class="card-body">
         <p>
-            Nombre Completo: 
+            <strong>Nombre Completo: </strong>
                 {{ $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales }}
                 {{ $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales }}
                 {{ $estudiante->Usuario->DatosPersonales->NombreDatosPersonales }}
         </p>
         <p>
-            Matrícula: {{ $estudiante->MatriculaEstudiante }}
+            <strong>Matrícula:</strong> {{ $estudiante->MatriculaEstudiante }}
         </p>
-            Programa Educativo: 
-                {{ $estudiante->Usuario->ProgramaEducativo->NombreProgramaEducativo ?? $estudiante->Usuario->password }}
+            <strong>Programa Educativo:</strong> 
+                {{ $estudiante->trayectoria->ProgramaEducativo->NombreProgramaEducativo ?? $estudiante->Usuario->password }}
         </p>
         <p>
-            Constancia: 
+            <strong>Constancia:</strong> 
                 {{ $constancia->NombreConstancia }}
         </p>
         

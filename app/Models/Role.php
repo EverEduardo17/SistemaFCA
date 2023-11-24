@@ -26,6 +26,7 @@ class Role extends Model
 
     //Relacion Muchos a Uno
     public function role_usuario(){
-        return $this->belongsTo(RoleUsuario::class, 'IdRole', 'IdRole');
+        return $this->belongsTo(RoleUsuario::class, 'IdRole', 'IdRole')
+                    ->withPivot('CreatedAt', 'UpdatedAt');
     }
 }

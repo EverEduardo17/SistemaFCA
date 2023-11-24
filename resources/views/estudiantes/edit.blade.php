@@ -19,7 +19,6 @@
                 </strong>
             </h5>
 
-            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
             <a class="btn btn-secondary col-4" href="{{ route('estudiantes.index') }}" role="button">
                 Ver Estudiantes
             </a>
@@ -42,37 +41,40 @@
                             <input name="NombreDatosPersonales" type="text"
                                 class="form-control @error('NombreDatosPersonales') is-invalid @enderror"
                                 value="{{old('NombreDatosPersonales', $estudiante->usuario->datosPersonales->NombreDatosPersonales ) }}"
-                                placeholder="Ej. Javier" id="NombreDatosPersonales">
+                                placeholder="Ej. Javier" id="NombreDatosPersonales"
+                            >
                         </div>
+                        
                         <div class="form-group">
-                            <label for="ApellidoPaternoDatosPersonales">Apellido Paterno:</label>
+                            <label for="ApellidoPaternoDatosPersonales">{{ $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales !== ""? "Apellido Paterno" : "Apellidos" }}</label>
                             <input name="ApellidoPaternoDatosPersonales" type="text"
                                 class="form-control @error('ApellidoPaternoDatosPersonales') is-invalid @enderror"
                                 value="{{ old('ApellidoPaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoPaternoDatosPersonales) }}"
-                                placeholder="Ej. Pino" id="ApellidoPaternoDatosPersonales">
+                                placeholder="Ej. Pino" id="ApellidoPaternoDatosPersonales"
+                            >
                         </div>
-                        <div class="form-group">
-                            <label for="ApellidoMaternoDatosPersonales">Apellido Materno:</label>
-                            <input name="ApellidoMaternoDatosPersonales" type="text"
-                                class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror"
-                                value="{{ old('ApellidoMaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales) }}"
-                                placeholder="Ej. Herrera" id="ApellidoMaternoDatosPersonales">
-                        </div>
+                        @if ($estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales !== "")
+                            <div class="form-group">
+                                <label for="ApellidoMaternoDatosPersonales">Apellido Materno:</label>
+                                <input name="ApellidoMaternoDatosPersonales" type="text"
+                                    class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror"
+                                    value="{{ old('ApellidoMaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales) }}"
+                                    placeholder="Ej. Herrera" id="ApellidoMaternoDatosPersonales"
+                                >
+                            </div>
+                        @endif
+                        
                         <div class="form-group">
                             <div class="form-row">
-
                                 <div class="col">
                                     <label for="MatriculaEstudiante">Matrícula:</label>
                                     <input name="MatriculaEstudiante" type="text"
                                         class="form-control @error('MatriculaEstudiante') is-invalid @enderror"
                                         value="{{old('MatriculaEstudiante', $estudiante->MatriculaEstudiante)}}"
-                                        placeholder="Ej. S17000000" id="MatriculaEstudiante">
+                                        placeholder="Ej. S17000000" id="MatriculaEstudiante"
+                                    >
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="form-group">
-                           <div class="form-row">
                                 <div class="col">
                                     <label for="ProgramaEducativo">Programa Educativo de pertenencia:</label>
                                     {{-- De manera temporal, el programa educativo se guardara en texto plano en el campo Contraseña para los nuevos estudiantes --}}
@@ -83,7 +85,21 @@
                                     >
                                 </div> 
                             </div>
-                        </div>  
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="IdRole">{{ sizeof($estudiante->usuario->roles)>1 ? "Roles:" : "Rol:" }}</label>
+                            <input type="text" class="form-control" disabled 
+                                value = "@foreach ($estudiante->usuario->roles as $rol) {{ $rol->ClaveRole }} @endforeach"
+                            >
+                            @can('havepermiso', 'roles-listar')
+                                <a href="{{ route('usuario.index.roles', ["usuario" => $estudiante->usuario, "roles" => $estudiante->usuario->roles]) }}" 
+                                    class="btn btn-info btn-sm mt-2"
+                                >
+                                    Modificar Roles
+                                </a>
+                            @endcan
+                        </div>
 
                         <div class="form-group">
                             <div class="form-row">
@@ -91,6 +107,7 @@
                                     <label for="Genero">Género:</label>
 
                                     <select name="Genero" id="Genero" class="form-control @error('Genero') is-invalid @enderror">
+                                        <option></option>
                                         <option value="Mujer" @if($estudiante->usuario->datosPersonales->Genero === "Mujer") selected @endif >
                                             Mujer
                                         </option>
@@ -105,7 +122,7 @@
                         <hr class="my-4">
   
                         <div class="form-group">
-                            @can('havepermiso', 'estudiantes-editar')
+                            @can('havepermiso', 'estudiantes-detalles')
                                 <button type="submit" class="btn btn-primary btn-block">
                                     Actualizar Información
                                 </button>

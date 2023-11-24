@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
+use PHPUnit\Framework\MockObject\Stub\ReturnValueMap;
 
 class AcademicoController extends Controller 
 {
@@ -36,15 +37,18 @@ class AcademicoController extends Controller
         Gate::authorize('havepermiso', 'academicos-crear');
 
         $request->validated();
-
         $input = $request->validated();
+
+        $idUsuarioDB = 0;
+
+
         try{
             DB::beginTransaction();
 
                 $idUsuarioDB = DB::table('Usuario')->insertGetId([
                     'name'              => $input['name'],
                     'email'             => $input['email'],
-                    'password'          => bcrypt($input['password']),
+                    'password'          => "",
                     'CreatedBy'         => Auth::user()->IdUsuario,
                     'UpdatedBy'         => Auth::user()->IdUsuario
                 ]);
@@ -62,7 +66,7 @@ class AcademicoController extends Controller
                     'idDatosPersonales'                 => $idUsuarioDB,
                     'NombreDatosPersonales'             => $input['NombreDatosPersonales'],
                     'ApellidoPaternoDatosPersonales'    => $input['ApellidoPaternoDatosPersonales'],
-                    'ApellidoMaternoDatosPersonales'    => $input['ApellidoMaternoDatosPersonales'],
+                    'ApellidoMaternoDatosPersonales'    => '',
                     'IdUsuario'                         => $idUsuarioDB,
                     'CreatedBy'                         => Auth::user()->IdUsuario,
                     'UpdatedBy'                         => Auth::user()->IdUsuario
@@ -70,7 +74,7 @@ class AcademicoController extends Controller
 
                 DB::table('Role_Usuario')->insert([
                     'IdUsuario'     => $idUsuarioDB,
-                    'IdRole'        => $input['IdRole'],
+                    'IdRole'        => 2,
                     'CreatedBy'     => Auth::user()->IdUsuario,
                     'UpdatedBy'     => Auth::user()->IdUsuario
                 ]);
@@ -79,13 +83,15 @@ class AcademicoController extends Controller
 
         }catch (\Throwable $throwable){
             DB::rollBack();
+
+            dd($throwable);
             Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar al Académico."]]);
 
             return redirect()->route('academicos.index');
         }
 
         Session::flash('flash', [['type' => "success", 'message' => "Académico registrado correctamente."]]);
-        return redirect()->route('academicos.index');
+        return redirect()->route('academicos.show', ['academico' => $idUsuarioDB]);
     }
 
     public function show($idAcademico) 
@@ -128,7 +134,7 @@ class AcademicoController extends Controller
         $academico->update($request->all());
         $academico->usuario->update($request->except('password'));
         $academico->usuario->datosPersonales->update($request->all());
-        $academico->usuario->roles()->sync($request->IdRole);
+        // $academico->usuario->roles()->sync($request->IdRole);
     
 
         Session::flash('flash', [['type' => "success", 'message' => "Académico actualizado con éxito."]]);
@@ -161,5 +167,41 @@ class AcademicoController extends Controller
             Session::flash('flash', [ ['type' => "danger", 'message' => "El Académico No pudo ser eliminado correctamente."] ]);
             return redirect()->route('academicos.index');
         }
+    }
+
+    public function indexRoles(\App\Models\Usuario $usuario, Role $roles)
+    {
+        Gate::authorize('havepermiso', 'roles-listar');
+
+        return view("roles", [
+            "usuario" => $usuario,
+            "roles" => $roles->all()
+        ]);
+    }
+    
+
+    /**
+     * Vincular o desvincular rol a usuario.
+     *
+     * @param \Illuminate\Http\Request $request La peticion JSON que se mandó con AJAX.
+     * @return \Illuminate\Http\JsonResponse Respuesta que indica al cliente si se eliminó o agregó
+     */
+    public function addRole(\Illuminate\Http\Request $request) 
+    {
+        $usuario = $request->input('idUsuario');
+        $rol = $request->input('idRole');
+
+        $usuario = \App\Models\Usuario::findOrFail($usuario);
+        $rol = Role::findOrFail($rol);
+
+        if ($usuario->roles()->where('Role.IdRole', $rol->IdRole)->exists()) {
+            $usuario->roles()->detach($rol);
+            $success = false;
+        } 
+        else {
+            $usuario->roles()->attach($rol);
+            $success = true;
+        }
+        return response()->json(['success' => $success]);
     }
 }

@@ -170,7 +170,7 @@ input.text {
 
 .txt-login:focus  {
   transition:border-bottom-width .1s, border-bottom-color .1s ease, background-color .3s ease;
-  border-bottom-color: #505050 !important;
+  border-bottom-color: #484848 !important;
   border-bottom-width: 3px;
 }
 
@@ -179,7 +179,7 @@ input.text {
 }
 
 .txt-login-error:hover  {
-  background-color: #333 !important;
+  background-color: rgb(255, 242, 242) !important;
 }
 
 .txt-login-error:focus  {

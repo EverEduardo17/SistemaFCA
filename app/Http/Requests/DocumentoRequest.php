@@ -17,7 +17,7 @@ class DocumentoRequest extends FormRequest
             'evento'                => 'required',
             'NombreDocumento'       => 'required | String',
             'DescripcionDocumento'  => 'required | String',
-            'FormatoDocumento'      => 'required | mimes:rar,zip,pdf|max:2048',
+            'FormatoDocumento'      => 'required | mimes:rar,zip,7z,pdf,jpeg,jpg,png,svg|max:2048',
         ];
     }
 }

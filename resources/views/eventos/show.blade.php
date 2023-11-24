@@ -169,7 +169,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Responsables</h4>
                                 <div class="btn-group" role="group">
-                                    @can('havepermiso', 'responsable-crear')
+                                    @can('havepermiso', 'eventos-editar-propio')
                                         <button class="btn btn-success" data-toggle="modal" data-target="#addTipoOrganizador">Agregar Responsable</button>
                                     @endcan
                                 </div>
@@ -193,7 +193,7 @@
                                         <td>{{ $responsable->usuario->name }}</td>
                                         <td>{{ $responsable->tipo_organizador->NombreTipoOrganizador }}</td>
                                         <td>
-                                            @can('havepermiso', 'responsable-eliminar')
+                                            @can('havepermiso', 'eventos-editar-propio')
                                                 <a  class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteTipoOrganizador"
                                                     data-tipoorganizador="{{ $responsable->IdOrganizador }}">Eliminar</a>
                                             @endcan
@@ -236,7 +236,7 @@
                                             <td>{{$ae->academico->NoPersonalAcademico }}</td>
                                             <td>{{$ae->academico->usuario-> name }}</td>
                                             <td>
-                                                @can('havepermiso', 'eventos-eliminar-propio')
+                                                @can('havepermiso', 'eventos-registrar-participantes')
                                                     <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteParticipante"
                                                        data-participante="{{ $ae->Id_Academico_Evento }}">Eliminar</a>
                                                 @endcan
@@ -255,7 +255,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Documentos</h4>
                                 <div class="btn-group" role="group">
-                                    @can('havepermiso', 'vincular-constancias-propia')
+                                    @can('havepermiso', 'eventos-vincular-constancias-propias')
                                         <button class="btn btn-success" data-toggle="modal" data-target="#addDocument">Agregar Documento</button>
                                     @endcan
                                 </div>
@@ -282,13 +282,13 @@
                                                 @can('havepermiso', 'constancias-detalles')
                                                     <a class="btn btn-sm btn-outline-primary" href="{{ route('documento.show', $documento->IdDocumento) }}">Descargar</a>
                                                 @endcan
-                                                @can('havepermiso', 'constancias-editar-propia')
+                                                @can('havepermiso', 'constancias-editar-propio')
                                                     <a class="btn btn-sm btn-primary" href="#" data-toggle="modal" data-target="#editDocumento"
                                                        data-documento="{{ $documento->IdDocumento }}"
                                                        data-nombre="{{ $documento->NombreDocumento }}"
                                                        data-descripcion="{{ $documento->DescripcionDocumento }}">Editar</a>
                                                 @endcan
-                                                @can('havepermiso', 'constancias-eliminar-propia')
+                                                @can('havepermiso', 'constancias-eliminar-propio')
                                                     <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteDocumento"
                                                        data-documento="{{ $documento->IdDocumento }}">Eliminar</a>
                                                 @endcan

@@ -9,6 +9,9 @@
     <title>{{ config('app.name', 'SistemaFCA') }}</title>
 
     <!-- Scripts -->
+    <script type="text/javascript" src="{{asset('js/jquery-3.5.1.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('lib/popper/popper.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('lib/bootstrap/bootstrap.min.js')}}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -38,11 +41,6 @@
     <br>
 
     @include('layouts.footer')
-
-    {{-- Extras --}}
-    <script type="text/javascript" src="{{asset('js/jquery-3.5.1.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('lib/popper/popper.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('lib/bootstrap/bootstrap.min.js')}}"></script>
     
     @yield('script')
 </body>

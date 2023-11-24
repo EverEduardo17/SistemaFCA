@@ -86,3 +86,7 @@ Route::delete('constancias/{constancia}/delete/{estudiante}', 'ConstanciaControl
 Route::get('constancias/{constancia}/{estudiante}/download/', 'ConstanciaController@downloadConstancia')->name('constancias.download');
 Route::get('constancias/aprobar/{id}/aprobar', 'ConstanciaController@aprobarConstancia')->name('constancias.aprobar.aceptar');
 Route::get('constancias/aprobar/{id}/rechazar', 'ConstanciaController@rechazarConstancia')->name('constancias.aprobar.rechazar');
+
+//<---- Roles ---->
+Route::post('usuarios/roles/agregar-rol', 'AcademicoController@addRole')->name('usuario.add.role');
+Route::get('{usuario}/roles', 'AcademicoController@indexRoles')->name('usuario.index.roles');

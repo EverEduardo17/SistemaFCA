@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
@@ -60,27 +61,23 @@
             </div>
 
             <div class="form-group">
-                <label for="IdRole">Rol:</label>
-                <select name="IdRole" id="IdRole" class="form-control @error('IdRole') is-invalid @enderror">
-                    @foreach ($roles as $role)
-                        <option value="{{ $role->IdRole  }}" @if($academico->usuario->roles[0]->IdRole === $role->IdRole) selected @endif>
-                            {{ $role->ClaveRole }}
-                        </option>
-                    @endforeach
-                </select>
+                <label for="IdRole">{{ sizeof($academico->usuario->roles)>1 ? "Roles:" : "Rol:" }}</label>
+                <input type="text" class="form-control" disabled 
+                    value = "@foreach ($academico->usuario->roles as $rol) {{ $rol->ClaveRole }} @endforeach"
+                >
+                @can('havepermiso', 'roles-listar')
+                    <a href="{{ route('usuario.index.roles', ["usuario" => $academico->usuario, "roles" => $academico->usuario->roles]) }}" 
+                        class="btn btn-info btn-sm mt-2"
+                    >
+                        Modificar Roles
+                    </a>
+                @endcan
             </div>
-
 
             <div class="form-group">
                 <label name="email">Correo electrónico:</label>
                 <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $academico->usuario->email) }}" placeholder="Ej. correo@correo.com">
             </div>
-
-            {{-- <div class="form-group">
-                <label name="password">Contraseña:</label> 
-                <a href="#" id="toggleLink" class="btn btn-light ml-2 shadow-sm" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color:blue;">¿Cambiar Contraseña?</a>
-                <input id="password-input" name="password" type="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" minlength="8" placeholder="Ej. Contraseña123" disabled>
-            </div> --}}
 
             @can('havepermiso', 'academicos-detalles')
                 <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
@@ -93,19 +90,3 @@
 </div>
 @endsection
 
-{{-- @section('script')
-<script src="{{ asset('js/password-popup.js') }}"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#toggleLink').click(function(e) {
-                e.preventDefault();
-                var passwordInput = $('#password-input');
-                if (passwordInput.val() === '') {
-                passwordInput.prop('disabled', !passwordInput.prop('disabled'));
-                passwordInput.focus();
-                }
-            });
-        });
-    </script>
-@endsection --}}

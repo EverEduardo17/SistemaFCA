@@ -56,7 +56,7 @@
                                     <em class="fas fa-list"></em>
                                 </a>
 
-                                @can('havepermiso','estudiantes-detalles')
+                                @can('havepermiso','estudiantes-crear')
                                     <a class="btn btn-outline-primary btn-sm mr-1 ml-1" href="{{ route('estudiantes.edit', $estudiante) }}" title="Editar">
                                         <em class="fas fa-pen"></em>
                                     </a>

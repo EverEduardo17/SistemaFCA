@@ -71,6 +71,20 @@
                     placeholder="Ej. S17000000" id="MatriculaEstudiante" disabled>
             </div>
         </div>
+
+        <div class="form-group">
+            <label for="IdRole">{{ sizeof($estudiante->usuario->roles)>1 ? "Roles:" : "Rol:" }}</label>
+            <input type="text" class="form-control" disabled 
+                value = "@foreach ($estudiante->usuario->roles as $rol) {{ $rol->ClaveRole }} @endforeach"
+            >
+            @can('havepermiso', 'roles-listar')
+                <a href="{{ route('usuario.index.roles', ["usuario" => $estudiante->usuario, "roles" => $estudiante->usuario->roles]) }}" 
+                    class="btn btn-info btn-sm mt-2"
+                >
+                    Modificar Roles
+                </a>
+            @endcan
+        </div>
         
         @unless ($estudiante->usuario->datosPersonales->Genero === null)
             <div class="form-group">
@@ -85,7 +99,7 @@
         
         <hr class="my-4">
         
-        @can('havepermiso', 'estudiante-editar-propio')
+        @can('havepermiso', 'estudiantes-crear')
             <a href="{{ route('estudiantes.edit', $estudiante) }}" class="btn btn-primary btn-block ">
                 Editar
             </a>

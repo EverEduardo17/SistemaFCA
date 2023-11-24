@@ -29,13 +29,22 @@
                 <input name="NombreDatosPersonales" type="text" class="form-control @error('NombreDatosPersonales') is-invalid @enderror" value="{{ old('NombreDatosPersonales', $academico->usuario->datospersonales->NombreDatosPersonales) }}" disabled>
             </div>
             <div class="form-group">
-                <label name="ApellidoPaternoDatosPersonales">Apellido Paterno del Académico:</label>
+                <label name="ApellidoPaternoDatosPersonales">
+                        {{ 
+                        $academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "" ? 
+                            "Apellidos del Académico" : "Apellido Paterno del Académico:" 
+                        }}
+                </label>
                 <input name="ApellidoPaternoDatosPersonales" type="text" class="form-control @error('ApellidoPaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoPaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoPaternoDatosPersonales) }}" disabled>
             </div>
-            <div class="form-group">
-                <label name="ApellidoMaternoDatosPersonales">Apellido Materno del Académico:</label>
-                <input name="ApellidoMaternoDatosPersonales" type="text" class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoMaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoMaternoDatosPersonales) }}" disabled>
-            </div>
+
+            @unless ($academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "")
+                <div class="form-group">
+                    <label name="ApellidoMaternoDatosPersonales">Apellido Materno del Académico:</label>
+                    <input name="ApellidoMaternoDatosPersonales" type="text" class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoMaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoMaternoDatosPersonales) }}" disabled>
+                </div>
+            @endunless
+
             <hr>
             <div class="form-group">
                 <label name="NoPersonalAcademico">Número de Personal:</label>
@@ -45,6 +54,21 @@
                 <label name="RfcAcademico">RFC:</label>
                 <input name="RfcAcademico" class="form-control @error('RfcAcademico') is-invalid @enderror" maxlength="14" value="{{ old('RfcAcademico', $academico->RfcAcademico) }}" disabled>
             </div>
+
+            <div class="form-group">
+                <label for="IdRole">{{ sizeof($academico->usuario->roles)>1 ? "Roles:" : "Rol:" }}</label>
+                <input type="text" class="form-control" disabled 
+                    value = "@foreach ($academico->usuario->roles as $rol) {{ $rol->ClaveRole }} @endforeach"
+                >
+                @can('havepermiso', 'roles-listar')
+                    <a href="{{ route('usuario.index.roles', ["usuario" => $academico->usuario, "roles" => $academico->usuario->roles]) }}" 
+                        class="btn btn-info btn-sm mt-2"
+                    >
+                        Modificar Roles
+                    </a>
+                @endcan
+            </div>
+
             <hr>
             <div class="form-group">
                 <label name="name">Nombre de Usuario:</label>
