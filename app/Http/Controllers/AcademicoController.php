@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AcademicoRequest;
-use App\Models\Academico;
 use App\Models\Role;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Academico;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\AcademicoRequest;
 use Illuminate\Support\Facades\Session;
-use PHPUnit\Framework\MockObject\Stub\ReturnValueMap;
 
 class AcademicoController extends Controller 
 {
@@ -91,7 +90,7 @@ class AcademicoController extends Controller
         }
 
         Session::flash('flash', [['type' => "success", 'message' => "Académico registrado correctamente."]]);
-        return redirect()->route('academicos.show', ['academico' => $idUsuarioDB]);
+        return redirect()->route('academicos.index');
     }
 
     public function show($idAcademico) 

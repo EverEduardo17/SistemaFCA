@@ -25,7 +25,7 @@
         <div class="d-flex justify-content-between align-items-center">
 
             <h5 class="card-title">
-                <strong> Estudiantes</strong>
+                <strong> Roles</strong>
             </h5>
 
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ url()->previous() }}" role="button">Regresar</a>
@@ -41,7 +41,7 @@
         <div class="table-responsive-xl">
 
         <table class="table table-striped table-hover border-bottom border-right" id="table-jquery">
-            <caption>Estudiantes registrados en el sistema.</caption>
+            <caption>Roles disponibles del sistema.</caption>
 
             <thead class="bg-table">
             <tr class="text-white">

@@ -9,8 +9,6 @@ use App\Models\Grupo;
 use App\Http\Requests\EstudianteRequest;
 use App\Models\Modalidad;
 use App\Models\ProgramaEducativo;
-
-use App\Models\Trayectoria;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -119,15 +117,15 @@ class EstudianteController extends Controller
                 'password' => $request->ProgramaEducativo,
                 'CreatedAt' => $timestamp,
                 'UpdatedAt' => $timestamp,
-                'CreatedBy'     => auth()->user()->IdUsuario(),
-                'UpdatedBy'     => auth()->user()->IdUsuario()
+                'CreatedBy'     => auth()->user()->IdUsuario,
+                'UpdatedBy'     => auth()->user()->IdUsuario
             ]);
 
             DB::table('Estudiante')->insert([
                 'matriculaEstudiante'   => $matricula,
                 'IdUsuario'   => $idUsuarioDB,
-                'CreatedBy'     => auth()->user()->IdUsuario(),
-                'UpdatedBy'     => auth()->user()->IdUsuario()
+                'CreatedBy'     => auth()->user()->IdUsuario,
+                'UpdatedBy'     => auth()->user()->IdUsuario
             ]);
 
             DB::table('DatosPersonales')->insert([
@@ -136,15 +134,15 @@ class EstudianteController extends Controller
                 'ApellidoMaternoDatosPersonales'      => '',
                 'Genero'                              => $input['Genero'],
                 'IdUsuario'   => $idUsuarioDB,
-                'CreatedBy'     => auth()->user()->IdUsuario(),
-                'UpdatedBy'     => auth()->user()->IdUsuario()
+                'CreatedBy'     => auth()->user()->IdUsuario,
+                'UpdatedBy'     => auth()->user()->IdUsuario
             ]);
 
             DB::table('Role_Usuario')->insert([
                     'IdUsuario'     => $idUsuarioDB,
                     'IdRole'        => 3,
-                    'CreatedBy'     => auth()->user()->IdUsuario(),
-                    'UpdatedBy'     => auth()->user()->IdUsuario()
+                    'CreatedBy'     => auth()->user()->IdUsuario,
+                    'UpdatedBy'     => auth()->user()->IdUsuario
                 ]);
 
             DB::commit();

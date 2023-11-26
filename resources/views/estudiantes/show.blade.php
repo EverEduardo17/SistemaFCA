@@ -19,7 +19,7 @@
                 </strong>
             </h5>
 
-            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ url()->previous() }}" role="button">Regresar</a>
             @can('havepermiso', 'estudiante-ver-todos-propio')
                 <a class="btn btn-secondary col-4" href="{{ route('estudiantes.index') }}" role="button">
                     Ver Estudiantes

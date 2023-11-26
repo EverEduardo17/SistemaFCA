@@ -34,10 +34,14 @@
             </div>
             <div id="divIzq" class="col-sm-12 col-md-6">
                 <div style="width: 100%; height: 70%; display: table;">
+                    
                     <div style="display: table-cell; vertical-align: middle;">
                         <br>
-                        <br>
+                        <br>         
+                        @include('layouts.alpinejs-messages')
+                        
                         <div class="row" style="margin-top: 4em;">
+                            
                             <div id="sistema-fca">
                                 <b>SistemaFCA</b>
                             </div>
@@ -82,6 +86,8 @@
                     Universidad Veracruzana
                 </div>
 
+            
+
                 <div class="divDerechosReser position-fixed bottom-0 end-0 text-right">
                     © {{ getYear() }} Universidad Veracruzana. Todos los derechos reservados
                 </div>
@@ -90,8 +96,9 @@
     </div>
 
     {{-- Extras --}}
-    <script type="text/javascript" src="{{asset('js/jquery-3.5.1.slim.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('lib/popper/popper.min.js')}}"></script>
+    {{-- <script type="text/javascript" src="{{asset('js/jquery-3.5.1.slim.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('lib/popper/popper.min.js')}}"></script> --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script type="text/javascript" src="{{asset('lib/bootstrap/bootstrap.min.js')}}"></script>
     @yield('script')
 </body>

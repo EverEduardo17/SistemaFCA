@@ -21,7 +21,9 @@
                 <strong>Agregar estudiante</strong>
             </h5>
 
-            <a class="btn btn-outline-info col-4" href="{{ route('estudiantes.index') }}" role="button">
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ url()->previous() }}" role="button">Regresar</a>
+
+            <a class="btn btn-primary col-4" href="{{ route('estudiantes.index') }}" role="button">
                 Ver Estudiantes
             </a>
         </div>

@@ -64,7 +64,7 @@ class LoginController extends Controller
         Auth::logout();
 
 
-        return redirect('/')->with('success', 'Sesión cerrada.');
+        return redirect('login')->with('success', 'Sesión cerrada.');
     }
 
     /**
@@ -147,7 +147,7 @@ class LoginController extends Controller
         }
   
         if (!isset($providedState) || $expectedState != $providedState) {
-            return redirect('/')
+            return redirect('home')
                 ->with('error', 'Estado de autenticación inválido')
                 ->with('errorDetail', 'El estado de autenticación proporcionado no coincide con el valor esperado');
         }
@@ -192,7 +192,7 @@ class LoginController extends Controller
 
             // si aun el usuario es nulo, es probable que alguien lo elimino del sistema
             if (!$user) {
-                return redirect('/')->with('error', 'Usuario no encontrado, contacte al administrador.');
+                return redirect('login')->with('error', 'Usuario no encontrado, contacte al administrador.');
             }
 
             Auth::login($user);
@@ -200,13 +200,13 @@ class LoginController extends Controller
             return redirect('/')->with('success', 'Sesión iniciada.');
         }
         catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
-            return redirect('/')
-                ->with('error', 'Error requesting access token')
+            return redirect('login')
+                ->with('error', 'Error al recuperar el token de acceso')
                 ->with('errorDetail', json_encode($e->getResponseBody()));
         }
     }
   
-        return redirect('/')    
+        return redirect('login')    
             ->with('error', $request->query('error'))
             ->with('errorDetail', $request->query('error_description'));
     }
