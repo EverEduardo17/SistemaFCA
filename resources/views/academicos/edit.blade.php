@@ -80,10 +80,15 @@
             </div>
 
             @if($esDirectivo)
+
+            <hr>
                 <div class="form-group">
                     <label for="Firma">Imagen firma:</label> <br>
                     <input id="Firma" name="Firma" type="file">
                 </div>
+                @if ($academico->Firma)
+                    <img src="{{ asset('storage/uploads/'.$academico->Firma) }}" height="100px" class="mb-3" alt="Firma de dirección">
+                @endif
             @endif
 
             @can('havepermiso', 'academicos-detalles')

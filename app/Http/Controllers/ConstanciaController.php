@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 use PhpOffice\PhpWord\TemplateProcessor;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Microsoft\Graph\Graph;
+
 
 class ConstanciaController extends Controller
 {

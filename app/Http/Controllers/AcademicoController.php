@@ -82,8 +82,6 @@ class AcademicoController extends Controller
 
         }catch (\Throwable $throwable){
             DB::rollBack();
-
-            dd($throwable);
             Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar al Académico."]]);
 
             return redirect()->route('academicos.index');
@@ -139,22 +137,18 @@ class AcademicoController extends Controller
 
         $image = $request->file('Firma');
 
-        if($image != null){
+        if($image !== null) {
+            $imageName =  $academico->usuario->IdUsuario; // Nombre único para la imagen
 
-        $imageName =  $academico->usuario->IdUsuario .'.' . $image->getClientOriginalExtension(); // Nombre único para la imagen
+            $image->storeAs('public/uploads/', $imageName);
 
-        $image->storeAs('uploads/', $imageName);
-
-        $existingImagePath = 'uploads/' . $academico->firma;
-
-        $academico->Firma = $imageName;
-        $academico->save();
+            $academico->Firma = $imageName;
+            $academico->save();
         }
     
         $academico->update($request->all());
         $academico->usuario->update($request->except('password'));
         $academico->usuario->datosPersonales->update($request->all());
-        // $academico->usuario->roles()->sync($request->IdRole);
     
 
         Session::flash('flash', [['type' => "success", 'message' => "Académico actualizado con éxito."]]);
