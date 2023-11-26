@@ -316,10 +316,10 @@ class LoginController extends Controller
         if (strpos($name, '@') !== false) {
             return $name;
         }
-        elseif (preg_match('/^zs\d+$/', $name)) {
+        elseif (preg_match('/^zs\d+$/i', $name)) {
             return $name . "@estudiantes.uv.mx";
         } 
-        elseif (preg_match('/^gs\d+$/', $name)) {
+        elseif (preg_match('/^gs\d+$/i', $name)) {
             return $name . "@egresados.uv.mx";
         }
 
