@@ -112,10 +112,17 @@ class AcademicoController extends Controller
 
         $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
 
+        $rol = $academico->usuario->roles()->pluck('ClaveRole')->toArray();
+
+        $esDirectivo = in_array('DIRECCIÓN', $rol);
+        // dd($rol);
+        
         return view('academicos.edit', [
             "academico" => $academico,
-            "roles" => $roles
+            "roles" => $roles,
+            "esDirectivo" => $esDirectivo
         ]);
+
     }
 
     public function update(AcademicoRequest $request, Academico $academico) 
@@ -128,6 +135,20 @@ class AcademicoController extends Controller
             $academico->usuario->update([
                 'password' => bcrypt($request->password)
             ]);
+        }
+
+        $image = $request->file('Firma');
+
+        if($image != null){
+
+        $imageName =  $academico->usuario->IdUsuario .'.' . $image->getClientOriginalExtension(); // Nombre único para la imagen
+
+        $image->storeAs('uploads/', $imageName);
+
+        $existingImagePath = 'uploads/' . $academico->firma;
+
+        $academico->Firma = $imageName;
+        $academico->save();
         }
     
         $academico->update($request->all());

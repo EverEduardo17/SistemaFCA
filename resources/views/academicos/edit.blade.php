@@ -21,7 +21,7 @@
         </div>
     </div>
     <div class="card-body">
-        <form method="POST" action="{{ route('academicos.update', $academico) }}" autocomplete="off">
+        <form method="POST" action="{{ route('academicos.update', $academico) }}" autocomplete="off" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             @include('layouts.validaciones')
@@ -78,6 +78,13 @@
                 <label name="email">Correo electrónico:</label>
                 <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $academico->usuario->email) }}" placeholder="Ej. correo@correo.com">
             </div>
+
+            @if($esDirectivo)
+                <div class="form-group">
+                    <label for="Firma">Imagen firma:</label> <br>
+                    <input id="Firma" name="Firma" type="file">
+                </div>
+            @endif
 
             @can('havepermiso', 'academicos-detalles')
                 <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
