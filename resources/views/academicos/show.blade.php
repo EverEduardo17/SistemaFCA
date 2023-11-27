@@ -15,9 +15,9 @@
 
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ url()->previous() }}" role="button">Regresar</a>
 
-            {{-- @can('havepermiso', 'academicos-listar')
+            @can('havepermiso', 'academicos-listar')
                 <a class="btn btn-primary col-4" href="{{ route('academicos.index') }}" role="button">Ver Académicos</a>
-            @endcan --}}
+            @endcan
         </div>
     </div>
     <div class="card-body">

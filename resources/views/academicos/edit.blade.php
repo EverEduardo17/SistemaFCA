@@ -13,8 +13,11 @@
 
 <div class="card shadow-sm">
     <div class="card-header">
-        <div class="row">
-            <h5 class="card-title col-8">Editar Académico</h5>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Editar Académico</h5>
+
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('academicos.index') }}" role="button">Regresar</a>
+
             @can('havepermiso', 'academicos-listar')
                 <a class="btn btn-primary col-4" href="{{ route('academicos.index') }}" role="button">Ver Académicos</a>
             @endcan
@@ -32,14 +35,21 @@
             </div>
 
             <div class="form-group">
-                <label name="ApellidoPaternoDatosPersonales">Apellido Paterno del Académico:</label>
+                <label name="ApellidoPaternoDatosPersonales">
+                    {{ 
+                    $academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "" ? 
+                        "Apellidos del Académico" : "Apellido Paterno del Académico:" 
+                    }}
+                </label>                
                 <input name="ApellidoPaternoDatosPersonales" type="text" class="form-control @error('ApellidoPaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoPaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoPaternoDatosPersonales) }}" placeholder="Ej. Pino">
             </div>
 
-            <div class="form-group">
-                <label name="ApellidoMaternoDatosPersonales">Apellido Materno del Académico:</label>
-                <input name="ApellidoMaternoDatosPersonales" type="text" class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoMaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoMaternoDatosPersonales) }}" placeholder="Ej. Herrera">
-            </div>
+            @unless ($academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "")
+                <div class="form-group">
+                    <label name="ApellidoMaternoDatosPersonales">Apellido Materno del Académico:</label>
+                    <input name="ApellidoMaternoDatosPersonales" type="text" class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoMaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoMaternoDatosPersonales) }}" placeholder="Ej. Herrera">
+                </div>
+            @endunless
 
             <hr>
 

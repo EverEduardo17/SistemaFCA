@@ -187,8 +187,16 @@ class AcademicoController extends Controller
     {
         Gate::authorize('havepermiso', 'roles-listar');
 
+        $direccionCount = 0;
+        foreach(\App\Models\Usuario::all() as $u) {
+            if ($u->roles()->where('Role.ClaveRole', 'DIRECCIÓN')->exists()) {
+                $direccionCount++;
+            }
+        }
+
         return view("roles", [
             "usuario" => $usuario,
+            "direccionCount" => $direccionCount,
             "roles" => $roles->all()
         ]);
     }

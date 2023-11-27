@@ -49,27 +49,25 @@
                 <th scope="col" class="border actions-col">Acciones</th>
             </tr>
             </thead>
-
             <tbody>
             @foreach ($roles as $rol)
-                    {{-- Los roles Academico, Estudiante, Egresado no deben cambiarse --}}
-                    @unless ($rol->IdRole === 2 || $rol->IdRole === 3 || $rol->IdRole === 4)
+                {{-- Los roles Academico, Estudiante, Egresado no deben cambiarse --}}
+                @unless ($rol->IdRole === 2 || $rol->IdRole === 3 || $rol->IdRole === 4 || 
+                        ($direccionCount>0 && $rol->IdRole === 5 && !$usuario->roles()->where('Role.IdRole', 5)->exists()) || //solo puede haber un director
+                        (($rol->IdRole === 5 || $rol->IdRole === 6) && ($usuario->roles()->where('Role.IdRole', 3)->exists() || $usuario->roles()->where('Role.IdRole', 4)->exists())) ) {{-- un estudiante/egresado no puede ser ni director ni secretaria academica --}}
                     <tr>
                         <td scope="row" class="border-right border-left">{{ $rol->ClaveRole }}</td>
-
                         <td class="btn-group btn-group-sm">
                             <a href="#" data-role="{{ $rol->IdRole }}" class="btn btn-role btn-sm
                                 @if ($usuario->roles()->where('Role.IdRole', $rol->IdRole)->exists())
-                                    btn-danger">
-                                        Eliminar
+                                    btn-danger">Eliminar
                                 @else
-                                    btn-success">
-                                        Agregar
+                                    btn-success">Agregar
                                 @endif
                             </a>
                         </td>
                     </tr>
-                    @endunless
+                @endunless
             @endforeach
             </tbody>
         </table>

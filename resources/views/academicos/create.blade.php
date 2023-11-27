@@ -13,9 +13,9 @@
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title">Agregar Académico</h5>
 
-            <a class="btn btn-outline-info col-4 ml-auto mr-4 " href="{{ url()->previous() }}" role="button">Regresar</a>
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ url()->previous() }}" role="button">Regresar</a>
 
-            @can('havepermiso', 'academicos-de')
+            @can('havepermiso', 'academicos-detalles')
                 <a class="btn btn-primary col-4" href="{{ route('academicos.index') }}" role="button">Ver Académicos</a>
             @endcan
         </div>
