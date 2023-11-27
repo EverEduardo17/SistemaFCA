@@ -177,7 +177,7 @@ class LoginController extends Controller
             $graph->setAccessToken($accessToken->getToken());
 
             // Queries de MS Graph, puedes ver que atributos existen con MS Graph Explorer
-            $userGraph = $graph->createRequest('GET', '/me?$select=givenName,surname,mail,userPrincipalName,officeLocation,jobTitle')
+            $userGraph = $graph->createRequest('GET', '/me?$select=givenName,surname,mail,userPrincipalName,officeLocation,jobTitle,employeeId,mailNickname,onPremisesExtensionAttributes')
             ->setReturnType(\ArrayObject::class)
             ->execute();
 
@@ -211,18 +211,6 @@ class LoginController extends Controller
             ->with('errorDetail', $request->query('error_description'));
     }
 
-
-
-    /**
-     * Eliminar el dominio del correo electronico para dejar solamente el nombre de usuario
-     * 
-     * @param string $email correo del usuario
-     * @return bool|string
-     */
-    private function getUserName(string $email) {
-        return strstr($email, '@', true);
-    }
-
     /**
      * Crear un nuevo usuario.
      * Según si es acádemico o estudiante.
@@ -232,13 +220,12 @@ class LoginController extends Controller
      */
     private function createUser($user)
     {
-        $matricula = $this->getUserName($user['mail']);
 
         try{
             DB::beginTransaction();
 
             $idUsuarioDB = DB::table('Usuario')->insertGetId([
-                'name'              => $matricula,
+                'name'              => $user['mailNickname'],
                 'email'             => $user['mail'],
                 'password'          => capitalizeFirst($user['officeLocation']), // poner la carrera en campo contraseña como solucion temporal a lo de Trayectoria,
                 'CreatedBy'         => 1,
@@ -268,7 +255,7 @@ class LoginController extends Controller
                 ]);
 
                 DB::table('Estudiante')->insert([
-                    'matriculaEstudiante'   => substr($matricula, 1),
+                    'matriculaEstudiante'   => $user['employeeId'],
                     'IdUsuario'             => $idUsuarioDB,
                     'CreatedBy'             => 1,
                     'UpdatedBy'             => 1
@@ -278,8 +265,8 @@ class LoginController extends Controller
             else {
                 DB::table('Academico')->insert([
                     'idAcademico'           => $idUsuarioDB,
-                    'NoPersonalAcademico'   => $idUsuarioDB,
-                    'RfcAcademico'          => $user['surname'][0] . $user['surname'][1] . $user['givenName'][0] . random_int(1000, 9999),
+                    'NoPersonalAcademico'   => $user['employeeId'] ?? "",
+                    'RfcAcademico'          => $user['onPremisesExtensionAttributes']['extensionAttribute1'] ?? "",
                     'IdUsuario'             => $idUsuarioDB,
                     'CreatedBy'             => 1,
                     'UpdatedBy'             => 1
