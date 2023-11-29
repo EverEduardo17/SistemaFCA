@@ -85,3 +85,6 @@ Route::delete('constancias/{constancia}/delete/{estudiante}', 'ConstanciaControl
 Route::get('constancias/{constancia}/{estudiante}/download/', 'ConstanciaController@downloadConstancia')->name('constancias.download');
 Route::get('constancias/aprobar/{id}/aprobar', 'ConstanciaController@aprobarConstancia')->name('constancias.aprobar.aceptar');
 Route::get('constancias/aprobar/{id}/rechazar', 'ConstanciaController@rechazarConstancia')->name('constancias.aprobar.rechazar');
+
+//<---- Ayuda ---->
+Route::get('/ayuda', 'ManualesController@index')->name('ayuda');
