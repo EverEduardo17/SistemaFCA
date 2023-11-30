@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-
 class HomeController extends Controller
 {
     public function index()
@@ -16,7 +14,7 @@ class HomeController extends Controller
                 "enlace" => "eventos",
                 "operaciones" => [
                     ["titulo" => "Nuevo Evento", "enlace" => "create"],
-                    ["titulo" => "Ver Eventos", "enlace" => "index"],
+                    ["titulo" => "Gestión de Eventos", "enlace" => "index"],
                 ],
                 "permiso" => "eventos-listar"
             ],
@@ -27,7 +25,7 @@ class HomeController extends Controller
                 "enlace" => "academicos",
                 "operaciones" => [
                     ["titulo" => "Nuevo Académico", "enlace" => "create"],
-                    ["titulo" => "Ver Académicos", "enlace" => "index"],
+                    ["titulo" => "Gestión de Académicos", "enlace" => "index"],
                 ],
                 "permiso" => "academicos-listar"
             ],
@@ -38,7 +36,7 @@ class HomeController extends Controller
                 "enlace" => "sedeEventos",
                 "operaciones" => [
                     ["titulo" => "Nueva Sede de Evento", "enlace" => "create"],
-                    ["titulo" => "Ver Sedes de Eventos", "enlace" => "index"],
+                    ["titulo" => "Gestión de Sedes", "enlace" => "index"],
                 ],
                 "permiso" => "sedes-listar"
             ],
@@ -49,7 +47,7 @@ class HomeController extends Controller
                 "enlace" => "tipoorganizador",
                 "operaciones" => [
                     ["titulo" => "Nuevo Tipo de Organizador", "enlace" => "create"],
-                    ["titulo" => "Ver Tipos de Organizadores", "enlace" => "index"],
+                    ["titulo" => "Gestión de Tipos de Organizadores", "enlace" => "index"],
                 ],
                 "permiso" => "tipoorganizador-listar"
             ],
@@ -60,7 +58,7 @@ class HomeController extends Controller
                 "enlace" => "facultades",
                 "operaciones" => [
                     ["titulo" => "Nueva Facultad", "enlace" => "create"],
-                    ["titulo" => "Ver Facultades", "enlace" => "index"],
+                    ["titulo" => "Gestión de Facultades", "enlace" => "index"],
                 ],
                 "permiso" => "facultades-listar"
             ],

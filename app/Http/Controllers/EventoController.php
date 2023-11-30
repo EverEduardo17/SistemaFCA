@@ -16,7 +16,6 @@ use App\Models\Role;
 use App\Models\SedeEvento;
 use App\Models\Organizador;
 use App\Models\TipoOrganizador;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -40,10 +39,8 @@ class EventoController extends Controller
         $estado = request('estado');
 
         $filtro_fecha = request('filtro_fecha');
-
-        Gate::authorize('havepermiso', 'eventos-listar');
                
-        if($filtro_fecha == 'PROXIMOS' || $filtro_fecha== null){
+        if($filtro_fecha == 'PROXIMOS'){
             $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
             ->get();
@@ -52,7 +49,8 @@ class EventoController extends Controller
             }
             $evento_fecha_sede_s = $evento_fecha_sede_s->where('fechaEvento.InicioFechaEvento', '>', now())
             ->sortBy('fechaEvento.InicioFechaEvento');
-        }else if($filtro_fecha == 'ANTERIORES'){
+        }
+        else if($filtro_fecha == 'ANTERIORES'){
             $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
             ->get();
@@ -61,7 +59,8 @@ class EventoController extends Controller
             }
             $evento_fecha_sede_s = $evento_fecha_sede_s->where('fechaEvento.InicioFechaEvento', '<', now())
             ->sortBy('fechaEvento.InicioFechaEvento');
-        }else{
+        }
+        else {
             $evento_fecha_sede_s = Evento_Fecha_Sede
             ::with(['evento', 'fechaEvento', 'sedeEvento'])
             ->get();
@@ -193,10 +192,10 @@ class EventoController extends Controller
             }
 
             //EnviarCorreos
-            $users = Role::where('IdRole', 3)->first();
-            foreach ($users->usuarios as $user) {
-                Mail::to($user->email)->send(new EventoRegistrado($input));
-            }
+            // $users = Role::where('IdRole', 3)->first();
+            // foreach ($users->usuarios as $user) {
+            //     Mail::to($user->email)->send(new EventoRegistrado($input));
+            // }
 
             Session::flash('flash', [['type' => "success", 'message' => "Evento registrado correctamente"]]);
             return redirect()->route('eventos.show', $idEvento);
@@ -208,7 +207,6 @@ class EventoController extends Controller
 
     public function show($idEvento)
     {
-        Gate::authorize('havepermiso', 'eventos-detalles');
 
         $evento = Evento::where('IdEvento', $idEvento)->with(['eventoFechaSede', 'organizador', 'documento', 'eventoFechaSede.fechaEvento', 'eventoFechaSede.sedeEvento'])->firstOrFail();
 

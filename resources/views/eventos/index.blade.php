@@ -19,20 +19,23 @@
             <form action="{{ route('eventos.index') }}" method="GET" style="display: flex">
                 <div class="form-group" style="display: flex; align-items: center; gap: 1rem">
                     <label for="lista-filtrar" style="white-space: nowrap; margin: 0%">Filtrar por estado:</label>
+
                     <select name="estado" id="lista-filtrar" class="form-control" onchange="this.form.submit()">
                         <option value="" @if($estado === '') selected @endif>Todos</option>
                         <option value="APROBADO" @if($estado === 'APROBADO') selected @endif>Aprobado</option>
                         <option value="NO APROBADO" @if($estado === 'NO APROBADO') selected @endif>No aprobado</option>
                         <option value="POR APROBAR" @if($estado === 'POR APROBAR') selected @endif>Pendiente</option>
                     </select>
+                    
                     <input type="radio" name="filtro_fecha" value="ANTERIORES" @if($filtro_fecha === 'ANTERIORES') checked @endif onchange="this.form.submit()">
                     <label>Anteriores</label>
+
                     <input type="radio" name="filtro_fecha" value="PROXIMOS" 
-                    @if($filtro_fecha === 'PROXIMOS'|| $filtro_fecha === null) checked @endif onchange="this.form.submit()">
+                    @if($filtro_fecha === 'PROXIMOS') checked @endif onchange="this.form.submit()">
+
                     <label>Proximos</label>
-                    <input type="radio" name="filtro_fecha" value="TODOS" @if($filtro_fecha === 'TODOS') checked @endif onchange="this.form.submit()">
+                    <input type="radio" name="filtro_fecha" value="TODOS" @if($filtro_fecha === 'TODOS' || $filtro_fecha === null) checked @endif onchange="this.form.submit()">
                     <label>Todos</label>
-                    <!-- <button class="btn btn-secondary mb-2" id="filterButton">Filtrar</button> -->
                 </div>
             </form>
             <div>
@@ -86,7 +89,6 @@
             "/" + e.date.getFullYear() +
             "/" + (e.date.getMonth() + 1) +
             "/" + e.date.getDate();
-        //console.log(e.date.toISOString().slice(0,10) );
     });
 </script>
 
@@ -113,7 +115,7 @@
             right: "listYear,dayGridMonth,timeGridWeek"
         }
         calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'listYear',
+            initialView: '{{ $filtro_fecha === 'PROXIMOS' ? 'listYear' : 'dayGridMonth' }}',
             locale: "es",
             headerToolbar: toolbar,
             buttonText: {
@@ -132,7 +134,9 @@
                 day = partes[2]
                 month = partes[1]
                 year = partes[0]
-                window.location.href = "{{ route('eventos.create') }}?day=" + day + "&month=" + month + "&year=" + year;
+                @can('havepermiso','eventos-crear')
+                    window.location.href = "{{ route('eventos.create') }}?day=" + day + "&month=" + month + "&year=" + year;
+                @endcan
             },
             viewDidMount: function(info) {
                 if (info.view.type.match("list")) {

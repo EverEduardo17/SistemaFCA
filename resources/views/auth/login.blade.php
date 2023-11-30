@@ -22,75 +22,53 @@
     {{-- Extras --}}
     @yield('head')
 </head>
-<body class="d-flex flex-column h-100">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6" id="colImg">
-                <div class="row">
-                    <div class="col-md-12">
-                        <img src="{{asset('img/plantel.jpg')}}" class="imgLogin" />
-                    </div>
-                </div>
-            </div>
-            <div id="divIzq" class="col-sm-12 col-md-6">
-                <div style="width: 100%; height: 70%; display: table;">
-                    
-                    <div style="display: table-cell; vertical-align: middle;">
-                        <br>
-                        <br>         
-                        @include('layouts.alpinejs-messages')
-                        
-                        <div class="row" style="margin-top: 4em;">
-                            
-                            <div id="sistema-fca">
-                                <b>SistemaFCA</b>
-                            </div>
+<body>
+    <div style="display: flex;">
+        <div class="pleca">
+            <a href="{{ route('home') }}" style="color: white">
+            Universidad Veracruzana
+            </a>
+        </div>
 
-                            <div id="inisesion">
-                                <b>Inicio de sesión</b>
-                            </div>
-                        </div>
-                    
-                        <form method="POST" action="{{ route('login') }}">
-                            @csrf
-
-                            <div class="text-center form-group" style="margin-top: 3em; margin-bottom: 2em;">
-                                <input name="name" id="name" type="text" style="width: 350px;"
-                                    class="txt-login @error('name') txt-login-error @enderror"
-                                    value="{{old('name')}}" placeholder="Usuario" autofocus
-                                >
-                                @error('name')
-                                    <br> <p class="text-danger small">El campo usuario es obligatorio.</p>
-                                @enderror
-                            </div>
-                        
-                            {{-- <div class="text-center form-group" style="margin-bottom: 3em;">
-                                <input name="password" id="password" type="password" style="width: 350px;"
-                                    class="txt-login"
-                                    value="{{old('password')}}" placeholder="Contraseña" autofocus
-                                >
-                                @error('password')
-                                    <br> <p class="text-danger small"> {{ $message }}</p>
-                                @enderror
-                            </div> --}}
-                        
-                            <div class="row justify-content-center form-group">
-                                <button type="submit" class="btn btn-success shadow-sm" style="width: 352px;">
-                                    Iniciar Sesión
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="pleca">
-                    Universidad Veracruzana
-                </div>
-
+        <div id="colImg">
+            <img src="{{asset('img/plantel.jpg')}}" style="height: 100vh; width: 100%; object-fit: cover;" />
+        </div>
+        <div id="divIzq">
             
-
-                <div class="divDerechosReser position-fixed bottom-0 end-0 text-right">
-                    © {{ getYear() }} Universidad Veracruzana. Todos los derechos reservados
+            <div >
+                @include('layouts.alpinejs-messages')
+                    
+                <div id="sistema-fca">
+                    <b>SistemaFCA</b>
                 </div>
+
+                <div id="inisesion">
+                    <b>Inicio de sesión</b>
+                </div>
+            
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
+
+                    <div class="text-center form-group" style="margin-top: 3em; margin-bottom: 2em;">
+                        <input name="name" id="name" type="text" style="width: 350px;"
+                            class="txt-login @error('name') txt-login-error @enderror"
+                            value="{{old('name')}}" placeholder="Usuario" autofocus
+                        >
+                        @error('name')
+                            <br> <p class="text-danger small">El campo usuario es obligatorio.</p>
+                        @enderror
+                    </div>
+                
+                    <div class="row justify-content-center form-group" style="margin-bottom:24vh">
+                        <button type="submit" class="btn btn-success shadow-sm" style="width: 352px;">
+                            Iniciar Sesión
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="divDerechosReser position-fixed bottom-0 end-0 text-right">
+                © {{ getYear() }} Universidad Veracruzana. Todos los derechos reservados
             </div>
         </div>
     </div>

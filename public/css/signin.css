@@ -50,15 +50,15 @@ html, body
   font-size: 17.8px;
   font-weight: normal;
   margin-top: -1px;
+  text-align-last: center;
   padding-right: 0.7em;
   padding-left: 0.7em;
-  
 }
 
 #sistema-fca {
   font-size: 70px;
-  font-weight: bolder;
-  padding: 0px 0px 0px 0px;
+  font-family: 'Roboto', sans-serif;
+  padding: 0px;
   margin: 0px;
   height: auto;
   width: 338px;
@@ -141,7 +141,6 @@ input.text {
   text-size-adjust: 100%;
   text-transform: none;
   user-select: text;
-  width: 100%;
   word-spacing: 0px;
   writing-mode: horizontal-tb;
   -webkit-appearance: none;
@@ -155,7 +154,6 @@ input.text {
 
 .txt-login {
   font-size: 16px;
-  width: 50%;
   border: 0;
   padding: 5px 0px 0px 4px;
   border-bottom: 2px solid #b9b9b9;
@@ -176,6 +174,10 @@ input.text {
 
 .txt-login-error {
   border-bottom: 2px solid red;
+}
+.txt-login-error::placeholder {
+  color:red;
+  opacity: 0.7;
 }
 
 .txt-login-error:hover  {
@@ -248,12 +250,6 @@ input.text {
   width: 100%;
 }
 
-.imgLogin {
-  width: 50%;
-  height: 100%;
-  position: fixed;
-}
-
 .divDerechosReser {
   right: 15px;
   bottom: 10px;
@@ -277,24 +273,50 @@ input.text {
 }
 
 #colImg {
-      padding-left: 0;
-      
+  width: 50%;
+}
+
+#divIzq {
+  width: 50%; 
+  height: 100vh; 
+  display:flex; 
+  justify-content:center; 
+  align-items:center; 
+}
+
+@media (max-width: 1200px), (max-height: 476px) {
+
+  body {
+    overflow:hidden;
   }
 
-
-@media (max-width: 1350px), (max-height: 476px) {
   #colImg {
       display: none;
   }
   #divIzq {
-      margin: 0 auto;
+    height: 100vh;
+    width: 100vw;
+    align-self: center;
+  }
+
+  #sistema-fca {
+    font-size: 50px;
+  }
+
+  #inisesion {
+    font-size: 20px;
+  }
+
+  .divDerechosReser {
+    font-size: 3.2vw;
+    margin-bottom: 3vh;
   }
 
 }
 
 body {
   
-  font-family: 'Roboto', sans-serif !important;
+  font-family:'Ubuntu','Roboto', sans-serif !important;
 }
 
 
