@@ -90,3 +90,6 @@ Route::get('constancias/aprobar/{id}/rechazar', 'ConstanciaController@rechazarCo
 //<---- Roles ---->
 Route::post('usuarios/roles/agregar-rol', 'AcademicoController@addRole')->name('usuario.add.role');
 Route::get('{usuario}/roles', 'AcademicoController@indexRoles')->name('usuario.index.roles');
+
+//<---- Ayuda ---->
+Route::get('/ayuda', 'ManualesController@index')->name('ayuda');
