@@ -307,6 +307,10 @@ input.text {
     font-size: 20px;
   }
 
+}
+
+@media (max-width: 400px) {
+
   .divDerechosReser {
     font-size: 3.2vw;
     margin-bottom: 3vh;
