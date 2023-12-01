@@ -20,7 +20,6 @@ use App\Models\Usuario;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class EventoController extends Controller
@@ -147,6 +146,8 @@ class EventoController extends Controller
                              ->withInput();
         }
 
+        $input['organizador'] = Auth::user()->name;
+
         // dd(Auth::user()->Academico->IdAcademico);
 
         //TODO: Validar que las fechas no chocan con otro evento
@@ -193,13 +194,23 @@ class EventoController extends Controller
             }
 
             //EnviarCorreos
+            $email = new \SendGrid\Mail\Mail(); 
+            $email->setFrom("zs18015382@estudiantes.uv.mx", "SistemaFCA");
+            $email->setSubject('Evento: Solicitud de aprobación para "'. $input['nombre'] . '"');
+            $email->addContent(
+                "text/html", view('emails.evento-registrado')->with('input',$input)->render()
+            );
+            $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+
+
             $users = Usuario::whereHas('roles', function ($query) {
                 $query->where('ClaveRole', 'LIKE', 'CONTROL-GÉNERAL')
                     ->orWhere('ClaveRole', 'LIKE', 'CONTROL-EVENTOS');
             })->get();
 
             foreach ($users as $user) {
-                Mail::to($user->email)->send(new EventoRegistrado($input));
+                $email->addTo($user->email, $user->name);
+                $response = $sendgrid->send($email);
             }
 
             Session::flash('flash', [['type' => "success", 'message' => "Evento registrado correctamente"]]);

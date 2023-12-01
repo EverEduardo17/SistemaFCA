@@ -2,14 +2,10 @@
 
 namespace App\Mail;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Mail\Mailable;
-use Illuminate\Queue\SerializesModels;
+use Symfony\Component\Mime\Email;
 
-class EventoRegistrado extends Mailable
+class EventoRegistrado extends Email
 {
-    use Queueable, SerializesModels;
-
     private $input = [];
 
     /**
@@ -29,8 +25,11 @@ class EventoRegistrado extends Mailable
      */
     public function build()
     {
-        return $this->from('sistemafca@uv.mx','SistemaFCA')
+        $email = (new Email())
+            ->from('sistemafca@uv.mx')
             ->subject('Evento: Solicitud de aprobación para "'. $this->input['nombre'] . '"')
-            ->view('emails.evento-registrado')->with('input',$this->input);
+            ->html(view('emails.evento-registrado')->with('input',$this->input)->render());
+
+        return $email;
     }
 }
