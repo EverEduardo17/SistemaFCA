@@ -16,6 +16,7 @@ use App\Models\Role;
 use App\Models\SedeEvento;
 use App\Models\Organizador;
 use App\Models\TipoOrganizador;
+use App\Models\Usuario;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -192,10 +193,14 @@ class EventoController extends Controller
             }
 
             //EnviarCorreos
-            // $users = Role::where('IdRole', 3)->first();
-            // foreach ($users->usuarios as $user) {
-            //     Mail::to($user->email)->send(new EventoRegistrado($input));
-            // }
+            $users = Usuario::whereHas('roles', function ($query) {
+                $query->where('ClaveRole', 'LIKE', 'CONTROL-GÉNERAL')
+                    ->orWhere('ClaveRole', 'LIKE', 'CONTROL-EVENTOS');
+            })->get();
+
+            foreach ($users as $user) {
+                Mail::to($user->email)->send(new EventoRegistrado($input));
+            }
 
             Session::flash('flash', [['type' => "success", 'message' => "Evento registrado correctamente"]]);
             return redirect()->route('eventos.show', $idEvento);

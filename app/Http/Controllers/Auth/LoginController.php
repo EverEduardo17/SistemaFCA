@@ -87,8 +87,7 @@ class LoginController extends Controller
     {
         $request->validated();
 
-        session()->put('name', $request->name);
-        return $this->msGraph();
+        return $this->msGraph($request->name);
     }
 
 
@@ -99,9 +98,10 @@ class LoginController extends Controller
     /**
      * Redireccionar a la pagina de login de Microsoft con los parametros necesarios
      * 
+     * @param string $name nombre de usuario, o modulo al donde redireccionar
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function msGraph() 
+    private function msGraph($name) 
     {
         $oauthClient = new \League\OAuth2\Client\Provider\GenericProvider([
             'clientId'                => config('azure.appId'),
@@ -116,7 +116,7 @@ class LoginController extends Controller
         // redireccionar directo a la pagina de login de la UV y saltarse la de microsoft
         $authUrl = $oauthClient->getAuthorizationUrl([
             'prompt' => 'login',
-            'login_hint' => $this->getEmail(session('name'))
+            'login_hint' => $this->getEmail($name)
         ]);
 
         // Salvar el estado para validar en callback
@@ -135,7 +135,6 @@ class LoginController extends Controller
      */
     public function callback(Request $request)
     {
-        $request->session()->forget('name');
 
         // Validate state
         $expectedState = session('oauthState');

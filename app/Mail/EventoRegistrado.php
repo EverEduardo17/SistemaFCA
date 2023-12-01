@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -11,8 +10,7 @@ class EventoRegistrado extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $subject = "Evento nuevo registrado.";
-    public $input;
+    private $input = [];
 
     /**
      * Create a new message instance.
@@ -31,6 +29,8 @@ class EventoRegistrado extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.evento-registrado');
+        return $this->from('sistemafca@uv.mx','SistemaFCA')
+            ->subject('Evento: Solicitud de aprobación para "'. $this->input['nombre'] . '"')
+            ->view('emails.evento-registrado')->with('input',$this->input);
     }
 }
