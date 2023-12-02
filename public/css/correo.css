@@ -1,0 +1,26 @@
+
+footer {
+    background-color: #0E47A1;
+    color: white;
+    align-items: center;
+    
+
+    p {
+        color: white;
+    }
+
+    a {
+        color: white;
+    }
+
+    a:hover{
+        color: black;
+    }
+}
+
+.solicitud{
+    padding: 15px;
+    align-items: center;
+    
+}
+
