@@ -146,9 +146,8 @@ class EventoController extends Controller
                              ->withInput();
         }
 
-        $input['organizador'] = Auth::user()->name;
+        $input['organizador'] = Auth::user()->email;
 
-        // dd(Auth::user()->Academico->IdAcademico);
 
         //TODO: Validar que las fechas no chocan con otro evento
         $comprobarFecha = $this->comprobarFecha($fechaInicio, $fechaFin, intval($input['sede']));
@@ -193,27 +192,7 @@ class EventoController extends Controller
                 return redirect()->route('eventos.index');
             }
 
-            $input['sede'] = SedeEvento::get()->where('IdSedeEvento', $input['sede'])->first()->NombreSedeEvento;
-
-            //EnviarCorreos
-            $email = new \SendGrid\Mail\Mail(); 
-            $email->setFrom("zs18015382@estudiantes.uv.mx", "SistemaFCA Eventos");
-            $email->setSubject('Solicitud de aprobación para "'. $input['nombre'] . '"');
-            $email->addContent(
-                "text/html", view('emails.evento-registrado')->with('input',$input)->render()
-            );
-            $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
-
-
-            $users = Usuario::whereHas('roles', function ($query) {
-                $query->where('ClaveRole', 'LIKE', 'CONTROL-GÉNERAL')
-                    ->orWhere('ClaveRole', 'LIKE', 'CONTROL-EVENTOS');
-            })->get();
-
-            foreach ($users as $user) {
-                $email->addTo($user->email, $user->name);
-                $response = $sendgrid->send($email);
-            }
+            $this->enviarCorreo($input);
 
             Session::flash('flash', [['type' => "success", 'message' => "Evento registrado correctamente"]]);
             return redirect()->route('eventos.show', $idEvento);
@@ -266,6 +245,19 @@ class EventoController extends Controller
             Session::flash('flash', [['type' => "danger", 'message' => "Error al editar el Evento."]]);
             return redirect()->route('eventos.show', $evento->IdEvento);
         }
+
+        $input['nombre'] = $request->NombreEvento;
+        $input['descripcion'] = $request->DescripcionEvento;
+        $input['organizador'] = $evento->organizador[0]->usuario->email;
+        $input['fechaInicio'] = printDateTime($evento->eventoFechaSede[0]->FechaEvento->InicioFechaEvento);
+        //todo: hacer que fecha inicio y hora inicio esten separados y que hora fin no tire fecha, traigo weba :)
+        $input['horaInicio'] = null;
+        $input['horaFin'] = printDateTime($evento->eventoFechaSede[0]->FechaEvento->FinFechaEvento);
+        
+        $input['sede'] = $evento->eventoFechaSede[0]->IdSedeEvento;
+
+        $this->enviarCorreo($input);
+
         Session::flash('flash', [['type' => "success", 'message' => "Evento actualizado con éxito."]]);
         return redirect()->route('eventos.show', $evento->IdEvento);
     }
@@ -275,6 +267,7 @@ class EventoController extends Controller
         Gate::authorize('havepermiso', 'eventos-eliminar-propio');
     }
 
+    // metodos auxiliares
 
     private function comprobarFecha($fechaInicio, $fechaFin, $sedeEvento)
     {
@@ -305,6 +298,37 @@ class EventoController extends Controller
             return false;
         } else {
             return false;
+        }
+    }
+
+
+    /**
+     * Manda un correo con los datos del evento para solicitar aprobación
+     *
+     * @param array $input
+     * @return void
+     */
+    private function enviarCorreo($input) 
+    {
+        $input['sede'] = SedeEvento::get()->where('IdSedeEvento', $input['sede'])->first()->NombreSedeEvento;
+    
+        $email = new \SendGrid\Mail\Mail(); 
+        $email->setFrom("zs18015382@estudiantes.uv.mx", "SistemaFCA Eventos");
+        $email->setSubject('Solicitud de aprobación para "'. $input['nombre'] . '"');
+        $email->addContent(
+            "text/html", view('emails.evento-registrado')->with('input',$input)->render()
+        );
+        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+
+
+        $users = Usuario::whereHas('roles', function ($query) {
+            $query->where('ClaveRole', 'LIKE', 'CONTROL-GÉNERAL')
+                ->orWhere('ClaveRole', 'LIKE', 'CONTROL-EVENTOS');
+        })->get();
+
+        foreach ($users as $user) {
+            $email->addTo($user->email, $user->name);
+            $response = $sendgrid->send($email);
         }
     }
 }

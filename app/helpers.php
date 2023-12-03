@@ -62,6 +62,20 @@
     }
 
     /**
+     * Convierte datetime a formato DD/MM/YYYY HH:MM AM/PM
+     *
+     * @param string $datetime La fecha y hora a imprimir.
+     * @return string La fecha y hora en formato DD/MM/YYYY HH:MM AM/PM.
+     */
+    function printDateTime($datetime)
+    {
+        $datetime = DateTime::createFromFormat('Y-m-d H:i:s', $datetime);
+        $formatted_datetime = $datetime->format('d/m/Y h:i A');
+        
+        return $formatted_datetime;
+    }
+
+    /**
      * Recibe una hora en formato AM/PM y la vuelve a formato 24H
      * 
      * @param string $time

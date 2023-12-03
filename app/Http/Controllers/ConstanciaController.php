@@ -94,6 +94,9 @@ class ConstanciaController extends Controller
             return redirect()->route('constancias.index');
         }
 
+        $input['autor'] = Auth::user()->email;
+        $this->enviarCorreos($input);
+
         Session::flash('flash', [['type' => "success", 'message' => "Constancia registrada correctamente."]]);
         return redirect()->route('constancias.index');
     }
@@ -194,6 +197,10 @@ class ConstanciaController extends Controller
             Session::flash('flash', [['type' => "danger", 'message' => "Error, la constancia no pudo ser actualizada."]]);
             return redirect()->route('constancias.show', $constancia);
         }
+
+        $input['autor'] = \App\Models\Usuario::find($constancia->CreatedBy)->email;
+        $this->enviarCorreos($input);
+
         Session::flash('flash', [['type' => "success", 'message' => "Constancia actualizada con éxito."]]);
         return redirect()->route('constancias.show', $constancia);
     }
@@ -544,7 +551,8 @@ class ConstanciaController extends Controller
      * @throws \Throwable Si ocurre un error durante el proceso.
      * @return \Illuminate\Http\RedirectResponse La respuesta de redirección a la página de aprobación de constancias.
      */
-    public function rechazarConstancia(Request $request, $id) {
+    public function rechazarConstancia(Request $request, $id) 
+    {
         Gate::authorize('havepermiso', 'constancias-aprobar-rechazar');
 
         $motivo = $request->get('Motivo');
@@ -565,5 +573,32 @@ class ConstanciaController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    /**
+     * Manda un correo con los datos de la constancia para solicitar aprobación
+     *
+     * @param array $input
+     * @return void
+     */
+    private function enviarCorreos($input)
+    {
+        $email = new \SendGrid\Mail\Mail(); 
+        $email->setFrom("zs18015382@estudiantes.uv.mx", "SistemaFCA Constancias");
+        $email->setSubject('Solicitud de aprobación para "'. $input['NombreConstancia'] . '"');
+        $email->addContent(
+            "text/html", view('emails.constancia-registrada')->with('input',$input)->render()
+        );
+        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+
+        $users = \App\Models\Usuario::whereHas('roles', function ($query) {
+            $query->where('ClaveRole', 'LIKE', 'CONTROL-GÉNERAL')
+                ->orWhere('ClaveRole', 'LIKE', 'CONTROL-CONSTANCIAS');
+        })->get();
+
+        foreach ($users as $user) {
+            $email->addTo($user->email, $user->name);
+            $response = $sendgrid->send($email);
+        }
     }
 }

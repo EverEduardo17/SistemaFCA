@@ -2,7 +2,7 @@
 
 @section('content')
 
-@can('havepermiso', 'documentos-leer')
+@can('havepermiso', 'constancias-detalles')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
@@ -17,13 +17,12 @@
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title">
-                {{ $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales }}
-                {{ $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales }}
-                {{ $estudiante->Usuario->DatosPersonales->NombreDatosPersonales }}
+                {{ optional($estudiante->Usuario->DatosPersonales)->ApellidoPaternoDatosPersonales }}
+                {{ optional($estudiante->Usuario->DatosPersonales)->ApellidoMaternoDatosPersonales }}
+                {{ optional($estudiante->Usuario->DatosPersonales)->NombreDatosPersonales }}
             </h5>
-            @can('havepermiso', 'documentos-leer')
-                <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
-            @endcan
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
+
             <a class="btn btn-primary col-4" href="{{ route('constancias.download', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" role="button">
                 Descargar Constancia
             </a>
@@ -32,9 +31,9 @@
     <div class="card-body">
         <p>
             <strong>Nombre Completo: </strong>
-                {{ $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales }}
-                {{ $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales }}
-                {{ $estudiante->Usuario->DatosPersonales->NombreDatosPersonales }}
+            {{ optional($estudiante->Usuario->DatosPersonales)->ApellidoPaternoDatosPersonales }}
+            {{ optional($estudiante->Usuario->DatosPersonales)->ApellidoMaternoDatosPersonales }}
+            {{ optional($estudiante->Usuario->DatosPersonales)->NombreDatosPersonales }}
         </p>
         <p>
             <strong>Matrícula:</strong> {{ $estudiante->MatriculaEstudiante }}

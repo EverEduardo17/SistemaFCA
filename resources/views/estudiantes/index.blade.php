@@ -43,9 +43,9 @@
                         </th>
 
                         <td class="border-right">
-                            {{ $estudiante->usuario->datosPersonales->ApellidoPaternoDatosPersonales }}
-                            {{ $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales }}
-                            {{ $estudiante->usuario->datosPersonales->NombreDatosPersonales }}
+                            {{ $estudiante->usuario->datosPersonales->ApellidoPaternoDatosPersonales ?? "" }}
+                            {{ $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales ?? "" }}
+                            {{ $estudiante->usuario->datosPersonales->NombreDatosPersonales ?? "" }}
                         </td>
 
                         <td>{{ $estudiante->usuario->roles[0]->ClaveRole ?? "" }}</td>

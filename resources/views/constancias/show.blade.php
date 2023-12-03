@@ -130,12 +130,12 @@
                                 </th>
 
                                 <td class="border-right">
-                                    {{ $estudiante->Usuario->DatosPersonales->ApellidoPaternoDatosPersonales }}
-                                    {{ $estudiante->Usuario->DatosPersonales->ApellidoMaternoDatosPersonales }}
-                                    {{ $estudiante->Usuario->DatosPersonales->NombreDatosPersonales }}
+                                    {{ optional($estudiante->Usuario->DatosPersonales)->ApellidoPaternoDatosPersonales }}
+                                    {{ optional($estudiante->Usuario->DatosPersonales)->ApellidoMaternoDatosPersonales }}
+                                    {{ optional($estudiante->Usuario->DatosPersonales)->NombreDatosPersonales }}
                                 </td>
 
-                                <td class="border-right">{{ $estudiante->Usuario->datosPersonales->Genero }}</td>
+                                <td class="border-right">{{ optional($estudiante->Usuario->datosPersonales)->Genero }}</td>
 
                                 <td class="py-2 btn-group border-right">
                                     <a class="btn btn-sm btn-outline-success mr-1" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">

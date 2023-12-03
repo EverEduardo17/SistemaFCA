@@ -59,9 +59,9 @@
                 <tr>
                     <th scope="row" class="border-right border-left">{{ $estudiante->MatriculaEstudiante }}</th>
                     <td class="border-right">
-                        {{ $estudiante->usuario->datosPersonales->ApellidoPaternoDatosPersonales }}
-                        {{ $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales }}
-                        {{ $estudiante->usuario->datosPersonales->NombreDatosPersonales }} 
+                        {{ optional($estudiante->usuario->datosPersonales)->ApellidoPaternoDatosPersonales }}
+                        {{ optional($estudiante->usuario->datosPersonales)->ApellidoMaternoDatosPersonales }}
+                        {{ optional($estudiante->usuario->datosPersonales)->NombreDatosPersonales }} 
                     </td>
                     <td class="border-right">{{ $estudiante->usuario->roles[0]->ClaveRole ?? "" }}</td>
 
