@@ -98,7 +98,7 @@ class LoginController extends Controller
     /**
      * Redireccionar a la pagina de login de Microsoft con los parametros necesarios
      * 
-     * @param string $name nombre de usuario, o modulo al donde redireccionar
+     * @param string $name nombre de usuario
      * @return \Illuminate\Http\RedirectResponse
      */
     private function msGraph($name) 

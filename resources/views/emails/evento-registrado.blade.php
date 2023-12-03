@@ -10,59 +10,57 @@
 </head>
 
 <body class="bg-light">
-    <div class="container">
-        <div class="py-5 text-center">
-            <img 
+    {{-- al parecer bootstrap no carga en el correo, por lo que se usa css puro --}}
+    <div style="width: 100%; max-width: 1140px; margin: 0 auto;">
+        <div style="padding: 3rem 0; text-align: center;">
+            {{-- por algun motivo no cargan los estilos ni las fotos en el correo --}}
+            {{-- <img 
                 class="d-block mx-auto mb-4" 
                 src="{{ asset('img/FlorconUV.png') }}" 
                 alt="Logo uv" 
                 width="100" 
                 height="72"
-            >
+            > --}}
             <h2>Nueva solicitud de Evento.</h2>
-            <p class="lead">Se ha solicitado una aprobación para el eveto: {{ $input['nombre'] }}.</p>
+            <p class="lead">Se solicita aprobación para el evento: {{ $input['nombre'] }}.</p>
         </div>
     
-        <div class="row">
-            <div class="col-md-12">
-                {{-- Vi que quitaste la descripción y la sede, las deje por si acaso --}}
-                <h4 class="mb-3">{{ $input['descripcion'] }}</h4>
+        <div style="display: flex; flex-wrap: wrap;">
+            <div style="flex: 1 0 100%; padding: 10px;">
+                <h4 style="margin-bottom: 1rem;">{{ $input['descripcion'] }}</h4>
     
-                <div class="row">
-                    <div class="form-group col-lg-6">
-                        <label>Fecha principal del Evento:</label>
-                        <input type="text" class="form-control" value="{{ $input['fechaInicio'] }}" readonly="readonly"/>
+                <div style="display: flex; flex-wrap: wrap;">
+                    <div style="flex: 1 0 50%; padding: 10px;">
+                        <label><strong>Fecha principal del Evento:</strong> {{ $input['fechaInicio'] }}</label>
                     </div>
-    
-                    <div class="form-group col-lg-6">
-                        <label>Sede:</label>
-                        <input type="text" class="form-control" value="{{ $input['sede'] }}" readonly="readonly"/>
+
+                    <div style="flex: 1 0 50%; padding: 10px;">
+                        <label><strong>Sede:</strong> {{ $input['sede'] }}</label>
                     </div>
-    
-                    <div class="form-group col-lg-6">
-                        <label>Hora Inicio:</label>
-                        <input type="text" class="form-control" value="{{ $input['horaInicio'] }}" readonly="readonly"/>
+
+                    <div style="flex: 1 0 50%; padding: 10px;">
+                        <label><strong>Hora Inicio:</strong> {{ $input['horaInicio'] }}</label>
                     </div>
-    
-                    <div class="form-group col-lg-6">
-                        <label>Hora Fin:</label>
-                        <input type="text" class="form-control" value="{{ $input['horaFin'] }}" readonly="readonly"/>
+                    
+                    <div style="flex: 1 0 50%; padding: 10px;">
+                        <label><strong>Hora Fin:</strong> {{ $input['horaFin'] }}</label>
                     </div>
-    
-                </div>
+                 </div>
     
                 <hr class="mb-12">
-                <a href="{{ route('login') }}" class="btn btn-primary btn-lg btn-block">Aprobar</a>
+                <a href="{{ route('login') }}" style="display: flex; align-items: center; justify-content: center; display: block; width: 100%; padding: 0.5rem 1rem; font-size: 1.25rem; line-height: 1.5; background-color: #007bff; color: #fff; border-radius: 0.25rem; text-align: center;">
+                    Ir a la plataforma
+                </a>
             </div>
             <div class="col-md-4 order-md-2 mb-4 solicitud">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     Solicitud
                 </h4>
-                <ul class="list-group mb-3">
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <ul style="list-style-type: none; margin-bottom: 1rem;">
+                    <li style="display: flex; justify-content: space-between; align-items: center; line-height: 1.5; padding: 10px; border: 1px solid #dee2e6; border-radius: 0.25rem;">
                         <div>
-                            <h6 class="my-0">Organizador:</h6>
-                            <small class="text-muted">{{ $input['organizador'] }}</small>
+                            <p style="margin: 0;">Organizador:</p>
+                            <small style="color: #6c757d;">{{ $input['organizador'] }}</small>
                         </div>
                     </li>
                 </ul>
@@ -70,11 +68,6 @@
         </div>
         <footer class="my-5 pt-5 text-muted text-center text-small">
             <p class="mb-1">© {{ getYear() }} Universidad Veracruzana.</p>
-            <ul class="list-inline">
-                <li class="list-inline-item"><a href="#">Privacidad</a></li>
-                <li class="list-inline-item"><a href="#">Contacto</a></li>
-                <li class="list-inline-item"><a href="#">Soporte</a></li>
-            </ul>
         </footer>
     </div>
     </div>

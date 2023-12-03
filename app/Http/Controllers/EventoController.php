@@ -188,15 +188,17 @@ class EventoController extends Controller
                 DB::commit();
             } catch (\Throwable $e) {
                 DB::rollBack();
-                // Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar el evento."]]);
-                Session::flash('flash', [['type' => "danger", 'message' => $e->getMessage()]]);
+                Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar el evento."]]);
+                // Session::flash('flash', [['type' => "danger", 'message' => $e->getMessage()]]);
                 return redirect()->route('eventos.index');
             }
 
+            $input['sede'] = SedeEvento::get()->where('IdSedeEvento', $input['sede'])->first()->NombreSedeEvento;
+
             //EnviarCorreos
             $email = new \SendGrid\Mail\Mail(); 
-            $email->setFrom("zs18015382@estudiantes.uv.mx", "SistemaFCA");
-            $email->setSubject('Evento: Solicitud de aprobación para "'. $input['nombre'] . '"');
+            $email->setFrom("zs18015382@estudiantes.uv.mx", "SistemaFCA Eventos");
+            $email->setSubject('Solicitud de aprobación para "'. $input['nombre'] . '"');
             $email->addContent(
                 "text/html", view('emails.evento-registrado')->with('input',$input)->render()
             );
