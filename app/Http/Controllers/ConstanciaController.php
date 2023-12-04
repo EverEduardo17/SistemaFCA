@@ -486,7 +486,7 @@ class ConstanciaController extends Controller
         );
 
         $estudianteConstancia = $filename . "_" . $estudiante->MatriculaEstudiante;
-        $pathEstudiante = storage_path('app/constancias/' . $estudianteConstancia);
+        $pathEstudiante = storage_path('app/constancias/' . $estudianteConstancia . '.docx');
 
         $templateProcessor->saveAs($pathEstudiante);
 
@@ -495,16 +495,16 @@ class ConstanciaController extends Controller
         // exec("docto -f $pathEstudiante -O ". storage_path('app/constancias/') . " -T wdFormatPDF");
 
         //perfil de usuario temporal para soffice, por los permisos de /var/www/
-        $tempLibreOfficeProfile = sys_get_temp_dir() . "/LibreOfficeProfile" . rand(100000, 999999);
-        $cmd = 'soffice "-env:UserInstallation=file:///' . str_replace("\\", "/", $tempLibreOfficeProfile) . '" --convert-to pdf ' . $pathEstudiante . ' --outdir ' . storage_path('app/constancias/');
-        exec($cmd);
+        // $tempLibreOfficeProfile = sys_get_temp_dir() . "/LibreOfficeProfile" . rand(100000, 999999);
+        // $cmd = 'soffice "-env:UserInstallation=file:///' . str_replace("\\", "/", $tempLibreOfficeProfile) . '" --convert-to pdf ' . $pathEstudiante . ' --outdir ' . storage_path('app/constancias/');
+        // exec($cmd);
 
         
         // Eliminar archivos temporales
-        unlink($pathEstudiante);
+        // unlink($pathEstudiante);
         unlink($pathQr);
 
-        return $pathEstudiante . '.pdf';
+        return $pathEstudiante;
     }
 
     /**

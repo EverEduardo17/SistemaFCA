@@ -141,8 +141,8 @@
                                     <a class="btn btn-sm btn-outline-success mr-1" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
                                         <em class="fas fa-list"></em>
                                     </a>
-                                    <a class="btn btn-sm btn-outline-primary mr-1" href="{{ route('constancias.download', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Descargar PDF">
-                                        <em class="fas fa-file-pdf"></em>
+                                    <a class="btn btn-sm btn-outline-primary mr-1" href="{{ route('constancias.download', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Descargar Documento">
+                                        <em class="fas fa-file-alt"></em>
                                     </a>
                                     <a class="btn btn-sm btn-outline-danger btn-estudiante" href="#" data-toggle="modal" data-target="#delete" data-estudiante="{{ $estudiante->IdEstudiante }}" title="Quitar">
                                         <em class="fas fa-trash-alt"></em>
