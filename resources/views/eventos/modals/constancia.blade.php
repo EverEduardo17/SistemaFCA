@@ -1,5 +1,5 @@
 <div class="modal fade" id="addConstanciaEvento" tabindex="-1" role="dialog" aria-labelledby="fechaModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-success">
                 <h5 class="modal-title text-white" id="fechaModalLabel">Agregar Constancia</h5>
@@ -13,15 +13,46 @@
                     @include('layouts.validaciones')
                     <input type="hidden" name="evento" value="{{$evento->IdEvento}}">
 
-                    <div class="form-group">
-                        <label name="constancia">Constancia:</label>
-                        <select name="constancia" class="form-control @error('constancia') is-invalid @enderror">
-                            <option value="" disabled selected></option>
+                    <table class="table table-striped table-hover border-bottom" id="table-agregar-constancias">
+                        <caption>Constancias registradas en el sistema.</caption>
+                        <thead class="bg-table">
+                            <tr class="text-white">
+                                <th scope="col" class="border">Nombre</th>
+                                <th scope="col" class="border">Descripción</th>
+                                <th scope="col" class="border">Autor</th>
+                                <th scope="col" class="border">Vigente Hasta</th>
+                                
+                                {{-- @can('havepermiso', 'constancias-editar-propio') --}}
+                                    <th scope="col" class="border">Seleccionar</th>
+                                {{-- @endcan --}}
+                            </tr>
+                        </thead>
+                        <tbody>
                             @foreach ($constancias as $constancia)
-                                <option value="{{ $constancia->IdConstancia }}">{{ $constancia->NombreConstancia }}</option>
+                            <tr>
+                                <th scope="row" class="border-right border-left">
+                                    <a href="{{ route('constancias.show', $constancia->IdConstancia) }}">
+                                        {{ $constancia->NombreConstancia }}
+                                    </a>
+                                </th>
+        
+                                <td class="border-right">{{ $constancia->DescripcionConstancia }}</td>
+        
+                                <td class="border-right">
+                                    {{ $constancia->usuario->datosPersonales->ApellidoPaternoDatosPersonales }}
+                                    {{ $constancia->usuario->datosPersonales->ApellidoMaternoDatosPersonales }}
+                                    {{ $constancia->usuario->datosPersonales->NombreDatosPersonales }}
+                                </td>
+        
+                                <td class="border-right">{{ printDate(($constancia->VigenteHasta)) }}</td>
+        
+                                <td>
+                                    <input type="checkbox" name="constancias[]" value="{{ $constancia->IdConstancia }}" style="width: 2rem; height: 2rem;">
+                                </td>
+                            </tr>
                             @endforeach
-                        </select>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

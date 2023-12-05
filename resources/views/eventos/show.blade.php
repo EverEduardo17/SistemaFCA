@@ -396,6 +396,7 @@
             $('#table_responsable').DataTable();
             $('#table_participante').DataTable();
             $('#table_constancias').DataTable();
+            $('#table-agregar-constancias').DataTable();
         } );
 
 

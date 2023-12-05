@@ -8,33 +8,33 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
-class ConstanciaEventoController extends Controller
-{
-    public function store(Request $request) 
-    {
+class ConstanciaEventoController extends Controller {
+    public function store(Request $request) {
         Gate::authorize('havepermiso', 'eventos-vincular-constancias-propias');
 
         $request->validate([
-            'constancia' => 'required',
+            'constancias' => 'required',
             'evento' => 'required',
         ]);
 
         try {
-            $constanciaEvento = new ConstanciaEvento([
-                'IdConstancia' => $request->constancia,
-                'IdEvento' => $request->evento
-            ]);
-            $constanciaEvento->save();
+            foreach($request->constancias as $constancia) {
+                $constanciaEvento = new ConstanciaEvento([
+                    'IdConstancia' => $constancia,
+                    'IdEvento' => $request->evento
+                ]);
+                $constanciaEvento->save();
+            }
             Session::flash('flash', [['type' => "success", 'message' => "Constancia asignada al evento correctamente"]]);
             return redirect()->route('eventos.show', $request->evento);
         } catch (\Throwable $th) {
-            Session::flash('flash', [['type' => "danger", 'message' => "Error al asignar constancia al evento."]]);
+            $hola = "Error al asignar constancia al evento.";
+            Session::flash('flash', [['type' => "danger", 'message' => $th->getMessage()]]);
             return redirect()->route('eventos.show', $request->evento);
         }
     }
 
-    public function destroy(Request $request) 
-    {
+    public function destroy(Request $request) {
         Gate::authorize('havepermiso', 'eventos-vincular-constancias-propias');
 
         $request->validate([
