@@ -306,7 +306,10 @@
                         <div class="col-md-12">
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Constancias</h4>
-                                <div class="btn-group" role="group">
+                                <div class="" role="group">
+                                    @can('havepermiso', 'constancias-crear')
+                                        <a class="btn btn-info" href="{{ route('constancias.create') }}" role="button">Crear Constancia</a>
+                                    @endcan
                                     @can('havepermiso', 'eventos-vincular-constancias-propias')
                                         <button class="btn btn-success" data-toggle="modal" data-target="#addConstanciaEvento">Agregar Constancia</button>
                                     @endcan

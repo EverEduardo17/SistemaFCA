@@ -14,7 +14,7 @@
                     <input type="hidden" name="evento" value="{{$evento->IdEvento}}">
 
                     <table class="table table-striped table-hover border-bottom" id="table-agregar-constancias">
-                        <caption>Constancias registradas en el sistema.</caption>
+                        <caption>Constancias ya aprobadas.</caption>
                         <thead class="bg-table">
                             <tr class="text-white">
                                 <th scope="col" class="border">Nombre</th>
@@ -67,13 +67,13 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-danger">
-                <h5 class="modal-title text-white" id="exampleModalLabel">Eliminar Documento</h5>
+                <h5 class="modal-title text-white" id="exampleModalLabel">Eliminar Constancia</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Usted está por eliminar un documento del evento.</p>
+                <p>Usted está por eliminar una constancia del evento.</p>
                 <h5>¿Desea continuar?</h5>
                 <small class="text-danger"><-- Esta acción no se puede deshacer --></small>
                 <form id="form-eliminar-constancia" method="post" action="{{ route('eventos.constancias.eliminar', $evento->IdEvento) }}">
