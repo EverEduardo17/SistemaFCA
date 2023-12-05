@@ -55,7 +55,7 @@
                     <input name="Estado" type="text" class="form-control @error('VigenteHasta') is-invalid @enderror" value="{{ old('Estado', $constancia->EstadoConstancia) }}" disabled>
                     {{-- TODO: Reemplazar con permiso necesario correcto --}}
                     @if ($constancia->EstadoConstancia == 'PENDIENTE')
-                        @can('havepermiso', 'constacias-editar-propio')
+                        @can('havepermiso', 'constancias-aprobar-rechazar')
                             <a class="btn btn-sm btn-outline-success mx-1" data-toggle="modal" data-target="#aprobarConstancia{{ $constancia->IdConstancia }}" href="#" data-placement="bottom" title="Aprobar">
                                 <em><b>Aprobar</b></em>
                             </a>
@@ -100,9 +100,11 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Estudiantes</h5>
                 {{-- @can('havepermiso', 'estudiantes-detalles') --}}
-                <a href="#download" data-file-name="{{ $constancia->NombreConstancia }}"data-href="{{ route('constancias.downloadAll', $constancia) }}" class="btn btn-info ml-auto mr-3 download-all"><i class="fas fa-file-archive"></i>
-                    Descargar Todo
-                </a>
+                @if ($constancia->EstadoConstancia == 'APROBADO')
+                    <a href="#download" data-file-name="{{ $constancia->NombreConstancia }}"data-href="{{ route('constancias.downloadAll', $constancia) }}" class="btn btn-info ml-auto mr-3 download-all"><i class="fas fa-file-archive"></i>
+                        Descargar Todo
+                    </a>
+                @endif
                     <a class="btn btn-success col-3" href="{{ route('constancias.indexEstudiantes', $constancia) }}" role="button">Agregar Estudiantes</a>
                 {{-- @endcan --}}
             </div>
@@ -141,9 +143,11 @@
                                     <a class="btn btn-sm btn-outline-success mr-1" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
                                         <em class="fas fa-list"></em>
                                     </a>
-                                    <a class="btn btn-sm btn-outline-primary mr-1" href="{{ route('constancias.download', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Descargar Documento">
-                                        <em class="fas fa-file-alt"></em>
-                                    </a>
+                                    @if ($constancia->EstadoConstancia == 'APROBADO')
+                                        <a class="btn btn-sm btn-outline-primary mr-1" href="{{ route('constancias.download', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Descargar Documento">
+                                            <em class="fas fa-file-alt"></em>
+                                        </a>
+                                    @endif
                                     <a class="btn btn-sm btn-outline-danger btn-estudiante" href="#" data-toggle="modal" data-target="#delete" data-estudiante="{{ $estudiante->IdEstudiante }}" title="Quitar">
                                         <em class="fas fa-trash-alt"></em>
                                     </a>

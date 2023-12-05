@@ -23,9 +23,11 @@
             </h5>
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="javascript:history.back()" role="button">Regresar</a>
 
-            <a class="btn btn-primary col-4" href="{{ route('constancias.download', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" role="button">
-                Descargar Constancia
-            </a>
+            @if ($constancia->EstadoConstancia == 'APROBADO')
+                <a class="btn btn-primary col-4" href="{{ route('constancias.download', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" role="button">
+                    Descargar Constancia
+                </a>
+            @endif
         </div>
     </div>
     <div class="card-body">
@@ -44,6 +46,11 @@
         <p>
             <strong>Constancia:</strong> 
                 {{ $constancia->NombreConstancia }}
+        </p>
+
+        <p>
+            <strong>Estado:</strong>
+                {{ $constancia->EstadoConstancia }}
         </p>
         
         <br>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ConstanciaRequest;
+use App\Models\Academico;
 use App\Models\Constancia;
 use App\Models\ConstanciaEvento;
 use App\Models\Estudiante;
@@ -47,7 +48,7 @@ class ConstanciaController extends Controller
         return view('constancias.create');
     }
 
-   /**
+    /**
      * Almacena una nueva constancia en el sistema.
      *
      * @param \App\Http\Requests\ConstanciaRequest $request El objeto Request que contiene los datos de la constancia a almacenar.
@@ -67,7 +68,7 @@ class ConstanciaController extends Controller
 
         try {
             DB::beginTransaction();
-            
+
             $datos = [
                 'NombreConstancia' => $input['NombreConstancia'],
                 'DescripcionConstancia' => $input['DescripcionConstancia'],
@@ -85,9 +86,8 @@ class ConstanciaController extends Controller
             $filename = 'c_' . str_pad($idConstanciaDB, 5, '0', STR_PAD_LEFT) . '.docx';
 
             $plantilla = $request->file('Plantilla');
-            $plantilla->storeAs('constancias/' , $filename);
-        }
-        catch (\Throwable $throwable){
+            $plantilla->storeAs('constancias/', $filename);
+        } catch (\Throwable $throwable) {
             DB::rollBack();
             Session::flash('flash', [['type' => "danger", 'message' => $throwable->getMessage()]]);
             // Session::flash('flash', [['type' => "danger", 'message' => "Error al registrar la constancia."]]);
@@ -110,7 +110,7 @@ class ConstanciaController extends Controller
     public function show(Constancia $constancia)
     {
         Gate::authorize('havepermiso', 'constancias-detalles');
-   
+
         $estudiantes = $constancia->estudiantes;
 
         // Guardar los estudiantes en la sesión para downloadAll()
@@ -147,17 +147,17 @@ class ConstanciaController extends Controller
         $vigenteHasta = null;
 
         $input = $request->validate([
-            'NombreConstancia'        => 'required | string',
-            'DescripcionConstancia'   => 'required | string',
-            'VigenteHasta'            => 'nullable | date_format:d/m/Y',
-            'Plantilla'               => 'nullable | file | mimes:doc,docx',
+            'NombreConstancia' => 'required | string',
+            'DescripcionConstancia' => 'required | string',
+            'VigenteHasta' => 'nullable | date_format:d/m/Y',
+            'Plantilla' => 'nullable | file | mimes:doc,docx',
         ]);
 
         if ($request->hasFile('Plantilla')) {
-                $filename = 'c_' . str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT) . '.docx';
+            $filename = 'c_' . str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT) . '.docx';
 
-                $request->file('Plantilla')->storeAs('constancias' , $filename);
-            }
+            $request->file('Plantilla')->storeAs('constancias', $filename);
+        }
 
 
         if ($input['VigenteHasta'] !== null) {
@@ -165,7 +165,7 @@ class ConstanciaController extends Controller
         }
         try {
             DB::beginTransaction();
-            
+
             $datos = [
                 'NombreConstancia' => $input['NombreConstancia'],
                 'DescripcionConstancia' => $input['DescripcionConstancia'],
@@ -174,16 +174,15 @@ class ConstanciaController extends Controller
                 'Motivo' => null,
                 'UpdatedAt' => $timestamp,
             ];
-            
+
             // si la fecha no es nula, enviala a la BD
             if ($vigenteHasta !== null) {
                 $datos['VigenteHasta'] = $vigenteHasta;
-            }
-            else {
+            } else {
                 $datos['VigenteHasta'] = null;
             }
 
-            DB::table('Constancia')->where('IdConstancia',$constancia->IdConstancia)->update($datos);
+            DB::table('Constancia')->where('IdConstancia', $constancia->IdConstancia)->update($datos);
 
             DB::commit();
 
@@ -191,8 +190,7 @@ class ConstanciaController extends Controller
             if ($constanciaEvento) {
                 $constanciaEvento->delete();
             }
-        }
-        catch (\Throwable $throwable){
+        } catch (\Throwable $throwable) {
             DB::rollBack();
             Session::flash('flash', [['type' => "danger", 'message' => "Error, la constancia no pudo ser actualizada."]]);
             return redirect()->route('constancias.show', $constancia);
@@ -218,8 +216,7 @@ class ConstanciaController extends Controller
                 Session::flash('flash', [['type' => "danger", 'message' => "No tiene autorización para eliminar sus constancias."]]);
                 return redirect()->back();
             }
-        } 
-        else {
+        } else {
             if (!Auth::user()->can('havepermiso', 'constancias-eliminar-cualquiera')) {
                 Session::flash('flash', [['type' => "danger", 'message' => "No tiene autorización para eliminar constancias de otros."]]);
                 return redirect()->back();
@@ -278,7 +275,8 @@ class ConstanciaController extends Controller
      * @param \App\Models\Estudiante $estudiante La instancia del modelo de Estudiante.
      * @return \Illuminate\Contracts\View\View La vista que muestra los datos de la constancia y el estudiante.
      */
-    public function showEstudiante(Constancia $constancia, Estudiante $estudiante) {
+    public function showEstudiante(Constancia $constancia, Estudiante $estudiante)
+    {
         return view('constancias.estudiantes.showEstudiante', compact('constancia', 'estudiante'));
     }
 
@@ -289,13 +287,14 @@ class ConstanciaController extends Controller
      * @return \Illuminate\Contracts\View\View La vista que muestra la lista de grupos.
      * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene los permisos necesarios.
      */
-    public function indexGrupos(Constancia $constancia) {
+    public function indexGrupos(Constancia $constancia)
+    {
         Gate::authorize('havepermiso', 'constancias-detalles');
 
         $grupos = Grupo::all();
         return view('constancias.estudiantes.indexGrupos', compact('constancia', 'grupos'));
     }
-    
+
     /**
      * Muestra la lista de estudiantes para un grupo específico dentro de una constancia.
      *
@@ -304,7 +303,8 @@ class ConstanciaController extends Controller
      * @return \Illuminate\Contracts\View\View La vista que muestra la lista de estudiantes.
      * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene los permisos necesarios.
      */
-    public function indexEstudiantes(Constancia $constancia) {
+    public function indexEstudiantes(Constancia $constancia)
+    {
         Gate::authorize('havepermiso', 'constancias-editar-propio');
 
         $estudiantes = Estudiante::all();
@@ -313,12 +313,12 @@ class ConstanciaController extends Controller
     }
 
     /**
-    * Agrega o elimina un estudiante de una constancia.
-    * Si el estudiante ya está en la constancia, lo elimina. Este metodo es usado en indexEstudiantes.
-    *
-    * @param \Illuminate\Http\Request $request
-    * @return \Illuminate\Http\JsonResponse La respuesta JSON indica el resultado para poder hacer el cambio de manera reactiva con Javascript.
-    */
+     * Agrega o elimina un estudiante de una constancia.
+     * Si el estudiante ya está en la constancia, lo elimina. Este metodo es usado en indexEstudiantes.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse La respuesta JSON indica el resultado para poder hacer el cambio de manera reactiva con Javascript.
+     */
     public function addEstudianteConstancia(Request $request)
     {
         Gate::authorize('havepermiso', 'constancias-editar-propio');
@@ -349,7 +349,7 @@ class ConstanciaController extends Controller
     {
         Gate::authorize('havepermiso', 'constancias-eliminar-propio');
 
-        if($request->ajax()){
+        if ($request->ajax()) {
             $estudiante = Estudiante::findOrFail($idEstudiante);
             $constancia = Constancia::findOrFail($idConstancia);
             if ($estudiante->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists()) {
@@ -368,8 +368,13 @@ class ConstanciaController extends Controller
      * @param  \App\Models\Estudiante  $estudiante
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadConstancia(Constancia $constancia, Estudiante $estudiante) 
+    public function downloadConstancia(Constancia $constancia, Estudiante $estudiante)
     {
+        if ($constancia->EstadoConstancia != 'APROBADO') {
+            Session::flash('flash', [['type' => "danger", 'message' => "Error: Intenta generar una constancia que no está aprobada."]]);
+            return redirect()->back();
+        }
+
         $pathConstancia = $this->generarConstancia($constancia, $estudiante);
 
         return response()->download($pathConstancia)->deleteFileAfterSend(true);
@@ -382,8 +387,13 @@ class ConstanciaController extends Controller
      * @param  \App\Models\Constancia  $constancia  La constancia para la cual se generarán los archivos.
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\RedirectResponse La respuesta de descarga del archivo ZIP o la redirección a la página anterior en caso de error.
      */
-    public function downloadAllConstancias(Request $request, Constancia $constancia) 
+    public function downloadAllConstancias(Request $request, Constancia $constancia)
     {
+        if ($constancia->EstadoConstancia != 'APROBADO') {
+            Session::flash('flash', [['type' => "danger", 'message' => "Error: Intenta generar una constancia que no está aprobada."]]);
+            return redirect()->back();
+        }
+
         $estudiantes = $request->session()->get('estudiantes');
 
         $allPaths = [];
@@ -407,7 +417,7 @@ class ConstanciaController extends Controller
             foreach ($allPaths as $path) {
                 unlink($path);
             }
-            
+
             $request->session()->forget('estudiantes');
 
             // Descargar el archivo ZIP
@@ -418,49 +428,70 @@ class ConstanciaController extends Controller
     }
 
     // Metodos auxiliares
-    
+
     /**
-    * Generar la constancia con PHPWord de un estudiante específico.
-    *
-    * @param Constancia $constancia La constancia para la cual se generará el archivo.
-    * @param Estudiante $estudiante El estudiante para el cual se generará la constancia.
-    * @return string La ruta del archivo PDF generado.
-    */
-    public function generarConstancia(Constancia $constancia, Estudiante $estudiante) 
+     * Generar la constancia con PHPWord de un estudiante específico.
+     *
+     * @param Constancia $constancia La constancia para la cual se generará el archivo.
+     * @param Estudiante $estudiante El estudiante para el cual se generará la constancia.
+     * @return string La ruta del archivo PDF generado.
+     */
+    public function generarConstancia(Constancia $constancia, Estudiante $estudiante)
     {
         $filename = 'c_' . str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT);
         $pathPlantilla = storage_path('app/constancias/' . $filename . '.docx');
 
         $templateProcessor = new TemplateProcessor($pathPlantilla);
-        
+
         $sexo = $estudiante->usuario->datosPersonales->Genero;
 
         $pronombre = ($sexo === 'Mujer') ? 'la' : 'el';
         $o_a = ($sexo === 'Mujer') ? 'a' : 'o';
 
         $templateProcessor->setValues([
-            'nombre_estudiante'     => $estudiante->usuario->DatosPersonales->ApellidoPaternoDatosPersonales . ' ' . 
-                                       $estudiante->usuario->DatosPersonales->ApellidoMaternoDatosPersonales . ' ' . 
-                                       $estudiante->usuario->DatosPersonales->NombreDatosPersonales,
+            'nombre_estudiante' => $estudiante->usuario->DatosPersonales->ApellidoPaternoDatosPersonales . ' ' .
+                $estudiante->usuario->DatosPersonales->ApellidoMaternoDatosPersonales . ' ' .
+                $estudiante->usuario->DatosPersonales->NombreDatosPersonales,
 
-            'matricula'             => $estudiante->MatriculaEstudiante,
+            'matricula' => $estudiante->MatriculaEstudiante,
 
-            'programa_educativo'    => $estudiante->Trayectoria->ProgramaEducativo->NombreProgramaEducativo ?? $estudiante->usuario->password,
+            'programa_educativo' => $estudiante->Trayectoria->ProgramaEducativo->NombreProgramaEducativo ?? $estudiante->usuario->password,
 
-            'nombre_constancia'     => $constancia->NombreConstancia,
+            'nombre_constancia' => $constancia->NombreConstancia,
 
-            'el/la'                 => $pronombre,
+            'el/la' => $pronombre,
 
-            'o/a'                   => $o_a,
+            'o/a' => $o_a,
 
         ]);
 
         if ($constancia->VigenteHasta !== null) {
-            $templateProcessor->setValue('vigencia',printDate($constancia->VigenteHasta));
+            $templateProcessor->setValue('vigencia', printDate($constancia->VigenteHasta));
+        } else {
+            $templateProcessor->setValue('vigencia', 'Indefinida');
         }
-        else {
-            $templateProcessor->setValue('vigencia','Indefinida');
-        }
+
+        $users = \App\Models\Usuario::whereHas('roles', function ($query) {
+            $query->where('ClaveRole', 'LIKE', 'DIRECCIÓN');
+        })->get();
+
+        $pathFirma = public_path('storage/uploads/' . $users[0]->academico->Firma);
+
+        $templateProcessor->setImageValue(
+            'img_firma',
+            [
+                'path' => $pathFirma,
+                'width' => 150,
+                'height' => 150,
+                'ratio' => true,
+            ]
+        );
+
+        $nombre = $users[0]->datosPersonales->NombreDatosPersonales;
+        $apellidoPaterno = $users[0]->datosPersonales->ApellidoPaternoDatosPersonales;
+        $apellidoMaterno = $users[0]->datosPersonales->ApellidoMaternoDatosPersonales;
+
+        $templateProcessor->setValue('nombre_direccion', "$nombre $apellidoPaterno $apellidoMaterno");
 
         // $pathQr = public_path('constancias plantilla/QR.jpg');
         $pathQr = storage_path('app/constancias/' . $constancia->IdConstancia);
@@ -469,7 +500,7 @@ class ConstanciaController extends Controller
             ->format('png')
             ->generate(
                 route('constancias.showEstudiante', [
-                    'constancia' => $constancia->IdConstancia, 
+                    'constancia' => $constancia->IdConstancia,
                     'estudiante' => $estudiante->IdEstudiante
                 ]),
                 $pathQr
@@ -499,7 +530,7 @@ class ConstanciaController extends Controller
         // $cmd = 'soffice "-env:UserInstallation=file:///' . str_replace("\\", "/", $tempLibreOfficeProfile) . '" --convert-to pdf ' . $pathEstudiante . ' --outdir ' . storage_path('app/constancias/');
         // exec($cmd);
 
-        
+
         // Eliminar archivos temporales
         // unlink($pathEstudiante);
         unlink($pathQr);
@@ -512,12 +543,12 @@ class ConstanciaController extends Controller
      *
      * @return \Illuminate\View\View La vista de la lista de constancias pendientes de aprobación.
      */
-    public function indexAprobar() 
+    public function indexAprobar()
     {
         Gate::authorize('havepermiso', 'constancias-aprobar-rechazar');
 
         $constancias = Constancia::with('usuario.datosPersonales')->where('EstadoConstancia', 'Pendiente')->get();
-        
+
         return view('constancias.aprobar', compact('constancias'));
     }
 
@@ -528,7 +559,7 @@ class ConstanciaController extends Controller
      * @throws \Throwable Si ocurre un error durante el proceso.
      * @return \Illuminate\Http\RedirectResponse La respuesta de redirección a la página de aprobación de constancia.
      */
-    public function aprobarConstancia($id) 
+    public function aprobarConstancia($id)
     {
         Gate::authorize('havepermiso', 'constancias-aprobar-rechazar');
 
@@ -551,7 +582,7 @@ class ConstanciaController extends Controller
      * @throws \Throwable Si ocurre un error durante el proceso.
      * @return \Illuminate\Http\RedirectResponse La respuesta de redirección a la página de aprobación de constancias.
      */
-    public function rechazarConstancia(Request $request, $id) 
+    public function rechazarConstancia(Request $request, $id)
     {
         Gate::authorize('havepermiso', 'constancias-aprobar-rechazar');
 
@@ -583,11 +614,12 @@ class ConstanciaController extends Controller
      */
     private function enviarCorreos($input)
     {
-        $email = new \SendGrid\Mail\Mail(); 
+        $email = new \SendGrid\Mail\Mail();
         $email->setFrom("zs18015382@estudiantes.uv.mx", "SistemaFCA Constancias");
-        $email->setSubject('Solicitud de aprobación para "'. $input['NombreConstancia'] . '"');
+        $email->setSubject('Solicitud de aprobación para "' . $input['NombreConstancia'] . '"');
         $email->addContent(
-            "text/html", view('emails.constancia-registrada')->with('input',$input)->render()
+            "text/html",
+            view('emails.constancia-registrada')->with('input', $input)->render()
         );
         $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
 
