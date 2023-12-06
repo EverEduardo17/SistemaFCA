@@ -12,7 +12,8 @@
       <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
         <div class="accordion-body">
             <div class="ratio ratio-21x9">
-                <iframe width="560" height="315" src="/videos/ver_eventos.mp4" title="Video para v" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              <video src="/videos/ver_eventos.mp4" controls>
+              </video>
               </div>
         </div>
       </div>
@@ -27,7 +28,9 @@
       <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
         <div class="accordion-body">
             <div class="ratio ratio-21x9">
-                <iframe width="560" height="315" src="/videos/eventos.mp4" title="Video para v" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              <video src="/videos/eventos.mp4" controls>
+
+              </video>
               </div>
         </div>
       </div>
@@ -42,7 +45,9 @@
       <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
         <div class="accordion-body">
             <div class="ratio ratio-21x9">
-                <iframe width="560" height="315" src="/videos/editar.mp4" title="Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              <video src="/videos/editar.mp4" controls>
+
+              </video>
               </div>
         </div>
       </div>
