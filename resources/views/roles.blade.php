@@ -116,7 +116,7 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText); // Log the error to the console
+                    // console.error(xhr.responseText);
                 }
             });
         });
