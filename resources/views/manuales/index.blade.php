@@ -12,7 +12,7 @@
       <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
         <div class="accordion-body">
             <div class="ratio ratio-21x9">
-              <video src="/videos/ver_eventos.mp4" controls>
+              <video src="/videos/eventos_vistas.mp4" controls>
               </video>
               </div>
         </div>
@@ -46,6 +46,41 @@
         <div class="accordion-body">
             <div class="ratio ratio-21x9">
               <video src="/videos/editar.mp4" controls>
+
+              </video>
+              </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingTwo">
+        <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          Como aprobar un evento
+        </button>
+      </h2>
+      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <div class="ratio ratio-21x9">
+              <video src="/videos/aprobar.mp4" controls>
+
+              </video>
+              </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingTwo">
+        <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          Como rechazar un evento.
+        </button>
+      </h2>
+      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <div class="ratio ratio-21x9">
+              <video src="/videos/rechazar_evento.mp4" controls>
 
               </video>
               </div>
