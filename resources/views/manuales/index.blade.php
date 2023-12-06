@@ -6,13 +6,13 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Como ver los eventos
+          Ver los eventos
         </button>
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
         <div class="accordion-body">
             <div class="ratio ratio-21x9">
-              <video src="/videos/ver_eventos.mp4" controls>
+              <video src="/videos/eventos_vistas.mp4" controls>
               </video>
               </div>
         </div>
@@ -22,7 +22,7 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingTwo">
         <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          Como crear un evento
+          Crear un evento
         </button>
       </h2>
       <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
@@ -39,7 +39,7 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingThree">
         <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-          Como editar un evento
+          Editar un evento
         </button>
       </h2>
       <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
@@ -174,6 +174,41 @@
 
 
 
+
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingFour">
+        <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+          Aprobar un evento
+        </button>
+      </h2>
+      <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <div class="ratio ratio-21x9">
+              <video src="/videos/aprobar.mp4" controls>
+
+              </video>
+              </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingFive">
+        <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+          Rechazar un evento.
+        </button>
+      </h2>
+      <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <div class="ratio ratio-21x9">
+              <video src="/videos/rechazar_evento.mp4" controls>
+
+              </video>
+              </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 @endsection
