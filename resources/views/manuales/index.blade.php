@@ -52,6 +52,128 @@
         </div>
       </div>
     </div>
+    
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingThree">
+        <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+          Inicio de sesión
+        </button>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <div class="ratio ratio-21x9">
+              <video src="/videos/Login.mp4" controls>
+
+              </video>
+              </div>
+        </div>
+      </div>
+    </div>
+
+    div class="accordion-item">
+      <h2 class="accordion-header" id="headingThree">
+        <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+          Agregar constancia
+        </button>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <div class="ratio ratio-21x9">
+              <video src="/videos/agregar_constancia.mp4" controls>
+
+              </video>
+              </div>
+        </div>
+      </div>
+    </div>
+
+    div class="accordion-item">
+      <h2 class="accordion-header" id="headingThree">
+        <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+          Editar constancia
+        </button>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <div class="ratio ratio-21x9">
+              <video src="/videos/editar_constancia.mp4" controls>
+
+              </video>
+              </div>
+        </div>
+      </div>
+    </div>
+
+    div class="accordion-item">
+      <h2 class="accordion-header" id="headingThree">
+        <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+          Eliminar constancia
+        </button>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <div class="ratio ratio-21x9">
+              <video src="/videos/eliminar_constancia.mp4" controls>
+
+              </video>
+              </div>
+        </div>
+      </div>
+    </div>
+
+    div class="accordion-item">
+      <h2 class="accordion-header" id="headingThree">
+        <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+          Aprobar constancia
+        </button>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <div class="ratio ratio-21x9">
+              <video src="/videos/aprobar_constancia.mp4" controls>
+
+              </video>
+              </div>
+        </div>
+      </div>
+    </div>
+
+    div class="accordion-item">
+      <h2 class="accordion-header" id="headingThree">
+        <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+          Rechazar constancia
+        </button>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <div class="ratio ratio-21x9">
+              <video src="/videos/rechazar_constancia.mp4" controls>
+
+              </video>
+              </div>
+        </div>
+      </div>
+    </div>
+
+    div class="accordion-item">
+      <h2 class="accordion-header" id="headingThree">
+        <button class="accordion-button collapsed text-white bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+          Agregar estudiante
+        </button>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <div class="ratio ratio-21x9">
+              <video src="/videos/agregar_estudiante.mp4" controls>
+
+              </video>
+              </div>
+        </div>
+      </div>
+    </div>
+
+
+
 
   </div>
 @endsection
