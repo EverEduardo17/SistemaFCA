@@ -97,8 +97,13 @@ class AcademicoController extends Controller
 
         $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
 
+        $rol = $academico->usuario->roles()->pluck('ClaveRole')->toArray();
+        $esDirectivo = in_array('DIRECCIÓN', $rol);
+
+
         return view('academicos.show', [
             "academico" => $academico,
+            "esDirectivo" => $esDirectivo
         ]);
     }
 

@@ -78,6 +78,18 @@
                 <label name="email">Correo electrónico:</label>
                 <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $academico->usuario->email) }}" disabled>
             </div>
+
+            @if($esDirectivo)
+
+            <hr>
+                <div class="form-group">
+                    <label for="Firma">Imagen firma:</label> <br>
+                </div>
+                @if ($academico->Firma)
+                    <img src="{{ asset('storage/uploads/'.$academico->Firma) }}" height="100px" class="mb-3" alt="Firma de dirección">
+                @endif
+            @endif
+
             @can('havepermiso', 'academicos-detalles')    
                 <a href="{{ route('academicos.edit', $academico) }}" class="btn btn-primary btn-block">Editar Académico</a>            
             @endcan

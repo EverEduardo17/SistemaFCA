@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ConstanciaRequest;
-use App\Models\Academico;
 use App\Models\Constancia;
 use App\Models\ConstanciaEvento;
 use App\Models\Estudiante;
 use App\Models\Grupo;
+use App\Models\Usuario;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 use PhpOffice\PhpWord\TemplateProcessor;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Microsoft\Graph\Graph;
 
 
 class ConstanciaController extends Controller {
@@ -106,12 +105,12 @@ class ConstanciaController extends Controller {
     public function show(Constancia $constancia) {
         Gate::authorize('havepermiso', 'constancias-detalles');
 
-        $estudiantes = $constancia->estudiantes;
+        $usuarios = $constancia->usuarios;
 
-        // Guardar los estudiantes en la sesión para downloadAll()
-        session()->put('estudiantes', $estudiantes);
+        // Guardar los usuarios en la sesión para downloadAll()
+        session()->put('usuarios', $usuarios);
 
-        return view('constancias.show', compact('constancia', 'estudiantes'));
+        return view('constancias.show', compact('constancia', 'usuarios'));
     }
 
     /**
@@ -262,11 +261,11 @@ class ConstanciaController extends Controller {
      * Esta es la vista a la que se redirige cuando se escanea el código QR de la constancia.
      *
      * @param \App\Models\Constancia $constancia La instancia del modelo de Constancia.
-     * @param \App\Models\Estudiante $estudiante La instancia del modelo de Estudiante.
+     * @param \App\Models\Estudiante $usuario La instancia del modelo de Estudiante.
      * @return \Illuminate\Contracts\View\View La vista que muestra los datos de la constancia y el estudiante.
      */
-    public function showEstudiante(Constancia $constancia, Estudiante $estudiante) {
-        return view('constancias.estudiantes.showEstudiante', compact('constancia', 'estudiante'));
+    public function showEstudiante(Constancia $constancia, Usuario $usuario) {
+        return view('constancias.estudiantes.showEstudiante', compact('constancia', 'usuario'));
     }
 
     /**
@@ -294,9 +293,9 @@ class ConstanciaController extends Controller {
     public function indexEstudiantes(Constancia $constancia) {
         Gate::authorize('havepermiso', 'constancias-editar-propio');
 
-        $estudiantes = Estudiante::all();
+        $usuarios = Usuario::all();
 
-        return view('constancias.estudiantes.indexEstudiantes', compact('constancia', 'estudiantes'));
+        return view('constancias.estudiantes.indexEstudiantes', compact('constancia', 'usuarios'));
     }
 
     /**
@@ -309,15 +308,17 @@ class ConstanciaController extends Controller {
     public function addEstudianteConstancia(Request $request) {
         Gate::authorize('havepermiso', 'constancias-editar-propio');
 
-        $idEstudiante = $request->input('idEstudiante');
+        $idUsuario = $request->input('idUsuario');
         $idConstancia = $request->input('idConstancia');
-        $estudiante = Estudiante::findOrFail($idEstudiante);
+        $usuario = Usuario::findOrFail($idUsuario);
         $constancia = Constancia::findOrFail($idConstancia);
-        if($estudiante->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists()) {
-            $estudiante->constancias()->detach($constancia);
+
+        if($usuario->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists()) {
+            $usuario->constancias()->detach($constancia);
             $success = false;
-        } else {
-            $estudiante->constancias()->attach($constancia);
+        } 
+        else {
+            $usuario->constancias()->attach($constancia);
             $success = true;
         }
         return response()->json(['success' => $success]);
@@ -350,16 +351,16 @@ class ConstanciaController extends Controller {
      * Descarga la constancia generada para un estudiante en particular.
      *
      * @param  \App\Models\Constancia  $constancia
-     * @param  \App\Models\Estudiante  $estudiante
+     * @param  \App\Models\Usuario  $usuario
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadConstancia(Constancia $constancia, Estudiante $estudiante) {
+    public function downloadConstancia(Constancia $constancia, Usuario $usuario) {
         if($constancia->EstadoConstancia != 'APROBADO') {
             Session::flash('flash', [['type' => "danger", 'message' => "Error: Intenta generar una constancia que no está aprobada."]]);
             return redirect()->back();
         }
 
-        $pathConstancia = $this->generarConstancia($constancia, $estudiante);
+        $pathConstancia = $this->generarConstancia($constancia, $usuario);
 
         return response()->download($pathConstancia)->deleteFileAfterSend(true);
     }
@@ -377,11 +378,11 @@ class ConstanciaController extends Controller {
             return redirect()->back();
         }
 
-        $estudiantes = $request->session()->get('estudiantes');
+        $usuarios = $request->session()->get('usuarios');
 
         $allPaths = [];
-        foreach($estudiantes as $estudiante) {
-            $allPaths[] = $this->generarConstancia($constancia, $estudiante);
+        foreach($usuarios as $usuario) {
+            $allPaths[] = $this->generarConstancia($constancia, $usuario);
         }
 
         $zip = new \ZipArchive();
@@ -401,7 +402,7 @@ class ConstanciaController extends Controller {
                 unlink($path);
             }
 
-            $request->session()->forget('estudiantes');
+            $request->session()->forget('usuarios');
 
             // Descargar el archivo ZIP
             return response()->download($zipFileName)->deleteFileAfterSend(true);
@@ -416,28 +417,28 @@ class ConstanciaController extends Controller {
      * Generar la constancia con PHPWord de un estudiante específico.
      *
      * @param Constancia $constancia La constancia para la cual se generará el archivo.
-     * @param Estudiante $estudiante El estudiante para el cual se generará la constancia.
+     * @param Usuario $usuario El usuario para el cual se generará la constancia.
      * @return string La ruta del archivo PDF generado.
      */
-    public function generarConstancia(Constancia $constancia, Estudiante $estudiante) {
+    public function generarConstancia(Constancia $constancia, Usuario $usuario) {
         $filename = 'c_'.str_pad($constancia->IdConstancia, 5, '0', STR_PAD_LEFT);
         $pathPlantilla = storage_path('app/constancias/'.$filename.'.docx');
 
         $templateProcessor = new TemplateProcessor($pathPlantilla);
 
-        $sexo = $estudiante->usuario->datosPersonales->Genero;
+        $sexo = $usuario->datosPersonales->Genero;
 
         $pronombre = ($sexo === 'Mujer') ? 'la' : 'el';
         $o_a = ($sexo === 'Mujer') ? 'a' : 'o';
 
         $templateProcessor->setValues([
-            'nombre_estudiante' => $estudiante->usuario->DatosPersonales->ApellidoPaternoDatosPersonales.' '.
-                $estudiante->usuario->DatosPersonales->ApellidoMaternoDatosPersonales.' '.
-                $estudiante->usuario->DatosPersonales->NombreDatosPersonales,
+            'nombre_participante' => $usuario->DatosPersonales->ApellidoPaternoDatosPersonales.' '.
+                $usuario->DatosPersonales->ApellidoMaternoDatosPersonales.' '.
+                $usuario->DatosPersonales->NombreDatosPersonales,
 
-            'matricula' => $estudiante->MatriculaEstudiante,
+            'matricula' => $usuario->Estudiante->MatriculaEstudiante ?? $usuario->Academico->NoPersonalAcademico,
 
-            'programa_educativo' => $estudiante->Trayectoria->ProgramaEducativo->NombreProgramaEducativo ?? $estudiante->usuario->password,
+            'programa_educativo' => $usuario->Estudiante->Trayectoria->ProgramaEducativo->NombreProgramaEducativo ?? $usuario->password,
 
             'nombre_constancia' => $constancia->NombreConstancia,
 
@@ -453,27 +454,33 @@ class ConstanciaController extends Controller {
             $templateProcessor->setValue('vigencia', 'Indefinida');
         }
 
-        $users = \App\Models\Usuario::whereHas('roles', function ($query) {
+        $users = Usuario::whereHas('roles', function ($query) {
             $query->where('ClaveRole', 'LIKE', 'DIRECCIÓN');
         })->get();
 
-        $pathFirma = storage_path('app/public/uploads/'.$users[0]->academico->Firma);
+        if($users->count() !== 0) {
+            $pathFirma = storage_path('app/public/uploads/'.$users[0]->academico->Firma);
+            
+            $templateProcessor->setImageValue(
+                'img_firma',
+                [
+                    'path' => $pathFirma,
+                    'width' => 150,
+                    'height' => 150,
+                    'ratio' => true,
+                ]
+            );
 
-        $templateProcessor->setImageValue(
-            'img_firma',
-            [
-                'path' => $pathFirma,
-                'width' => 150,
-                'height' => 150,
-                'ratio' => true,
-            ]
-        );
+            $nombre = $users[0]->datosPersonales->NombreDatosPersonales;
+            $apellidoPaterno = $users[0]->datosPersonales->ApellidoPaternoDatosPersonales;
+            $apellidoMaterno = $users[0]->datosPersonales->ApellidoMaternoDatosPersonales;
 
-        $nombre = $users[0]->datosPersonales->NombreDatosPersonales;
-        $apellidoPaterno = $users[0]->datosPersonales->ApellidoPaternoDatosPersonales;
-        $apellidoMaterno = $users[0]->datosPersonales->ApellidoMaternoDatosPersonales;
-
-        $templateProcessor->setValue('nombre_direccion', "$nombre $apellidoPaterno $apellidoMaterno");
+            $templateProcessor->setValue('nombre_direccion', "$nombre $apellidoPaterno $apellidoMaterno");
+        }
+        else {
+            $templateProcessor->setValue('nombre_direccion', "Error: No se encontró ningún director en el sistema, contacte al administrador.");
+            $templateProcessor->setValue('img_firma', "__");
+        }
 
         // $pathQr = public_path('constancias plantilla/QR.jpg');
         $pathQr = storage_path('app/constancias/'.$constancia->IdConstancia);
@@ -483,7 +490,7 @@ class ConstanciaController extends Controller {
             ->generate(
                 route('constancias.showEstudiante', [
                     'constancia' => $constancia->IdConstancia,
-                    'estudiante' => $estudiante->IdEstudiante
+                    'usuario' => $usuario->IdUsuario
                 ]),
                 $pathQr
             );
@@ -498,7 +505,7 @@ class ConstanciaController extends Controller {
             ]
         );
 
-        $estudianteConstancia = $filename."_".$estudiante->MatriculaEstudiante;
+        $estudianteConstancia = $filename."_".$usuario->name;
         $pathEstudiante = storage_path('app/constancias/'.$estudianteConstancia.'.docx');
 
         $templateProcessor->saveAs($pathEstudiante);
@@ -601,7 +608,7 @@ class ConstanciaController extends Controller {
         );
         $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
 
-        $users = \App\Models\Usuario::whereHas('roles', function ($query) {
+        $users = Usuario::whereHas('roles', function ($query) {
             $query->where('ClaveRole', 'LIKE', 'CONTROL-GÉNERAL')
                 ->orWhere('ClaveRole', 'LIKE', 'CONTROL-CONSTANCIAS');
         })->get();

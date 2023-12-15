@@ -98,22 +98,20 @@
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title">Estudiantes</h5>
-                {{-- @can('havepermiso', 'estudiantes-detalles') --}}
+                <h5 class="card-title">Participantes</h5>
                 @if ($constancia->EstadoConstancia == 'APROBADO')
                     <a href="#download" data-file-name="{{ $constancia->NombreConstancia }}"data-href="{{ route('constancias.downloadAll', $constancia) }}" class="btn btn-info ml-auto mr-3 download-all"><i class="fas fa-file-archive"></i>
                         Descargar Todo
                     </a>
                 @endif
-                    <a class="btn btn-success col-3" href="{{ route('constancias.indexEstudiantes', $constancia) }}" role="button">Agregar Estudiantes</a>
-                {{-- @endcan --}}
+                    <a class="btn btn-success col-3" href="{{ route('constancias.indexEstudiantes', $constancia) }}" role="button">Agregar Participantes</a>
             </div>
         </div>
 
             <div class="card-body">
                 <div class="table-responsive-xl">
                     <table class="table table-striped table-hover border-bottom" id="table-jquery">
-                        <caption>Estudiantes que agregados a la constancia {{ $constancia->NombreConstancia }}.</caption>
+                        <caption>Usuarios que agregados a la constancia {{ $constancia->NombreConstancia }}.</caption>
                         <thead class="bg-table">
                             <tr class="text-white">
                                 <th scope="col" class="border">Matrícula</th>
@@ -123,32 +121,32 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($estudiantes as $estudiante)
-                            <tr id="fila-{{ $estudiante->IdEstudiante }}">
+                            @foreach ($usuarios as $usuario)
+                            <tr id="fila-{{ $usuario->IdUsuario }}">
                                 <th scope="row" class="border-right border-left">
-                                    <a href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}">
-                                        {{ $estudiante->MatriculaEstudiante }}
+                                    <a href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'usuario' => $usuario->IdUsuario]) }}">
+                                        {{ $usuario->name }}
                                     </a>
                                 </th>
 
                                 <td class="border-right">
-                                    {{ optional($estudiante->Usuario->DatosPersonales)->ApellidoPaternoDatosPersonales }}
-                                    {{ optional($estudiante->Usuario->DatosPersonales)->ApellidoMaternoDatosPersonales }}
-                                    {{ optional($estudiante->Usuario->DatosPersonales)->NombreDatosPersonales }}
+                                    {{ optional($usuario->DatosPersonales)->ApellidoPaternoDatosPersonales }}
+                                    {{ optional($usuario->DatosPersonales)->ApellidoMaternoDatosPersonales }}
+                                    {{ optional($usuario->DatosPersonales)->NombreDatosPersonales }}
                                 </td>
 
-                                <td class="border-right">{{ optional($estudiante->Usuario->datosPersonales)->Genero }}</td>
+                                <td class="border-right">{{ optional($usuario->datosPersonales)->Genero }}</td>
 
                                 <td class="py-2 btn-group border-right">
-                                    <a class="btn btn-sm btn-outline-success mr-1" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => $estudiante->IdEstudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
+                                    <a class="btn btn-sm btn-outline-success mr-1" href="{{ route('constancias.showEstudiante', ['constancia' => $constancia->IdConstancia, 'usuario' => $usuario->IdUsuario]) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
                                         <em class="fas fa-list"></em>
                                     </a>
                                     @if ($constancia->EstadoConstancia == 'APROBADO')
-                                        <a class="btn btn-sm btn-outline-primary mr-1" href="{{ route('constancias.download', ['constancia' => $constancia, 'estudiante' => $estudiante]) }}" data-toggle="tooltip" data-placement="bottom" title="Descargar Documento">
+                                        <a class="btn btn-sm btn-outline-primary mr-1" href="{{ route('constancias.download', ['constancia' => $constancia, 'usuario' => $usuario]) }}" data-toggle="tooltip" data-placement="bottom" title="Descargar Documento">
                                             <em class="fas fa-file-alt"></em>
                                         </a>
                                     @endif
-                                    <a class="btn btn-sm btn-outline-danger btn-estudiante" href="#" data-toggle="modal" data-target="#delete" data-estudiante="{{ $estudiante->IdEstudiante }}" title="Quitar">
+                                    <a class="btn btn-sm btn-outline-danger btn-usuario" href="#" data-toggle="modal" data-target="#delete" data-usuario="{{ $usuario->IdUsuario }}" title="Quitar">
                                         <em class="fas fa-trash-alt"></em>
                                     </a>
                                 </td>
@@ -171,20 +169,19 @@
 @section('script')
     <script type="text/javascript" src="{{asset('lib/datatables/js/jquery.dataTables.min.js')}}" defer></script>
     <script src="{{ asset('js/table-script.js') }}"></script>
-    <script src="{{ asset('js/constancias-scripts/delete-estudiante.js') }}"></script>
+    <script src="{{ asset('js/constancias-scripts/delete-usuario.js') }}"></script>
     <script src="{{ asset('js/constancias-scripts/download-all.js') }}"></script>
     
     <script>
-        // Actualizar el modal, a que estudiante borrar
-        $(document).on('click', '.btn-estudiante', function (e) {
-            var idEstudiante = $(this).data('estudiante');
+        $(document).on('click', '.btn-usuario', function (e) {
+            var IdUsuario = $(this).data('usuario');
             var btnConstancia = $(".btn-constancia");
 
-            btnConstancia.data('estudiante', idEstudiante);
+            btnConstancia.data('usuario', IdUsuario);
 
-            var url = "{{ route('constancias.destroyEstudiante', ['constancia' => $constancia->IdConstancia, 'estudiante' => "/"]) }}"
+            var url = "{{ route('constancias.destroyEstudiante', ['constancia' => $constancia->IdConstancia, 'usuario' => "/"]) }}"
 
-            url += '/' + idEstudiante;
+            url += '/' + IdUsuario;
             
             btnConstancia.data('url', url);
         });

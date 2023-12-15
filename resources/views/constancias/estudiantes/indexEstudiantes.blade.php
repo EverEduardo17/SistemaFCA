@@ -9,14 +9,14 @@
 
 
 @section('content')
-{{-- {{ dd($estudiantes) }} --}}
+{{-- {{ dd($usuarios) }} --}}
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('constancias.index') }}">Constancias</a></li>
         <li class="breadcrumb-item"><a href="{{ route('constancias.show', $constancia->IdConstancia) }}">{{ $constancia->NombreConstancia }}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Estudiantes</li>
+        <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
     </ol>
 </nav>
 
@@ -25,7 +25,7 @@
         <div class="d-flex justify-content-between align-items-center">
 
             <h5 class="card-title">
-                <strong> Estudiantes</strong>
+                <strong>Usuarios</strong>
             </h5>
 
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('constancias.show', $constancia->IdConstancia) }}" role="button">Regresar</a>
@@ -42,11 +42,11 @@
         <div class="table-responsive-xl">
 
         <table class="table table-striped table-hover border-bottom border-right" id="table-jquery">
-            <caption>Estudiantes registrados en el sistema.</caption>
+            <caption>Usuarios registrados en el sistema.</caption>
 
             <thead class="bg-table">
             <tr class="text-white">
-                <th scope="col" class="border">Matrícula</th>
+                <th scope="col" class="border">Usuario</th>
                 <th scope="col" class="border">Nombre</th>
                 <th scope="col" class="border">Rol</th>
                 <th scope="col" class="border actions-col">Acciones</th>
@@ -54,20 +54,20 @@
             </thead>
 
             <tbody>
-            @foreach ($estudiantes as $estudiante)
+            @foreach ($usuarios as $usuario)
 
                 <tr>
-                    <th scope="row" class="border-right border-left">{{ $estudiante->MatriculaEstudiante }}</th>
+                    <th scope="row" class="border-right border-left">{{ $usuario->name }}</th>
                     <td class="border-right">
-                        {{ optional($estudiante->usuario->datosPersonales)->ApellidoPaternoDatosPersonales }}
-                        {{ optional($estudiante->usuario->datosPersonales)->ApellidoMaternoDatosPersonales }}
-                        {{ optional($estudiante->usuario->datosPersonales)->NombreDatosPersonales }} 
+                        {{ optional($usuario->datosPersonales)->ApellidoPaternoDatosPersonales }}
+                        {{ optional($usuario->datosPersonales)->ApellidoMaternoDatosPersonales }}
+                        {{ optional($usuario->datosPersonales)->NombreDatosPersonales }} 
                     </td>
-                    <td class="border-right">{{ $estudiante->usuario->roles[0]->ClaveRole ?? "" }}</td>
+                    <td class="border-right">{{ $usuario->roles[0]->ClaveRole ?? "" }}</td>
 
                     <td class="btn-group btn-group-sm">
-                        <a href="#" data-estudiante="{{ $estudiante->IdEstudiante }}" class="btn btn-constancia btn-sm
-                            @if ($estudiante->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists())
+                        <a href="#" data-usuario="{{ $usuario->IdUsuario }}" class="btn btn-constancia btn-sm
+                            @if ($usuario->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists())
                                 btn-danger">
                                     Eliminar
                             @else
@@ -97,29 +97,29 @@
     $(function() {
         $('.btn-constancia').on('click', function(e) {
             e.preventDefault();
-            var idEstudiante = $(this).data('estudiante');
+            var idUsuario = $(this).data('usuario');
             var url = '{{ route("constancias.addEstudiante") }}';
             $.ajax({
                 url: url,
                 method: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
-                    idEstudiante: idEstudiante,
+                    idUsuario: idUsuario,
                     idConstancia: '{{ $constancia->IdConstancia }}'
                 },
                 success: function(data) {
                     if (data.success) {
-                        $('.btn-constancia[data-estudiante="' + idEstudiante + '"]')
+                        $('.btn-constancia[data-usuario="' + idUsuario + '"]')
                             .removeClass('btn-success')
                             .addClass('btn-danger')
                             .text('Eliminar');
-                            toastr.success('Estudiante agregado a la constancia correctamente.', 'Accion realizada con éxito'); // Mostrar notificación de éxito
+                            toastr.success('Usuario agregado a la constancia correctamente.', 'Accion realizada con éxito'); // Mostrar notificación de éxito
                     } else {
-                        $('.btn-constancia[data-estudiante="' + idEstudiante + '"]')
+                        $('.btn-constancia[data-usuario="' + idUsuario + '"]')
                             .removeClass('btn-danger')
                             .addClass('btn-success')
                             .text('Agregar');
-                            toastr.warning('Estudiante eliminado de la constancia correctamente.', 'Accion realizada con éxito'); // Mostrar notificación de éxito
+                            toastr.warning('Usuario eliminado de la constancia correctamente.', 'Accion realizada con éxito'); // Mostrar notificación de éxito
                     }
                 }
             });

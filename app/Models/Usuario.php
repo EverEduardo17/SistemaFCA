@@ -45,17 +45,30 @@ class Usuario extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function academico(){
+    public function academico()
+    {
         return $this->belongsTo(Academico::class, 'IdUsuario', 'IdUsuario');
     }
 
-    public function datosPersonales(){
+    public function datosPersonales()
+    {
         return $this->belongsTo(DatosPersonales::class, 'IdUsuario', 'IdUsuario');
+    }
+
+    public function estudiante()
+    {
+        return $this->belongsTo(Estudiante::class, 'IdUsuario', 'IdUsuario');
     }
 
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'Role_Usuario', 'IdUsuario', 'IdRole')
                     ->withPivot('CreatedAt', 'UpdatedAt');
+    }
+
+    public function constancias()
+    {
+        return $this->belongsToMany(Constancia::class, 'constancia_estudiante', 'IdEstudiante', 'IdConstancia')
+                    ->withPivot('created_at', 'updated_at');
     }
 }

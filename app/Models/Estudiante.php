@@ -26,10 +26,4 @@ class Estudiante extends Model
         return $this->belongsTo(Trayectoria::class, 'IdEstudiante', 'IdEstudiante');
     }
 
-    public function constancias()
-    {
-        return $this->belongsToMany(Constancia::class, 'constancia_estudiante', 'IdEstudiante', 'IdConstancia')
-                    ->withPivot('created_at', 'updated_at');
-    }
-
 }

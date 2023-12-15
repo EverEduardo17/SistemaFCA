@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('constancia_estudiante', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdConstancia')->references('IdConstancia')->on('Constancia');
-            $table->foreignId('IdEstudiante')->references('IdEstudiante')->on('Estudiante');
+            $table->foreignId('IdEstudiante')->references('IdUsuario')->on('Usuario');
             $table->timestamps();
         });
     }
