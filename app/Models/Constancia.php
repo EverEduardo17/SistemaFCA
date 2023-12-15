@@ -29,7 +29,7 @@ class Constancia extends Model
 
     public function usuarios()
     {
-        return $this->belongsToMany(Usuario::class, 'constancia_estudiante', 'IdConstancia', 'IdEstudiante')
+        return $this->belongsToMany(Usuario::class, 'constancia_usuario', 'IdConstancia', 'IdUsuario')
                     ->withPivot('created_at', 'updated_at');
     }
 

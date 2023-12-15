@@ -329,17 +329,17 @@ class ConstanciaController extends Controller {
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int $idConstancia
-     * @param  int $idEstudiante
+     * @param  int $idUsuario
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroyEstudianteConstancia(Request $request, $idConstancia, $idEstudiante) {
+    public function destroyEstudianteConstancia(Request $request, $idConstancia, $idUsuario) {
         Gate::authorize('havepermiso', 'constancias-eliminar-propio');
 
         if($request->ajax()) {
-            $estudiante = Estudiante::findOrFail($idEstudiante);
+            $usuario = Usuario::findOrFail($idUsuario);
             $constancia = Constancia::findOrFail($idConstancia);
-            if($estudiante->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists()) {
-                $estudiante->constancias()->detach($constancia);
+            if($usuario->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists()) {
+                $usuario->constancias()->detach($constancia);
             }
             return response()->json(['success' => true]);
         } else {

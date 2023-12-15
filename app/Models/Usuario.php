@@ -68,7 +68,7 @@ class Usuario extends Authenticatable
 
     public function constancias()
     {
-        return $this->belongsToMany(Constancia::class, 'constancia_estudiante', 'IdEstudiante', 'IdConstancia')
+        return $this->belongsToMany(Constancia::class, 'constancia_usuario', 'IdUsuario', 'IdConstancia')
                     ->withPivot('created_at', 'updated_at');
     }
 }
