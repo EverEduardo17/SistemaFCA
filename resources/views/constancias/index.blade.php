@@ -39,7 +39,6 @@
                         <th scope="col" class="border">Autor</th>
                         <th scope="col" class="border">Vigente Hasta</th>
                         <th scope="col" class="border">Estado de Aprobación</th>
-                        <th scope="col" class="border">Motivo de Rechazo</th>
                         
                         {{-- @can('havepermiso', 'constancias-editar-propio') --}}
                             <th scope="col" class="border actions-col">Acciones</th>
@@ -66,8 +65,6 @@
                         <td class="border-right">{{ printDate(($constancia->VigenteHasta)) }}</td>
 
                         <td class="border-right">{{ $constancia->EstadoConstancia }}</td>
-
-                        <td class="border-right">{{ $constancia->Motivo ?? 'Ninguno' }}</td>
 
                         {{-- @can('havepermiso', 'constancias-crear') --}}
                             <td class="btn-group py-2 border-right">
