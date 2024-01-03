@@ -36,7 +36,7 @@ class FechaEventoController extends Controller
 
     public function store(FechaEventoRequest $request)
     {
-        Gate::authorize('havepermiso', 'fechaevento-crear');
+        Gate::authorize('havepermiso', 'eventos-crear');
 
         $input = $request->validated();
 
@@ -104,7 +104,7 @@ class FechaEventoController extends Controller
 
     public function update(FechaEventoRequest $request)
     {
-        Gate::authorize('havepermiso', 'fechaevento-editar');
+        Gate::authorize('havepermiso', 'eventos-editar-propio');
 
         $input = $request->validated();
 
@@ -164,7 +164,7 @@ class FechaEventoController extends Controller
 
     public function destroy(Request $request)
     {
-        Gate::authorize('havepermiso', 'fechaevento-eliminar');
+        Gate::authorize('havepermiso', 'eventos-eliminar-propio');
 
         $input = $request->all();
         $rules = [

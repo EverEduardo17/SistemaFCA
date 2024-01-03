@@ -18,14 +18,13 @@
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title"><strong> Gestión de Constancias</strong></h5>
-            {{-- @can('havepermiso', 'documentos-crear') --}}
                 <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
-                {{-- TODO: Reemplazar con el permiso necesario correcto --}}
-                {{-- @can('havepermiso', 'documentos-crear') --}}
-                <a class="btn btn-outline-secondary col-2 mr-4 " href="{{ route('constancias.aprobar') }}" role="button">Aprobar Constancias</a>
-                {{-- @endcan --}}
-                <a class="btn btn-success col-4" href="{{ route('constancias.create') }}" role="button">Agregar Constancia</a>
-            {{-- @endcan --}}
+                @can('havepermiso', 'constancias-aprobar-rechazar')
+                    <a class="btn btn-outline-secondary col-2 mr-4 " href="{{ route('constancias.aprobar') }}" role="button">Aprobar Constancias</a>
+                @endcan
+                @can('havepermiso', 'constancias-crear')
+                    <a class="btn btn-success col-4" href="{{ route('constancias.create') }}" role="button">Agregar Constancia</a>
+                @endcan
         </div>
     </div>
     
@@ -40,9 +39,8 @@
                         <th scope="col" class="border">Autor</th>
                         <th scope="col" class="border">Vigente Hasta</th>
                         <th scope="col" class="border">Estado de Aprobación</th>
-                        <th scope="col" class="border">Motivo de Rechazo</th>
                         
-                        {{-- @can('havepermiso', 'documentos-editar') --}}
+                        {{-- @can('havepermiso', 'constancias-editar-propio') --}}
                             <th scope="col" class="border actions-col">Acciones</th>
                         {{-- @endcan --}}
                     </tr>
@@ -68,9 +66,7 @@
 
                         <td class="border-right">{{ $constancia->EstadoConstancia }}</td>
 
-                        <td class="border-right">{{ $constancia->Motivo ?? 'Ninguno' }}</td>
-
-                        {{-- @can('havepermiso', 'documentos-crear') --}}
+                        {{-- @can('havepermiso', 'constancias-crear') --}}
                             <td class="btn-group py-2 border-right">
                                 <a class="btn btn-sm btn-outline-success mx-1" href="{{ route('constancias.show', $constancia->IdConstancia) }}" data-toggle="tooltip" data-placement="bottom" title="Detalles">
                                     <em class="fas fa-list"></em>

@@ -8,17 +8,21 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
-class OrganizadorController extends Controller {
-    public function index() {
+class OrganizadorController extends Controller 
+{
+    public function index() 
+    {
         //
     }
 
-    public function create() {
+    public function create() 
+    {
         //
     }
 
-    public function store(Request $request) {
-        Gate::authorize('havepermiso', 'responsable-eliminar');
+    public function store(Request $request) 
+    {
+        Gate::authorize('havepermiso', 'eventos-editar-propio');
         $request->validate([
             'academico' => 'required | numeric',
             'organizador' => 'required | numeric'
@@ -50,18 +54,22 @@ class OrganizadorController extends Controller {
         return redirect()->route('eventos.show', $request['evento']);
     }
 
-    public function show(Organizador $organizador) {
+    public function show(Organizador $organizador) 
+    {
         //
     }
 
-    public function edit(Organizador $organizador) {
+    public function edit(Organizador $organizador) 
+    {
         //
     }
-    public function update(Request $request, $organizador) {
+    public function update(Request $request, $organizador) 
+    {
         //
     }
-    public function destroy($organizador){
-        Gate::authorize('havepermiso', 'responsable-eliminar');
+    public function destroy($organizador)
+    {
+        Gate::authorize('havepermiso', 'eventos-editar-propio');
         $organizador = Organizador::findOrFail( $organizador );
         $organizador->forceDelete();
 

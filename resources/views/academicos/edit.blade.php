@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
@@ -12,15 +13,18 @@
 
 <div class="card shadow-sm">
     <div class="card-header">
-        <div class="row">
-            <h5 class="card-title col-8">Editar Académico</h5>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Editar Académico</h5>
+
+            <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('academicos.index') }}" role="button">Regresar</a>
+
             @can('havepermiso', 'academicos-listar')
                 <a class="btn btn-primary col-4" href="{{ route('academicos.index') }}" role="button">Ver Académicos</a>
             @endcan
         </div>
     </div>
     <div class="card-body">
-        <form method="POST" action="{{ route('academicos.update', $academico) }}" autocomplete="off">
+        <form method="POST" action="{{ route('academicos.update', $academico) }}" autocomplete="off" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             @include('layouts.validaciones')
@@ -31,14 +35,21 @@
             </div>
 
             <div class="form-group">
-                <label name="ApellidoPaternoDatosPersonales">Apellido Paterno del Académico:</label>
+                <label name="ApellidoPaternoDatosPersonales">
+                    {{ 
+                    $academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "" ? 
+                        "Apellidos del Académico" : "Apellido Paterno del Académico:" 
+                    }}
+                </label>                
                 <input name="ApellidoPaternoDatosPersonales" type="text" class="form-control @error('ApellidoPaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoPaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoPaternoDatosPersonales) }}" placeholder="Ej. Pino">
             </div>
 
-            <div class="form-group">
-                <label name="ApellidoMaternoDatosPersonales">Apellido Materno del Académico:</label>
-                <input name="ApellidoMaternoDatosPersonales" type="text" class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoMaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoMaternoDatosPersonales) }}" placeholder="Ej. Herrera">
-            </div>
+            @unless ($academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "")
+                <div class="form-group">
+                    <label name="ApellidoMaternoDatosPersonales">Apellido Materno del Académico:</label>
+                    <input name="ApellidoMaternoDatosPersonales" type="text" class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoMaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoMaternoDatosPersonales) }}" placeholder="Ej. Herrera">
+                </div>
+            @endunless
 
             <hr>
 
@@ -60,29 +71,37 @@
             </div>
 
             <div class="form-group">
-                <label for="IdRole">Rol:</label>
-                <select name="IdRole" id="IdRole" class="form-control @error('IdRole') is-invalid @enderror">
-                    @foreach ($roles as $role)
-                        <option value="{{ $role->IdRole  }}" @if($academico->usuario->roles[0]->IdRole === $role->IdRole) selected @endif>
-                            {{ $role->ClaveRole }}
-                        </option>
-                    @endforeach
-                </select>
+                <label for="IdRole">{{ sizeof($academico->usuario->roles)>1 ? "Roles:" : "Rol:" }}</label>
+                <input type="text" class="form-control" disabled 
+                    value = "@foreach ($academico->usuario->roles as $rol) {{ $rol->ClaveRole }} @endforeach"
+                >
+                @can('havepermiso', 'roles-listar')
+                    <a href="{{ route('usuario.index.roles', ["usuario" => $academico->usuario, "roles" => $academico->usuario->roles]) }}" 
+                        class="btn btn-info btn-sm mt-2"
+                    >
+                        Modificar Roles
+                    </a>
+                @endcan
             </div>
-
 
             <div class="form-group">
                 <label name="email">Correo electrónico:</label>
                 <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $academico->usuario->email) }}" placeholder="Ej. correo@correo.com">
             </div>
 
-            <div class="form-group">
-                <label name="password">Contraseña:</label> 
-                <a href="#" id="toggleLink" class="btn btn-light ml-2 shadow-sm" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color:blue;">¿Cambiar Contraseña?</a>
-                <input id="password-input" name="password" type="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" minlength="8" placeholder="Ej. Contraseña123" disabled>
-            </div>
+            @if($esDirectivo)
 
-            @can('havepermiso', 'academicos-editar')
+            <hr>
+                <div class="form-group">
+                    <label for="Firma">Imagen firma:</label> <br>
+                    <input id="Firma" name="Firma" type="file">
+                </div>
+                @if ($academico->Firma)
+                    <img src="{{ asset('storage/uploads/'.$academico->Firma) }}" height="100px" class="mb-3" alt="Firma de dirección">
+                @endif
+            @endif
+
+            @can('havepermiso', 'academicos-detalles')
                 <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
             @endcan
             @can('havepermiso', 'academicos-listar')
@@ -93,19 +112,3 @@
 </div>
 @endsection
 
-@section('script')
-<script src="{{ asset('js/password-popup.js') }}"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#toggleLink').click(function(e) {
-                e.preventDefault();
-                var passwordInput = $('#password-input');
-                if (passwordInput.val() === '') {
-                passwordInput.prop('disabled', !passwordInput.prop('disabled'));
-                passwordInput.focus();
-                }
-            });
-        });
-    </script>
-@endsection

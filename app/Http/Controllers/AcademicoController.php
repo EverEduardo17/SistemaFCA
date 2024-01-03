@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Academico;
-use App\Models\DatosPersonales;
 use App\Models\Role;
-use App\Models\Usuario;
-use App\Http\Requests\AcademicoRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
+use App\Models\Academico;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\AcademicoRequest;
 use Illuminate\Support\Facades\Session;
 
 class AcademicoController extends Controller 
@@ -28,7 +24,7 @@ class AcademicoController extends Controller
     }
 
     public function create() {
-        Gate::authorize('havepermiso', 'academico-ver-propio');
+        Gate::authorize('havepermiso', 'academicos-crear');
 
         $roles = Role::all();
 
@@ -40,15 +36,18 @@ class AcademicoController extends Controller
         Gate::authorize('havepermiso', 'academicos-crear');
 
         $request->validated();
-
         $input = $request->validated();
+
+        $idUsuarioDB = 0;
+
+
         try{
             DB::beginTransaction();
 
                 $idUsuarioDB = DB::table('Usuario')->insertGetId([
                     'name'              => $input['name'],
                     'email'             => $input['email'],
-                    'password'          => bcrypt($input['password']),
+                    'password'          => "",
                     'CreatedBy'         => Auth::user()->IdUsuario,
                     'UpdatedBy'         => Auth::user()->IdUsuario
                 ]);
@@ -66,7 +65,7 @@ class AcademicoController extends Controller
                     'idDatosPersonales'                 => $idUsuarioDB,
                     'NombreDatosPersonales'             => $input['NombreDatosPersonales'],
                     'ApellidoPaternoDatosPersonales'    => $input['ApellidoPaternoDatosPersonales'],
-                    'ApellidoMaternoDatosPersonales'    => $input['ApellidoMaternoDatosPersonales'],
+                    'ApellidoMaternoDatosPersonales'    => '',
                     'IdUsuario'                         => $idUsuarioDB,
                     'CreatedBy'                         => Auth::user()->IdUsuario,
                     'UpdatedBy'                         => Auth::user()->IdUsuario
@@ -74,7 +73,7 @@ class AcademicoController extends Controller
 
                 DB::table('Role_Usuario')->insert([
                     'IdUsuario'     => $idUsuarioDB,
-                    'IdRole'        => $input['IdRole'],
+                    'IdRole'        => 2,
                     'CreatedBy'     => Auth::user()->IdUsuario,
                     'UpdatedBy'     => Auth::user()->IdUsuario
                 ]);
@@ -94,32 +93,44 @@ class AcademicoController extends Controller
 
     public function show($idAcademico) 
     {
-        Gate::authorize('havepermiso', 'academico-ver-propio');
+        Gate::authorize('havepermiso', 'academicos-detalles');
 
         $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
 
+        $rol = $academico->usuario->roles()->pluck('ClaveRole')->toArray();
+        $esDirectivo = in_array('DIRECCIÓN', $rol);
+
+
         return view('academicos.show', [
             "academico" => $academico,
+            "esDirectivo" => $esDirectivo
         ]);
     }
 
     public function edit($idAcademico) 
     {
-        Gate::authorize('havepermiso', 'academico-ver-propio');
+        Gate::authorize('havepermiso', 'academicos-detalles');
 
         $roles = Role::all();
 
         $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
 
+        $rol = $academico->usuario->roles()->pluck('ClaveRole')->toArray();
+
+        $esDirectivo = in_array('DIRECCIÓN', $rol);
+        // dd($rol);
+        
         return view('academicos.edit', [
             "academico" => $academico,
-            "roles" => $roles
+            "roles" => $roles,
+            "esDirectivo" => $esDirectivo
         ]);
+
     }
 
     public function update(AcademicoRequest $request, Academico $academico) 
     {
-        Gate::authorize('havepermiso', 'academicos-editar');
+        Gate::authorize('havepermiso', 'academicos-detalles');
 
         $request->validated();
 
@@ -128,57 +139,27 @@ class AcademicoController extends Controller
                 'password' => bcrypt($request->password)
             ]);
         }
+
+        $image = $request->file('Firma');
+
+        if($image !== null) {
+            $imageName =  $academico->usuario->IdUsuario; // Nombre único para la imagen
+
+            $image->storeAs('public/uploads/', $imageName);
+
+            $academico->Firma = $imageName;
+            $academico->save();
+        }
     
         $academico->update($request->all());
         $academico->usuario->update($request->except('password'));
         $academico->usuario->datosPersonales->update($request->all());
-        $academico->usuario->roles()->sync($request->IdRole);
     
 
         Session::flash('flash', [['type' => "success", 'message' => "Académico actualizado con éxito."]]);
 
         return redirect()->route('academicos.index');
     }
-
-    // public function update(Request $request, $idAcademico) {
-    //     Gate::authorize('havepermiso', 'academicos-editar');
-
-    //     $academico = Academico::with('usuario.datosPersonales')->findOrFail($idAcademico);
-
-    //     $request->validate([
-    //         'NombreDatosPersonales' => 'required',
-    //         'ApellidoPaternoDatosPersonales' => 'required',
-    //         'ApellidoMaternoDatosPersonales' => 'required',
-    //         'NoPersonalAcademico' => 'unique:Academico,NoPersonalAcademico,'.$academico->IdAcademico.',IdAcademico',
-    //         'RfcAcademico' => 'unique:Academico,RfcAcademico,'.$academico->IdAcademico.',IdAcademico',
-    //         'name' => 'unique:Usuario,name,'.$academico->usuario->IdUsuario.',IdUsuario',
-    //         'email' => 'unique:Usuario,email,'.$academico->usuario->IdUsuario.',IdUsuario'
-    //     ]);
-
-    //     try {
-    //         DB::beginTransaction();
-    //             DB::table('Usuario')->where('IdUsuario', $academico->IdUsuario)->update([
-    //                 'name'       => $request->name,
-    //                 'email'  => $request->email
-    //             ]);
-    //             DB::table('Academico')->where('IdUsuario', $academico->IdUsuario)->update([
-    //                 'NoPersonalAcademico' => $request->NoPersonalAcademico,
-    //                 'RfcAcademico'        => $request->RfcAcademico
-    //             ]);
-    //             DB::table('DatosPersonales')->where('IdUsuario', $academico->IdUsuario)->update([
-    //                 'NombreDatosPersonales'             => $request->NombreDatosPersonales,
-    //                 'ApellidoPaternoDatosPersonales'    => $request->ApellidoPaternoDatosPersonales,
-    //                 'ApellidoMaternoDatosPersonales'    => $request->ApellidoMaternoDatosPersonales,
-    //             ]);
-    //         DB::commit();
-    //     } catch (\Throwable $th) {
-    //         DB::rollBack();
-    //         Session::flash('flash', [['type' => "danger", 'message' => "Error al editar al Académico."]]);
-    //         return redirect()->route('academicos.index');
-    //     }
-    //     Session::flash('flash', [['type' => "success", 'message' => "Académico actualizado con éxito."]]);
-    //     return redirect()->route('academicos.index');
-    // }
 
     public function destroy($idAcademico) 
     {
@@ -205,5 +186,49 @@ class AcademicoController extends Controller
             Session::flash('flash', [ ['type' => "danger", 'message' => "El Académico No pudo ser eliminado correctamente."] ]);
             return redirect()->route('academicos.index');
         }
+    }
+
+    public function indexRoles(\App\Models\Usuario $usuario, Role $roles)
+    {
+        Gate::authorize('havepermiso', 'roles-listar');
+
+        $direccionCount = 0;
+        foreach(\App\Models\Usuario::all() as $u) {
+            if ($u->roles()->where('Role.ClaveRole', 'DIRECCIÓN')->exists()) {
+                $direccionCount++;
+            }
+        }
+
+        return view("roles", [
+            "usuario" => $usuario,
+            "direccionCount" => $direccionCount,
+            "roles" => $roles->all()
+        ]);
+    }
+    
+
+    /**
+     * Vincular o desvincular rol a usuario.
+     *
+     * @param \Illuminate\Http\Request $request La peticion JSON que se mandó con AJAX.
+     * @return \Illuminate\Http\JsonResponse Respuesta que indica al cliente si se eliminó o agregó
+     */
+    public function addRole(\Illuminate\Http\Request $request) 
+    {
+        $usuario = $request->input('idUsuario');
+        $rol = $request->input('idRole');
+
+        $usuario = \App\Models\Usuario::findOrFail($usuario);
+        $rol = Role::findOrFail($rol);
+
+        if ($usuario->roles()->where('Role.IdRole', $rol->IdRole)->exists()) {
+            $usuario->roles()->detach($rol);
+            $success = false;
+        } 
+        else {
+            $usuario->roles()->attach($rol);
+            $success = true;
+        }
+        return response()->json(['success' => $success]);
     }
 }

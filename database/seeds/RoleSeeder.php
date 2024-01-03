@@ -11,32 +11,59 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $claves = [
-            "ADMINISTRADOR",
-            "CONTROL-GENERAL",
-            "CONTROL-EVENTOS",
-            "ACADEMICO",
-            "ESTUDIANTE"
+ 
+        $roles = [
+            [
+                "ClaveRole" => "CONTROL-GÉNERAL",
+                "DescripcionRole" => "Encargado de supervisar y controlar aspectos generales del sistema.",
+            ],
+            [
+                "ClaveRole" => "ACÁDEMICO",
+                "DescripcionRole" => "Se ocupa de cuestiones académicas y educativas.",
+            ],
+            [
+                "ClaveRole" => "ESTUDIANTE",
+                "DescripcionRole" => "Representa a los estudiantes matriculados.",
+            ],
+            [
+                "ClaveRole" => "EGRESADO",
+                "DescripcionRole" => "Representa a aquellos estudiantes que han completado sus estudios.",
+            ],
+            [
+                "ClaveRole" => "DIRECCIÓN",
+                "DescripcionRole" => "Responsable de la dirección estratégica y toma de decisiones.",
+            ],
+            [
+                "ClaveRole" => "SECRETARIA-ACADÉMICA",
+                "DescripcionRole" => "Encargada de tareas administrativas y de oficina.",
+            ],
+            [
+                "ClaveRole" => "CONTROL-ACADÉMICOS",
+                "DescripcionRole" => "Supervisa y gestiona asuntos académicos específicos.",
+            ],
+            [
+                "ClaveRole" => "CONTROL-CONSTANCIAS",
+                "DescripcionRole" => "Gestiona la emisión de constancias y certificaciones.",
+            ],
+            [
+                "ClaveRole" => "CONTROL-ESTUDIANTES",
+                "DescripcionRole" => "Supervisa la información y actividades relacionadas con los estudiantes.",
+            ],
+            [
+                "ClaveRole" => "CONTROL-EVENTOS",
+                "DescripcionRole" => "Maneja la planificación y ejecución de eventos.",
+            ],
+            [
+                "ClaveRole" => "CONTROL-SEDES",
+                "DescripcionRole" => "Maneja la información y funciones específicas de las sedes o campus.",
+            ],
+            [
+                "ClaveRole" => "CONTROL-ROLES",
+                "DescripcionRole" => "Crear roles nuevos y asignarle permisos a esos roles",
+            ],
         ];
 
-        $descripciones = [
-            "Rol de Administrador dentro del Sistema.",
-            "Rol que permite el Control General dentro del Sistema.",
-            "Rol que permite el Control de Eventos dentro del Sistema.",
-            "Rol de Académico dentro del sistema.",
-            "Rol de Estudiante dentro del sistema."
-        ];
 
-        $registros = [];
-        for($i=0; $i<count($claves); $i++){
-            $registros[] = [
-                'ClaveRole'         => $claves[$i],
-                'DescripcionRole'    => $descripciones[$i],
-                'CreatedBy' => 1,
-                'UpdatedBy' => 1,
-            ];
-        }
-
-        DB::table('Role')->insert($registros);
+        DB::table('Role')->insert($roles);
     }
 }

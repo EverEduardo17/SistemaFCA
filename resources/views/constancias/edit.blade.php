@@ -64,13 +64,13 @@
             </div>
 
             <hr>
-            @can('havepermiso', 'documentos-editar')
+            @can('havepermiso', 'constancias-editar-propio')
                 <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmarModificarModal">
                     Actualizar
                 </button>
             @endcan
         </form>
-        @can('havepermiso', 'documentos-leer')
+        @can('havepermiso', 'constancias-detalles')
         <a href="javascript:history.back()" class="btn btn-secondary btn-block mt-2">Cancelar</a>
         @endcan
     </div>

@@ -9,8 +9,6 @@ use App\Models\Grupo;
 use App\Http\Requests\EstudianteRequest;
 use App\Models\Modalidad;
 use App\Models\ProgramaEducativo;
-
-use App\Models\Trayectoria;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -29,7 +27,7 @@ class EstudianteController extends Controller
      */
     public function index() 
     {
-        \Gate::authorize('havepermiso', 'estudiante-ver-todos-propio');
+        \Gate::authorize('havepermiso', 'estudiantes-listar');
 
         $estudiantes = Estudiante::all();
 
@@ -44,7 +42,7 @@ class EstudianteController extends Controller
      */
     public function create() 
     {
-        Gate::authorize('havepermiso', 'estudiante-ver-propio');
+        Gate::authorize('havepermiso', 'estudiantes-crear');
 
         $cohortes = Cohorte::orderBy('NombreCohorte', 'desc')->get();
         //$grupos = Grupo::orderBy('NombreGrupo', 'asc')->get();
@@ -64,7 +62,14 @@ class EstudianteController extends Controller
      */
     public function show(Estudiante $estudiante)
     {
-        Gate::authorize('havepermiso', 'estudiante-ver-propio');
+        // los estudiantes pueden ver sus propios datos
+        $isEstudiante = \Auth::user()->estudiante->IdEstudiante ?? false;
+        if ($isEstudiante) {
+            if (\Auth::user()->estudiante->IdEstudiante === $estudiante->IdEstudiante) {
+                return view('estudiantes.show', compact('estudiante'));   
+            }
+        }
+        Gate::authorize('havepermiso', 'estudiantes-detalles');
 
         return view('estudiantes.show', compact('estudiante'));   
     }
@@ -78,7 +83,7 @@ class EstudianteController extends Controller
      */
     public function edit(Estudiante $estudiante) 
     {
-        Gate::authorize('havepermiso', 'estudiante-ver-propio');
+        Gate::authorize('havepermiso', 'estudiantes-crear');
 
         $cohortes = Cohorte::orderBy('NombreCohorte', 'desc')->get();
         $programasEducativos = ProgramaEducativo::orderBy('NombreProgramaEducativo', 'asc')->get();
@@ -96,11 +101,10 @@ class EstudianteController extends Controller
      */
     public function store(EstudianteRequest $request)
     {
-        Gate::authorize('havepermiso', 'estudiante-crear');
+        Gate::authorize('havepermiso', 'estudiantes-crear');
      
         try {
             $input = $request->validated();
-            //$idGrupo = $input['IdGrupo'];
             $timestamp = Carbon::now()->toDateTimeString();
 
             $matricula = strtoupper($input['MatriculaEstudiante']);
@@ -108,25 +112,38 @@ class EstudianteController extends Controller
             DB::beginTransaction();
 
             $idUsuarioDB = DB::table('Usuario')->insertGetId([
-                'name'     => $matricula,
+                'name'     => "z$matricula",
                 'email'   => 'z' . $matricula . '@estudiantes.uv.mx',
-                'password' => $request->password,
+                'password' => $request->ProgramaEducativo,
                 'CreatedAt' => $timestamp,
                 'UpdatedAt' => $timestamp,
+                'CreatedBy'     => auth()->user()->IdUsuario,
+                'UpdatedBy'     => auth()->user()->IdUsuario
             ]);
 
             DB::table('Estudiante')->insert([
                 'matriculaEstudiante'   => $matricula,
                 'IdUsuario'   => $idUsuarioDB,
+                'CreatedBy'     => auth()->user()->IdUsuario,
+                'UpdatedBy'     => auth()->user()->IdUsuario
             ]);
 
             DB::table('DatosPersonales')->insert([
                 'NombreDatosPersonales'               => $input['NombreDatosPersonales'],
                 'ApellidoPaternoDatosPersonales'      => $input['ApellidoPaternoDatosPersonales'],
-                'ApellidoMaternoDatosPersonales'      => $input['ApellidoMaternoDatosPersonales'],
+                'ApellidoMaternoDatosPersonales'      => '',
                 'Genero'                              => $input['Genero'],
                 'IdUsuario'   => $idUsuarioDB,
+                'CreatedBy'     => auth()->user()->IdUsuario,
+                'UpdatedBy'     => auth()->user()->IdUsuario
             ]);
+
+            DB::table('Role_Usuario')->insert([
+                    'IdUsuario'     => $idUsuarioDB,
+                    'IdRole'        => 3,
+                    'CreatedBy'     => auth()->user()->IdUsuario,
+                    'UpdatedBy'     => auth()->user()->IdUsuario
+                ]);
 
             DB::commit();
         } 
@@ -149,7 +166,7 @@ class EstudianteController extends Controller
      */
     public function update(EstudianteRequest $request, Estudiante $estudiante)
     {
-        Gate::authorize('havepermiso', 'estudiante-editar-propio');
+        Gate::authorize('havepermiso', 'estudiantes-crear');
 
         $request->validated();
 
@@ -176,7 +193,7 @@ class EstudianteController extends Controller
      */
     public function destroy(Estudiante $estudiante)
     {
-        Gate::authorize('havepermiso', 'estudiante-eliminar-propio');
+        Gate::authorize('havepermiso', 'estudiantes-eliminar');
 
         try {
             $estudiante->delete();

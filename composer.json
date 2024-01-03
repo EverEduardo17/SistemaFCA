@@ -9,16 +9,22 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
+        "ext-imagick": "*",
         "barryvdh/laravel-dompdf": "^2.0",
         "fideloper/proxy": "^4.2",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^9.0",
         "laravel/tinker": "^2.0",
+        "league/oauth2-client": "^2.7",
         "maatwebsite/excel": "^3.1",
+        "microsoft/microsoft-graph": "^1.108",
         "phpoffice/phpword": "^1.0",
         "s-ichikawa/laravel-sendgrid-driver": "^3.0",
+        "sendgrid/sendgrid": "^8.1",
         "simplesoftwareio/simple-qrcode": "~4",
-        "ext-imagick": "*"
+        "symfony/mailer": "^6.4",
+        "symfony/sendgrid-mailer": "^6.4",
+        "vlucas/phpdotenv": "^5.5"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0",

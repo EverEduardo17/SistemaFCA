@@ -31,7 +31,7 @@ class SedeEventoController extends Controller {
      * @throws \Illuminate\Auth\Access\AuthorizationException Si el usuario no tiene el permiso requerido.
      */
     public function create() {
-        Gate::authorize('havepermiso', 'sedes-listar');
+        Gate::authorize('havepermiso', 'sedes-crear');
 
         return view('sedeEvento.create', [
             'sedes' => new SedeEvento()

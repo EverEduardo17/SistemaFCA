@@ -37,15 +37,15 @@
                 <a href="{{ route('sedeEventos.index') }}" class="btn btn-secondary btn-block">Cancelar</a>
             @endcan
         </form>
-        <hr>
         @can('havepermiso', 'sedes-eliminar')
+        <hr>
             <form method="POST" id="form-eliminar" action="{{ route('sedeEventos.destroy', $sede) }}">
                 @csrf
                 @method('DELETE')
                 <a href="#" data-toggle="modal" data-target="#delete" class="btn btn-danger btn-block">Eliminar Permanentemente</a>
             </form>
-        @endcan
         </div>
+        @endcan
     </div>
     @include('sedeEvento.modals.delete')
 @endsection

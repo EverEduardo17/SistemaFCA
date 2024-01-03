@@ -24,7 +24,7 @@ class EventoEstadoController extends Controller
 
     public function store(Request $request, Evento $evento)
     {
-        Gate::authorize('havepermiso', 'eventoestado-aprobar');
+        Gate::authorize('havepermiso', 'eventos-aprobar-rechazar');
         try {
             $bandera = $this->existeConflicto($evento);
             if($bandera){
@@ -58,7 +58,7 @@ class EventoEstadoController extends Controller
 
     public function update(Request $request, $evento)
     {
-        Gate::authorize('havepermiso', 'eventoestado-editar');
+        Gate::authorize('havepermiso', 'eventos-editar-propio');
         $evento = Evento::findOrFail($evento);
         try {
             DB::beginTransaction();
@@ -82,7 +82,7 @@ class EventoEstadoController extends Controller
 
     public function rechazo(Request $request, Evento $evento)
     {
-        Gate::authorize('havepermiso', 'eventoestado-aprobar');
+        Gate::authorize('havepermiso', 'eventos-aprobar-rechazar');
         $validated = $request->validate([
             'Motivo' => 'required|max:255',
         ]);
@@ -104,7 +104,7 @@ class EventoEstadoController extends Controller
 
     public function cancelar(Request $request, Evento $evento)
     {
-        Gate::authorize('havepermiso', 'eventoestado-aprobar');
+        Gate::authorize('havepermiso', 'eventos-aprobar-rechazar');
         $validated = $request->validate([
             'Motivo' => 'required|max:255',
         ]);

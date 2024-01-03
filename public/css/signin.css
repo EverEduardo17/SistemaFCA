@@ -10,7 +10,7 @@ html, body
 {
 	font-size:.590em;
 	color:#036;
-	font-family: Arial;
+	font-family: Verdana;
 }
 
 #estado
@@ -20,14 +20,14 @@ html, body
 	margin-top:3px;
 	float:left;
 	width:65%;
-	font-family: Arial, Segoe UI, Gill Sans MT;
+	font-family: Verdana, Segoe UI, Gill Sans MT;
 }
 
 .tr-etiqueta
 {
 	color:#093;
 	height:30px; 
-	font-family:Arial , Gill Sans, Segoe UI ; 
+	font-family:Verdana , Gill Sans, Segoe UI ; 
 	font-size:1.3em;
 }
 
@@ -42,19 +42,23 @@ html, body
 
 
 .pleca {
+  position: fixed;
+  top: 0;
+  right: 0;
   background: #0D47A1;
   color: #fff;
-  font-size: 16px;
+  font-size: 17.8px;
   font-weight: normal;
-  padding-right: 1em;
-  padding-left: 1em;
-  
+  margin-top: -1px;
+  text-align-last: center;
+  padding-right: 0.7em;
+  padding-left: 0.7em;
 }
 
 #sistema-fca {
- font-size: 50px;
-  font-weight: lighter;
-  padding: 0px 0px 0px 0px;
+  font-size: 70px;
+  font-family: 'Roboto', sans-serif;
+  padding: 0px;
   margin: 0px;
   height: auto;
   width: 338px;
@@ -65,48 +69,11 @@ html, body
   width: 100%;
 }
 
-#divMsjError {
-  /*font-size: 25px;*/
-  font-size: 15px;
-  font-weight: lighter;
-  padding: 0px 0px 0px 0px;
-  margin: 0px;
-  height: auto;
-  width: 338px;
-  background-color: transparent;
-  color: #c85305;
-  font-weight: 200;
-  text-align: center;
-  width: 100%;
-}
-
-#msjError {
- font-size: 1.2em !important;
-  color: #c85305 !important;
-  margin-top: 3px !important;
-  float: left !important;
-  width: 100% !important;
-  font-family: Arial, Segoe UI, Gill Sans MT !important;
-}
-
 #inisesion {
-  font-size: 28px;
-  font-weight: lighter;
-  margin: 0px;
-  height: auto;
-  width: 338px;
-  background-color: transparent;
-  color: #666666;
-  font-weight: 200;
-  text-align: center;
-  width: 100%;
-}
-
-
-#inisesionMsj {
-  font-size: 39px;
-  font-weight: lighter;
-  height: auto;
+  font-size: 30px;
+  font-weight: 100;
+  margin: -20px 0 0 0;
+  height: 60px;
   width: 338px;
   background-color: transparent;
   color: #666666;
@@ -117,20 +84,6 @@ html, body
 
 #divCambPsw {
   color: #006699;
-}
-
-#mantenimiento {
-  font-size: 39px;
-  font-weight: lighter;
-  padding: 0px 0px 0px 0px;
-  margin: 0px;
-  height: auto;
-  width: 338px;
-  background-color: transparent;
-  color: #003366;
-  font-weight: 200;
-  text-align: center;
-  width: 100%;
 }
 
 input.text {
@@ -188,7 +141,6 @@ input.text {
   text-size-adjust: 100%;
   text-transform: none;
   user-select: text;
-  width: 100%;
   word-spacing: 0px;
   writing-mode: horizontal-tb;
   -webkit-appearance: none;
@@ -202,13 +154,38 @@ input.text {
 
 .txt-login {
   font-size: 16px;
-  width: 50%;
   border: 0;
-  border-bottom: 2px solid #cccccc;
-  border-bottom-color: #cccccc;
-  border-bottom-style: solid;
+  padding: 5px 0px 0px 4px;
+  border-bottom: 2px solid #b9b9b9;
   border-bottom-width: .5px;
-  /*background-color: rgb(232, 240, 254) !important;*/
+  transition: border-bottom-color .3s ease, background-color .5s ease;
+}
+
+.txt-login:hover  {
+  transition: background-color .2s ease;
+  background-color: rgb(242, 247, 255) !important;
+}
+
+.txt-login:focus  {
+  transition:border-bottom-width .1s, border-bottom-color .1s ease, background-color .3s ease;
+  border-bottom-color: #484848 !important;
+  border-bottom-width: 3px;
+}
+
+.txt-login-error {
+  border-bottom: 2px solid red;
+}
+.txt-login-error::placeholder {
+  color:red;
+  opacity: 0.7;
+}
+
+.txt-login-error:hover  {
+  background-color: rgb(255, 242, 242) !important;
+}
+
+.txt-login-error:focus  {
+  border-bottom-color: red !important;
 }
 
 
@@ -239,15 +216,6 @@ input.text {
   color: rgb(0, 0, 0) !important;
 }*/
 
-
-#txtUser:hover  {
-  background-color: rgb(232, 240, 254) !important;
-}
-
-
-#txtPassword:hover {
-  background-color: rgb(232, 240, 254) !important;
-}
 
 #divPsw {
   margin-top: 2em;
@@ -282,12 +250,6 @@ input.text {
   width: 100%;
 }
 
-.imgLogin {
-  width: 50%;
-  height: 100%;
-  position: fixed;
-}
-
 .divDerechosReser {
   right: 15px;
   bottom: 10px;
@@ -307,39 +269,63 @@ input.text {
   margin-top: 3px !important;
   float: left !important;
   width: 100% !important;
-  font-family: Arial, Segoe UI, Gill Sans MT !important;
+  font-family: Verdana, Segoe UI, Gill Sans MT !important;
 }
 
 #colImg {
-      padding-left: 0;
-      
+  width: 50%;
+}
+
+#divIzq {
+  width: 50%; 
+  height: 100vh; 
+  display:flex; 
+  justify-content:center; 
+  align-items:center; 
+}
+
+@media (max-width: 1200px), (max-height: 476px) {
+
+  body {
+    overflow:hidden;
   }
 
-
-@media (max-width: 767px) {
   #colImg {
       display: none;
   }
   #divIzq {
-      margin: 0 auto;
+    height: 100vh;
+    width: 100vw;
+    align-self: center;
+  }
+
+  #sistema-fca {
+    font-size: 50px;
+  }
+
+  #inisesion {
+    font-size: 20px;
+  }
+
+}
+
+@media (max-width: 400px) {
+
+  .divDerechosReser {
+    font-size: 3.2vw;
+    margin-bottom: 3vh;
   }
 
 }
 
 body {
   
-  font-family: 'Roboto', sans-serif !important;
+  font-family:'Ubuntu','Roboto', sans-serif !important;
 }
 
-a, input {
-  font-family: 'Roboto', sans-serif !important;
-}
 
 #footer {
   position: inherit;
-  width: 100%;
   margin-top: 20%;
-  text-align: right;
-  padding-right: 10px;
   font-size: 14px;
 }

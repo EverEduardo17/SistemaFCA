@@ -14,7 +14,7 @@
 
             <a class="btn btn-outline-info col-2 ml-auto mr-4 " href="{{ route('home') }}" role="button">Regresar</a>
 
-            @can('havepermiso', 'academicos-listar')
+            @can('havepermiso', 'academicos-crear')
                 <a class="btn btn-success col-4" href="{{ route('academicos.create') }}" role="button">Agregar Académico</a>
             @endcan
 
@@ -33,25 +33,30 @@
             <tbody>
                 @foreach($academicos as $academico)
                 <tr>
-                    <td>{{$academico->NoPersonalAcademico ?? ""}}</td>
+                    <td>{{ $academico->NoPersonalAcademico ?? "" }}</td>
                     <td>
-                        {{$academico->usuario->datosPersonales->ApellidoPaternoDatosPersonales ?? "-"}}
-                        {{$academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales ?? "-"}}
-                        {{$academico->usuario->datosPersonales->NombreDatosPersonales ?? ""}}
+                        {{ $academico->usuario->datosPersonales->ApellidoPaternoDatosPersonales ?? "-" }}
+                        {{ $academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales ?? "-" }}
+                        {{ $academico->usuario->datosPersonales->NombreDatosPersonales ?? "" }}
                     </td>
-                    <td>{{$academico->usuario->email ?? ""}}</td>
+                    <td>{{ $academico->usuario->email ?? "" }}</td>
+
+
                     <td class="btn-group">
-                        @can('havepermiso', 'academico-ver-propio')
+                        @can('havepermiso', 'academicos-detalles')
                             <a class="btn btn-outline-primary btn-sm mr-1" href="{{ route('academicos.show', $academico) }}">Detalles</a>
                         @endcan
-                        @can('havepermiso', 'academico-ver-propio')
+                        @can('havepermiso', 'academicos-detalles')
                             <a class="btn btn-primary btn-sm mr-1" href="{{ route('academicos.edit', $academico) }}">Editar</a>
                         @endcan
-                        {{-- @can('havepermiso', 'academicos-eliminar') --}}
+                        @can('havepermiso', 'academicos-eliminar')
                                 <a class="btn btn-danger btn-sm" href="#"
                                    data-toggle="modal" data-target="#deleteAcademico"
-                                   data-academico="{{ $academico->IdAcademico }}">Eliminar</a>
-                        {{-- @endcan --}}
+                                   data-academico="{{ $academico->IdAcademico }}"
+                                >
+                                    Eliminar
+                                </a>
+                        @endcan
                     </td>
                 </tr>
                 @endforeach

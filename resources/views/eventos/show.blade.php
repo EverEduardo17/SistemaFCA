@@ -14,22 +14,22 @@
                 <h4 class="mr-auto p-3">{{$evento->NombreEvento ?? ""}}</h4>
 
                 <div>
-                    {{-- @can('havepermiso', 'eventos-editar') --}}
+                    @can('havepermiso', 'eventos-editar-propio')
                         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#editEvento">Editar</a>
-                    {{-- @endcan --}}
+                    @endcan
                     @if($evento->EstadoEvento == "APROBADO")
-                        @can('havepermiso', 'eventoestado-aprobar')
+                        @can('havepermiso', 'eventos-aprobar-rechazar')
                             <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#cancelarEvento">Cancelar Evento</a>
                         @endcan
                     @endif
                     @if($evento->EstadoEvento == "POR APROBAR")
-                        @can('havepermiso', 'eventoestado-aprobar')
+                        @can('havepermiso', 'eventos-aprobar-rechazar')
                             <a href="#" class="btn btn-info" data-toggle="modal" data-target="#aprobarEvento">Aprobar</a>
                             <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#rechazarEvento">NO aprobar</a>
                         @endcan
                     @endif
                     @if($evento->EstadoEvento == "NO APROBADO")
-                        @can('havepermiso', 'eventoestado-editar')
+                        @can('havepermiso', 'eventos-editar-propio')
                             <a href="#" class="btn btn-info" data-toggle="modal" data-target="#solicitarEvento">Solicitar aprobación</a>
                         @endcan
                     @endif
@@ -101,7 +101,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Fechas</h4>
                                 <div class="btn-group" role="group">
-                                    @can('havepermiso', 'fechaevento-crear')
+                                    @can('havepermiso', 'eventos-crear')
                                         <button class="btn btn-success" data-toggle="modal" data-target="#addfecha" data-do="create">Agregar Fecha</button>
                                     @endcan
                                 </div>
@@ -142,7 +142,7 @@
                                             <td>{{$efs->fechaEvento->FinFechaEvento->format('h:i A') ?? ""}}</td>
                                             <td>{{$efs->sedeEvento->NombreSedeEvento ?? ""}}</td>
                                             <td>
-                                                @can('havepermiso', 'fechaevento-editar')
+                                                @can('havepermiso', 'eventos-editar-propio')
                                                     <a class="btn btn-sm btn-primary" href="#" data-toggle="modal" data-target="#addfecha"
                                                        data-do="update" data-fecha="{{$efs->IdFechaEvento}}"
                                                        data-fechainicio="{{$efs->fechaEvento->InicioFechaEvento->format('d/m/Y')}}"
@@ -150,7 +150,7 @@
                                                        data-horafin="{{$efs->fechaEvento->FinFechaEvento->format('g:i A')}}"
                                                        data-sedeevento="{{$efs->IdSedeEvento}}" >Editar</a>
                                                 @endcan
-                                                @can('havepermiso', 'fechaevento-eliminar')
+                                                @can('havepermiso', 'eventos-eliminar-propio')
                                                     <a class="btn btn-sm btn-danger" href="#" data-toggle="modal"
                                                        data-target="#deletefecha" data-fecha="{{$efs->IdFechaEvento}}">Eliminar</a>
                                                 @endcan
@@ -169,7 +169,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Responsables</h4>
                                 <div class="btn-group" role="group">
-                                    @can('havepermiso', 'responsable-crear')
+                                    @can('havepermiso', 'eventos-editar-propio')
                                         <button class="btn btn-success" data-toggle="modal" data-target="#addTipoOrganizador">Agregar Responsable</button>
                                     @endcan
                                 </div>
@@ -190,10 +190,10 @@
                                 <tbody>
                                 @foreach($evento->organizador as $responsable)
                                     <tr>
-                                        <td>{{ $responsable->academico->usuario->name }}</td>
+                                        <td>{{ $responsable->usuario->name }}</td>
                                         <td>{{ $responsable->tipo_organizador->NombreTipoOrganizador }}</td>
                                         <td>
-                                            @can('havepermiso', 'responsable-eliminar')
+                                            @can('havepermiso', 'eventos-editar-propio')
                                                 <a  class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteTipoOrganizador"
                                                     data-tipoorganizador="{{ $responsable->IdOrganizador }}">Eliminar</a>
                                             @endcan
@@ -212,7 +212,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Participantes</h4>
                                 <div class="btn-group" role="group">
-                                    @can('havepermiso', 'participantes-crear')
+                                    @can('havepermiso', 'eventos-registrar-participantes')
                                         <button class="btn btn-success" data-toggle="modal" data-target="#addParticipante">Agregar Participante</button>
                                     @endcan
                                 </div>
@@ -236,7 +236,7 @@
                                             <td>{{$ae->academico->NoPersonalAcademico }}</td>
                                             <td>{{$ae->academico->usuario-> name }}</td>
                                             <td>
-                                                @can('havepermiso', 'participantes-eliminar')
+                                                @can('havepermiso', 'eventos-registrar-participantes')
                                                     <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteParticipante"
                                                        data-participante="{{ $ae->Id_Academico_Evento }}">Eliminar</a>
                                                 @endcan
@@ -255,7 +255,7 @@
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Documentos</h4>
                                 <div class="btn-group" role="group">
-                                    @can('havepermiso', 'documentos-crear')
+                                    @can('havepermiso', 'eventos-vincular-constancias-propias')
                                         <button class="btn btn-success" data-toggle="modal" data-target="#addDocument">Agregar Documento</button>
                                     @endcan
                                 </div>
@@ -279,16 +279,16 @@
                                             <td>{{ $documento->NombreDocumento }}</td>
                                             <td>{{ $documento->DescripcionDocumento }}</td>
                                             <td>
-                                                @can('havepermiso', 'documentos-leer')
+                                                @can('havepermiso', 'constancias-detalles')
                                                     <a class="btn btn-sm btn-outline-primary" href="{{ route('documento.show', $documento->IdDocumento) }}">Descargar</a>
                                                 @endcan
-                                                @can('havepermiso', 'documentos-editar')
+                                                @can('havepermiso', 'constancias-editar-propio')
                                                     <a class="btn btn-sm btn-primary" href="#" data-toggle="modal" data-target="#editDocumento"
                                                        data-documento="{{ $documento->IdDocumento }}"
                                                        data-nombre="{{ $documento->NombreDocumento }}"
                                                        data-descripcion="{{ $documento->DescripcionDocumento }}">Editar</a>
                                                 @endcan
-                                                @can('havepermiso', 'documentos-eliminar')
+                                                @can('havepermiso', 'constancias-eliminar-propio')
                                                     <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteDocumento"
                                                        data-documento="{{ $documento->IdDocumento }}">Eliminar</a>
                                                 @endcan
@@ -306,8 +306,11 @@
                         <div class="col-md-12">
                             <div class="d-flex align-items-center">
                                 <h4 class="mr-auto pl-3">Constancias</h4>
-                                <div class="btn-group" role="group">
-                                    @can('havepermiso', 'documentos-crear')
+                                <div class="" role="group">
+                                    @can('havepermiso', 'constancias-crear')
+                                        <a class="btn btn-info" href="{{ route('constancias.create') }}" role="button">Crear Constancia</a>
+                                    @endcan
+                                    @can('havepermiso', 'eventos-vincular-constancias-propias')
                                         <button class="btn btn-success" data-toggle="modal" data-target="#addConstanciaEvento">Agregar Constancia</button>
                                     @endcan
                                 </div>
@@ -333,10 +336,10 @@
                                             <td>{{ $constancia->constancia->DescripcionConstancia }}</td>
                                             <th>{{ $constancia->constancia->VigenteHasta }}</th>
                                             <td>
-                                                @can('havepermiso', 'documentos-leer')
+                                                @can('havepermiso', 'constancias-detalles')
                                                     <a class="btn btn-sm btn-primary" href="{{ route('constancias.show', $constancia->IdConstancia) }}">Ver</a>
                                                 @endcan
-                                                @can('havepermiso', 'documentos-eliminar')
+                                                @can('havepermiso', 'constancias-eliminar-propio')
                                                     <a class="btn btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteConstanciaEvento"
                                                        data-constancia="{{ $constancia->IdConstancia }}">Eliminar</a>
                                                 @endcan
@@ -396,6 +399,7 @@
             $('#table_responsable').DataTable();
             $('#table_participante').DataTable();
             $('#table_constancias').DataTable();
+            $('#table-agregar-constancias').DataTable();
         } );
 
 

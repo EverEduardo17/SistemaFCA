@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('constancia_estudiante', function (Blueprint $table) {
-            $table->id();
+        Schema::create('constancia_usuario', function (Blueprint $table) {
             $table->foreignId('IdConstancia')->references('IdConstancia')->on('Constancia');
-            $table->foreignId('IdEstudiante')->references('IdEstudiante')->on('Estudiante');
+            $table->foreignId('IdUsuario')->references('IdUsuario')->on('Usuario');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('constancia_estudiante');
+        Schema::dropIfExists('constancia_usuario');
     }
 };

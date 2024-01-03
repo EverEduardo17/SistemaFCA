@@ -25,7 +25,7 @@ class AcademicoEventoController extends Controller
 
     public function store(Request $request)
     {
-        Gate::authorize('havepermiso', 'participantes-crear');
+        Gate::authorize('havepermiso', 'eventos-registrar-participantes');
         $request->validate([
             'academico' => 'required | numeric',
         ]);
@@ -70,7 +70,7 @@ class AcademicoEventoController extends Controller
     }
 
     public function destroy($participante) {
-        Gate::authorize('havepermiso', 'participantes-eliminar');
+        Gate::authorize('havepermiso', 'eventos-eliminar-propio');
         $participante = AcademicoEvento::findOrFail( $participante );
         $participante->forceDelete();
 

@@ -27,7 +27,7 @@ class AcademiaAcademicoController extends Controller {
     }
 
     public function store(Request $request) {
-        Gate::authorize('havepermiso', 'academia-academico-crear');
+        Gate::authorize('havepermiso', 'academicos-crear');
         $academia = Academia::findOrFail($request->academia);
         $academico = Academico::findOrFail($request->docente);
 
@@ -62,7 +62,7 @@ class AcademiaAcademicoController extends Controller {
     }
 
     public function destroy($id) {
-        Gate::authorize('havepermiso', 'academia-academico-eliminar');
+        Gate::authorize('havepermiso', 'academicos-eliminar');
         $academicoAcademia = AcademicoAcademia::findOrFail($id);
         try {
             $academicoAcademia->forceDelete();

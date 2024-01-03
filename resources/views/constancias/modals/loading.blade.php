@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <p>Por favor no cierre la pagina hasta que termine la descarga</p>
                 <div class="progress">
-                    <div class="progress-bar progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-increment="{{ $estudiantes->count() }}" style="width: 0%"></div>
+                    <div class="progress-bar progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-increment="{{ $usuarios->count() }}" style="width: 0%"></div>
                 </div>
             </div>
         </div>
