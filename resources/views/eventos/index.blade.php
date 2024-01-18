@@ -26,16 +26,20 @@
                         <option value="NO APROBADO" @if($estado === 'NO APROBADO') selected @endif>No aprobado</option>
                         <option value="POR APROBAR" @if($estado === 'POR APROBAR') selected @endif>Pendiente</option>
                     </select>
-                    
-                    <input type="radio" name="filtro_fecha" value="ANTERIORES" @if($filtro_fecha === 'ANTERIORES') checked @endif onchange="this.form.submit()">
-                    <label>Anteriores</label>
 
-                    <input type="radio" name="filtro_fecha" value="PROXIMOS" 
-                    @if($filtro_fecha === 'PROXIMOS') checked @endif onchange="this.form.submit()">
+                    <label style="white-space: nowrap; margin: 0%">Filtrar por fecha:</label>
 
-                    <label>Proximos</label>
-                    <input type="radio" name="filtro_fecha" value="TODOS" @if($filtro_fecha === 'TODOS' || $filtro_fecha === null) checked @endif onchange="this.form.submit()">
-                    <label>Todos</label>
+                    <div class="d-inline-flex bg-light btn">
+                        <input class="ml-2" type="radio" name="filtro_fecha" value="ANTERIORES" @if($filtro_fecha === 'ANTERIORES') checked @endif onchange="this.form.submit()">
+                        <label class="mx-2">Anteriores</label>
+    
+                        <input class="ml-3" type="radio" name="filtro_fecha" value="PROXIMOS" 
+                        @if($filtro_fecha === 'PROXIMOS') checked @endif onchange="this.form.submit()">
+    
+                        <label class="mx-2">Proximos</label>
+                        <input class="ml-3" type="radio" name="filtro_fecha" value="TODOS" @if($filtro_fecha === 'TODOS' || $filtro_fecha === null) checked @endif onchange="this.form.submit()">
+                        <label class="mx-2">Todos</label>
+                    </div>
                 </div>
             </form>
             <div>

@@ -13,7 +13,6 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-        <li class="breadcrumb-item active">{{ $usuario->roles[0]->ClaveRole }}</li>
         <li class="breadcrumb-item active">{{ $usuario->IdUsuario }}</li>
         <li class="breadcrumb-item active" aria-current="page">Roles</li>
     </ol>

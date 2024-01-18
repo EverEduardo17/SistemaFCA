@@ -131,7 +131,7 @@ class EstudianteController extends Controller
             DB::table('DatosPersonales')->insert([
                 'NombreDatosPersonales'               => $input['NombreDatosPersonales'],
                 'ApellidoPaternoDatosPersonales'      => $input['ApellidoPaternoDatosPersonales'],
-                'ApellidoMaternoDatosPersonales'      => '',
+                'ApellidoMaternoDatosPersonales'      => $input['ApellidoMaternoDatosPersonales'],
                 'Genero'                              => $input['Genero'],
                 'IdUsuario'   => $idUsuarioDB,
                 'CreatedBy'     => auth()->user()->IdUsuario,

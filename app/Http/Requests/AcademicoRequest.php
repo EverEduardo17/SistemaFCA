@@ -38,7 +38,7 @@ class AcademicoRequest extends FormRequest
         return [
             'NombreDatosPersonales'             => 'required | max:255',
             'ApellidoPaternoDatosPersonales'    => 'required | max:255',
-            // 'ApellidoMaternoDatosPersonales'    => 'required | max:255',
+            'ApellidoMaternoDatosPersonales'    => 'nullable | max:255',
             'NoPersonalAcademico'               => $noPersonalAcademico,
             'RfcAcademico'                      => $rfcAcademico,
             'IdRole'                            => '',

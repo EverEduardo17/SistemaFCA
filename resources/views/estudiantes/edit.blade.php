@@ -53,16 +53,15 @@
                                 placeholder="Ej. Pino" id="ApellidoPaternoDatosPersonales"
                             >
                         </div>
-                        @if ($estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales !== "")
-                            <div class="form-group">
-                                <label for="ApellidoMaternoDatosPersonales">Apellido Materno:</label>
-                                <input name="ApellidoMaternoDatosPersonales" type="text"
-                                    class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror"
-                                    value="{{ old('ApellidoMaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales) }}"
-                                    placeholder="Ej. Herrera" id="ApellidoMaternoDatosPersonales"
-                                >
-                            </div>
-                        @endif
+                        
+                        <div class="form-group">
+                            <label for="ApellidoMaternoDatosPersonales">Apellido Materno:</label>
+                            <input name="ApellidoMaternoDatosPersonales" type="text"
+                                class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror"
+                                value="{{ old('ApellidoMaternoDatosPersonales', $estudiante->usuario->datosPersonales->ApellidoMaternoDatosPersonales) }}"
+                                placeholder="Ej. Herrera" id="ApellidoMaternoDatosPersonales"
+                            >
+                        </div>
                         
                         <div class="form-group">
                             <div class="form-row">

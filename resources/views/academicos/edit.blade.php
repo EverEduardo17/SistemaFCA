@@ -44,12 +44,10 @@
                 <input name="ApellidoPaternoDatosPersonales" type="text" class="form-control @error('ApellidoPaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoPaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoPaternoDatosPersonales) }}" placeholder="Ej. Pino">
             </div>
 
-            @unless ($academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "")
-                <div class="form-group">
-                    <label name="ApellidoMaternoDatosPersonales">Apellido Materno del Académico:</label>
-                    <input name="ApellidoMaternoDatosPersonales" type="text" class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoMaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoMaternoDatosPersonales) }}" placeholder="Ej. Herrera">
-                </div>
-            @endunless
+            <div class="form-group">
+                <label name="ApellidoMaternoDatosPersonales">Apellido Materno del Académico:</label>
+                <input name="ApellidoMaternoDatosPersonales" type="text" class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoMaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoMaternoDatosPersonales) }}" placeholder="Ej. Herrera">
+            </div>
 
             <hr>
 
