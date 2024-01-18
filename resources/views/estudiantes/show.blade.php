@@ -41,8 +41,9 @@
         <div class="form-group">
             <label for="ApellidoPaternoDatosPersonales">
                     {{ 
-                        optional($estudiante->usuario->datosPersonales)->ApellidoMaternoDatosPersonales === "" ? 
-                            "Apellidos" : "Apellido Paterno:" 
+                        optional($estudiante->usuario->datosPersonales)->ApellidoMaternoDatosPersonales === "" || 
+                        optional($estudiante->usuario->datosPersonales)->ApellidoMaternoDatosPersonales === null 
+                        ? "Apellidos" : "Apellido Paterno:" 
                     }}
             </label>
             <input name="ApellidoPaternoDatosPersonales" type="text"
@@ -52,7 +53,10 @@
             >
         </div>
 
-        @unless (optional($estudiante->usuario->datosPersonales)->ApellidoMaternoDatosPersonales === "")
+        @unless (
+                optional($estudiante->usuario->datosPersonales)->ApellidoMaternoDatosPersonales === "" ||
+                optional($estudiante->usuario->datosPersonales)->ApellidoMaternoDatosPersonales === null
+            )
             <div class="form-group">
                 <label for="ApellidoMaternoDatosPersonales">Apellido Materno:</label>
                 <input name="ApellidoMaternoDatosPersonales" type="text"
