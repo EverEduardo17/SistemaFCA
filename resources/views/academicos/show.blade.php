@@ -31,14 +31,18 @@
             <div class="form-group">
                 <label name="ApellidoPaternoDatosPersonales">
                         {{ 
-                        $academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "" ? 
-                            "Apellidos del Académico" : "Apellido Paterno del Académico:" 
+                        $academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "" || 
+                        $academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === null 
+                        ? "Apellidos del Académico" : "Apellido Paterno del Académico:" 
                         }}
                 </label>
                 <input name="ApellidoPaternoDatosPersonales" type="text" class="form-control @error('ApellidoPaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoPaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoPaternoDatosPersonales) }}" disabled>
             </div>
 
-            @unless ($academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "")
+            @unless (
+                    $academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === "" ||
+                    $academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales === null
+                )
                 <div class="form-group">
                     <label name="ApellidoMaternoDatosPersonales">Apellido Materno del Académico:</label>
                     <input name="ApellidoMaternoDatosPersonales" type="text" class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoMaternoDatosPersonales', $academico->usuario->datospersonales->ApellidoMaternoDatosPersonales) }}" disabled>
