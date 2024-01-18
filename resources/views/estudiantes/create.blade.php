@@ -41,14 +41,21 @@
                         value="{{ old('NombreDatosPersonales') }}" placeholder="Ej. Javier" autofocus>
                 </div>
                 <div class="form-group">
-                    <label name="ApellidoPaternoDatosPersonales">Apellidos:</label>
+                    <label name="ApellidoPaternoDatosPersonales">Apellido Paterno:</label>
                     <input name="ApellidoPaternoDatosPersonales" type="text"
                         class="form-control @error('ApellidoPaternoDatosPersonales') is-invalid @enderror"
-                        value="{{ old('ApellidoPaternoDatosPersonales') }}" placeholder="Ej. Pino Herrera">
+                        value="{{ old('ApellidoPaternoDatosPersonales') }}" placeholder="Ej. Pino">
                 </div>
+
+                <div class="form-group">
+                    <label name="ApellidoMaternoDatosPersonales">Apellido Materno:</label>
+                    <input name="ApellidoMaternoDatosPersonales" type="text"
+                        class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror"
+                        value="{{ old('ApellidoMaternoDatosPersonales') }}" placeholder="Ej. Herrera">
+                </div>
+                
                 <div class="form-group">
                     <div class="form-row">
-
                         <div class="col">
                             <label name="MatriculaEstudiante">Matricula:</label>
                             <input name="MatriculaEstudiante" type="text"

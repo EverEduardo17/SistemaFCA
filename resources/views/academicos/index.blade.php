@@ -35,9 +35,9 @@
                 <tr>
                     <td>{{ $academico->NoPersonalAcademico ?? "" }}</td>
                     <td>
-                        {{ $academico->usuario->datosPersonales->ApellidoPaternoDatosPersonales ?? "-" }}
-                        {{ $academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales ?? "-" }}
-                        {{ $academico->usuario->datosPersonales->NombreDatosPersonales ?? "" }}
+                        {{ $academico->usuario->datosPersonales->ApellidoPaternoDatosPersonales ?? "" }}
+                        {{ $academico->usuario->datosPersonales->ApellidoMaternoDatosPersonales ?? "" }}
+                        {{ $academico->usuario->datosPersonales->NombreDatosPersonales ?? "-" }}
                     </td>
                     <td>{{ $academico->usuario->email ?? "" }}</td>
 

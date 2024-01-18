@@ -1,5 +1,5 @@
 <div class="modal fade" id="addConstanciaEvento" tabindex="-1" role="dialog" aria-labelledby="fechaModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-success">
                 <h5 class="modal-title text-white" id="fechaModalLabel">Agregar Constancia</h5>

@@ -65,7 +65,7 @@ class AcademicoController extends Controller
                     'idDatosPersonales'                 => $idUsuarioDB,
                     'NombreDatosPersonales'             => $input['NombreDatosPersonales'],
                     'ApellidoPaternoDatosPersonales'    => $input['ApellidoPaternoDatosPersonales'],
-                    'ApellidoMaternoDatosPersonales'    => '',
+                    'ApellidoMaternoDatosPersonales'    => $input['ApellidoMaternoDatosPersonales'],
                     'IdUsuario'                         => $idUsuarioDB,
                     'CreatedBy'                         => Auth::user()->IdUsuario,
                     'UpdatedBy'                         => Auth::user()->IdUsuario

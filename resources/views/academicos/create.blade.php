@@ -31,9 +31,15 @@
             </div>
                 
             <div class=" form-group">
-                <label name="ApellidoPaternoDatosPersonales">Apellidos del Académico:</label>
+                <label name="ApellidoPaternoDatosPersonales">Apellido Paterno del Académico:</label>
                 <input name="ApellidoPaternoDatosPersonales" value="{{ old('ApellidoPaternoDatosPersonales') }}" type="text" class="form-control @error('ApellidoPaternoDatosPersonales') is-invalid @enderror" placeholder="Ej. Pino">
             </div>
+
+            <div class="form-group">
+                <label name="ApellidoMaternoDatosPersonales">Apellido Materno del Académico:</label>
+                <input name="ApellidoMaternoDatosPersonales" type="text" class="form-control @error('ApellidoMaternoDatosPersonales') is-invalid @enderror" value="{{ old('ApellidoMaternoDatosPersonales') }}" placeholder="Ej. Herrera">
+            </div>
+
             <hr>
             <div class=" form-group">
                 <label name="NoPersonalAcademico">Número de Personal:</label>
