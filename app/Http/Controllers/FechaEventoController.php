@@ -33,7 +33,14 @@ class FechaEventoController extends Controller
     {
         //
     }
-
+    
+    /**
+     * Metodo para agregar nuevas fechas a un evento
+     * Desde la vista eventos.show en la parte inferior donde se ven las fechas
+     *
+     * @param  FechaEventoRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function store(FechaEventoRequest $request)
     {
         Gate::authorize('havepermiso', 'eventos-crear');
@@ -41,7 +48,13 @@ class FechaEventoController extends Controller
         $input = $request->validated();
 
         $idEvento = Evento::findOrFail($input['evento']);
+
+        $input['nombre'] = $idEvento->NombreEvento;
+        $input['descripcion'] = $idEvento->DescripcionEvento;
+
         $idEvento = $idEvento->IdEvento;
+
+        $input['organizador'] = Auth::user()->email;
 
         /* Obtener fechas */
         $fechaInicio    = formatearDateTime($input['fechaInicio'], $input['horaInicio']);
@@ -88,6 +101,11 @@ class FechaEventoController extends Controller
             return redirect()->back()->withInput();
         }
 
+        
+        if ( !(Auth::user()->havePermission('eventos-aprobar-rechazar')) ) {
+            $this->enviarCorreo($input);
+        }
+
         Session::flash('flash', [['type' => "success", 'message' => "Fecha agregada con éxito."]]);
         return redirect()->back()->withInput();
     }
@@ -102,6 +120,13 @@ class FechaEventoController extends Controller
         //
     }
 
+    /**
+     * Metodo para editar las fechas agregadas a un evento
+     * Desde la vista eventos.show en la parte inferior donde se ven las fechas
+     *
+     * @param  FechaEventoRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function update(FechaEventoRequest $request)
     {
         Gate::authorize('havepermiso', 'eventos-editar-propio');
@@ -121,6 +146,11 @@ class FechaEventoController extends Controller
         //!!! Validar que las fechas no chocan con otro evento
 
         $fechaEvento = FechaEvento::find($input['fechaEvento']);
+
+        $input['nombre'] = $fechaEvento->evento->NombreEvento;
+        $input['descripcion'] = $fechaEvento->evento->DescripcionEvento;
+        $input['organizador'] = Auth::user()->email;
+        $input['evento'] = $fechaEvento->evento->IdEvento; 
 
         if (intval($input['evento']) != $fechaEvento->evento->IdEvento) {
             Session::flash('flash', [['type' => "danger", 'message' => "No fue posible realizar la operación solicitada."]]);
@@ -156,6 +186,10 @@ class FechaEventoController extends Controller
             return redirect()
                 ->back()
                 ->withInput();
+        }
+
+        if ( !(Auth::user()->havePermission('eventos-aprobar-rechazar')) ) {
+            $this->enviarCorreo($input);
         }
 
         Session::flash('flash', [['type' => "success", 'message' => "Fecha actualizada con éxito."]]);
@@ -207,6 +241,36 @@ class FechaEventoController extends Controller
             return false;
         } else {
             return false;
+        }
+    }
+
+
+    /**
+     * Manda un correo con los datos del evento para solicitar aprobación
+     *
+     * @param array $input
+     * @return void
+     */
+    private function enviarCorreo($input) {
+        $input['sede'] = \App\Models\SedeEvento::get()->where('IdSedeEvento', $input['sede'])->first()->NombreSedeEvento;
+
+        $email = new \SendGrid\Mail\Mail();
+        $email->setFrom("zs18015382@estudiantes.uv.mx", "SistemaFCA Eventos");
+        $email->setSubject('Solicitud de aprobación para "'.$input['nombre'].'"');
+        $email->addContent(
+            "text/html", view('emails.evento-registrado')->with('input', $input)->render()
+        );
+        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+
+
+        $users = \App\Models\Usuario::whereHas('roles', function ($query) {
+            $query->where('ClaveRole', 'LIKE', 'CONTROL-GÉNERAL')
+                ->orWhere('ClaveRole', 'LIKE', 'CONTROL-EVENTOS');
+        })->get();
+
+        foreach($users as $user) {
+            $email->addTo($user->email, $user->name);
+            $response = $sendgrid->send($email);
         }
     }
 }

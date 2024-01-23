@@ -28,11 +28,6 @@
                             <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#rechazarEvento">NO aprobar</a>
                         @endcan
                     @endif
-                    @if($evento->EstadoEvento == "NO APROBADO")
-                        @can('havepermiso', 'eventos-editar-propio')
-                            <a href="#" class="btn btn-info" data-toggle="modal" data-target="#solicitarEvento">Solicitar aprobación</a>
-                        @endcan
-                    @endif
                 </div>
             </div>
         </div>

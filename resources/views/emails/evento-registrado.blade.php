@@ -13,14 +13,13 @@
     {{-- al parecer bootstrap no carga en el correo, por lo que se usa css puro --}}
     <div style="width: 100%; max-width: 1140px; margin: 0 auto;">
         <div style="padding: 3rem 0; text-align: center;">
-            {{-- por algun motivo no cargan los estilos ni las fotos en el correo --}}
-            {{-- <img 
+            <img 
                 class="d-block mx-auto mb-4" 
                 src="{{ asset('img/FlorconUV.png') }}" 
-                alt="Logo uv" 
+                alt="UV" 
                 width="100" 
                 height="72"
-            > --}}
+            >
             <h2>Nueva solicitud de Evento.</h2>
             <p class="lead">Se solicita aprobación para el evento: {{ $input['nombre'] }}.</p>
         </div>
@@ -31,7 +30,7 @@
     
                 <div style="display: flex; flex-wrap: wrap;">
                     <div style="flex: 1 0 50%; padding: 10px;">
-                        <label><strong>Fecha principal del Evento:</strong> {{ $input['fechaInicio'] }}</label>
+                        <label><strong>Fecha del Evento:</strong> {{ $input['fechaInicio'] }}</label>
                     </div>
 
                     <div style="flex: 1 0 50%; padding: 10px;">
@@ -40,18 +39,18 @@
 
                     @if ($input['horaInicio'] !== null)
                         <div style="flex: 1 0 50%; padding: 10px;">
-                            <label><strong>Hora Inicio:</strong> {{ $input['horaInicio'] }}</label>
+                            <label><strong>Hora de inicio:</strong> {{ $input['horaInicio'] }}</label>
                         </div>
                     @endif
                     
                     <div style="flex: 1 0 50%; padding: 10px;">
-                        <label><strong>Hora Fin:</strong> {{ $input['horaFin'] }}</label>
+                        <label><strong>Hora de terminación:</strong> {{ $input['horaFin'] }}</label>
                     </div>
                  </div>
     
                 <hr class="mb-12">
-                <a href="{{ route('login') }}" style="display: flex; align-items: center; justify-content: center; display: block; width: 100%; padding: 0.5rem 1rem; font-size: 1.25rem; line-height: 1.5; background-color: #007bff; color: #fff; border-radius: 0.25rem; text-align: center;">
-                    Ir a la plataforma
+                <a href="{{ route('eventos.show', $input['evento']) }}" style="display: flex; align-items: center; justify-content: center; display: block; width: 100%; padding: 0.5rem 1rem; font-size: 1.25rem; line-height: 1.5; background-color: #007bff; color: #fff; border-radius: 0.25rem; text-align: center;">
+                    Ir a evento
                 </a>
             </div>
             <div class="col-md-4 order-md-2 mb-4 solicitud">

@@ -178,6 +178,8 @@ class EventoController extends Controller {
                     'UpdatedBy' => Auth::user()->IdUsuario
                 ]);
                 DB::commit();
+
+                $input['evento'] = $idEvento;
             } catch (\Throwable $e) {
                 DB::rollBack();
                 Session::flash('flash', [['type' => "danger", 'message' => $e->getMessage()]]);
@@ -185,7 +187,9 @@ class EventoController extends Controller {
                 return redirect()->route('eventos.index');
             }
 
-            $this->enviarCorreo($input);
+            if ( !(Auth::user()->havePermission('eventos-aprobar-rechazar')) ) {
+                $this->enviarCorreo($input);
+            }
 
             Session::flash('flash', [['type' => "success", 'message' => "Evento registrado correctamente"]]);
             return redirect()->route('eventos.show', $idEvento);
@@ -236,18 +240,6 @@ class EventoController extends Controller {
             Session::flash('flash', [['type' => "danger", 'message' => "Error al editar el Evento."]]);
             return redirect()->route('eventos.show', $evento->IdEvento);
         }
-
-        $input['nombre'] = $request->NombreEvento;
-        $input['descripcion'] = $request->DescripcionEvento;
-        $input['organizador'] = $evento->organizador[0]->usuario->email;
-        $input['fechaInicio'] = printDateTime($evento->eventoFechaSede[0]->FechaEvento->InicioFechaEvento);
-        //todo: hacer que fecha inicio y hora inicio esten separados y que hora fin no tire fecha, traigo weba :)
-        $input['horaInicio'] = null;
-        $input['horaFin'] = printDateTime($evento->eventoFechaSede[0]->FechaEvento->FinFechaEvento);
-
-        $input['sede'] = $evento->eventoFechaSede[0]->IdSedeEvento;
-
-        $this->enviarCorreo($input);
 
         Session::flash('flash', [['type' => "success", 'message' => "Evento actualizado con éxito."]]);
         return redirect()->route('eventos.show', $evento->IdEvento);
