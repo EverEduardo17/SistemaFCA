@@ -293,7 +293,7 @@ class EventoController extends Controller {
         $input['sede'] = SedeEvento::get()->where('IdSedeEvento', $input['sede'])->first()->NombreSedeEvento;
 
         $email = new \SendGrid\Mail\Mail();
-        $email->setFrom("zs18015382@estudiantes.uv.mx", "SistemaFCA Eventos");
+        $email->setFrom("luismorales04@uv.mx", "SistemaFCA Eventos");
         $email->setSubject('Solicitud de aprobación para "'.$input['nombre'].'"');
         $email->addContent(
             "text/html", view('emails.evento-registrado')->with('input', $input)->render()

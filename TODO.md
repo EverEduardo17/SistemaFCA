@@ -1,0 +1,25 @@
+# UV/SistemaFCA To Do List
+
+- Modificar el archivo `REAMDE.md` para que tenga la guia de instalacion del proyecto.
+- Verificar apartado de `Academicos`, `Estudiantes` ver que funcionalidad tiene (si se ocupa).
+- Los apartador de eliminar registro no piden confirmacion. (Se eliminan directamente).
+- Revisar las dependencias siguientes y evaluar si es necesario removerlas:
+  - `Academias`
+  - `Bajas` 
+  - `Cohortes`
+  - `Grupos`
+  - `Facultades`
+  - `Programa educativo`
+  - `Empresas`
+  - `practicas`
+  - `reprobado`
+  - `servicio`
+  - `titulo`
+  - `traslado`
+- Cuando se edita la fecha de un `Evento` y la validacion de las horas no se cumple, este se redirecciona a crear el evento.
+- Corregir el error que permite eliminar todas las fechas del evento (Debe existir por lo menos 1 fecha)
+- Corregir el error que permite eliminar todas las responsables del evento (Debe existir por lo menos 1 responsable)
+- Convertir las consultas de base de datos con Query Builder a Eloquent ORM 
+- Agregar un status de constancias (Revision, rechazado, aceptado, etc) y notificar el cambio por correo.
+- Las constancias rechazdas debe permitir el enviar un archivo adjunto.
+- 

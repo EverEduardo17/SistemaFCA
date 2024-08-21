@@ -80,7 +80,6 @@ return array(
     'App\\Http\\Requests\\TitulacionRequest' => $baseDir . '/app/Http/Requests/TitulacionRequest.php',
     'App\\Http\\Requests\\TrasladoRequest' => $baseDir . '/app/Http/Requests/TrasladoRequest.php',
     'App\\Imports\\EstudiantesImport' => $baseDir . '/app/Imports/EstudiantesImport.php',
-    'App\\Mail\\EventoRegistrado' => $baseDir . '/app/Mail/EventoRegistrado.php',
     'App\\Models\\Academia' => $baseDir . '/app/Models/Academia.php',
     'App\\Models\\Academico' => $baseDir . '/app/Models/Academico.php',
     'App\\Models\\AcademicoAcademia' => $baseDir . '/app/Models/AcademicoAcademia.php',

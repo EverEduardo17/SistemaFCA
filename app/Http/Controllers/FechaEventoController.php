@@ -33,7 +33,7 @@ class FechaEventoController extends Controller
     {
         //
     }
-    
+
     /**
      * Metodo para agregar nuevas fechas a un evento
      * Desde la vista eventos.show en la parte inferior donde se ven las fechas
@@ -101,7 +101,7 @@ class FechaEventoController extends Controller
             return redirect()->back()->withInput();
         }
 
-        
+
         if ( !(Auth::user()->havePermission('eventos-aprobar-rechazar')) ) {
             $this->enviarCorreo($input);
         }
@@ -140,7 +140,7 @@ class FechaEventoController extends Controller
         //!!!! Validar que la fechaFin debe ser mayor a la fechaInicio
         if (formatearTime($input['horaInicio']) >= formatearTime($input['horaFin'])) {
             Session::flash('flash', [['type' => "danger", 'message' => "La Hora Fin, debe ser mayor que la hora Inicio."]]);
-            return redirect()->route('eventos.create')->withInput();
+            return redirect()->back()->withInput();
         }
 
         //!!! Validar que las fechas no chocan con otro evento
@@ -150,7 +150,7 @@ class FechaEventoController extends Controller
         $input['nombre'] = $fechaEvento->evento->NombreEvento;
         $input['descripcion'] = $fechaEvento->evento->DescripcionEvento;
         $input['organizador'] = Auth::user()->email;
-        $input['evento'] = $fechaEvento->evento->IdEvento; 
+        $input['evento'] = $fechaEvento->evento->IdEvento;
 
         if (intval($input['evento']) != $fechaEvento->evento->IdEvento) {
             Session::flash('flash', [['type' => "danger", 'message' => "No fue posible realizar la operación solicitada."]]);

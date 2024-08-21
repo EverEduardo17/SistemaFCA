@@ -257,7 +257,7 @@ class ConstanciaController extends Controller {
     }
 
     /**
-     * Muestra la vista que contiene los datos de una constancia y del estudiante relacionado. 
+     * Muestra la vista que contiene los datos de una constancia y del estudiante relacionado.
      * Esta es la vista a la que se redirige cuando se escanea el código QR de la constancia.
      *
      * @param \App\Models\Constancia $constancia La instancia del modelo de Constancia.
@@ -316,7 +316,7 @@ class ConstanciaController extends Controller {
         if($usuario->constancias()->where('Constancia.IdConstancia', $constancia->IdConstancia)->exists()) {
             $usuario->constancias()->detach($constancia);
             $success = false;
-        } 
+        }
         else {
             $usuario->constancias()->attach($constancia);
             $success = true;
@@ -460,7 +460,7 @@ class ConstanciaController extends Controller {
 
         if($users->count() !== 0) {
             $pathFirma = storage_path('app/public/uploads/'.$users[0]->academico->Firma);
-            
+
             $templateProcessor->setImageValue(
                 'img_firma',
                 [
@@ -484,6 +484,7 @@ class ConstanciaController extends Controller {
 
         // $pathQr = public_path('constancias plantilla/QR.jpg');
         $pathQr = storage_path('app/constancias/'.$constancia->IdConstancia);
+
         QrCode::size(200)
             ->style('round')
             ->format('png')

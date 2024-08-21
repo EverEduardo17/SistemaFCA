@@ -723,7 +723,6 @@ class ComposerStaticInit99443e554482e2cc2a665939667ab3d4
         'App\\Http\\Requests\\TitulacionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/TitulacionRequest.php',
         'App\\Http\\Requests\\TrasladoRequest' => __DIR__ . '/../..' . '/app/Http/Requests/TrasladoRequest.php',
         'App\\Imports\\EstudiantesImport' => __DIR__ . '/../..' . '/app/Imports/EstudiantesImport.php',
-        'App\\Mail\\EventoRegistrado' => __DIR__ . '/../..' . '/app/Mail/EventoRegistrado.php',
         'App\\Models\\Academia' => __DIR__ . '/../..' . '/app/Models/Academia.php',
         'App\\Models\\Academico' => __DIR__ . '/../..' . '/app/Models/Academico.php',
         'App\\Models\\AcademicoAcademia' => __DIR__ . '/../..' . '/app/Models/AcademicoAcademia.php',
